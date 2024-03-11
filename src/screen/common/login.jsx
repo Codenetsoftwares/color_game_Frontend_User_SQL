@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LoginII from '../Login/CustomModal';
 import { Button } from 'react-bootstrap';
 import { login } from '../../utils/apiService';
@@ -12,6 +12,12 @@ function LoginMain({ showLogin, setShowLogin }) {
   const [loginCred, setLoginCred] = useState(setInitialValues());
 
   const { dispatch } = useAppContext();
+
+  useEffect(() => {
+    if (!showLogin) {
+      resetForm();
+    }
+  }, [showLogin]);
 
   function setInitialValues() {
     return {
@@ -32,13 +38,13 @@ function LoginMain({ showLogin, setShowLogin }) {
   });
 
   async function loginHandler(values) {
-    const response = await login(values,true);
-    if(response) {
+    const response = await login(values, true);
+    if (response) {
       dispatch({
         type: strings.LOG_IN,
         payload: { isLogin: true, ...response.token },
       });
-      setShowLogin(!showLogin)
+      setShowLogin(!showLogin);
     }
   }
 
@@ -46,11 +52,10 @@ function LoginMain({ showLogin, setShowLogin }) {
     return <h4>Login</h4>;
   }
 
-
-  console.log(errors)
+  // console.log(errors)
   function ModalBody() {
     return (
-      <div className='py-3'>
+      <div className="py-3">
         <div className="d-flex justify-content-center position-relative">
           <input
             type="text"
@@ -61,23 +66,23 @@ function LoginMain({ showLogin, setShowLogin }) {
             value={values.userName}
             onChange={handleChange}
           />
-          <span className="position-absolute" style={{ left: '60px', top: '36px' }}>
-            {errors.userName && touched.userName ? <p>{errors.userName}</p> : null}
+          <span className="position-absolute small" style={{ left: '60px', top: '36px' }}>
+            {errors.userName && touched.userName ? <p >{errors.userName}</p> : null}
           </span>
         </div>
         <br />
-        <div className="d-flex justify-content-center position-relative">
+        <div className="d-flex justify-content-center position-relative ">
           <input
             type="password"
             className="form-control w-75"
             placeholder="enter password"
             name="password"
-            style={{ border: '1px solid black' }}
+            // style={{ border: '1px solid black' }}
             value={values.password}
             onChange={handleChange}
           />
 
-          <span className="position-absolute" style={{ left: '60px', top: '36px' }}>
+          <span className="position-absolute small" style={{ left: '60px', top: '36px' }}>
             {errors.password && touched.password ? <p>{errors.password}</p> : null}
           </span>
         </div>

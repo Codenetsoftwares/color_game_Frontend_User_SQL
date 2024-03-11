@@ -15,9 +15,9 @@ const Carousel = () => {
 
   async function handelCarousel() {
     const response = await getcarrousel();
-    console.log('response handelCarousel =>>', response);
-    if(response) {
-      SetCarrouselImg(response.data ?? []);
+    console.log('response handelCarousel  line 18 =>>', response);
+    if (response) {
+      SetCarrouselImg(response.formattedSliders ?? response.data ??  []);  //after updating the response 
       // dispatch({ type: strings.Name, payload: response.data });
     }
   }

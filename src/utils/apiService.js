@@ -5,7 +5,7 @@ import { getCallParams, getNoAuthCallParams, makeCall } from './service';
 export async function login(body, isToast = false) {
   try {
     const callParams = getNoAuthCallParams(strings.POST, body, isToast);
-    const response = await makeCall(urls.login, callParams,isToast);
+    const response = await makeCall(urls.login, callParams, isToast);
     return response;
   } catch (error) {
     throw error;
