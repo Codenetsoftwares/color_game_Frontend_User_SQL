@@ -1,0 +1,7 @@
+.card-img-top {
+  height: 300px; /* Set your desired height */
+  width: 600px; /* Let the width adjust proportionally */
+  border-radius: 25px;
+  max-width: 100%; /* Ensure the image doesn't exceed its container */
+  object-fit: contain; /* Maintain aspect ratio and cover the container */
+}

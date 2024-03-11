@@ -1,0 +1,21 @@
+.marquee {
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 0.969625350140056) 0%,
+    rgba(9, 102, 121, 1) 35%,
+    rgba(0, 212, 255, 1) 100%
+  );
+}
+.imagecontainer {
+  height: 50px;
+  width: 50px;
+  margin: 10px;
+}
+.footerBox {
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 0.969625350140056) 0%,
+    rgba(9, 102, 121, 1) 35%,
+    rgba(0, 212, 255, 1) 100%
+  );
+}

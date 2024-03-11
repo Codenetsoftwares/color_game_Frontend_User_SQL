@@ -1,0 +1,25 @@
+.Avater {
+  height: 40px;
+  width: 40px;
+  /* background-color: #bbb; */
+  background: rgb(27, 78, 157);
+  border-radius: 50%;
+  display: inline-block;
+  text-align: center;
+  object-fit: cover;
+  font-size: 25px;
+  color: white;
+  margin-right: 30px;
+  text-transform: uppercase;
+  /* border-style: solid;
+  border-color: white; */
+}
+.Imageuser {
+  height: 40px;
+  width: 40px;
+  /* background-color: #bbb; */
+  border-radius: 50%;
+  /* display: inline-block; */
+  object-fit: cover;
+  margin-right: 30px;
+}
