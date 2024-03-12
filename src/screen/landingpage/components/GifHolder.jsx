@@ -9,7 +9,6 @@ const GifHolder = () => {
     const response = await gifholder();
     console.log('response handelCarousel =>>', response);
     SetGetgif(response);
-    // dispatch({ type: strings.Name, payload: name });
   }
 
   useEffect(() => {

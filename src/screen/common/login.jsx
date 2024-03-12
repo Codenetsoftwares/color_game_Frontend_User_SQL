@@ -67,7 +67,7 @@ function LoginMain({ showLogin, setShowLogin }) {
             onChange={handleChange}
           />
           <span className="position-absolute small" style={{ left: '60px', top: '36px' }}>
-            {errors.userName && touched.userName ? <p >{errors.userName}</p> : null}
+            {errors.userName && touched.userName ? <p>{errors.userName}</p> : null}
           </span>
         </div>
         <br />

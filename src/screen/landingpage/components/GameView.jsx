@@ -13,7 +13,8 @@ const GameView = () => {
   });
 
   async function MarketData() {
-    const response = await marketdata();
+    const response = await marketdata(true);
+    console.log('Game view Response Line 17', response);
     SetGameList(response);
   }
 

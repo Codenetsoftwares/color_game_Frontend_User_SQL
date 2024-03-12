@@ -26,7 +26,7 @@ class UrlConstant {
 
   footerwarning = `${this.url_dev}/footerwarning`; //tom
 
-  AllGames = `${this.url_dev}/AllGames`;
+  AllGames = `${this.url_dev}/api/user-games`;
 }
 
 const urls = new UrlConstant();

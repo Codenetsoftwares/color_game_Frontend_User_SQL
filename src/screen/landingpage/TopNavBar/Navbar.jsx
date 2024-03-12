@@ -8,6 +8,7 @@ const Navbar = () => {
 
   async function getGameName() {
     const response = await AllGames();
+    console.log('AL GAMES ==========> LINE 11', response);
     setGameName(response);
   }
 

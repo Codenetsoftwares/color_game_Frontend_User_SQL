@@ -7,7 +7,7 @@ const CustomModal = ({ show, setShow, ModalBody, header, footer }) => {
   return (
     <Modal show={show} onHide={handleClose} centered>
       {header && (
-        <Modal.Header className= 'custom-header' closeButton>
+        <Modal.Header className="custom-header" closeButton>
           <Modal.Title className="m-auto">{header()}</Modal.Title>
         </Modal.Header>
       )}

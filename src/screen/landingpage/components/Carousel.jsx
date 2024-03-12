@@ -13,14 +13,30 @@ const Carousel = () => {
 
   const { dispatch } = useAppContext();
 
-  async function handelCarousel() {
-    const response = await getcarrousel();
+  async function handelCarousel(value) {
+    const response = await getcarrousel(value, true);
     console.log('response handelCarousel  line 18 =>>', response);
     if (response) {
-      SetCarrouselImg(response.formattedSliders ?? response.data ??  []);  //after updating the response 
-      // dispatch({ type: strings.Name, payload: response.data });
+      SetCarrouselImg(response.data);
     }
   }
+
+  // async function handelCarousel() {
+  //   try {
+  //     const response = await getcarrousel(true);
+  //     console.log('response handelCarousel  line 18 =>>', response);
+  //     if (response && response.data) {
+  //       SetCarrouselImg(response.data);
+  //     } else {
+  //       // Handle unexpected response format from backend
+  //       console.error('Unexpected response format from backend line 32 :', response);
+  //     }
+  //   } catch (error) {
+  //     // Handle network errors or errors from backend
+  //     console.error('Error fetching carousel data 36 :', error);
+
+  //   }
+  // }
 
   useEffect(() => {
     handelCarousel();
@@ -35,7 +51,7 @@ const Carousel = () => {
             carrouselImg.map((item, index) => (
               <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={index} data-bs-interval="2000">
                 {item.image ? (
-                  <img src={item.image} className="d-block w-100" alt="..." style={{ height: '50vh' }} />
+                  <img src={item.image} className="d-block w-100" alt="..." style={{ height: '85vh' }} />
                 ) : (
                   <img src={Img[index]} className="d-block w-100" alt="..." style={{ height: '50vh' }} />
                 )}
