@@ -13,7 +13,7 @@ class UrlConstant {
 
   carrousel = `${this.url_dev}/api/admin/slider-text-img`;
 
-  announcement = `${this.url_dev}/announcement`;
+  announcement = `${this.url_dev}/api/announcement`;
 
   hitgames = `${this.url_dev}/hitgames`;
 

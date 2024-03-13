@@ -14,8 +14,10 @@ const GameView = () => {
 
   async function MarketData() {
     const response = await marketdata(true);
-    console.log('Game view Response Line 17', response);
-    SetGameList(response);
+    if (response?.data) {
+      console.log('Game view Response Line 17', response.data);
+      SetGameList([response.data[1]]);
+    }
   }
 
   useEffect(() => {
@@ -88,8 +90,9 @@ const GameView = () => {
 
   return (
     <div>
-      {!!gameList?.length &&
+      {!!gameList?.length > 0 &&
         gameList?.map((game, index) => (
+          // console.log('=========> line 95',  gameList)
           <table className="table table-sm m-1">
             <thead>
               <tr key={game._id}>
@@ -99,7 +102,7 @@ const GameView = () => {
               </tr>
             </thead>
             <tbody>
-              {game?.markets?.length > 0 && (
+              {game.markets.length > 0 && (
                 <tr>
                   <td colSpan="6"></td>
                   <td>1</td>
@@ -108,151 +111,162 @@ const GameView = () => {
                 </tr>
               )}
 
-              {game?.markets.map((market, marketIndex) => (
-                <>
-                  <tr key={market?.marketId}>
-                    <td colSpan="6">
-                      {market?.Date}&nbsp;&nbsp;&nbsp;&nbsp;{market?.marketName}
-                    </td>
-                    {market?.runners?.map((runner, runnerindex) => (
-                      <React.Fragment key={runner?.runnerName?.runnerId}>
-                        {runner.rate.map((rate, rateIndex) => (
-                          <React.Fragment key={rateIndex}>
-                            <td>
-                              <span
-                                style={{
-                                  backgroundColor: '#8ad1f2',
-                                  borderRadius: '5px',
-                                  display: 'inline-block',
-                                  width: '5rem',
-                                  textAlign: 'center',
-                                }}
-                                onClick={() =>
-                                  handleToggle(runner?.runnerName?.runnerId, rate?.Back, 'back', runnerindex)
-                                }
-                              >
-                                {rate.Back}
-                              </span>
-                              &nbsp;
-                              <span
-                                style={{
-                                  backgroundColor: '#f7bac3',
-                                  borderRadius: '5px',
-                                  display: 'inline-block',
-                                  width: '5rem',
-                                  textAlign: 'center',
-                                }}
-                                onClick={() =>
-                                  handleToggle(runner?.runnerName?.runnerId, rate?.Lay, 'lay', runnerindex)
-                                }
-                              >
-                                {rate.Lay}
-                              </span>
-                            </td>
-                          </React.Fragment>
-                        ))}
-                      </React.Fragment>
-                    ))}
-                  </tr>
-                  {console.log('market', market.runners[0].runnerName.runnerId)}
-                  {toggle.indexNo === market?.runners[toggle.stateindex]?.runnerName?.runnerId &&
-                    !toggle.toggleOpen && (
-                      <>
-                        <tr className="">
-                          <td colSpan="6"></td>
-                          <td>{'india'}</td>
-                          <td className="">
-                            <div className="d-flex justify-content-end">
-                              <button className=" btn btn-secondary text-nowrap">-</button>
-                              &nbsp; &nbsp; &nbsp;
-                              <input type="number" className="form-control w-50" value={bidding.rate} />
-                              &nbsp; &nbsp; &nbsp;
-                              <button className="btn btn-secondary text-nowrap ">+</button>
-                            </div>
-                          </td>
-                          <td className="">
-                            <div className="d-flex justify-content-start">
-                              <button
-                                className={`btn btn-secondary text-nowrap  ${bidding.amount <= 100 ? 'disabled' : ''}`}
-                                onClick={() => handleBiddingAmount('amount', bidding.amount - 100)}
-                              >
-                                -
-                              </button>
-                              &nbsp; &nbsp; &nbsp;
-                              <input
-                                type="number"
-                                className="form-control w-50"
-                                value={bidding.amount}
-                                onChange={(e) => handleBiddingAmount('amount', e.target.value)}
-                              />
-                              &nbsp; &nbsp; &nbsp;
-                              <button
-                                className=" btn btn-secondary text-nowrap"
-                                onClick={() => handleBiddingAmount('amount', bidding.amount + 100)}
-                              >
-                                +
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td colSpan="7"></td>
-                          <td>
-                            <div className="d-flex justify-content-end">
-                              <button
-                                type="button"
-                                className="btn btn-primary text-nowrap"
-                                onClick={() => handleBiddingAmount('amount', 100)}
-                              >
-                                100
-                              </button>
-                              &nbsp; &nbsp; &nbsp;
-                              <button
-                                type="button"
-                                className="btn btn-primary text-nowrap"
-                                onClick={() => handleBiddingAmount('amount', 200)}
-                              >
-                                200
-                              </button>{' '}
-                              &nbsp; &nbsp; &nbsp;
-                              <button
-                                type="button"
-                                className=" btn btn-primary text-nowrap"
-                                onClick={() => handleBiddingAmount('amount', 500)}
-                              >
-                                500
-                              </button>{' '}
-                            </div>
-                          </td>
-                          <td>
-                            <div className="d-flex justify-content-start">
-                              {' '}
-                              <button
-                                type="button"
-                                className="btn btn-primary text-nowrap"
-                                onClick={() => handleBiddingAmount('amount', 1000)}
-                              >
-                                1000
-                              </button>{' '}
-                              &nbsp; &nbsp; &nbsp;
-                              <button type="button" className="btn btn-primary " onClick={() => handleSubmit()}>
-                                place bet
-                              </button>{' '}
-                              &nbsp; &nbsp; &nbsp;
-                              <button
-                                type="button"
-                                className="btn btn-primary text-nowrap"
-                                onClick={() => handleCancel()}
-                              >
-                                cancel
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      </>
-                    )}
-                </>
-              ))}
+              {!!game.markets.length > 0 &&
+                game?.markets.map((market, marketIndex) => {
+                  console.log('========> line 117', market);
+
+                  return (
+                    <>
+                      {/* {console.log("========> line 112", market)} */}
+                      <tr key={market?.marketId}>
+                        <td colSpan="6">
+                          {market?.Date}&nbsp;&nbsp;&nbsp;&nbsp;
+                          {market?.marketName}
+                        </td>
+                        {!!market?.runners?.length > 0 &&
+                          market?.runners?.map((runner, runnerindex) => (
+                            <React.Fragment key={runner?.runnerName?.runnerId}>
+                              {!!runner?.rate?.length > 0 &&
+                                runner.rate.map((rate, rateIndex) => (
+                                  <React.Fragment key={rateIndex}>
+                                    <td>
+                                      <span
+                                        style={{
+                                          backgroundColor: '#8ad1f2',
+                                          borderRadius: '5px',
+                                          display: 'inline-block',
+                                          width: '5rem',
+                                          textAlign: 'center',
+                                        }}
+                                        onClick={() =>
+                                          handleToggle(runner?.runnerName?.runnerId, rate?.Back, 'back', runnerindex)
+                                        }
+                                      >
+                                        {rate.Back}
+                                      </span>
+                                      &nbsp;
+                                      <span
+                                        style={{
+                                          backgroundColor: '#f7bac3',
+                                          borderRadius: '5px',
+                                          display: 'inline-block',
+                                          width: '5rem',
+                                          textAlign: 'center',
+                                        }}
+                                        onClick={() =>
+                                          handleToggle(runner?.runnerName?.runnerId, rate?.Lay, 'lay', runnerindex)
+                                        }
+                                      >
+                                        {rate.Lay}
+                                      </span>
+                                    </td>
+                                  </React.Fragment>
+                                ))}
+                            </React.Fragment>
+                          ))}
+                      </tr>
+                      {console.log('market', market.runners[0].runnerName.runnerId)}
+                      {toggle.indexNo === market?.runners[toggle.stateindex]?.runnerName?.runnerId &&
+                        !toggle.toggleOpen && (
+                          <>
+                            <tr className="">
+                              <td colSpan="6"></td>
+                              <td>{'india'}</td>
+                              <td className="">
+                                <div className="d-flex justify-content-end">
+                                  <button className=" btn btn-secondary text-nowrap">-</button>
+                                  &nbsp; &nbsp; &nbsp;
+                                  <input type="number" className="form-control w-50" value={bidding.rate} />
+                                  &nbsp; &nbsp; &nbsp;
+                                  <button className="btn btn-secondary text-nowrap ">+</button>
+                                </div>
+                              </td>
+                              <td className="">
+                                <div className="d-flex justify-content-start">
+                                  <button
+                                    className={`btn btn-secondary text-nowrap  ${
+                                      bidding.amount <= 100 ? 'disabled' : ''
+                                    }`}
+                                    onClick={() => handleBiddingAmount('amount', bidding.amount - 100)}
+                                  >
+                                    -
+                                  </button>
+                                  &nbsp; &nbsp; &nbsp;
+                                  <input
+                                    type="number"
+                                    className="form-control w-50"
+                                    value={bidding.amount}
+                                    onChange={(e) => handleBiddingAmount('amount', e.target.value)}
+                                  />
+                                  &nbsp; &nbsp; &nbsp;
+                                  <button
+                                    className=" btn btn-secondary text-nowrap"
+                                    onClick={() => handleBiddingAmount('amount', bidding.amount + 100)}
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td colSpan="7"></td>
+                              <td>
+                                <div className="d-flex justify-content-end">
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary text-nowrap"
+                                    onClick={() => handleBiddingAmount('amount', 100)}
+                                  >
+                                    100
+                                  </button>
+                                  &nbsp; &nbsp; &nbsp;
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary text-nowrap"
+                                    onClick={() => handleBiddingAmount('amount', 200)}
+                                  >
+                                    200
+                                  </button>{' '}
+                                  &nbsp; &nbsp; &nbsp;
+                                  <button
+                                    type="button"
+                                    className=" btn btn-primary text-nowrap"
+                                    onClick={() => handleBiddingAmount('amount', 500)}
+                                  >
+                                    500
+                                  </button>{' '}
+                                </div>
+                              </td>
+                              <td>
+                                <div className="d-flex justify-content-start">
+                                  {' '}
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary text-nowrap"
+                                    onClick={() => handleBiddingAmount('amount', 1000)}
+                                  >
+                                    1000
+                                  </button>{' '}
+                                  &nbsp; &nbsp; &nbsp;
+                                  <button type="button" className="btn btn-primary " onClick={() => handleSubmit()}>
+                                    place bet
+                                  </button>{' '}
+                                  &nbsp; &nbsp; &nbsp;
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary text-nowrap"
+                                    onClick={() => handleCancel()}
+                                  >
+                                    cancel
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          </>
+                        )}
+                    </>
+                  );
+                })}
             </tbody>
           </table>
         ))}

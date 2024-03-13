@@ -16,8 +16,8 @@ const LandingPage = () => {
   return (
     <div className="bg-light">
       <Carousel />
-      <HitGames />
-      <GifHolder />
+      {/* <HitGames /> */}
+      {/* <GifHolder /> */}
       <GameView />
       {/* <Footer /> */}
     </div>

@@ -6,10 +6,10 @@ const Announcement = () => {
   const [announcement, SetAnnouncement] = useState('');
 
   async function HandleAnnouncement() {
-    const response = await getAnnouncement();
+    // const response = await getAnnouncement();
 
-    console.log('Response for getAnnouncement line 11', response);
-    SetAnnouncement(response);
+    // console.log('Response for getAnnouncement line 11', response);
+    SetAnnouncement('');
   }
 
   useEffect(() => {
