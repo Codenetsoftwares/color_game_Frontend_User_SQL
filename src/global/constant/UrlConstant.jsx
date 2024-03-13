@@ -14,7 +14,9 @@ class UrlConstant {
   AllGames = `${this.url_dev_Json}/AllGames`;
 
   gifholder = `${this.url_dev_Json}/gifholder`;
-
+  
+  footer = `${this.url_dev_Json}/footer`; // tom
+  footerwarning = `${this.url_dev_Json}/footerwarning`; //tom
   landingViewPath = "/";
 
   login = `${this.url_dev}/api/user-login`;
@@ -26,9 +28,7 @@ class UrlConstant {
   marketdata = `${this.url_dev}/api/user-All-gameData`;
   avaterimage = `${this.url_dev}/avaterimage`; //subho
 
-  footer = `${this.url_dev}/footer`; // tom
 
-  footerwarning = `${this.url_dev}/footerwarning`; //tom
 }
 
 const urls = new UrlConstant();
