@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { marketdata } from '../../../utils/apiService';
+import React, { useState, useEffect } from "react";
+import { marketdata } from "../../../utils/apiService";
 
 const GameView = () => {
   const [gameList, SetGameList] = useState([]);
-  const [bidding, setBidding] = useState({ rate: '', amount: 0 });
+  const [bidding, setBidding] = useState({ rate: "", amount: 0 });
   const [toggle, setToggle] = useState({
     toggleOpen: false,
-    indexNo: '',
-    mode: '',
+    indexNo: "",
+    mode: "",
     stateindex: 0,
-    runnerName: '',
+    runnerName: "",
   });
 
   async function MarketData() {
     const response = await marketdata();
-    SetGameList(response);
+    SetGameList(response.data);
   }
 
+  console.log("first", gameList);
   useEffect(() => {
     MarketData();
   }, []);
@@ -30,16 +31,16 @@ const GameView = () => {
 
   const handleToggle = (runnerid, rate, value, id) => {
     console.log(
-      'runnerid',
+      "runnerid",
       runnerid,
-      'value',
+      "value",
       value,
-      'indexNo',
+      "indexNo",
       toggle.indexNo,
-      'mode',
+      "mode",
       toggle.mode,
-      'id',
-      toggle.stateindex,
+      "id",
+      toggle.stateindex
     );
     if (toggle.toggleOpen || toggle.indexNo !== runnerid) {
       setToggle({
@@ -48,7 +49,7 @@ const GameView = () => {
         mode: value,
         stateindex: id,
       });
-      handleBiddingAmount('rate', rate);
+      handleBiddingAmount("rate", rate);
     } else if (toggle.indexNo === runnerid && toggle.mode !== value) {
       setToggle({
         toggleOpen: false,
@@ -56,7 +57,7 @@ const GameView = () => {
         mode: value,
         stateindex: id,
       });
-      handleBiddingAmount('rate', rate);
+      handleBiddingAmount("rate", rate);
     } else if (toggle.indexNo === runnerid && toggle.mode === value) {
       setToggle({
         toggleOpen: true,
@@ -64,7 +65,7 @@ const GameView = () => {
         mode: value,
         stateindex: id,
       });
-      handleBiddingAmount('rate', rate);
+      handleBiddingAmount("rate", rate);
     } else {
       setToggle({
         toggleOpen: true,
@@ -72,15 +73,15 @@ const GameView = () => {
         mode: value,
         stateindex: id,
       });
-      handleBiddingAmount('rate', rate);
+      handleBiddingAmount("rate", rate);
     }
   };
 
   const handleSubmit = () => {};
 
   const handleCancel = () => {
-    handleBiddingAmount('rate', '');
-    handleBiddingAmount('amount', '');
+    handleBiddingAmount("rate", "");
+    handleBiddingAmount("amount", "");
   };
 
   console.log(gameList);
@@ -110,9 +111,12 @@ const GameView = () => {
               {game?.markets.map((market, marketIndex) => (
                 <>
                   <tr key={market?.marketId}>
-                    <td colSpan="6">
-                      {market?.Date}&nbsp;&nbsp;&nbsp;&nbsp;{market?.marketName}
-                    </td>
+                    {market.runners.length > 0 && (
+                      <td colSpan="6">
+                        {market?.Date}&nbsp;&nbsp;&nbsp;&nbsp;
+                        {market?.marketName}
+                      </td>
+                    )}
                     {market?.runners?.map((runner, runnerindex) => (
                       <React.Fragment key={runner?.runnerName?.runnerId}>
                         {runner.rate.map((rate, rateIndex) => (
@@ -120,14 +124,19 @@ const GameView = () => {
                             <td>
                               <span
                                 style={{
-                                  backgroundColor: '#8ad1f2',
-                                  borderRadius: '5px',
-                                  display: 'inline-block',
-                                  width: '5rem',
-                                  textAlign: 'center',
+                                  backgroundColor: "#8ad1f2",
+                                  borderRadius: "5px",
+                                  display: "inline-block",
+                                  width: "5rem",
+                                  textAlign: "center",
                                 }}
                                 onClick={() =>
-                                  handleToggle(runner?.runnerName?.runnerId, rate?.Back, 'back', runnerindex)
+                                  handleToggle(
+                                    runner?.runnerName?.runnerId,
+                                    rate?.Back,
+                                    "back",
+                                    runnerindex
+                                  )
                                 }
                               >
                                 {rate.Back}
@@ -135,14 +144,19 @@ const GameView = () => {
                               &nbsp;
                               <span
                                 style={{
-                                  backgroundColor: '#f7bac3',
-                                  borderRadius: '5px',
-                                  display: 'inline-block',
-                                  width: '5rem',
-                                  textAlign: 'center',
+                                  backgroundColor: "#f7bac3",
+                                  borderRadius: "5px",
+                                  display: "inline-block",
+                                  width: "5rem",
+                                  textAlign: "center",
                                 }}
                                 onClick={() =>
-                                  handleToggle(runner?.runnerName?.runnerId, rate?.Lay, 'lay', runnerindex)
+                                  handleToggle(
+                                    runner?.runnerName?.runnerId,
+                                    rate?.Lay,
+                                    "lay",
+                                    runnerindex
+                                  )
                                 }
                               >
                                 {rate.Lay}
@@ -153,27 +167,47 @@ const GameView = () => {
                       </React.Fragment>
                     ))}
                   </tr>
-                  {console.log('market', market.runners[0].runnerName.runnerId)}
-                  {toggle.indexNo === market?.runners[toggle.stateindex]?.runnerName?.runnerId &&
+
+                  {console.log(
+                    "market",
+                    market?.runners[0]?.runnerName?.runnerId
+                  )}
+                  {toggle.indexNo ===
+                    market?.runners[toggle.stateindex]?.runnerName?.runnerId &&
                     !toggle.toggleOpen && (
                       <>
                         <tr className="">
                           <td colSpan="6"></td>
-                          <td>{'india'}</td>
+                          <td>{"india"}</td>
                           <td className="">
                             <div className="d-flex justify-content-end">
-                              <button className=" btn btn-secondary text-nowrap">-</button>
+                              <button className=" btn btn-secondary text-nowrap">
+                                -
+                              </button>
                               &nbsp; &nbsp; &nbsp;
-                              <input type="number" className="form-control w-50" value={bidding.rate} />
+                              <input
+                                type="number"
+                                className="form-control w-50"
+                                value={bidding.rate}
+                              />
                               &nbsp; &nbsp; &nbsp;
-                              <button className="btn btn-secondary text-nowrap ">+</button>
+                              <button className="btn btn-secondary text-nowrap ">
+                                +
+                              </button>
                             </div>
                           </td>
                           <td className="">
                             <div className="d-flex justify-content-start">
                               <button
-                                className={`btn btn-secondary text-nowrap  ${bidding.amount <= 100 ? 'disabled' : ''}`}
-                                onClick={() => handleBiddingAmount('amount', bidding.amount - 100)}
+                                className={`btn btn-secondary text-nowrap  ${
+                                  bidding.amount <= 100 ? "disabled" : ""
+                                }`}
+                                onClick={() =>
+                                  handleBiddingAmount(
+                                    "amount",
+                                    bidding.amount - 100
+                                  )
+                                }
                               >
                                 -
                               </button>
@@ -182,12 +216,19 @@ const GameView = () => {
                                 type="number"
                                 className="form-control w-50"
                                 value={bidding.amount}
-                                onChange={(e) => handleBiddingAmount('amount', e.target.value)}
+                                onChange={(e) =>
+                                  handleBiddingAmount("amount", e.target.value)
+                                }
                               />
                               &nbsp; &nbsp; &nbsp;
                               <button
                                 className=" btn btn-secondary text-nowrap"
-                                onClick={() => handleBiddingAmount('amount', bidding.amount + 100)}
+                                onClick={() =>
+                                  handleBiddingAmount(
+                                    "amount",
+                                    bidding.amount + 100
+                                  )
+                                }
                               >
                                 +
                               </button>
@@ -201,7 +242,9 @@ const GameView = () => {
                               <button
                                 type="button"
                                 className="btn btn-primary text-nowrap"
-                                onClick={() => handleBiddingAmount('amount', 100)}
+                                onClick={() =>
+                                  handleBiddingAmount("amount", 100)
+                                }
                               >
                                 100
                               </button>
@@ -209,34 +252,44 @@ const GameView = () => {
                               <button
                                 type="button"
                                 className="btn btn-primary text-nowrap"
-                                onClick={() => handleBiddingAmount('amount', 200)}
+                                onClick={() =>
+                                  handleBiddingAmount("amount", 200)
+                                }
                               >
                                 200
-                              </button>{' '}
+                              </button>{" "}
                               &nbsp; &nbsp; &nbsp;
                               <button
                                 type="button"
                                 className=" btn btn-primary text-nowrap"
-                                onClick={() => handleBiddingAmount('amount', 500)}
+                                onClick={() =>
+                                  handleBiddingAmount("amount", 500)
+                                }
                               >
                                 500
-                              </button>{' '}
+                              </button>{" "}
                             </div>
                           </td>
                           <td>
                             <div className="d-flex justify-content-start">
-                              {' '}
+                              {" "}
                               <button
                                 type="button"
                                 className="btn btn-primary text-nowrap"
-                                onClick={() => handleBiddingAmount('amount', 1000)}
+                                onClick={() =>
+                                  handleBiddingAmount("amount", 1000)
+                                }
                               >
                                 1000
-                              </button>{' '}
+                              </button>{" "}
                               &nbsp; &nbsp; &nbsp;
-                              <button type="button" className="btn btn-primary " onClick={() => handleSubmit()}>
+                              <button
+                                type="button"
+                                className="btn btn-primary "
+                                onClick={() => handleSubmit()}
+                              >
                                 place bet
-                              </button>{' '}
+                              </button>{" "}
                               &nbsp; &nbsp; &nbsp;
                               <button
                                 type="button"
