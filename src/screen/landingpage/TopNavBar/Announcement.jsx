@@ -9,7 +9,7 @@ const Announcement = () => {
     const response = await getAnnouncement();
 
     // console.log("Response for getAnnouncement", response);
-    SetAnnouncement(response);
+    SetAnnouncement(response[0].data);
     // dispatch({ type: strings.Announcement, payload: response });
   }
 

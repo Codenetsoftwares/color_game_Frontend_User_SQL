@@ -5,7 +5,7 @@ import Navbar from './Navbar';
 const TopNav = () => {
   return (
     <div>
-      {/* <Announcement /> */}
+      <Announcement />
       <MiddleNav />
       <Navbar />
     </div>
