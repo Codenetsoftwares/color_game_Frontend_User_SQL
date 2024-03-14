@@ -93,7 +93,7 @@ const GameView = () => {
           <table className="table table-sm m-1">
             <thead>
               <tr key={game._id}>
-                <td colSpan="9" className="bg-info">
+                <td colSpan="12" className="bg-info">
                   {game?.gameName}
                 </td>
               </tr>
@@ -178,7 +178,7 @@ const GameView = () => {
                       <>
                         <tr className="">
                           <td colSpan="6"></td>
-                          <td>{"india"}</td>
+                          {/* <td colSpan="2"></td> */}
                           <td className="">
                             <div className="d-flex justify-content-end">
                               <button className=" btn btn-secondary text-nowrap">
@@ -270,7 +270,7 @@ const GameView = () => {
                               </button>{" "}
                             </div>
                           </td>
-                          <td>
+                          <td className="position-absolute">
                             <div className="d-flex justify-content-start">
                               {" "}
                               <button
@@ -279,6 +279,7 @@ const GameView = () => {
                                 onClick={() =>
                                   handleBiddingAmount("amount", 1000)
                                 }
+                                style={{whiteSpace:'nowrap', height:"46px"}}
                               >
                                 1000
                               </button>{" "}
@@ -287,6 +288,7 @@ const GameView = () => {
                                 type="button"
                                 className="btn btn-primary "
                                 onClick={() => handleSubmit()}
+                                style={{whiteSpace:'nowrap', height:"46px"}}
                               >
                                 place bet
                               </button>{" "}
@@ -295,6 +297,7 @@ const GameView = () => {
                                 type="button"
                                 className="btn btn-primary text-nowrap"
                                 onClick={() => handleCancel()}
+                                style={{whiteSpace:'nowrap', height:"46px"}}
                               >
                                 cancel
                               </button>

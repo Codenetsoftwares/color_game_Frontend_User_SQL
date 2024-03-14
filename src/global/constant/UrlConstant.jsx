@@ -26,9 +26,9 @@ class UrlConstant {
   marketdata = `${this.url_dev}/api/user-All-gameData`;
   avaterimage = `${this.url_dev}/avaterimage`; //subho
 
-  footer = `${this.url_dev}/footer`; // tom
+  footer = `${this.url_dev_Json}/footer`; // tom
 
-  footerwarning = `${this.url_dev}/footerwarning`; //tom
+  footerwarning = `${this.url_dev_Json}/footerwarning`; //tom
 }
 
 const urls = new UrlConstant();

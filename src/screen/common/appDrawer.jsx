@@ -34,11 +34,11 @@ function AppDrawer() {
   return (
     <div className="appbody ">
       <Sidebar>
-        <div style={{ padding: '0 24px', marginBottom: '8px' }}>
+        {/* <div style={{ padding: '0 24px', marginBottom: '8px' }}>
           <Typography variant="body2" fontWeight={600} style={{ letterSpacing: '0.5px' }} color="">
             Popular
           </Typography>
-        </div>
+        </div> */}
 
         <Menu menuItemStyles={menuItemStyles}>
           <MenuItem component={<Link to="/inplay" />}>In-Play</MenuItem>
