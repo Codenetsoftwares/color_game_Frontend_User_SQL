@@ -26,7 +26,7 @@ const Footer = () => {
       // will be updated after updating api
     }
     // console.log("response line 12 footer image  =>>", response);
-    // SetFooterimage(response);
+    SetFooterimage(response);
   }
   async function HandleWarning() {
     const response = await footerwarning();
@@ -34,8 +34,11 @@ const Footer = () => {
       SetWarning(dummywarning[0].data);
       // will be updated after updating api
     }
+    else {
+      
+      SetWarning(response[0].data);
+    }
     // console.log("Response for footer warning", response);
-    // SetWarning(response[0].data);
   }
   useEffect(() => {
     handelgetfooterimage();
