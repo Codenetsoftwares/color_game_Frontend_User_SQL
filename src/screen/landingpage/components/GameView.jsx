@@ -270,7 +270,7 @@ const GameView = () => {
                               </button>{" "}
                             </div>
                           </td>
-                          <td className="position-absolute">
+                          <td className="">
                             <div className="d-flex justify-content-start">
                               {" "}
                               <button
