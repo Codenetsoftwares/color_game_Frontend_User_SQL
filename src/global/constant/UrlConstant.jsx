@@ -3,9 +3,9 @@
 class UrlConstant {
   constructor() {}
 
-  url_dev = "http://localhost:8080";
+  url_dev = 'http://localhost:8080';
 
-  url_dev_Json = "http://localhost:4000";
+  url_dev_Json = 'http://localhost:4000';
 
   announcement = `${this.url_dev_Json}/announcement`;
 
@@ -14,10 +14,10 @@ class UrlConstant {
   AllGames = `${this.url_dev_Json}/AllGames`;
 
   gifholder = `${this.url_dev_Json}/gifholder`;
-  
+
   footer = `${this.url_dev_Json}/footer`; // tom
   footerwarning = `${this.url_dev_Json}/footerwarning`; //tom
-  landingViewPath = "/";
+  landingViewPath = '/';
 
   login = `${this.url_dev}/api/user-login`;
 

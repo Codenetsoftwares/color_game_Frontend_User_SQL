@@ -14,6 +14,7 @@
   /* border-style: solid;
   border-color: white; */
 }
+
 .Imageuser {
   height: 40px;
   width: 40px;
@@ -22,4 +23,15 @@
   /* display: inline-block; */
   object-fit: cover;
   margin-right: 30px;
+}
+
+.btn-ft {
+  background-image: linear-gradient(to top, #044469 4%, #1aa0d1 92%);
+  display: grid;
+  gap: 50px;
+}
+
+.mBody {
+  color: #1aa0d1;
+  margin: 50px;
 }

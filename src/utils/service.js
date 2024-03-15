@@ -65,12 +65,12 @@ export async function makeCall(callName, callParams, isToast) {
     });
 
     const json = await response.json();
-    debugger
-    if(json.success === false) {
-      toast.error(json.errMessage)
-      return null
-    } else if(isToast && (json.success === true || json.code === 200)) { // will update after backend api will provide proper response structure
-      toast.success(json.message)
+    if (json.success === false) {
+      toast.error(json.errMessage);
+      return null;
+    } else if (isToast && (json.success === true || json.code === 200)) {
+      // will update after backend api will provide proper response structure
+      toast.success(json.message);
     }
     // if (response && response.ok) {
     //   return json;
@@ -78,13 +78,13 @@ export async function makeCall(callName, callParams, isToast) {
     //  else {
     //   throw new Error('Something went wrong');
     // }
-    return json
+    return json;
   } catch (error) {
     // if (await checkStatus(error)) {
     //   // throw notifiers.LOGGEDOUT;
     // }
     toast.error(error.message);
-    return null
+    return null;
   }
 }
 
