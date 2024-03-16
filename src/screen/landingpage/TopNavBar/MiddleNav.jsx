@@ -7,9 +7,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import './Avater.css';
 
 import LoginMain from '../../common/login';
+import AlertBoxModal from './AlertBoxModal';
 
 const MiddleNav = () => {
   const [showModalLogin, setShowModalLogin] = useState(false);
+  const [show, setShow] = useState(false);
+
   const handleShow = () => setShowModalLogin(true);
   const [userImage, setUserImage] = useState(null);
 
@@ -17,7 +20,7 @@ const MiddleNav = () => {
   const [photo, setPhoto] = useState([]);
   const { store } = useAppContext();
   const { isLogin: userIsLoginFromStore, userName: userNameFromStore } = store.user;
-
+  console.log('==store=======>', store);
   const [loginCred, setLoginCred] = useState({ username: '', password: '' });
 
   const { dispatch } = useAppContext();
@@ -47,7 +50,7 @@ const MiddleNav = () => {
 
     const reader = new FileReader();
     reader.readAsDataURL(event.target.files[0]);
-    reader.onload = () => {
+    reader.onloadend = () => {
       setUserImage(reader.result);
       console.log('urlimage====>', reader.result); //b64 string
     };
@@ -58,13 +61,15 @@ const MiddleNav = () => {
 
   const handleIconClick = () => {
     fileInputRef.current.click();
+    console.log('handleiconclick+++++++>');
   };
 
   const handleLogoutClick = () => {
-    dispatch({
-      type: strings.LOG_OUT,
-      payload: { isLogin: false },
-    });
+    setShow(true);
+    // dispatch({
+    //   type: strings.LOG_OUT,
+    //   payload: { isLogin: false },
+    // });
   };
 
   return (
@@ -140,6 +145,8 @@ const MiddleNav = () => {
 
       {/* login modal */}
       <LoginMain showLogin={showModalLogin} setShowLogin={setShowModalLogin} />
+      {/* AlertModal */}
+      <AlertBoxModal showAlertBoxModal={show} setShowAlertBoxModal={setShow} />
     </div>
   );
 };

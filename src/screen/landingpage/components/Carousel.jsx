@@ -16,7 +16,7 @@ const Carousel = () => {
   async function handelCarousel() {
     const response = await getcarrousel();
     console.log('response handelCarousel =>>', response);
-    if(response) {
+    if (response) {
       SetCarrouselImg(response.data ?? []);
       // dispatch({ type: strings.Name, payload: response.data });
     }
