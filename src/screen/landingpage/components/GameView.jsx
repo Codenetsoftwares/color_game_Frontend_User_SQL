@@ -20,6 +20,7 @@ const GameView = () => {
     }
   }
 
+  console.log('first', gameList);
   useEffect(() => {
     MarketData();
   }, []);
@@ -96,7 +97,7 @@ const GameView = () => {
           <table className="table table-sm m-1">
             <thead>
               <tr key={game._id}>
-                <td colSpan="9" className="bg-info">
+                <td colSpan="12" className="bg-info">
                   {game?.gameName}
                 </td>
               </tr>

@@ -32,27 +32,34 @@ function LoginMain({ showLogin, setShowLogin }) {
     onSubmit: (values, action) => {
       console.log('values++===============>', values);
       loginHandler(values);
-      action.resetForm();
+      resetForm();
     },
     enableReinitialize: true,
   });
+
+  useEffect(() => {
+    if (!showLogin) {
+      resetForm();
+    }
+  }, [showLogin]);
 
   async function loginHandler(values) {
     const response = await login(values, true);
     if (response) {
       dispatch({
         type: strings.LOG_IN,
-        payload: { isLogin: true, ...response.token },
+        payload: { isLogin: true, ...response.data },
       });
       setShowLogin(!showLogin);
     }
   }
 
   function header() {
-    return <h4>Login</h4>;
+    return <h4 className="d-flex justify-content-center">Login</h4>;
   }
 
-  // console.log(errors)
+
+  console.log(errors)
   function ModalBody() {
     return (
       <div className="py-3">
@@ -92,7 +99,13 @@ function LoginMain({ showLogin, setShowLogin }) {
 
   function footer() {
     return (
-      <Button variant="secondary" onClick={handleSubmit}>
+      <Button
+        variant="secondary"
+        onClick={handleSubmit}
+        style={{
+          backgroundImage: 'linear-gradient(to top, #044469 4%, #1AA0D1 92%)',
+        }}
+      >
         Sign in
       </Button>
     );

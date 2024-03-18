@@ -5,9 +5,9 @@ import { getAnnouncement } from '../../../utils/apiService';
 const Announcement = () => {
   const [announcement, SetAnnouncement] = useState('');
 
+  // pending
   async function HandleAnnouncement() {
     // const response = await getAnnouncement();
-
     // console.log('Response for getAnnouncement line 11', response);
     SetAnnouncement('');
   }

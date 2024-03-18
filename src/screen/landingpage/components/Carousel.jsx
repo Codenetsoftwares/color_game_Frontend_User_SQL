@@ -13,30 +13,14 @@ const Carousel = () => {
 
   const { dispatch } = useAppContext();
 
-  async function handelCarousel(value) {
-    const response = await getcarrousel(value, true);
-    console.log('response handelCarousel  line 18 =>>', response);
+  async function handelCarousel() {
+    const response = await getcarrousel();
+    console.log('response handelCarousel =>>', response);
     if (response) {
-      SetCarrouselImg(response.data);
+      SetCarrouselImg(response.data ?? []);
+      // dispatch({ type: strings.Name, payload: response.data });
     }
   }
-
-  // async function handelCarousel() {
-  //   try {
-  //     const response = await getcarrousel(true);
-  //     console.log('response handelCarousel  line 18 =>>', response);
-  //     if (response && response.data) {
-  //       SetCarrouselImg(response.data);
-  //     } else {
-  //       // Handle unexpected response format from backend
-  //       console.error('Unexpected response format from backend line 32 :', response);
-  //     }
-  //   } catch (error) {
-  //     // Handle network errors or errors from backend
-  //     console.error('Error fetching carousel data 36 :', error);
-
-  //   }
-  // }
 
   useEffect(() => {
     handelCarousel();
