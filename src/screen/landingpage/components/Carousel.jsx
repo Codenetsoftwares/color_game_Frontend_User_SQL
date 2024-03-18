@@ -35,7 +35,7 @@ const Carousel = () => {
             carrouselImg.map((item, index) => (
               <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={index} data-bs-interval="2000">
                 {item.image ? (
-                  <img src={item.image} className="d-block w-100" alt="..." style={{ height: '50vh' }} />
+                  <img src={item.image} className="d-block w-100" alt="..." style={{ height: '85vh' }} />
                 ) : (
                   <img src={Img[index]} className="d-block w-100" alt="..." style={{ height: '50vh' }} />
                 )}

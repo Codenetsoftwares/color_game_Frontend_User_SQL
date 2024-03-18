@@ -13,6 +13,12 @@ function LoginMain({ showLogin, setShowLogin }) {
 
   const { dispatch } = useAppContext();
 
+  useEffect(() => {
+    if (!showLogin) {
+      resetForm();
+    }
+  }, [showLogin]);
+
   function setInitialValues() {
     return {
       userName: '',
@@ -52,7 +58,8 @@ function LoginMain({ showLogin, setShowLogin }) {
     return <h4 className="d-flex justify-content-center">Login</h4>;
   }
 
-  console.log(errors);
+
+  console.log(errors)
   function ModalBody() {
     return (
       <div className="py-3">
@@ -66,23 +73,23 @@ function LoginMain({ showLogin, setShowLogin }) {
             value={values.userName}
             onChange={handleChange}
           />
-          <span className="position-absolute" style={{ left: '60px', top: '36px' }}>
+          <span className="position-absolute small" style={{ left: '60px', top: '36px' }}>
             {errors.userName && touched.userName ? <p>{errors.userName}</p> : null}
           </span>
         </div>
         <br />
-        <div className="d-flex justify-content-center position-relative">
+        <div className="d-flex justify-content-center position-relative ">
           <input
             type="password"
             className="form-control w-75"
             placeholder="enter password"
             name="password"
-            style={{ border: '1px solid black' }}
+            // style={{ border: '1px solid black' }}
             value={values.password}
             onChange={handleChange}
           />
 
-          <span className="position-absolute" style={{ left: '60px', top: '36px' }}>
+          <span className="position-absolute small" style={{ left: '60px', top: '36px' }}>
             {errors.password && touched.password ? <p>{errors.password}</p> : null}
           </span>
         </div>

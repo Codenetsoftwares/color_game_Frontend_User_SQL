@@ -25,12 +25,20 @@ class UrlConstant {
 
   carrousel = `${this.url_dev}/api/admin/slider-text-img`;
 
+  announcement = `${this.url_dev}/api/announcement`;
+
+  hitgames = `${this.url_dev}/hitgames`;
+
+  gifholder = `${this.url_dev}/gifholder`;
+
   marketdata = `${this.url_dev}/api/user-All-gameData`;
   avaterimage = `${this.url_dev}/avaterimage`; //subho
 
   footer = `${this.url_dev_Json}/footer`; // tom
 
   footerwarning = `${this.url_dev_Json}/footerwarning`; //tom
+
+  AllGames = `${this.url_dev}/api/user-games`;
 }
 
 const urls = new UrlConstant();
