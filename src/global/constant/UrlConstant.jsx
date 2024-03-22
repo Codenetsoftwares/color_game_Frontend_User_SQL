@@ -3,42 +3,43 @@
 class UrlConstant {
   constructor() {}
 
-  url_dev = 'http://localhost:8080';
+  url_dev = 'http://localhost:8080/api';
 
-  url_dev_Json = 'http://localhost:4000';
+  login = `${this.url_dev}/user-login`;
 
-  announcement = `${this.url_dev_Json}/announcement`;
+  // url_dev_Json = 'http://localhost:4000';
 
-  hitgames = `${this.url_dev_Json}/hitgames`;
+  // announcement = `${this.url_dev_Json}/announcement`;
 
-  AllGames = `${this.url_dev_Json}/AllGames`;
+  // hitgames = `${this.url_dev_Json}/hitgames`;
 
-  gifholder = `${this.url_dev_Json}/gifholder`;
+  // AllGames = `${this.url_dev_Json}/AllGames`;
 
-  footer = `${this.url_dev_Json}/footer`; // tom
-  footerwarning = `${this.url_dev_Json}/footerwarning`; //tom
-  landingViewPath = '/';
+  // gifholder = `${this.url_dev_Json}/gifholder`;
 
-  login = `${this.url_dev}/api/user-login`;
+  // footer = `${this.url_dev_Json}/footer`; // tom
+  // footerwarning = `${this.url_dev_Json}/footerwarning`; //tom
+  // landingViewPath = '/';
 
-  name = `${this.url_dev}/Name`;
 
-  carrousel = `${this.url_dev}/api/admin/slider-text-img`;
+  // name = `${this.url_dev}/Name`;
 
-  announcement = `${this.url_dev}/api/announcement`;
+  // carrousel = `${this.url_dev}/api/admin/slider-text-img`;
 
-  hitgames = `${this.url_dev}/hitgames`;
+  // announcement = `${this.url_dev}/api/announcement`;
 
-  gifholder = `${this.url_dev}/gifholder`;
+  // hitgames = `${this.url_dev}/hitgames`;
 
-  marketdata = `${this.url_dev}/api/user-All-gameData`;
-  avaterimage = `${this.url_dev}/avaterimage`; //subho
+  // gifholder = `${this.url_dev}/gifholder`;
 
-  footer = `${this.url_dev_Json}/footer`; // tom
+  // marketdata = `${this.url_dev}/api/user-All-gameData`;
+  // avaterimage = `${this.url_dev}/avaterimage`; //subho
 
-  footerwarning = `${this.url_dev_Json}/footerwarning`; //tom
+  // footer = `${this.url_dev_Json}/footer`; // tom
 
-  AllGames = `${this.url_dev}/api/user-games`;
+  // footerwarning = `${this.url_dev_Json}/footerwarning`; //tom
+
+  // AllGames = `${this.url_dev}/api/user-games`;
 }
 
 const urls = new UrlConstant();
