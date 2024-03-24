@@ -2,13 +2,19 @@ import React from 'react';
 import './gameView.css';
 import Layout from '../layout/layout';
 import AppDrawer from '../common/appDrawer';
+import { useAppContext } from '../../contextApi/context';
+import GameWithMarketList from '../common/gameListView/gameWithMarketList';
 
 const GameView = () => {
+  const { store } = useAppContext();
+
   function gamePage() {
     return (
-      <AppDrawer>
-        <h2>this is from game page</h2>
-      </AppDrawer>
+      <div className={`global-margin-top${store.user.isLogin ? '-logged' : ''}`}>
+        <AppDrawer>
+          <GameWithMarketList isSingleMarket={true} />
+        </AppDrawer>
+      </div>
     );
   }
 

@@ -7,6 +7,7 @@ import { useAppContext } from '../../contextApi/context';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Layout from '../layout/layout';
 import AppDrawer from '../common/appDrawer';
+import GameWithMarketList from '../common/gameListView/gameWithMarketList';
 
 const Home = () => {
   const [sliderData, setSliderData] = useState(dSlider);
@@ -24,7 +25,7 @@ const Home = () => {
 
   function carrousel() {
     return (
-      <div id="carouselExampleCaptions global-margin-top" className="carousel slide" data-bs-ride="carousel">
+      <div id="carouselExampleCaptions" className="carousel slide" data-bs-ride="carousel">
         <div className="carousel-indicators">
           {sliderData.map((item, index) => (
             <button
@@ -180,24 +181,26 @@ const Home = () => {
     );
   }
 
-  // app drawer pending
   function getLoginHomePage() {
     return (
-      <AppDrawer>
-        <h2>this is from home page</h2>
-      </AppDrawer>
+      <div className='global-margin-top-logged'>
+        <AppDrawer>
+          <GameWithMarketList isSingleMarket={false}/>
+        </AppDrawer>
+      </div>
     );
   }
 
   function homePage() {
     return (
-      <>
+      <div className='global-margin-top'>
         {carrousel()}
         {hitGames()}
         {gif()}
+        <GameWithMarketList isSingleMarket={false}/>
         {downloadApp()}
         {footer()}
-      </>
+      </div>
     );
   }
 

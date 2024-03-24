@@ -3,9 +3,6 @@ import React, { useState } from 'react';
 
 function AppDrawer({ children }) {
   const [isActive, setIsActive] = useState(false);
-  function toggleSidebar() {
-    setIsActive(!isActive);
-  }
 
   function getLeftNavBar() {
     return (
@@ -281,146 +278,16 @@ function AppDrawer({ children }) {
             className="col-md-10 offset-md-2"
             style={{ border: '1px solid red', height: '100vh', overflowY: 'auto' }}
           >
-            {/* <div className="row" style={{ height: "80vh", overflow: "hidden" }}> */}
             <div className="col-md-12" style={{ background: 'green', overflowX: 'auto' }}>
               {getMidCarousel()}
             </div>
-            {/* </div> */}
-            <div className="row" style={{ overflowY: 'auto' }}>
-              <div className="col-md-12" style={{ border: '1px solid red' }}>
-                <h1 className="text-center">GameView Body</h1>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et ligula libero. Proin vitae placerat
-                  odio. Nam tincidunt, nunc ac auctor vehicula, mauris odio consequat leo, vel tristique purus lacus at
-                  erat. Duis ultricies, massa a ullamcorper luctus, dui lorem bibendum turpis, a viverra turpis odio vel
-                  libero. Fusce rhoncus dui ut mi efficitur, a facilisis arcu commodo. Quisque vitae diam nec libero
-                  sollicitudin laoreet ac non orci. Donec tempor, metus non accumsan euismod, sapien mauris eleifend
-                  orci, et feugiat elit enim sed neque. Mauris pellentesque turpis sit amet libero viverra euismod.
-                  Quisque aliquet odio eu est fermentum, a facilisis neque ullamcorper. Phasellus sit amet eros libero.
-                  In hac habitasse platea dictumst. Nam nec velit sed urna lobortis finibus non quis arcu. Donec in
-                  libero ut enim suscipit consequat. Nullam consectetur a nunc ut sodales. Donec nec magna eget mi
-                  tristique tincidunt.
-                </p>
-                <p>
-                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
-                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
-                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
-                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
-                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
-                  eros varius et.
-                </p>
-                <p>
-                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
-                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
-                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
-                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
-                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
-                  eros varius et.
-                </p>
-                <p>
-                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
-                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
-                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
-                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
-                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
-                  eros varius et.
-                </p>
-                <p>
-                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
-                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
-                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
-                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
-                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
-                  eros varius et.
-                </p>
-                <p>
-                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
-                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
-                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
-                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
-                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
-                  eros varius et.
-                </p>
-                <p>
-                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
-                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
-                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
-                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
-                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
-                  eros varius et.
-                </p>
-                <p>
-                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
-                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
-                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
-                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
-                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
-                  eros varius et.
-                </p>
-                <p>
-                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
-                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
-                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
-                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
-                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
-                  eros varius et.
-                </p>
-                <p>
-                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
-                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
-                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
-                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
-                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
-                  eros varius et.
-                </p>
-                <p>
-                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
-                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
-                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
-                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
-                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
-                  eros varius et.
-                </p>
-                <p>
-                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
-                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
-                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
-                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
-                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
-                  eros varius et.
-                </p>
-                <p>
-                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
-                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
-                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
-                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
-                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
-                  eros varius et.
-                </p>
-                <p>
-                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
-                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
-                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
-                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
-                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
-                  eros varius et.
-                </p>
-                <p>
-                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
-                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
-                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
-                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
-                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
-                  eros varius et.
-                </p>
-              </div>
-            </div>
+            {children}
           </div>
         </div>
       </div>
     );
   }
 
-  return <div className="global-margin-top-loggedIn">{getBody()}</div>;
+  return <div>{getBody()}</div>;
 }
 export default AppDrawer;

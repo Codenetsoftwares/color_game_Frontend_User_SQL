@@ -33,7 +33,7 @@ function Layout() {
         {user_allGames.map((gameObj, index) => (
           <li key={index + 1} className="p-2 text-white" style={{ fontWeight: 600 }}>
             <a
-              className={`text-white text-decoration-none ${gameObj.isBlink ? 'blink_me' : ''}`}
+              className={`text-white text-decoration-none text-nowrap ${gameObj.isBlink ? 'blink_me' : ''}`}
               href={`/gameView/${gameObj.gameName.replace(/\s/g, '')}/${gameObj.gameId}`}
             >
               {gameObj.gameName}
