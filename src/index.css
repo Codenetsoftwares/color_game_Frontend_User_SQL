@@ -11,6 +11,14 @@
   right: 24px;
 }
 
+.global-margin-top {
+  margin-top: 147px;
+}
+
+.global-margin-top-logged {
+  margin-top: 115px;
+}
+
 * {
   box-sizing: border-box;
 }

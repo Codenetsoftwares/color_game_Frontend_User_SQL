@@ -15,7 +15,7 @@ export async function login(body, isToast = false) {
 
 // user api call
 
-export async function user_getAllGames(body = {}, isToast = false) {
+export async function user_getAllGames_api(body = {}, isToast = false) {
   try {
     const callParams = getNoAuthCallParams(strings.GET, body, isToast);
     const response = await makeCall(urls.userGames, callParams);

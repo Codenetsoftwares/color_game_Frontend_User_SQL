@@ -1,31 +1,44 @@
 import { useEffect, useState } from 'react';
 import { useAppContext } from '../../contextApi/context';
 import NavBar from '../common/navBar';
-import { user_getAllGames } from '../../utils/apiService';
-import { getUser_allGames_I_state } from '../../utils/getInitiateState';
+import { user_getAllGames_api } from '../../utils/apiService';
+import './layout.css'
 
 function Layout() {
   const [user_allGames, setUser_allGames] = useState([]);
   const appDrawerFromStore = useAppContext();
 
-  // get all game data for from backend to display in navbar
-  useEffect(async () => {
-    const response = await user_getAllGames();
+  useEffect(() => {
+    user_getAllGames()
+  }, []);
+
+  async function user_getAllGames() {
+    const response = await user_getAllGames_api();
     if (response) {
       setUser_allGames(response.data);
     }
-  }, []);
+  }
 
-  // get option for navbar
   function getNavBarOption() {
-    return <ul>{user_allGames.map((gameObj, index) => <li key={index}>{gameObj.gameName}</li>)}</ul>;
+    return (
+      <ul className='mb-0 d-flex' style={{ listStyleType: 'none', overflowX: 'auto', padding: 0, backgroundColor: 'rgb(23 101 119)' }}>
+        <li key={0} className='p-2 text-white' style={{ fontWeight: 600 }}>
+          <a className="text-white text-decoration-none" href={`/home`}>{'Home'}</a>
+        </li>
+        {user_allGames.map((gameObj, index) => (
+          <li key={index + 1} className='p-2 text-white' style={{ fontWeight: 600 }}>
+            <a className={`text-white text-decoration-none ${gameObj.isBlink ? 'blink_me' : ''}`} href={`/gameView/${gameObj.gameName.replace(/\s/g, '')}/${gameObj.gameId}`}>{gameObj.gameName}</a>
+          </li>
+        ))}
+      </ul>
+    );
   }
 
   return (
-    <>
+    <div className='fixed-top'>
       <NavBar />
-      {/* {getNavBarOption()} */}
-    </>
+      {user_allGames && getNavBarOption()}
+    </div>
   );
 }
 

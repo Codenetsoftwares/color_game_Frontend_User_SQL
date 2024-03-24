@@ -23,12 +23,11 @@ function App() {
         pauseOnHover
         theme="dark"
       />
-      <Layout />
       <BrowserRouter>
         <Routes>
           <Route path="/home" element={<Home />} />
           <Route path="/" element={<Home />} />
-          <Route path="/gameView" element={<GameView />} />
+          <Route path="/gameView/:gameName/:id" element={<GameView />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

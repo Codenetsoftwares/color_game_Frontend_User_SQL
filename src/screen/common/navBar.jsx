@@ -16,10 +16,11 @@ import {
 } from 'react-icons/fa';
 import Login from '../loginModal/loginModal';
 import strings from '../../utils/constant/stringConstant';
+import { toast } from 'react-toastify';
 
 const NavBar = () => {
   const [showModalLogin, setShowModalLogin] = useState(false);
-  const handleShow = () => setShowModalLogin(true);
+
   const { store, dispatch } = useAppContext();
 
   const handleLogout = () => {
@@ -27,13 +28,16 @@ const NavBar = () => {
       type: strings.LOG_OUT,
       payload: { isLogin: false },
     });
-    window.location.reload();
+    const closeButton = document.querySelector('.btn-close');
+    closeButton.click();
+    toast.info("Logout successfully");
   };
+
 
   function getNav() {
     return (
       <nav
-        class="navbar navbar-dark bg-dark fixed-top"
+        className="navbar navbar-dark bg-dark  p-0"
         style={{
           backgroundImage: 'linear-gradient(to bottom, #0a262c, #114651, #17687a, #1b8da6, #20b3d4)',
         }}
@@ -90,7 +94,7 @@ const NavBar = () => {
                   backgroundImage: 'linear-gradient(to top, #114551, #226575, #34879b, #47abc2, #5ad0eb)',
                   fontSize: '13px',
                 }}
-                onClick={handleShow}
+                onClick={()=> setShowModalLogin(true)}
               >
                 <FaUser style={{ width: '12px' }} className="mb-1" />
                 &nbsp;

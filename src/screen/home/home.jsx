@@ -5,7 +5,8 @@ import HandImg from '../../asset/best_betting_image-removeBg-preview.png';
 import LogoImg from '../../asset/Logo.png';
 import { useAppContext } from '../../contextApi/context';
 import { useLocation, useNavigate } from 'react-router-dom';
-import NavBar from '../common/navBar';
+import Layout from '../layout/layout';
+import AppDrawer from '../common/appDrawer';
 
 const Home = () => {
   const [sliderData, setSliderData] = useState(dSlider);
@@ -18,13 +19,12 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (store.user.isLogin) navigate('/gameView');
-    else if (location.pathname === '/') navigate('/home');
-  }, [store.user.isLogin]);
+    if (location.pathname === '/') navigate('/home');
+  }, []);
 
   function carrousel() {
     return (
-      <div id="carouselExampleCaptions" className="carousel slide" data-bs-ride="carousel">
+      <div id="carouselExampleCaptions global-margin-top" className="carousel slide" data-bs-ride="carousel">
         <div className="carousel-indicators">
           {sliderData.map((item, index) => (
             <button
@@ -180,15 +180,31 @@ const Home = () => {
     );
   }
 
-  return (
-    <>
+  // app drawer pending
+  function getLoginHomePage() {
+    return <AppDrawer>
+      <h2>this is from home page</h2>
+    </AppDrawer>
+  }
+
+  function homePage() {
+    return <>
       {carrousel()}
       {hitGames()}
       {gif()}
       {downloadApp()}
       {footer()}
     </>
-  );
+  }
+
+  function getBody() {
+    return <>
+      <Layout />
+      {store.user.isLogin ? getLoginHomePage() : homePage()}
+    </>
+  }
+
+  return getBody()
 };
 
 export default Home;
