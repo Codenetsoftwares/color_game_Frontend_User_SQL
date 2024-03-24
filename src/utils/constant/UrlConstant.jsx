@@ -4,10 +4,11 @@ class UrlConstant {
   constructor() {}
 
   url_dev = 'http://localhost:8080/api';
+  user = "user";
 
   // user api
-  login = `${this.url_dev}/user-login`;
-  userGames = `${this.url_dev}/user-games`;
+  login = `${this.url_dev}/${this.user}-login`;
+  userGames = `${this.url_dev}/${this.user}-games`;
 
   // url_dev_Json = 'http://localhost:4000';
 
