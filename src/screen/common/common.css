@@ -36,3 +36,11 @@
 .constant_box_404 {
   margin-top: -50px;
 }
+
+/*======================
+    NavBar
+=======================*/
+.announcement {
+  font-size: 16px;
+  color: orange;
+}

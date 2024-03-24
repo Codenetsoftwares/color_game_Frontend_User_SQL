@@ -1,10 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './App.css';
-import { ToastContainer } from 'react-bootstrap';
 import { AppProvider } from './contextApi/context';
 import Home from './screen/home/home';
 import NotFound from './screen/common/notFound';
 import GameView from './screen/gameView/gameView';
+import Layout from './screen/layout/layout';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './App.css';
 
 function App() {
   return (
@@ -21,6 +23,7 @@ function App() {
         pauseOnHover
         theme="dark"
       />
+      <Layout />
       <BrowserRouter>
         <Routes>
           <Route path="/home" element={<Home />} />

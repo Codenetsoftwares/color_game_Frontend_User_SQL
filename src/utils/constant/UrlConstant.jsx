@@ -5,7 +5,9 @@ class UrlConstant {
 
   url_dev = 'http://localhost:8080/api';
 
+  // user api
   login = `${this.url_dev}/user-login`;
+  userGames = `${this.url_dev}/user-games`;
 
   // url_dev_Json = 'http://localhost:4000';
 

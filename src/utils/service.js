@@ -68,7 +68,7 @@ export async function makeCall(callName, callParams, isToast) {
       return null;
     } else if (isToast && (json.success === true || json.code === 200)) {
       // will update after backend api will provide proper response structure
-      toast.success(json.message);
+      toast.info(json.message);
     }
     // if (response && response.ok) {
     //   return json;

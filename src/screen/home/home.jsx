@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import HandImg from '../../asset/best_betting_image-removeBg-preview.png';
 import LogoImg from '../../asset/Logo.png';
 import { useAppContext } from '../../contextApi/context';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import NavBar from '../common/navBar';
 
 const Home = () => {
@@ -13,11 +13,13 @@ const Home = () => {
   const [gifData, setHitGifData] = useState(sGif);
   const [footerImageData, setFooterImageData] = useState(fFooterI);
 
+  const location = useLocation();
   const { store } = useAppContext();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (store.user.isLogin) navigate('/gameView');
+    else if (location.pathname === '/') navigate('/home');
   }, [store.user.isLogin]);
 
   function carrousel() {
@@ -180,7 +182,6 @@ const Home = () => {
 
   return (
     <>
-      <NavBar />
       {carrousel()}
       {hitGames()}
       {gif()}

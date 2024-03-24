@@ -38,6 +38,14 @@ const NavBar = () => {
           backgroundImage: 'linear-gradient(to bottom, #0a262c, #114651, #17687a, #1b8da6, #20b3d4)',
         }}
       >
+        {!store.user.isLogin && <div class="w-100 d-flex justify-content-between">
+          <FaCoins className="m-2" style={{ color: '#fec015' }} />
+          <marquee className="text-white">Your announcement text here</marquee>
+          <span className="text-nowrap text-white px-2" style={{ fontSize: '14px' }}>
+            March 24, 2024
+          </span>
+        </div>}
+
         <div class="container-fluid">
           <a class="navbar-brand" href="#">
             <img src={Logo} style={{ width: '150px' }} />
@@ -317,13 +325,12 @@ const NavBar = () => {
 
   function getBody() {
     return (
-      <div>
+      <>
         {getNav()}
         {getRightSlider()}
-        <h2>Hello</h2>
         <Outlet />
         <Login showLogin={showModalLogin} setShowLogin={setShowModalLogin} />
-      </div>
+      </>
     );
   }
 

@@ -8,6 +8,7 @@ const AppContext = createContext();
 const initialState = {
   user: getUserInitialState(),
   announcement: [],
+  appDrawer: [],
 };
 
 const AppProvider = ({ children }) => {

@@ -117,7 +117,6 @@ const GameView = () => {
   function getBody() {
     return (
       <div class=" text-center">
-        <h1>GameView</h1>
         <div class="row">
           <div class="col-2 vertical-navbar-container d-flex">{getLeftNavBar()}</div>
           <div
@@ -134,12 +133,7 @@ const GameView = () => {
     );
   }
 
-  return (
-    <>
-      <NavBar />
-      {getBody()}
-    </>
-  );
+  return getBody();
 };
 
 export default GameView;
