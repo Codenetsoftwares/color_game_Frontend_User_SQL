@@ -1,6 +1,7 @@
-import urls from '../global/constant/UrlConstant';
-import strings from '../global/constant/stringConstant';
-import { getCallParams, getNoAuthCallParams, makeCall } from './service';
+import urls from '../utils/constant/UrlConstant';
+import strings from '../utils/constant/stringConstant';
+
+import { getNoAuthCallParams, makeCall } from './service';
 
 export async function login(body, isToast = false) {
   try {

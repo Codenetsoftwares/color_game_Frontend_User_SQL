@@ -1,4 +1,4 @@
-import strings from '../global/constant/stringConstant';
+import strings from '../utils/constant/stringConstant';
 import { getUserInitialState } from '../utils/getInitiateState';
 
 export const reducer = (state, action) => {

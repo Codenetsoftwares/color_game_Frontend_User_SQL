@@ -21,7 +21,6 @@ class UrlConstant {
   // footerwarning = `${this.url_dev_Json}/footerwarning`; //tom
   // landingViewPath = '/';
 
-
   // name = `${this.url_dev}/Name`;
 
   // carrousel = `${this.url_dev}/api/admin/slider-text-img`;
