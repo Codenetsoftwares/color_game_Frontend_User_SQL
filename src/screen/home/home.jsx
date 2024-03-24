@@ -182,29 +182,35 @@ const Home = () => {
 
   // app drawer pending
   function getLoginHomePage() {
-    return <AppDrawer>
-      <h2>this is from home page</h2>
-    </AppDrawer>
+    return (
+      <AppDrawer>
+        <h2>this is from home page</h2>
+      </AppDrawer>
+    );
   }
 
   function homePage() {
-    return <>
-      {carrousel()}
-      {hitGames()}
-      {gif()}
-      {downloadApp()}
-      {footer()}
-    </>
+    return (
+      <>
+        {carrousel()}
+        {hitGames()}
+        {gif()}
+        {downloadApp()}
+        {footer()}
+      </>
+    );
   }
 
   function getBody() {
-    return <>
-      <Layout />
-      {store.user.isLogin ? getLoginHomePage() : homePage()}
-    </>
+    return (
+      <>
+        <Layout />
+        {store.user.isLogin ? getLoginHomePage() : homePage()}
+      </>
+    );
   }
 
-  return getBody()
+  return getBody();
 };
 
 export default Home;

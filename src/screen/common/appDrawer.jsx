@@ -1,109 +1,426 @@
+import React, { useState } from 'react';
+// import "./common.css";
+
 function AppDrawer({ children }) {
+  const [isActive, setIsActive] = useState(false);
+  function toggleSidebar() {
+    setIsActive(!isActive);
+  }
 
-    function getLeftNavBar() {
-        return (
-            <div className='position-fixed '>
-                <ul className='navbar-nav  flex-grow-1 p-0'>
-                    <li className='nav-item'>
-                        <a className='nav-link active' aria-current='page' href='#'>
-                            Home
-                        </a>
-                    </li>
-                    <li className='nav-item'>
-                        <a className='nav-link active' aria-current='page' href='#'>
-                            Home
-                        </a>
-                    </li>
-                    <li className='nav-item'>
-                        <a className='nav-link' href='#'>
-                            Link
-                        </a>
-                    </li>
-                    <li className='nav-item dropdown'>
-                        <a className='nav-link dropdown-toggle' href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
-                            Dropdown
-                        </a>
-                        <ul className='dropdown-menu'>
-                            <li>
-                                <a className='dropdown-item' href='#'>
-                                    Action
-                                </a>
-                            </li>
-                            <li>
-                                <a className='dropdown-item' href='#'>
-                                    Another action
-                                </a>
-                            </li>
-                            <li>
-                                <hr className='dropdown-divider' />
-                            </li>
-                            <li>
-                                <a className='dropdown-item' href='#'>
-                                    Something else here
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+  function getLeftNavBar() {
+    return (
+      <div className="sidebar" style={{ overflowY: 'auto', height: '100vh' }}>
+        <ul>
+          <li>
+            <a href="#">Home</a>
+          </li>
+          <li>
+            <a href="#">About</a>
+          </li>
+          <li>
+            <a href="#">Services</a>
+          </li>
+          <li>
+            <a href="#">Contact</a>
+          </li>
+          <li>
+            <a href="#">Lorem</a>
+          </li>
+          <li>
+            <a href="#">Ipsum</a>
+          </li>
+          <li>
+            <a href="#">Dolor</a>
+          </li>
+          <li>
+            <a href="#">Sit</a>
+          </li>
+          <li>
+            <a href="#">Amet</a>
+          </li>
+          <li>
+            <a href="#">Consectetur</a>
+          </li>
+          <li>
+            <a href="#">Adipiscing</a>
+          </li>
+          <li>
+            <a href="#">Elit</a>
+          </li>
+          <li>
+            <a href="#">Sed</a>
+          </li>
+          <li>
+            <a href="#">Do</a>
+          </li>
+          <li>
+            <a href="#">Eiusmod</a>
+          </li>
+          <li>
+            <a href="#">Tempor</a>
+          </li>
+          <li>
+            <a href="#">Incididunt</a>
+          </li>
+          <li>
+            <a href="#">Labore</a>
+          </li>
+          <li>
+            <a href="#">Et</a>
+          </li>
+          <li>
+            <a href="#">Dolore</a>
+          </li>
+          <li>
+            <a href="#">Magna</a>
+          </li>
+          <li>
+            <a href="#">Aliqua</a>
+          </li>
+          <li>
+            <a href="#">Ut</a>
+          </li>
+          <li>
+            <a href="#">Enim</a>
+          </li>
+          <li>
+            <a href="#">Ad</a>
+          </li>
+          <li>
+            <a href="#">Minim</a>
+          </li>
+          <li>
+            <a href="#">Veniam</a>
+          </li>
+          <li>
+            <a href="#">Quis</a>
+          </li>
+          <li>
+            <a href="#">Nostrud</a>
+          </li>
+          <li>
+            <a href="#">Exercitation</a>
+          </li>
+          <li>
+            <a href="#">Ullamco</a>
+          </li>
+          <li>
+            <a href="#">Laboris</a>
+          </li>
+          <li>
+            <a href="#">Nisi</a>
+          </li>
+          <li>
+            <a href="#">Aliquip</a>
+          </li>
+          <li>
+            <a href="#">Ex</a>
+          </li>
+          <li>
+            <a href="#">Commodo</a>
+          </li>
+          <li>
+            <a href="#">Consequat</a>
+          </li>
+          <li>
+            <a href="#">Duis</a>
+          </li>
+          <li>
+            <a href="#">Aute</a>
+          </li>
+          <li>
+            <a href="#">Iure</a>
+          </li>
+          <li>
+            <a href="#">Reprehenderit</a>
+          </li>
+          <li>
+            <a href="#">Voluptate</a>
+          </li>
+          <li>
+            <a href="#">Velit</a>
+          </li>
+          <li>
+            <a href="#">Esse</a>
+          </li>
+          <li>
+            <a href="#">Cillum</a>
+          </li>
+          <li>
+            <a href="#">Fugiat</a>
+          </li>
+          <li>
+            <a href="#">Nulla</a>
+          </li>
+          <li>
+            <a href="#">Pariatur</a>
+          </li>
+          <li>
+            <a href="#">Excepteur</a>
+          </li>
+          <li>
+            <a href="#">Sint</a>
+          </li>
+          <li>
+            <a href="#">Occaecat</a>
+          </li>
+          <li>
+            <a href="#">Cupidatat</a>
+          </li>
+          <li>
+            <a href="#">Non</a>
+          </li>
+          <li>
+            <a href="#">Proident</a>
+          </li>
+          <li>
+            <a href="#">Sunt</a>
+          </li>
+          <li>
+            <a href="#">In</a>
+          </li>
+          <li>
+            <a href="#">Culpa</a>
+          </li>
+          <li>
+            <a href="#">Qui</a>
+          </li>
+          <li>
+            <a href="#">Officia</a>
+          </li>
+          <li>
+            <a href="#">Deserunt</a>
+          </li>
+          <li>
+            <a href="#">Mollit</a>
+          </li>
+          <li>
+            <a href="#">Anim</a>
+          </li>
+          <li>
+            <a href="#">Id</a>
+          </li>
+          <li>
+            <a href="#">Est</a>
+          </li>
+          <li>
+            <a href="#">Laborum</a>
+          </li>
+        </ul>
+      </div>
+    );
+  }
+
+  function getMidCarousel() {
+    return (
+      <>
+        <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner ">
+            <div class="carousel-item active">
+              <img
+                src="https://images.news18.com/ibnlive/uploads/2024/03/the-carnival-of-cricket-ipl-2024-begins-friday-in-chennai-2024-03-57866b703b220dfd84e70329b271fbd8-3x2.jpg"
+                class="d-block w-100"
+                alt="..."
+                //   style={{ height: "300px", objectfit: "cover" }}
+                style={{ height: '300px', objectfit: 'contain' }}
+              />
             </div>
-        );
-    }
+            <div class="carousel-item">
+              <img
+                src="https://www.hindustantimes.com/ht-img/img/2024/01/14/550x309/TOPSHOT-TENNIS-AUS-OPEN-33_1705249861778_1705249942860.jpg"
+                class="d-block w-100"
+                alt="..."
+                //   style={{ height: "300px", objectfit: "cover" }}
+                style={{ height: '300px', objectfit: 'contain' }}
+              />
+            </div>
+            <div class="carousel-item">
+              <img
+                src="https://assets-webp.khelnow.com/d7293de2fa93b29528da214253f1d8d0/640x360/news/uploads/2024/02/football-lead-pic.jpg.webp"
+                class="d-block w-100"
+                alt="..."
+                //   style={{ height: "300px", objectfit: "cover" }}
+                style={{ height: '300px', objectfit: 'contain' }}
+              />
+            </div>
+          </div>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselExampleAutoplaying"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselExampleAutoplaying"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </>
+    );
+  }
 
-    function getMidCarousel() {
-		return (
-			<>
-				<div id='carouselExampleAutoplaying' class='carousel slide' data-bs-ride='carousel'>
-					<div class='carousel-inner '>
-						<div class='carousel-item active'>
-							<img
-								src='https://images.news18.com/ibnlive/uploads/2024/03/the-carnival-of-cricket-ipl-2024-begins-friday-in-chennai-2024-03-57866b703b220dfd84e70329b271fbd8-3x2.jpg'
-								class='d-block w-100'
-								alt='...'
-								//   style={{ height: "300px", objectfit: "cover" }}
-								style={{ height: '300px', objectfit: 'contain' }}
-							/>
-						</div>
-						<div class='carousel-item'>
-							<img
-								src='https://www.hindustantimes.com/ht-img/img/2024/01/14/550x309/TOPSHOT-TENNIS-AUS-OPEN-33_1705249861778_1705249942860.jpg'
-								class='d-block w-100'
-								alt='...'
-								//   style={{ height: "300px", objectfit: "cover" }}
-								style={{ height: '300px', objectfit: 'contain' }}
-							/>
-						</div>
-						<div class='carousel-item'>
-							<img
-								src='https://assets-webp.khelnow.com/d7293de2fa93b29528da214253f1d8d0/640x360/news/uploads/2024/02/football-lead-pic.jpg.webp'
-								class='d-block w-100'
-								alt='...'
-								//   style={{ height: "300px", objectfit: "cover" }}
-								style={{ height: '300px', objectfit: 'contain' }}
-							/>
-						</div>
-					</div>
-					<button class='carousel-control-prev' type='button' data-bs-target='#carouselExampleAutoplaying' data-bs-slide='prev'>
-						<span class='carousel-control-prev-icon' aria-hidden='true'></span>
-						<span class='visually-hidden'>Previous</span>
-					</button>
-					<button class='carousel-control-next' type='button' data-bs-target='#carouselExampleAutoplaying' data-bs-slide='next'>
-						<span class='carousel-control-next-icon' aria-hidden='true'></span>
-						<span class='visually-hidden'>Next</span>
-					</button>
-				</div>
-			</>
-		);
-	}
-
-    function getBody() {
-        return <>
+  function getBody() {
+    return (
+      <div className="container-fluid">
+        <div className="row">
+          <div
+            className="col-md-2 position-fixed d-none d-md-block vertical-navbar"
+            style={{ border: '1px solid red', height: '100vh' }}
+          >
             {getLeftNavBar()}
-            {getMidCarousel()}
-            <h1>{children}</h1>
-        </>
-    }
+          </div>
+          <div
+            className="col-md-10 offset-md-2"
+            style={{ border: '1px solid red', height: '100vh', overflowY: 'auto' }}
+          >
+            {/* <div className="row" style={{ height: "80vh", overflow: "hidden" }}> */}
+            <div className="col-md-12" style={{ background: 'green', overflowX: 'auto' }}>
+              {getMidCarousel()}
+            </div>
+            {/* </div> */}
+            <div className="row" style={{ overflowY: 'auto' }}>
+              <div className="col-md-12" style={{ border: '1px solid red' }}>
+                <h1 className="text-center">GameView Body</h1>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et ligula libero. Proin vitae placerat
+                  odio. Nam tincidunt, nunc ac auctor vehicula, mauris odio consequat leo, vel tristique purus lacus at
+                  erat. Duis ultricies, massa a ullamcorper luctus, dui lorem bibendum turpis, a viverra turpis odio vel
+                  libero. Fusce rhoncus dui ut mi efficitur, a facilisis arcu commodo. Quisque vitae diam nec libero
+                  sollicitudin laoreet ac non orci. Donec tempor, metus non accumsan euismod, sapien mauris eleifend
+                  orci, et feugiat elit enim sed neque. Mauris pellentesque turpis sit amet libero viverra euismod.
+                  Quisque aliquet odio eu est fermentum, a facilisis neque ullamcorper. Phasellus sit amet eros libero.
+                  In hac habitasse platea dictumst. Nam nec velit sed urna lobortis finibus non quis arcu. Donec in
+                  libero ut enim suscipit consequat. Nullam consectetur a nunc ut sodales. Donec nec magna eget mi
+                  tristique tincidunt.
+                </p>
+                <p>
+                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
+                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
+                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
+                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
+                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
+                  eros varius et.
+                </p>
+                <p>
+                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
+                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
+                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
+                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
+                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
+                  eros varius et.
+                </p>
+                <p>
+                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
+                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
+                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
+                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
+                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
+                  eros varius et.
+                </p>
+                <p>
+                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
+                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
+                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
+                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
+                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
+                  eros varius et.
+                </p>
+                <p>
+                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
+                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
+                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
+                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
+                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
+                  eros varius et.
+                </p>
+                <p>
+                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
+                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
+                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
+                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
+                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
+                  eros varius et.
+                </p>
+                <p>
+                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
+                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
+                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
+                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
+                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
+                  eros varius et.
+                </p>
+                <p>
+                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
+                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
+                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
+                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
+                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
+                  eros varius et.
+                </p>
+                <p>
+                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
+                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
+                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
+                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
+                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
+                  eros varius et.
+                </p>
+                <p>
+                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
+                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
+                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
+                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
+                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
+                  eros varius et.
+                </p>
+                <p>
+                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
+                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
+                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
+                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
+                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
+                  eros varius et.
+                </p>
+                <p>
+                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
+                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
+                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
+                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
+                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
+                  eros varius et.
+                </p>
+                <p>
+                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
+                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
+                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
+                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
+                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
+                  eros varius et.
+                </p>
+                <p>
+                  Integer sed mauris sed nunc lacinia egestas ac ac turpis. Fusce ut nisl vitae quam bibendum rhoncus eu
+                  nec enim. Sed vel libero sed urna tempus venenatis eget eget arcu. Integer euismod eros non purus
+                  laoreet, nec congue ligula posuere. Cras nec diam vel sem ultricies sollicitudin. Quisque nec congue
+                  nulla. In hac habitasse platea dictumst. Nullam dignissim felis non risus convallis, et malesuada dui
+                  tincidunt. Suspendisse potenti. Nam fringilla luctus dui. Cras euismod congue mauris, nec pharetra
+                  eros varius et.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-    return <div className='global-margin-top-loggedIn'>{getBody()}</div>;
+  return <div className="global-margin-top-loggedIn">{getBody()}</div>;
 }
-
 export default AppDrawer;

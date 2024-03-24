@@ -30,9 +30,8 @@ const NavBar = () => {
     });
     const closeButton = document.querySelector('.btn-close');
     closeButton.click();
-    toast.info("Logout successfully");
+    toast.info('Logout successfully');
   };
-
 
   function getNav() {
     return (
@@ -42,15 +41,26 @@ const NavBar = () => {
           backgroundImage: 'linear-gradient(to bottom, #0a262c, #114651, #17687a, #1b8da6, #20b3d4)',
         }}
       >
-        {!store.user.isLogin && <div class="w-100 d-flex justify-content-between">
-          <FaCoins className="m-2" style={{ color: '#fec015' }} />
-          <marquee className="text-white">Your announcement text here</marquee>
-          <span className="text-nowrap text-white px-2" style={{ fontSize: '14px' }}>
-            March 24, 2024
-          </span>
-        </div>}
+        {!store.user.isLogin && (
+          <div class="w-100 d-flex justify-content-between">
+            <FaCoins className="m-2" style={{ color: '#fec015' }} />
+            <marquee className="text-white">Your announcement text here</marquee>
+            <span className="text-nowrap text-white px-2" style={{ fontSize: '14px' }}>
+              March 24, 2024
+            </span>
+          </div>
+        )}
 
         <div class="container-fluid">
+          <button
+            class="btn btn-primary d-lg-none"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasExample"
+            aria-controls="offcanvasExample"
+          >
+            ☰
+          </button>
           <a class="navbar-brand" href="#">
             <img src={Logo} style={{ width: '150px' }} />
           </a>
@@ -94,7 +104,7 @@ const NavBar = () => {
                   backgroundImage: 'linear-gradient(to top, #114551, #226575, #34879b, #47abc2, #5ad0eb)',
                   fontSize: '13px',
                 }}
-                onClick={()=> setShowModalLogin(true)}
+                onClick={() => setShowModalLogin(true)}
               >
                 <FaUser style={{ width: '12px' }} className="mb-1" />
                 &nbsp;

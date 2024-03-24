@@ -48,3 +48,59 @@
 /*======================
     App drawer
 =======================*/
+
+/* ==========>  getLeftNavBar */
+/* Sidebar */
+.sidebar1 {
+  position: fixed;
+  top: 20;
+  left: 0;
+  height: 100%;
+  width: 0;
+  background-color: hsl(180, 24%, 33%);
+  overflow-x: hidden;
+  transition: all 0.3s;
+  border-radius: 1px solid red;
+}
+
+.sidebar.active {
+  width: 250px;
+  display: block; /* Show sidebar when active */
+}
+
+.sidebar-header {
+  padding: 10px 40px;
+  background-color: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar ul.components {
+  padding: 20px 0;
+}
+
+.sidebar ul.components li a {
+  padding: 10px 15px;
+  display: block;
+  color: #343a40;
+}
+
+.sidebar ul.components li a:hover {
+  background-color: #e9ecef;
+}
+
+/* Media Query */
+/* @media (max-width: 991.98px) {
+  #sidebar {
+    display: none;
+  }
+
+  #sidebar.active {
+    display: none;
+  }
+
+  .btn-toggle {
+    display: none;
+  }
+} */

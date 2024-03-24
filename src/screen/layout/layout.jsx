@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { useAppContext } from '../../contextApi/context';
 import NavBar from '../common/navBar';
 import { user_getAllGames_api } from '../../utils/apiService';
-import './layout.css'
+import './layout.css';
 
 function Layout() {
   const [user_allGames, setUser_allGames] = useState([]);
   const appDrawerFromStore = useAppContext();
 
   useEffect(() => {
-    user_getAllGames()
+    user_getAllGames();
   }, []);
 
   async function user_getAllGames() {
@@ -21,13 +21,23 @@ function Layout() {
 
   function getNavBarOption() {
     return (
-      <ul className='mb-0 d-flex' style={{ listStyleType: 'none', overflowX: 'auto', padding: 0, backgroundColor: 'rgb(23 101 119)' }}>
-        <li key={0} className='p-2 text-white' style={{ fontWeight: 600 }}>
-          <a className="text-white text-decoration-none" href={`/home`}>{'Home'}</a>
+      <ul
+        className="mb-0 d-flex"
+        style={{ listStyleType: 'none', overflowX: 'auto', padding: 0, backgroundColor: 'rgb(23 101 119)' }}
+      >
+        <li key={0} className="p-2 text-white" style={{ fontWeight: 600 }}>
+          <a className="text-white text-decoration-none" href={`/home`}>
+            {'Home'}
+          </a>
         </li>
         {user_allGames.map((gameObj, index) => (
-          <li key={index + 1} className='p-2 text-white' style={{ fontWeight: 600 }}>
-            <a className={`text-white text-decoration-none ${gameObj.isBlink ? 'blink_me' : ''}`} href={`/gameView/${gameObj.gameName.replace(/\s/g, '')}/${gameObj.gameId}`}>{gameObj.gameName}</a>
+          <li key={index + 1} className="p-2 text-white" style={{ fontWeight: 600 }}>
+            <a
+              className={`text-white text-decoration-none ${gameObj.isBlink ? 'blink_me' : ''}`}
+              href={`/gameView/${gameObj.gameName.replace(/\s/g, '')}/${gameObj.gameId}`}
+            >
+              {gameObj.gameName}
+            </a>
           </li>
         ))}
       </ul>
@@ -35,7 +45,7 @@ function Layout() {
   }
 
   return (
-    <div className='fixed-top'>
+    <div className="fixed-top">
       <NavBar />
       {user_allGames && getNavBarOption()}
     </div>

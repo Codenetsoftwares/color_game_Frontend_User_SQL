@@ -5,7 +5,7 @@ import { useAppContext } from '../../contextApi/context';
 import strings from '../../utils/constant/stringConstant';
 import { useFormik } from 'formik';
 import LoginSchema from '../../schema/LoginSchema';
-import './loginModal.css'
+import './loginModal.css';
 
 function Login({ showLogin, setShowLogin }) {
   const [loginCred, setLoginCred] = useState(setInitialValues());
