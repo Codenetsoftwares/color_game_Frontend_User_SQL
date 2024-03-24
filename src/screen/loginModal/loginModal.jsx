@@ -5,6 +5,7 @@ import { useAppContext } from '../../contextApi/context';
 import strings from '../../utils/constant/stringConstant';
 import { useFormik } from 'formik';
 import LoginSchema from '../../schema/LoginSchema';
+import './loginModal.css'
 
 function Login({ showLogin, setShowLogin }) {
   const [loginCred, setLoginCred] = useState(setInitialValues());
@@ -56,7 +57,6 @@ function Login({ showLogin, setShowLogin }) {
     return <h4 className="d-flex justify-content-center">Login</h4>;
   }
 
-  console.log(errors);
   function ModalBody() {
     return (
       <div className="py-3">
