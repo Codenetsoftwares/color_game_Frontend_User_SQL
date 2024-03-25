@@ -1,21 +1,32 @@
 import { useEffect, useState } from "react"
-import { user_getAllGamesWithMarketData_api, user_getGameWithMarketData_api } from "../../../utils/apiService";
-import { getGameWithMarketDataInitialState } from "../../../utils/getInitiateState";
+import { user_getAllGamesWithMarketData_api, user_getGameWithMarketData_api, user_getMarketWithRunnerData_api } from "../../../utils/apiService";
+import { getGameWithMarketDataInitialState, getMarketWithRunnerDataInitialState } from "../../../utils/getInitiateState";
 import { useLocation } from "react-router-dom";
 
 function GameWithMarketList({ isSingleMarket }) {
     const [user_allGamesWithMarketData, setUser_allGamesWithMarketData] = useState([]);
     const [user_gameWithMarketData, setUser_gameWithMarketData] = useState(getGameWithMarketDataInitialState());
+    const [user_marketWithRunnerData, setUser_marketWithRunnerData] = useState(getMarketWithRunnerDataInitialState());
 
     const gameIdFromUrl = useLocation().pathname.split('/')[3]
+    const marketIdFromUrl = useLocation()?.pathname?.split('-')[1]?.split('/')[1]
 
     useEffect(() => {
-        if (isSingleMarket) {
+        if (marketIdFromUrl) {
+            user_getMarketsWithRunnerData()
+        } else if (isSingleMarket) {
             user_getGameWithMarketData()
         } else {
             user_getAllGamesWithMarketData();
         }
     }, []);
+
+    async function user_getMarketsWithRunnerData() {
+        const response = await user_getMarketWithRunnerData_api({ marketId: marketIdFromUrl });
+        if (response) {
+            setUser_marketWithRunnerData(response.data);
+        }
+    }
 
     async function user_getAllGamesWithMarketData() {
         const response = await user_getAllGamesWithMarketData_api();
@@ -31,6 +42,30 @@ function GameWithMarketList({ isSingleMarket }) {
         }
     }
 
+    function getMarketDetailByMarketId() {
+        return (
+            <div className="row p-0 m-0">
+                {user_marketWithRunnerData &&
+                    user_marketWithRunnerData.runners.map((runnerData) => {
+                        return <div className="row py-1 px-0 m-0 border">
+                            <span
+                                className={`col-4 text-dark text-decoration-none text-nowrap`}
+                            >
+                                {runnerData.runnerName.name}
+                            </span>
+
+                            <div className="col-4" style={{ backgroundColor: 'blue' }}>
+                                {runnerData.rate[0].Back}
+                            </div>
+                            <div className="col-4" style={{ backgroundColor: 'pink' }}>
+                                {runnerData.rate[0].Lay}
+                            </div>
+                        </div>
+                    })}
+            </div>
+        )
+    }
+
     function getSingleMarket() {
         return (
             <div className="row p-0 m-0">
@@ -38,9 +73,13 @@ function GameWithMarketList({ isSingleMarket }) {
                 {user_gameWithMarketData &&
                     user_gameWithMarketData.markets.map((marketData) => {
                         return <div className="row py-1 px-0 m-0 border">
-                            <div className="col-4">
+                            <a
+                                className={`col-4 text-dark text-decoration-none text-nowrap`}
+                                href={`/gameView/${user_gameWithMarketData?.gameName?.replace(/\s/g, '')}-${marketData?.marketName?.replace(/\s/g, '')}/${marketData?.marketId}`}
+                            >
                                 <span>{marketData.timeSpan}</span> | <span> {marketData.marketName}</span>
-                            </div>
+                            </a>
+
                             <div className="col-8" style={{ backgroundColor: 'orange' }}>
                                 col-8
                             </div>
@@ -84,7 +123,7 @@ function GameWithMarketList({ isSingleMarket }) {
 
     function getBody() {
         return (
-            isSingleMarket ? getSingleMarket() : getWholeMarket()
+            marketIdFromUrl ? getMarketDetailByMarketId() : isSingleMarket ? getSingleMarket() : getWholeMarket()
         )
     }
 

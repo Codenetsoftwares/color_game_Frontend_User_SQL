@@ -3,7 +3,6 @@ import { AppProvider } from './contextApi/context';
 import Home from './screen/home/home';
 import NotFound from './screen/common/notFound';
 import GameView from './screen/gameView/gameView';
-import Layout from './screen/layout/layout';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';

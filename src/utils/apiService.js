@@ -47,3 +47,13 @@ export async function user_getGameWithMarketData_api(body = {}, isToast = false)
 	}
 }
 
+export async function user_getMarketWithRunnerData_api(body = {}, isToast = false) {
+	try {
+		const callParams = getNoAuthCallParams(strings.GET, body, isToast);
+		const response = await makeCall(`${urls.userMarketDetailById}/${body.marketId}`, callParams);
+		return response;
+	} catch (error) {
+		throw error;
+	}
+}
+
