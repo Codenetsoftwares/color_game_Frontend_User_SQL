@@ -45,6 +45,7 @@ function GameWithMarketList({ isSingleMarket }) {
     function getMarketDetailByMarketId() {
         return (
             <div className="row p-0 m-0">
+                <div className="col-12 p-1 mt-2" style={{ backgroundColor: '#a1aed4' }}>{user_marketWithRunnerData.marketName} | {user_marketWithRunnerData.timeSpan}</div>
                 {user_marketWithRunnerData &&
                     user_marketWithRunnerData.runners.map((runnerData) => {
                         return <div className="row py-1 px-0 m-0 border">
