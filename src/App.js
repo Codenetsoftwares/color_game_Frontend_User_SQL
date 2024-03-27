@@ -6,6 +6,7 @@ import GameView from './screen/gameView/gameView';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
+import RulesPage from './screen/common/rulesPage';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/gameView/:gameName/:id" element={<GameView />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/rulesPage" element={<RulesPage />} />
         </Routes>
       </BrowserRouter>
     </AppProvider>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Logo from '../../asset/Logo.png';
 import { useAppContext } from '../../contextApi/context';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import {
   FaCoins,
   FaUser,
@@ -17,6 +17,7 @@ import {
 import Login from '../loginModal/loginModal';
 import strings from '../../utils/constant/stringConstant';
 import { toast } from 'react-toastify';
+import RulesPage from './rulesPage';
 
 const NavBar = () => {
   const [showModalLogin, setShowModalLogin] = useState(false);
@@ -125,14 +126,14 @@ const NavBar = () => {
           tabindex="-1"
           id="offcanvasDarkNavbar"
           aria-labelledby="offcanvasDarkNavbarLabel"
-          style={{ width: '300px', background: '#0D505A' }}
+          style={{ width: "300px", background: "#0D505A" }}
         >
           <div class="offcanvas-header">
             <h6 class="offcanvas-title" id="offcanvasDarkNavbarLabel">
               <FaUser
                 style={{
-                  width: '12px',
-                  color: '#fec015',
+                  width: "12px",
+                  color: "#fec015",
                 }}
               />
               &nbsp;&nbsp;
@@ -153,9 +154,9 @@ const NavBar = () => {
                     type="button"
                     class="btn  d-flex justify-content-start text-white fw-bold border border-white"
                     style={{
-                      width: '500px',
-                      height: '60px',
-                      background: '#2FA8BA',
+                      width: "500px",
+                      height: "60px",
+                      background: "#2FA8BA",
                     }}
                   >
                     Exposure 0.00
@@ -164,9 +165,9 @@ const NavBar = () => {
                     type="button"
                     class="btn btn-info d-flex justify-content-start text-white fw-bold border border-white"
                     style={{
-                      width: '500px',
-                      height: '60px',
-                      background: '#2FA8BA',
+                      width: "500px",
+                      height: "60px",
+                      background: "#2FA8BA",
                     }}
                   >
                     P&L 0.00
@@ -177,157 +178,159 @@ const NavBar = () => {
               <li
                 class="nav-item mb-3 align-items-start text-start"
                 style={{
-                  color: 'white', // Initial color
+                  color: "white", // Initial color
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.color = '#2FA8BA'; // Color change on hover
+                  e.currentTarget.style.color = "#2FA8BA"; // Color change on hover
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.color = 'white'; // Color back to original on mouse out
+                  e.currentTarget.style.color = "white"; // Color back to original on mouse out
                 }}
               >
                 <FaFileAlt
                   style={{
-                    color: '#fec015',
+                    color: "#fec015",
                   }}
-                />{' '}
+                />{" "}
                 Account Statement
               </li>
               <li
                 class="nav-item mb-3 align-items-start"
                 style={{
-                  color: 'white', // Initial color
+                  color: "white", // Initial color
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.color = '#2FA8BA'; // Color change on hover
+                  e.currentTarget.style.color = "#2FA8BA"; // Color change on hover
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.color = 'white'; // Color back to original on mouse out
+                  e.currentTarget.style.color = "white"; // Color back to original on mouse out
                 }}
               >
                 <FaMoneyCheck
                   style={{
-                    color: '#fec015',
+                    color: "#fec015",
                   }}
-                />{' '}
+                />{" "}
                 Rolling Commission
               </li>
               <li
                 class="nav-item mb-3 align-items-start"
                 style={{
-                  color: 'white', // Initial color
+                  color: "white", // Initial color
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.color = '#2FA8BA'; // Color change on hover
+                  e.currentTarget.style.color = "#2FA8BA"; // Color change on hover
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.color = 'white'; // Color back to original on mouse out
+                  e.currentTarget.style.color = "white"; // Color back to original on mouse out
                 }}
               >
                 <FaKey
                   style={{
-                    color: '#fec015',
+                    color: "#fec015",
                   }}
-                />{' '}
+                />{" "}
                 Change Password
               </li>
               <li
                 class="nav-item mb-3 align-items-start"
                 style={{
-                  color: 'white', // Initial color
+                  color: "white", // Initial color
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.color = '#2FA8BA'; // Color change on hover
+                  e.currentTarget.style.color = "#2FA8BA"; // Color change on hover
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.color = 'white'; // Color back to original on mouse out
+                  e.currentTarget.style.color = "white"; // Color back to original on mouse out
                 }}
               >
                 <FaChartLine
                   style={{
-                    color: '#fec015',
+                    color: "#fec015",
                   }}
-                />{' '}
+                />{" "}
                 Profit & Loss
               </li>
               <li
                 class="nav-item mb-3 align-items-start"
                 style={{
-                  color: 'white', // Initial color
+                  color: "white", // Initial color
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.color = '#2FA8BA'; // Color change on hover
+                  e.currentTarget.style.color = "#2FA8BA"; // Color change on hover
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.color = 'white'; // Color back to original on mouse out
+                  e.currentTarget.style.color = "white"; // Color back to original on mouse out
                 }}
               >
                 <FaHistory
                   style={{
-                    color: '#fec015',
+                    color: "#fec015",
                   }}
-                />{' '}
+                />{" "}
                 Bets History
               </li>
 
               <li
                 class="nav-item mb-3 align-items-start"
                 style={{
-                  color: 'white', // Initial color
+                  color: "white", // Initial color
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.color = '#2FA8BA'; // Color change on hover
+                  e.currentTarget.style.color = "#2FA8BA"; // Color change on hover
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.color = 'white'; // Color back to original on mouse out
+                  e.currentTarget.style.color = "white"; // Color back to original on mouse out
                 }}
               >
                 <FaRunning
                   style={{
-                    color: '#fec015',
+                    color: "#fec015",
                   }}
-                />{' '}
+                />{" "}
                 Activity Log
               </li>
-
-              <li
-                class="nav-item mb-3 align-items-start text-start"
-                style={{
-                  color: 'white', // Initial color
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.color = '#2FA8BA'; // Color change on hover
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.color = 'white'; // Color back to original on mouse out
-                }}
-              >
-                <FaBook
+              
+              <Link to="/rulesPage">
+                <li
+                  class="nav-item mb-3 align-items-start text-start"
                   style={{
-                    color: '#fec015',
+                    color: "white", // Initial color
                   }}
-                />{' '}
-                Rules
-              </li>
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.color = "#2FA8BA"; // Color change on hover
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.color = "white"; // Color back to original on mouse out
+                  }}
+                >
+                  <FaBook
+                    style={{
+                      color: "#fec015",
+                    }}
+                  />{" "}
+                  Rules
+                </li>
+              </Link>
 
               <li
                 class="nav-item mb-3 align-items-start"
                 style={{
-                  color: 'white', // Initial color
+                  color: "white", // Initial color
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.color = '#2FA8BA'; // Color change on hover
+                  e.currentTarget.style.color = "#2FA8BA"; // Color change on hover
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.color = 'white'; // Color back to original on mouse out
+                  e.currentTarget.style.color = "white"; // Color back to original on mouse out
                 }}
                 onClick={handleLogout}
               >
                 <FaSignOutAlt
                   style={{
-                    color: '#fec015',
+                    color: "#fec015",
                   }}
-                />{' '}
+                />{" "}
                 Logout
               </li>
             </ul>
