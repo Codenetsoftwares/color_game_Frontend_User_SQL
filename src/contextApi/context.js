@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer, useEffect } from 'react';
 import { reducer } from './reducer';
-import strings from '../global/constant/stringConstant';
+import strings from '../utils/constant/stringConstant';
 import { getUserInitialState } from '../utils/getInitiateState';
 
 const AppContext = createContext();
@@ -8,6 +8,7 @@ const AppContext = createContext();
 const initialState = {
   user: getUserInitialState(),
   announcement: [],
+  appDrawer: [],
 };
 
 const AppProvider = ({ children }) => {

@@ -1,7 +1,6 @@
 import { toast } from 'react-toastify';
-import urls from '../global/constant/UrlConstant';
-import strings from '../global/constant/stringConstant';
-import history from '../utils/history';
+import urls from '../utils/constant/UrlConstant';
+import strings from '../utils/constant/stringConstant';
 
 // getNoAuthCallParams public api call
 export function getNoAuthCallParams(methodType, body) {
@@ -27,7 +26,6 @@ export async function getHeaderObject(accessToken, contentType) {
         token: accessToken,
       };
     }
-    history.push(urls.landingViewPath);
     return null;
   } catch (error) {
     throw error;
@@ -70,7 +68,7 @@ export async function makeCall(callName, callParams, isToast) {
       return null;
     } else if (isToast && (json.success === true || json.code === 200)) {
       // will update after backend api will provide proper response structure
-      toast.success(json.message);
+      toast.info(json.message);
     }
     // if (response && response.ok) {
     //   return json;

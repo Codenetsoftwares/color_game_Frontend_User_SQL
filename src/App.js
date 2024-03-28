@@ -1,15 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './App.css';
-
-// Components
-import LandingPage from './screen/landingpage/landingPage';
-import PrivateRoute from './screen/common/privateRoute';
-import NotFound from './screen/common/notFound';
-import Games from './screen/games/Games';
 import { AppProvider } from './contextApi/context';
-import Layout from './screen/landingpage/components/layout/layout';
-import { ToastContainer, toast } from 'react-toastify';
-import IndividualGames from './screen/games/IndividualGames';
+import Home from './screen/home/home';
+import NotFound from './screen/common/notFound';
+import GameView from './screen/gameView/gameView';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './App.css';
+import RulesPage from './screen/common/rulesPage';
 
 function App() {
   return (
@@ -28,24 +25,11 @@ function App() {
       />
       <BrowserRouter>
         <Routes>
-          {/* public routes */}
-          <Route path="/" element={<Layout />}>
-            <Route path="/inplay" element={<Games />} />
-            <Route path="/home" element={<LandingPage />} />
-            <Route path="/game/:gamename/:id" element={<IndividualGames />} />
-          </Route>
-          {/* protected routes */}
-          <Route
-            path="/private"
-            element={
-              <PrivateRoute>
-                <Layout />
-              </PrivateRoute>
-            }
-          />
-
-          {/* Not found route */}
+          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/gameView/:gameName/:id" element={<GameView />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/rulesPage" element={<RulesPage />} />
         </Routes>
       </BrowserRouter>
     </AppProvider>
