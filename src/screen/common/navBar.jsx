@@ -366,7 +366,7 @@ const NavBar = () => {
           tabindex="-1"
           id="offcanvasScrolling"
           aria-labelledby="offcanvasScrollingLabel"
-          style={{ width: '300px', background: '#0D505A' }}
+          style={{ width: '300px' }}
         >
           <AppDrawer showCarousel={false} isMobile={true} />
         </div>
