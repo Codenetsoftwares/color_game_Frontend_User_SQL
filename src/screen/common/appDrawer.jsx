@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import "./appDrawer.css";
 import { user_getAllGamesWithMarketData_api } from "../../utils/apiService";
 import { Link } from "react-router-dom";
+import { getAllGameDataInitialState } from "../../utils/getInitiateState";
 
 function AppDrawer({ children, showCarousel, isMobile }) {
   const [toggleStates, setToggleStates] = useState({});
-  const [user_allGames, setUser_allGames] = useState([]);
-  
+  const [user_allGames, setUser_allGames] = useState(
+    getAllGameDataInitialState()
+  );
+
   useEffect(() => {
     user_getAllGames();
   }, []);
