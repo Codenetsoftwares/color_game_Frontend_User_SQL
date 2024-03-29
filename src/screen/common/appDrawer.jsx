@@ -295,11 +295,11 @@ function AppDrawer({ children, showCarousel, isMobile }) {
     );
   }
 
-  return <div>
-    
-    {getBody()}
-    <HamburgerNavBar/>
-    
-    </div>;
+  return (
+    <div>
+      {getBody()}
+      <HamburgerNavBar />
+    </div>
+  );
 }
 export default AppDrawer;
