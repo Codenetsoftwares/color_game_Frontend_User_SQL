@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 function AppDrawer({ children, showCarousel, isMobile }) {
   const [toggleStates, setToggleStates] = useState({});
   const [user_allGames, setUser_allGames] = useState([]);
-  
+
   useEffect(() => {
     user_getAllGames();
   }, []);
@@ -23,7 +23,7 @@ function AppDrawer({ children, showCarousel, isMobile }) {
       [index]: !prevState[index],
     }));
 
-    if(isMobile) {
+    if (isMobile) {
       // close app drawer logic should call here
     }
   };
@@ -41,8 +41,16 @@ function AppDrawer({ children, showCarousel, isMobile }) {
           }}
           className="text-white"
         >
-          Popular
+          Popular{" "}
+          <button
+            type="button"
+            className="btn-close d-xl-none d-lg-none "
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+            style={{ marginLeft: "70%" }}
+          />
         </span>
+
         <ul>
           <li
             className={toggleStates["inPlay"] ? "subMenuHead" : "MenuHead"}
