@@ -83,7 +83,7 @@ function GameWithMarketList({ isSingleMarket }) {
     } else {
       user_getAllGamesWithMarketData();
     }
-  }, []);
+  }, [marketIdFromUrl]);
 
   async function user_getMarketsWithRunnerData() {
     const response = await user_getMarketWithRunnerData_api({

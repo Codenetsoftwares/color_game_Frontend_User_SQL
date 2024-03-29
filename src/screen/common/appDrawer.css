@@ -1,0 +1,70 @@
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  display: block;
+}
+
+.sidebar ul li a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #034e52;
+  position: relative;
+  font-weight: 700;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar ul li.subMenuItems a {
+  display: block;
+  padding: 5px;
+  text-decoration: none;
+  color: black;
+  position: relative;
+  transition: background-color 0.3s, color 0.3s;
+  background-color: #adc2c7;
+  font-size: small;
+  opacity: 50%;
+  text-indent: 10px;
+}
+
+.sidebar ul li.MenuHead a::after {
+  content: "\2193";
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 0.8em;
+}
+
+
+
+
+
+.sidebar ul li.subMenuItems a::after {
+  content: " \2192";
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 0.8em;
+}
+
+.sidebar ul li.subMenuHead a::after {
+  content: " \2191";
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 0.8em;
+  font-weight: 700;
+}
+
+.sidebar ul li a:hover {
+  background-color: #2cb3d1;
+  color: white;
+}
+
+.sidebar ul li.subMenuItems a:hover {
+  background-color: #3b3d3d;
+  color: white;
+}
