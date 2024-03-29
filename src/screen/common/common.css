@@ -245,7 +245,6 @@ hamburgerNavbar
   max-width: 20px;
   max-height: 20px;
   border-radius: 50%;
-  right: -70px;
   background: linear-gradient(to right, red 50%, black 50%);
   position: relative;
   animation: rotateCoin 2s infinite linear;

@@ -23,9 +23,8 @@ const HamburgerNavBar = () => {
         }}
       >
         <div
-          className={`col-3 col-md text-center text-white  ${
-            activeIcon === "home" ? "active-icon" : ""
-          }`}
+          className={`col-3 col-md text-center text-white  ${activeIcon === "home" ? "active-icon" : ""
+            }`}
           title="Home"
           onMouseEnter={() => handleIconHover("home")}
         >
@@ -35,9 +34,8 @@ const HamburgerNavBar = () => {
           {activeIcon === "home" && <div className="hover-text ">Home</div>}
         </div>
         <div
-          className={`col-3 col-md text-center text-white ${
-            activeIcon === "play" ? "active-icon" : ""
-          }`}
+          className={`col-3 col-md text-center text-white ${activeIcon === "play" ? "active-icon" : ""
+            }`}
           title="Video Play"
           onMouseEnter={() => handleIconHover("play")}
         >
@@ -47,9 +45,8 @@ const HamburgerNavBar = () => {
           {activeIcon === "play" && <div className="hover-text">In-Play</div>}
         </div>
         <div
-          className={`col-3 col-md text-center text-white ${
-            activeIcon === "heart" ? "active-icon" : ""
-          }`}
+          className={`col-3 col-md text-center text-white d-flex align-items-center flex-column${activeIcon === "heart" ? "active-icon" : ""
+            }`}
           title="Animated Round Card (Mini Game)"
           onMouseEnter={() => handleIconHover("heart")}
         >
@@ -61,13 +58,17 @@ const HamburgerNavBar = () => {
           )}
         </div>
         <div
-          className={`col-3 col-md text-center text-white ${
-            activeIcon === "menu" ? "active-icon" : ""
-          }`}
+          className={`col-3 col-md text-center text-white ${activeIcon === "menu" ? "active-icon" : ""
+            }`}
           title="Menu"
           onMouseEnter={() => handleIconHover("menu")}
         >
-          <div>
+          <div
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasDarkNavbar"
+            aria-controls="offcanvasDarkNavbar"
+            aria-label="Toggle navigation"
+          >
             <FaBars />
           </div>
           {activeIcon === "menu" && <div className="hover-text">Menu</div>}

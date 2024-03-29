@@ -20,6 +20,7 @@ import strings from '../../utils/constant/stringConstant';
 import { toast } from 'react-toastify';
 import ansmt from '../../asset/ancmntv.png';
 import AppDrawer from './appDrawer';
+import HamburgerNavBar from './HamburgerNavBar';
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -377,6 +378,7 @@ const NavBar = () => {
   function getBody() {
     return (
       <>
+        <HamburgerNavBar/>
         {getNav()}
         {getRightSlider()}
         {leftNav()}

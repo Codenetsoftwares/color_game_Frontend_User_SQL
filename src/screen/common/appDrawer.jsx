@@ -191,7 +191,6 @@ function AppDrawer({ children, showCarousel, isMobile }) {
   return (
     <div>
       {getBody()}
-      <HamburgerNavBar />
     </div>
   );
 }
