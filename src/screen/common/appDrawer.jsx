@@ -25,6 +25,10 @@ function AppDrawer({ children, showCarousel, isMobile }) {
     setToggleStates((prevState) => ({
       [index]: !prevState[index],
     }));
+
+    if (isMobile) {
+      // close app drawer logic should call here
+    }
   };
 
   function getLeftNavBar() {
@@ -40,8 +44,16 @@ function AppDrawer({ children, showCarousel, isMobile }) {
           }}
           className="text-white"
         >
-          Popular
+          Popular{" "}
+          <button
+            type="button"
+            className="btn-close d-xl-none d-lg-none "
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+            style={{ marginLeft: "70%" }}
+          />
         </span>
+
         <ul>
           <li
             className={toggleStates["inPlay"] ? "subMenuHead" : "MenuHead"}
