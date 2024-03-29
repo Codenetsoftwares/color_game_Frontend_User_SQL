@@ -22,6 +22,10 @@ function AppDrawer({ children, showCarousel, isMobile }) {
     setToggleStates((prevState) => ({
       [index]: !prevState[index],
     }));
+
+    if(isMobile) {
+      // close app drawer logic should call here
+    }
   };
 
   function getLeftNavBar() {
