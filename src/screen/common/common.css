@@ -5,7 +5,7 @@
 .page_404 {
   padding: 40px 0;
   background: #fff;
-  font-family: 'Arvo', serif;
+  font-family: "Arvo", serif;
 }
 
 .page_404 img {
@@ -233,4 +233,29 @@ label {
 
 .customWidth {
   width: 90%;
+}
+
+/*======================
+hamburgerNavbar
+=======================*/
+
+.animated-coin {
+  width: 10vw;
+  height: 10vw;
+  max-width: 20px;
+  max-height: 20px;
+  border-radius: 50%;
+  right: -70px;
+  background: linear-gradient(to right, red 50%, black 50%);
+  position: relative;
+  animation: rotateCoin 2s infinite linear;
+}
+
+@keyframes rotateCoin {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
 }
