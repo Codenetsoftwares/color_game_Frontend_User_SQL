@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import HamburgerNavBar from './HamburgerNavBar';
 // import "./common.css";
 
 function AppDrawer({ children, showCarousel, isMobile }) {
@@ -294,6 +295,11 @@ function AppDrawer({ children, showCarousel, isMobile }) {
     );
   }
 
-  return <div>{getBody()}</div>;
+  return <div>
+    
+    {getBody()}
+    <HamburgerNavBar/>
+    
+    </div>;
 }
 export default AppDrawer;
