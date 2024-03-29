@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import RulesPage from './screen/common/rulesPage';
 import ForgotPassword from './screen/chnagePassword/ForgotPassword';
+import PrivateRoute from './globlaCommon/privateRoute';
 
 function App() {
   return (
@@ -28,11 +29,28 @@ function App() {
         <Routes>
           <Route path="/home" element={<Home />} />
           <Route path="/" element={<Home />} />
-          <Route path="/forgetPassword" element={<ForgotPassword />} />
-          <Route path="/rulesPage" element={<RulesPage />} />
           <Route path="/gameView/:gameName/:id" element={<GameView />} />
+
+          {/* private routes */}
+          <Route
+            path="/forgetPassword"
+            element={
+              <PrivateRoute>
+                <ForgotPassword />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/rulesPage"
+            element={
+              <PrivateRoute>
+                <RulesPage />
+              </PrivateRoute>
+            }
+          />
+
+          {/* not found */}
           <Route path="*" element={<NotFound />} />
-          <Route path="/rulesPage" element={<RulesPage />} />
         </Routes>
       </BrowserRouter>
     </AppProvider>
