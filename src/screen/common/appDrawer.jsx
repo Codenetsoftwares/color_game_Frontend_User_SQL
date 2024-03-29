@@ -1,36 +1,30 @@
 import React, { useState, useEffect } from "react";
-// import "./common.css";
 import "./appDrawer.css";
 import { user_getAllGamesWithMarketData_api } from "../../utils/apiService";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
 function AppDrawer({ children, showCarousel, isMobile }) {
-  const [isActive, setIsActive] = useState(false);
   const [toggleStates, setToggleStates] = useState({});
   const [user_allGames, setUser_allGames] = useState([]);
+  
+  useEffect(() => {
+    user_getAllGames();
+  }, []);
+
+  async function user_getAllGames() {
+    const response = await user_getAllGamesWithMarketData_api();
+    if (response) {
+      setUser_allGames(response.data);
+    }
+  }
+
+  const handleToggle = (index) => {
+    setToggleStates((prevState) => ({
+      [index]: !prevState[index],
+    }));
+  };
 
   function getLeftNavBar() {
-    const handleToggle = (index) => {
-      setToggleStates((prevState) => ({
-        ...prevState,
-        [index]: !prevState[index],
-      }));
-    };
-
-    useEffect(() => {
-      user_getAllGames();
-    }, []);
-
-    async function user_getAllGames() {
-      const response = await user_getAllGamesWithMarketData_api();
-      if (response) {
-        setUser_allGames(response.data);
-      }
-    }
-
-    console.log("user_allGames from appdrawer=>>>", user_allGames);
-
     return (
       <div className="sidebar" style={{ overflowY: "auto", height: "100vh" }}>
         <span
@@ -89,7 +83,7 @@ function AppDrawer({ children, showCarousel, isMobile }) {
     return (
       <>
         <div
-          id="carouselExampleAutoplaying"
+          id="carouselExampleAutoPlaying"
           class="carousel slide"
           data-bs-ride="carousel"
         >
@@ -99,8 +93,7 @@ function AppDrawer({ children, showCarousel, isMobile }) {
                 src="https://images.news18.com/ibnlive/uploads/2024/03/the-carnival-of-cricket-ipl-2024-begins-friday-in-chennai-2024-03-57866b703b220dfd84e70329b271fbd8-3x2.jpg"
                 class="d-block w-100"
                 alt="..."
-                //   style={{ height: "300px", objectfit: "cover" }}
-                style={{ height: "300px", objectfit: "contain" }}
+                style={{ height: "300px" }}
               />
             </div>
             <div class="carousel-item">
@@ -108,8 +101,8 @@ function AppDrawer({ children, showCarousel, isMobile }) {
                 src="https://www.hindustantimes.com/ht-img/img/2024/01/14/550x309/TOPSHOT-TENNIS-AUS-OPEN-33_1705249861778_1705249942860.jpg"
                 class="d-block w-100"
                 alt="..."
-                //   style={{ height: "300px", objectfit: "cover" }}
-                style={{ height: "300px", objectfit: "contain" }}
+                //   style={{ height: "300px", objectFit: "cover" }}
+                style={{ height: "300px" }}
               />
             </div>
             <div class="carousel-item">
@@ -117,15 +110,15 @@ function AppDrawer({ children, showCarousel, isMobile }) {
                 src="https://assets-webp.khelnow.com/d7293de2fa93b29528da214253f1d8d0/640x360/news/uploads/2024/02/football-lead-pic.jpg.webp"
                 class="d-block w-100"
                 alt="..."
-                //   style={{ height: "300px", objectfit: "cover" }}
-                style={{ height: "300px", objectfit: "contain" }}
+                //   style={{ height: "300px", objectFit: "cover" }}
+                style={{ height: "300px" }}
               />
             </div>
           </div>
           <button
             class="carousel-control-prev"
             type="button"
-            data-bs-target="#carouselExampleAutoplaying"
+            data-bs-target="#carouselExampleAutoPlaying"
             data-bs-slide="prev"
           >
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -134,7 +127,7 @@ function AppDrawer({ children, showCarousel, isMobile }) {
           <button
             class="carousel-control-next"
             type="button"
-            data-bs-target="#carouselExampleAutoplaying"
+            data-bs-target="#carouselExampleAutoPlaying"
             data-bs-slide="next"
           >
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
