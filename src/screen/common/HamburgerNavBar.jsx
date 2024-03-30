@@ -1,18 +1,29 @@
 import React, { useState } from "react";
 import { FaHome, FaPlay, FaBars, FaHeart } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
+import { useAppContext } from "../../contextApi/context";
+import Login from "../loginModal/loginModal";
 
 const HamburgerNavBar = () => {
   const [activeIcon, setActiveIcon] = useState(null);
+  const [isLoginModal, setIsLoginModal] = useState(false);
+
+  const { store } = useAppContext();
 
   const navigate = useNavigate();
 
   const handleIconHover = (icon) => {
     setActiveIcon(icon);
-    if(icon === 'home') {
+    if (icon === 'home') {
       navigate("/");
     }
   };
+
+  function handleLogin() {
+    if(!store.user.isLogin) {
+      setIsLoginModal(!isLoginModal)
+    }
+  }
 
   return (
     <div className="container-fluid">
@@ -66,14 +77,14 @@ const HamburgerNavBar = () => {
           onMouseEnter={() => handleIconHover("menu")}
         >
           <div
-            data-bs-toggle="offcanvas"
+            onClick={handleLogin}
+            data-bs-toggle={store.user.isLogin ? "offcanvas" : ""}
             data-bs-target="#offcanvasDarkNavbar"
-            aria-controls="offcanvasDarkNavbar"
-            aria-label="Toggle navigation"
           >
             <FaBars />
           </div>
           {activeIcon === "menu" && <div className="hover-text">Menu</div>}
+          <Login showLogin={isLoginModal} setShowLogin={setIsLoginModal} />
         </div>
       </div>
     </div>
