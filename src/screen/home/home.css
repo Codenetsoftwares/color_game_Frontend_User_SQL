@@ -19,7 +19,7 @@
   padding: 10px;
 }
 
-/* =======> css for component hitgames */
+/* =======> css for component hti games -> Desktop screen*/
 .card-deck {
   display: flex;
   justify-content: space-between;
@@ -34,8 +34,17 @@
 .card:last-child {
   margin-right: 0; /* Remove margin from the last card */
 }
+
 .card-img-top {
   height: 300px;
+}
+
+/* =======> css for component hit games -> Mobile screen */
+
+@media (max-width: 767.98px) {
+  .card-img-top {
+    height: 120px;
+  }
 }
 
 /* ===========> css for component advertisement */

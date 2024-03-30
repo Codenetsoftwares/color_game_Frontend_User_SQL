@@ -85,9 +85,9 @@ const Home = () => {
 
   function gif() {
     return (
-      <div className="row">
+      <div className="row m-0">
         {gifData.map((item, index) => (
-          <div className="col-sm-6" key={index}>
+          <div className={`col-sm-6 p-0 ${index != 0 ? 'ps-md-3' : ''}`} key={index}>
             <div className="card">
               <img
                 src={item.image}

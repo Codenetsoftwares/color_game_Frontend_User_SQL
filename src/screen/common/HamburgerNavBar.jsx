@@ -9,7 +9,9 @@ const HamburgerNavBar = () => {
 
   const handleIconHover = (icon) => {
     setActiveIcon(icon);
-    navigate("/");
+    if(icon === 'home') {
+      navigate("/");
+    }
   };
 
   return (
