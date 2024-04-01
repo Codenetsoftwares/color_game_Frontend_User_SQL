@@ -2,7 +2,7 @@
 
 #carouselExampleCaptions {
   max-height: 600px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 /* Adjusting the height of the carousel images */
@@ -23,7 +23,9 @@
 .card-deck {
   display: flex;
   justify-content: space-between;
-  /* overflow-x: scroll; */
+  margin-bottom: 10px;
+  /* margin-top: 5px; */
+  overflow-x: scroll;
 }
 
 .card {
@@ -74,9 +76,10 @@
   );
 }
 .icontainer {
-  height: 90px;
-  width: 90px;
-  margin: 10px;
+  height: 60px;
+  width: 120px;
+ cursor: pointer;
+  /* margin: 10px; */
 }
 .imagecontainer {
   height: 90px;
