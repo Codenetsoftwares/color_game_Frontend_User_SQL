@@ -1,29 +1,38 @@
-import { useEffect, useState } from 'react';
-import '../common.css';
+import { useEffect, useState } from "react";
+import "../common.css";
 import {
+  userBidding,
   user_getAllGamesWithMarketData_api,
   user_getGameWithMarketData_api,
   user_getMarketWithRunnerData_api,
-} from '../../../utils/apiService';
+} from "../../../utils/apiService";
 import {
   getGameWithMarketDataInitialState,
   getMarketWithRunnerDataInitialState,
-} from '../../../utils/getInitiateState';
-import { useLocation } from 'react-router-dom';
-import biddingButton from '../../../utils/constant/biddingButton';
+} from "../../../utils/getInitiateState";
+import { useLocation } from "react-router-dom";
+import biddingButton from "../../../utils/constant/biddingButton";
+import { useAppContext } from "../../../contextApi/context";
 
 function GameWithMarketList({ isSingleMarket }) {
-  const [user_allGamesWithMarketData, setUser_allGamesWithMarketData] = useState([]);
-  const [user_gameWithMarketData, setUser_gameWithMarketData] = useState(getGameWithMarketDataInitialState());
-  const [user_marketWithRunnerData, setUser_marketWithRunnerData] = useState(getMarketWithRunnerDataInitialState());
-
-  const [bidding, setBidding] = useState({ rate: '', amount: 0 });
+  const [user_allGamesWithMarketData, setUser_allGamesWithMarketData] =
+    useState([]);
+  const [user_gameWithMarketData, setUser_gameWithMarketData] = useState(
+    getGameWithMarketDataInitialState()
+  );
+  const [user_marketWithRunnerData, setUser_marketWithRunnerData] = useState(
+    getMarketWithRunnerDataInitialState()
+  );
+  console.log(useLocation());
+  const { store } = useAppContext();
+  const [gameId, setGameId] = useState("");
+  const [bidding, setBidding] = useState({ rate: "", amount: 0 });
   const [toggle, setToggle] = useState({
     toggleOpen: false,
-    indexNo: '',
-    mode: '',
+    indexNo: "",
+    mode: "",
     stateindex: 0,
-    runnerName: '',
+    runnerName: "",
   });
 
   const handleBiddingAmount = (name, value) => {
@@ -34,46 +43,56 @@ function GameWithMarketList({ isSingleMarket }) {
   };
 
   const handleToggle = (runnerid, rate, value) => {
-    console.log('runnerid', runnerid, 'value', value, 'indexNo', toggle.indexNo, 'mode', toggle.mode);
     if (toggle.toggleOpen || toggle.indexNo !== runnerid) {
       setToggle({
         toggleOpen: false,
         indexNo: runnerid,
         mode: value,
       });
-      handleBiddingAmount('rate', rate);
+      handleBiddingAmount("rate", rate);
     } else if (toggle.indexNo === runnerid && toggle.mode !== value) {
       setToggle({
         toggleOpen: false,
         indexNo: runnerid,
         mode: value,
       });
-      handleBiddingAmount('rate', rate);
+      handleBiddingAmount("rate", rate);
     } else if (toggle.indexNo === runnerid && toggle.mode === value) {
       setToggle({
         toggleOpen: true,
         indexNo: runnerid,
         mode: value,
       });
-      handleBiddingAmount('rate', rate);
+      handleBiddingAmount("rate", rate);
     } else {
       setToggle({
         toggleOpen: true,
         indexNo: runnerid,
         mode: value,
       });
-      handleBiddingAmount('rate', rate);
+      handleBiddingAmount("rate", rate);
     }
   };
 
   const handleCancel = () => {
-    handleBiddingAmount('rate', '');
-    handleBiddingAmount('amount', '');
+    handleBiddingAmount("rate", "");
+    handleBiddingAmount("amount", "");
     setToggle({ toggleOpen: true });
   };
 
-  const gameIdFromUrl = useLocation().pathname.split('/')[3];
-  const marketIdFromUrl = useLocation()?.pathname?.split('-')[1]?.split('/')[1];
+  const  marketIdFromUrl = useLocation().pathname.split("/")[3];
+  const gameIdFromUrl = useLocation().pathname.split("/")[4];
+
+  console.log(
+    "gameIdFromUrl====>",
+    gameIdFromUrl,
+    "marketIdFromUrl===>",
+    marketIdFromUrl
+  );
+
+  const handlegameId = (id) => {
+    setGameId(id);
+  };
 
   useEffect(() => {
     if (marketIdFromUrl) {
@@ -116,13 +135,25 @@ function GameWithMarketList({ isSingleMarket }) {
     }
   }
 
+  const handleUserBidding = async () => {
+    const values = {
+      userId: store.user.id,
+      gameId: gameIdFromUrl,
+      marketId: marketIdFromUrl,
+      runnerId: toggle.indexNo,
+      value: bidding.amount,
+      bidType: toggle.mode,
+    };
+    const response = await userBidding(values, true);
+  };
+
   function getMarketDetailByMarketId() {
     const handleBidding = () => {
       const nData = biddingButton.map((list) => (
         <div className={`${list.col} p-0`}>
           <button
             className={`btn btn-sm bg-white border border-2 rounded-3 col-11`}
-            onClick={() => handleBiddingAmount('amount', parseInt(list.name))}
+            onClick={() => handleBiddingAmount("amount", parseInt(list.name))}
           >
             {list.name}
           </button>
@@ -131,41 +162,57 @@ function GameWithMarketList({ isSingleMarket }) {
 
       return nData;
     };
+
     return (
       <div className="row p-0 m-0">
-        <div className="col-12 p-1 mt-2" style={{ backgroundColor: '#a1aed4' }}>
-          {user_marketWithRunnerData.marketName} | {user_marketWithRunnerData.timeSpan}
+        <div className="col-12 p-1 mt-2" style={{ backgroundColor: "#a1aed4" }}>
+          {user_marketWithRunnerData.marketName} |{" "}
+          {user_marketWithRunnerData.timeSpan}
         </div>
         {user_marketWithRunnerData &&
           user_marketWithRunnerData.runners.map((runnerData) => {
             return (
               <>
                 <div className="row py-1 px-0 m-0 border">
-                  <span className={`col-4 text-dark text-decoration-none text-nowrap`}>
-                    {runnerData.runnerName.name}
+                  <span
+                    className={`col-4 text-dark text-decoration-none text-nowrap`}
+                  >
+                    {runnerData.runnerName.name} <span>{}</span>
                   </span>
-                  {console.log('runnerid', runnerData._id)}
+
                   <div
                     className="col-4"
-                    style={{ backgroundColor: 'blue' }}
-                    onClick={() => handleToggle(runnerData._id, runnerData.rate[0].Back, 'back')}
+                    style={{ backgroundColor: "lightblue" }}
+                    onClick={() =>
+                      handleToggle(
+                        runnerData._id,
+                        runnerData.rate[0].Back,
+                        "Back"
+                      )
+                    }
                   >
                     {runnerData.rate[0].Back}
                   </div>
 
                   <div
                     className="col-4"
-                    style={{ backgroundColor: 'pink' }}
-                    onClick={() => handleToggle(runnerData._id, runnerData.rate[0].Lay, 'lay')}
+                    style={{ backgroundColor: "pink" }}
+                    onClick={() =>
+                      handleToggle(
+                        runnerData._id,
+                        runnerData.rate[0].Lay,
+                        "Lay"
+                      )
+                    }
                   >
                     {runnerData.rate[0].Lay}
                   </div>
                 </div>
 
                 {toggle.indexNo === runnerData._id && !toggle.toggleOpen && (
-                  <div style={{ background: '#c6e7ee' }}>
+                  <div style={{ background: "#c6e7ee" }}>
                     <div className="row py-1 px-0 m-0">
-                      <div className="col-2">
+                      <div className="d-none d-sm-block d-md-block d-lg-block d-xl-block col-sm-2 col-md-2 col-lg-2 col-xl-2">
                         <button
                           className=" btn btn-sm bg-white border border-2 rounded-3"
                           onClick={() => handleCancel()}
@@ -173,20 +220,34 @@ function GameWithMarketList({ isSingleMarket }) {
                           Cancel
                         </button>
                       </div>
-                      <div className="col-4">
-                        <button className="col-3 rounded-start-4" style={{ width: '18%', border: '0' }}>
+                      <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                        <button
+                          className="col-3 rounded-start-4"
+                          style={{ width: "18%", border: "0" }}
+                        >
                           -
                         </button>
-                        <input className="col-6 " type="text" value={bidding.rate} />
-                        <button className="col-3 rounded-end-3" style={{ width: '18%', border: '0' }}>
+                        <input
+                          className="col-6 "
+                          type="text"
+                          value={bidding.rate}
+                        />
+                        <button
+                          className="col-3 rounded-end-3"
+                          style={{ width: "18%", border: "0" }}
+                        >
                           +
                         </button>
                       </div>
-                      <div className="col-4">
+                      <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                         <button
-                          className={`col-3 rounded-start-3 ${bidding.amount <= 100 ? 'disabled' : ''}`}
-                          style={{ width: '18%', border: '0' }}
-                          onClick={() => handleBiddingAmount('amount', bidding.amount - 100)}
+                          className={`col-3 rounded-start-3 ${
+                            bidding.amount <= 100 ? "disabled" : ""
+                          }`}
+                          style={{ width: "18%", border: "0" }}
+                          onClick={() =>
+                            handleBiddingAmount("amount", bidding.amount - 100)
+                          }
                         >
                           -
                         </button>
@@ -194,86 +255,47 @@ function GameWithMarketList({ isSingleMarket }) {
                           className="col-6"
                           type="text"
                           value={bidding.amount}
-                          onChange={(e) => handleBiddingAmount('amount', e.target.value)}
+                          onChange={(e) =>
+                            handleBiddingAmount("amount", e.target.value)
+                          }
                         />
                         <button
                           className="col-3 rounded-end-3"
-                          style={{ width: '18%', border: '0' }}
-                          onClick={() => handleBiddingAmount('amount', bidding.amount + 100)}
+                          style={{ width: "18%", border: "0" }}
+                          onClick={() =>
+                            handleBiddingAmount("amount", bidding.amount + 100)
+                          }
                         >
                           +
                         </button>
                       </div>
-                      <div className="col-2">
-                        <button className="btn btn-sm bg-white border border-2 rounded-3">Place Bet</button>
+                      <div className="d-none d-sm-block d-md-block d-lg-block d-xl-block col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                        <button
+                          className="btn btn-sm bg-white border border-2 rounded-3"
+                          onClick={() => handleUserBidding()}
+                        >
+                          Place Bet
+                        </button>
                       </div>
                     </div>
+                    <div className="row py-1 px-0 m-0">{handleBidding()}</div>
                     <div className="row py-1 px-0 m-0">
-                      {handleBidding()}
-                      {/* <div className="col-1 position-relative">
+                      <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
                         <button
-                          className="btn btn-sm btn-danger rounded-3 position-absolute customWidth"
-                          onClick={() => handleBiddingAmount("amount", 50)}
+                          className=" btn btn-sm bg-white border border-2 rounded-3 col-12"
+                          onClick={() => handleCancel()}
                         >
-                          50
+                          Cancel
                         </button>
                       </div>
-                      <div className="col-1">
+                      <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
                         <button
-                          className="btn btn-sm btn-danger rounded-3"
-                          onClick={() => handleBiddingAmount("amount", 100)}
+                          className="btn btn-sm bg-white border border-2 rounded-3 col-12"
+                          onClick={() => handleUserBidding()}
                         >
-                          100
-                        </button>{" "}
-                      </div>
-                      <div className="col-1">
-                        <button
-                          className=" btn btn-sm btn-danger rounded-3"
-                          onClick={() => handleBiddingAmount("amount", 200)}
-                        >
-                          200
-                        </button>{" "}
-                      </div>
-                      <div className="col-1">
-                        <button
-                          className="btn btn-sm btn-danger rounded-3"
-                          onClick={() => handleBiddingAmount("amount", 500)}
-                        >
-                          500
-                        </button>{" "}
-                      </div>
-                      <div className="col-2">
-                        <button
-                          className="btn btn-sm btn-danger rounded-3"
-                          onClick={() => handleBiddingAmount("amount", 1000)}
-                        >
-                          1000
-                        </button>{" "}
-                      </div>
-                      <div className="col-2">
-                        <button
-                          className="btn btn-sm btn-danger rounded-3"
-                          onClick={() => handleBiddingAmount("amount", 2000)}
-                        >
-                          2000
-                        </button>{" "}
-                      </div>
-                      <div className="col-2">
-                        <button
-                          className=" btn btn-sm btn-danger rounded-3"
-                          onClick={() => handleBiddingAmount("amount", 5000)}
-                        >
-                          5000
+                          Place Bet
                         </button>
                       </div>
-                      <div className="col-2">
-                        <button
-                          className=" btn btn-sm btn-primary rounded-3"
-                          onClick={() => handleBiddingAmount("amount", 10000)}
-                        >
-                          10000
-                        </button>
-                      </div> */}
                     </div>
                   </div>
                 )}
@@ -287,7 +309,7 @@ function GameWithMarketList({ isSingleMarket }) {
   function getSingleMarket() {
     return (
       <div className="row p-0 m-0">
-        <div className="col-12 p-1 mt-2" style={{ backgroundColor: '#a1aed4' }}>
+        <div className="col-12 p-1 mt-2" style={{ backgroundColor: "#a1aed4" }}>
           {user_gameWithMarketData.gameName}
         </div>
         {user_gameWithMarketData &&
@@ -298,13 +320,16 @@ function GameWithMarketList({ isSingleMarket }) {
                   className={`col-4 text-dark text-decoration-none text-nowrap`}
                   href={`/gameView/${user_gameWithMarketData?.gameName?.replace(
                     /\s/g,
-                    '',
-                  )}-${marketData?.marketName?.replace(/\s/g, '')}/${marketData?.marketId}`}
+                    ""
+                  )}-${marketData?.marketName?.replace(/\s/g, "")}/${
+                    marketData?.marketId
+                  }`}
                 >
-                  <span>{marketData.timeSpan}</span> | <span> {marketData.marketName}</span>
+                  <span>{marketData.timeSpan}</span> |{" "}
+                  <span> {marketData.marketName}</span>
                 </a>
 
-                <div className="col-8" style={{ backgroundColor: 'orange' }}>
+                <div className="col-8" style={{ backgroundColor: "orange" }}>
                   col-8
                 </div>
               </div>
@@ -321,7 +346,10 @@ function GameWithMarketList({ isSingleMarket }) {
           user_allGamesWithMarketData.map((gameWithMarketData) => {
             return (
               <>
-                <div className="col-12 p-1 mt-2" style={{ backgroundColor: '#a1aed4' }}>
+                <div
+                  className="col-12 p-1 mt-2"
+                  style={{ backgroundColor: "#a1aed4" }}
+                >
                   {gameWithMarketData.gameName}
                 </div>
                 {gameWithMarketData &&
@@ -329,9 +357,13 @@ function GameWithMarketList({ isSingleMarket }) {
                     return (
                       <div className="row py-1 px-0 m-0 border">
                         <div className="col-4">
-                          <span>{marketData.timeSpan}</span> | <span> {marketData.marketName}</span>
+                          <span>{marketData.timeSpan}</span> |{" "}
+                          <span> {marketData.marketName}</span>
                         </div>
-                        <div className="col-8" style={{ backgroundColor: 'orange' }}>
+                        <div
+                          className="col-8"
+                          style={{ backgroundColor: "orange" }}
+                        >
                           col-8
                         </div>
                       </div>
@@ -339,8 +371,11 @@ function GameWithMarketList({ isSingleMarket }) {
                   })}
                 <a
                   className={`col-12 text-dark text-decoration-none text-nowrap`}
-                  href={`/gameView/${gameWithMarketData?.gameName?.replace(/\s/g, '')}/${gameWithMarketData?.gameId}`}
-                  style={{ textAlign: 'right' }}
+                  href={`/gameView/${gameWithMarketData?.gameName?.replace(
+                    /\s/g,
+                    ""
+                  )}/${gameWithMarketData?.gameId}`}
+                  style={{ textAlign: "right" }}
                 >
                   View more
                 </a>
@@ -352,7 +387,11 @@ function GameWithMarketList({ isSingleMarket }) {
   }
 
   function getBody() {
-    return marketIdFromUrl ? getMarketDetailByMarketId() : isSingleMarket ? getSingleMarket() : getWholeMarket();
+    return marketIdFromUrl
+      ? getMarketDetailByMarketId()
+      : isSingleMarket
+      ? getSingleMarket()
+      : getWholeMarket();
   }
 
   return getBody();

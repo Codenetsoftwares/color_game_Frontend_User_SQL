@@ -1,19 +1,19 @@
 const BiddingBtnData = [
   {
     name: '50',
-    col: 'col-3 col-sm-1 col-md-1 col-lg-2 col-xl-2',
+    col: 'col-3 col-sm-1 col-md-1 col-lg-1 col-xl-1',
   },
   {
     name: '100',
-    col: 'col-3 col-sm-1 col-md-1 col-lg-2 col-xl-2',
+    col: 'col-3 col-sm-1 col-md-1 col-lg-1 col-xl-1',
   },
   {
     name: '200',
-    col: 'col-3 col-sm-1 col-md-1 col-lg-2 col-xl-2',
+    col: 'col-3 col-sm-1 col-md-1 col-lg-1 col-xl-1',
   },
   {
     name: '500',
-    col: 'col-3 col-sm-1 col-md-1 col-lg-2 col-xl-2',
+    col: 'col-3 col-sm-1 col-md-1 col-lg-1 col-xl-1',
   },
   {
     name: '1000',
@@ -34,3 +34,5 @@ const BiddingBtnData = [
 ];
 
 export default BiddingBtnData;
+
+

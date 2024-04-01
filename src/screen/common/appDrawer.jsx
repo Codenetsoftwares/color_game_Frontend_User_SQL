@@ -3,7 +3,7 @@ import "./appDrawer.css";
 import { user_getAllGamesWithMarketData_api } from "../../utils/apiService";
 import { Link } from "react-router-dom";
 import { getAllGameDataInitialState } from "../../utils/getInitiateState";
-import HamburgerNavBar from './HamburgerNavBar';
+import HamburgerNavBar from "./HamburgerNavBar";
 // import "./common.css";
 
 function AppDrawer({ children, showCarousel, isMobile }) {
@@ -82,7 +82,10 @@ function AppDrawer({ children, showCarousel, isMobile }) {
                         )}-${marketObj?.marketName?.replace(
                           /\s/g,
                           ""
-                        )}/${marketObj?.marketId?.replace(/\s/g, "")}`}
+                        )}/${marketObj?.marketId?.replace(
+                          /\s/g,
+                          ""
+                        )}/${gameObj?._id?.replace(/\s/g, "")}`}
                       >
                         {marketObj.marketName}
                       </Link>
@@ -188,10 +191,6 @@ function AppDrawer({ children, showCarousel, isMobile }) {
     );
   }
 
-  return (
-    <div>
-      {getBody()}
-    </div>
-  );
+  return <div>{getBody()}</div>;
 }
 export default AppDrawer;
