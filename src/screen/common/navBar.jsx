@@ -36,6 +36,10 @@ const NavBar = () => {
     navigate('/rulesPage');
   };
 
+  const handleBetHistoryClick = () => {
+    navigate('/betHistory');
+  };
+
   const handleLogout = () => {
     dispatch({
       type: strings.LOG_OUT,
@@ -270,6 +274,7 @@ const NavBar = () => {
                 Profit & Loss
               </li>
               <li
+                onClick={handleBetHistoryClick}
                 class="nav-item mb-3 align-items-start"
                 style={{
                   color: 'white', // Initial color

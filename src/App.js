@@ -7,9 +7,10 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import RulesPage from './screen/common/rulesPage';
-import ForgotPassword from './screen/chnagePassword/ForgotPassword';
+import ForgotPassword from './screen/chnagePassword/forgotPassword';
 import PrivateRoute from './globlaCommon/privateRoute';
-import HamburgerNavBar from './screen/common/HamburgerNavBar';
+import HamburgerNavBar from './screen/common/hamburgerNavBar';
+import BetHistory from './screen/history/BetHistory';
 
 function App() {
   return (
@@ -46,6 +47,15 @@ function App() {
             element={
               <PrivateRoute>
                 <RulesPage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/betHistory"
+            element={
+              <PrivateRoute>
+                <BetHistory />
               </PrivateRoute>
             }
           />
