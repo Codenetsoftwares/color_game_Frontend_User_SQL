@@ -15,6 +15,7 @@ export class StringConstants {
   LOG_OUT = 'LOG_OUT';
   Announcement = 'Announcement';
   Name = 'Name';
+  placeBidding = 'placeBidding';
 }
 
 let strings = new StringConstants();

@@ -30,10 +30,7 @@ function App() {
         <Routes>
           <Route path="/home" element={<Home />} />
           <Route path="/" element={<Home />} />
-          <Route
-            path="/gameView/:gameName/:marketid/:gameid"
-            element={<GameView />}
-          />
+          <Route path="/gameView/:gameName/:id" element={<GameView />} />
 
           {/* private routes */}
           <Route

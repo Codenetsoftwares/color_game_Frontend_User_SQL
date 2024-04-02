@@ -34,5 +34,3 @@ const BiddingBtnData = [
 ];
 
 export default BiddingBtnData;
-
-

@@ -1,6 +1,6 @@
-import { toast } from "react-toastify";
-import urls from "../utils/constant/UrlConstant";
-import strings from "../utils/constant/stringConstant";
+import { toast } from 'react-toastify';
+import urls from '../utils/constant/UrlConstant';
+import strings from '../utils/constant/stringConstant';
 
 // getNoAuthCallParams public api call
 export function getNoAuthCallParams(methodType, body) {
@@ -9,9 +9,9 @@ export function getNoAuthCallParams(methodType, body) {
     headers: strings.applicationJSON,
   };
   switch (methodType) {
-    case "GET":
+    case 'GET':
       return params;
-    case "POST":
+    case 'POST':
       return { ...params, body: JSON.stringify(body) };
     default:
       return false;
@@ -23,7 +23,7 @@ export async function getHeaderObject(accessToken, contentType) {
     if (accessToken) {
       return {
         ...contentType,
-        authorization: accessToken,
+        authorization: `Bearer ${accessToken}`,
       };
     }
     return null;
@@ -40,13 +40,13 @@ export const getCallParams = async (methodType, body) => {
     method: methodType,
     headers: await getHeaderObject(accessToken, strings.applicationJSON),
   };
-  console.log("methodType from getCallParams line 43 ", methodType);
+  console.log('methodType from getCallParams line 43 ', methodType);
   switch (methodType) {
-    case "GET":
+    case 'GET':
       return params;
-    case "POST":
+    case 'POST':
       return { ...params, body: JSON.stringify(body) };
-    case "PUT":
+    case 'PUT':
       return { ...params, body: JSON.stringify(body) };
 
     default:
@@ -89,10 +89,7 @@ export async function makeCall(callName, callParams, isToast) {
 
 export function getTimeoutPromise() {
   return new Promise((resolve, reject) => {
-    setTimeout(
-      () => reject({ error: true, message: "Timeout", success: false }),
-      5000
-    );
+    setTimeout(() => reject({ error: true, message: 'Timeout', success: false }), 5000);
   });
 }
 
