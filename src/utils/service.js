@@ -23,7 +23,7 @@ export async function getHeaderObject(accessToken, contentType) {
     if (accessToken) {
       return {
         ...contentType,
-        authorization: accessToken,
+        authorization: `Bearer ${accessToken}`,
       };
     }
     return null;

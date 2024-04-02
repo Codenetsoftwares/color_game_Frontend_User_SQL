@@ -80,3 +80,11 @@ export function getAllGameDataInitialState(body = {}) {
     },
   ];
 }
+
+export function getUserPlaceBidding(body = {}) {
+  return {
+    gameId: body.gameId ?? "",
+    marketId: body.marketId ?? "",
+    runnerId: body.runnerId ?? "",
+  };
+}

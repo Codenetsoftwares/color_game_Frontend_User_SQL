@@ -82,10 +82,7 @@ function AppDrawer({ children, showCarousel, isMobile }) {
                         )}-${marketObj?.marketName?.replace(
                           /\s/g,
                           ""
-                        )}/${marketObj?.marketId?.replace(
-                          /\s/g,
-                          ""
-                        )}/${gameObj?._id?.replace(/\s/g, "")}`}
+                        )}/${marketObj?.marketId?.replace(/\s/g, "")}`}
                       >
                         {marketObj.marketName}
                       </Link>

@@ -13,6 +13,7 @@ import {
 import { useLocation } from "react-router-dom";
 import biddingButton from "../../../utils/constant/biddingButton";
 import { useAppContext } from "../../../contextApi/context";
+import strings from "../../../utils/constant/stringConstant";
 
 function GameWithMarketList({ isSingleMarket }) {
   const [user_allGamesWithMarketData, setUser_allGamesWithMarketData] =
@@ -24,7 +25,7 @@ function GameWithMarketList({ isSingleMarket }) {
     getMarketWithRunnerDataInitialState()
   );
   console.log(useLocation());
-  const { store } = useAppContext();
+  const { store, dispatch } = useAppContext();
   const [gameId, setGameId] = useState("");
   const [bidding, setBidding] = useState({ rate: "", amount: 0 });
   const [toggle, setToggle] = useState({
@@ -42,7 +43,8 @@ function GameWithMarketList({ isSingleMarket }) {
     }));
   };
 
-  const handleToggle = (runnerid, rate, value) => {
+  const handleToggle = (runnerid, rate, value, id) => {
+    
     if (toggle.toggleOpen || toggle.indexNo !== runnerid) {
       setToggle({
         toggleOpen: false,
@@ -50,6 +52,7 @@ function GameWithMarketList({ isSingleMarket }) {
         mode: value,
       });
       handleBiddingAmount("rate", rate);
+      handleRunnerId(id);
     } else if (toggle.indexNo === runnerid && toggle.mode !== value) {
       setToggle({
         toggleOpen: false,
@@ -57,6 +60,7 @@ function GameWithMarketList({ isSingleMarket }) {
         mode: value,
       });
       handleBiddingAmount("rate", rate);
+      handleRunnerId(id);
     } else if (toggle.indexNo === runnerid && toggle.mode === value) {
       setToggle({
         toggleOpen: true,
@@ -64,6 +68,7 @@ function GameWithMarketList({ isSingleMarket }) {
         mode: value,
       });
       handleBiddingAmount("rate", rate);
+      handleRunnerId(id);
     } else {
       setToggle({
         toggleOpen: true,
@@ -71,6 +76,7 @@ function GameWithMarketList({ isSingleMarket }) {
         mode: value,
       });
       handleBiddingAmount("rate", rate);
+      handleRunnerId(id);
     }
   };
 
@@ -80,8 +86,30 @@ function GameWithMarketList({ isSingleMarket }) {
     setToggle({ toggleOpen: true });
   };
 
-  const  marketIdFromUrl = useLocation().pathname.split("/")[3];
-  const gameIdFromUrl = useLocation().pathname.split("/")[4];
+  const handleGameId = (id) => {
+    dispatch({
+      type: strings.placeBidding,
+      payload: { gameId: id },
+    });
+  };
+
+  const handleMarketId = (id) => {
+    console.log(id, "===>");
+    dispatch({
+      type: strings.placeBidding,
+      payload: { marketId: id },
+    });
+  };
+
+  const handleRunnerId = (id) => {
+    dispatch({
+      type: strings.placeBidding,
+      payload: { runnerId: id },
+    });
+  };
+
+  const gameIdFromUrl = useLocation().pathname.split("/")[3];
+  const marketIdFromUrl = useLocation()?.pathname?.split("-")[1]?.split("/")[1];
 
   console.log(
     "gameIdFromUrl====>",
@@ -138,9 +166,9 @@ function GameWithMarketList({ isSingleMarket }) {
   const handleUserBidding = async () => {
     const values = {
       userId: store.user.id,
-      gameId: gameIdFromUrl,
-      marketId: marketIdFromUrl,
-      runnerId: toggle.indexNo,
+      gameId: store.placeBidding.gameId,
+      marketId: store.placeBidding.marketId,
+      runnerId: store.placeBidding.runnerId,
       value: bidding.amount,
       bidType: toggle.mode,
     };
@@ -187,7 +215,8 @@ function GameWithMarketList({ isSingleMarket }) {
                       handleToggle(
                         runnerData._id,
                         runnerData.rate[0].Back,
-                        "Back"
+                        "Back",
+                        runnerData.runnerName.runnerId
                       )
                     }
                   >
@@ -201,7 +230,8 @@ function GameWithMarketList({ isSingleMarket }) {
                       handleToggle(
                         runnerData._id,
                         runnerData.rate[0].Lay,
-                        "Lay"
+                        "Lay",
+                        runnerData.runnerName.runnerId
                       )
                     }
                   >
@@ -324,6 +354,7 @@ function GameWithMarketList({ isSingleMarket }) {
                   )}-${marketData?.marketName?.replace(/\s/g, "")}/${
                     marketData?.marketId
                   }`}
+                  onClick={() => handleMarketId(marketData?.marketId)}
                 >
                   <span>{marketData.timeSpan}</span> |{" "}
                   <span> {marketData.marketName}</span>
@@ -376,6 +407,7 @@ function GameWithMarketList({ isSingleMarket }) {
                     ""
                   )}/${gameWithMarketData?.gameId}`}
                   style={{ textAlign: "right" }}
+                  onClick={() => handleGameId(gameWithMarketData?.gameId)}
                 >
                   View more
                 </a>
