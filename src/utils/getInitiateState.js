@@ -86,6 +86,5 @@ export function getUserPlaceBidding(body = {}) {
     gameId: body.gameId ?? '',
     marketId: body.marketId ?? '',
     runnerId: body.runnerId ?? '',
-
   };
 }
