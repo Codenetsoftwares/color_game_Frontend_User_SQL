@@ -1,5 +1,8 @@
-import strings from '../utils/constant/stringConstant';
-import { getUserInitialState } from '../utils/getInitiateState';
+import strings from "../utils/constant/stringConstant";
+import {
+  getUserInitialState,
+  getUserWalletInitialState,
+} from "../utils/getInitiateState";
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -21,6 +24,16 @@ export const reducer = (state, action) => {
       return {
         ...state,
         announcement: action.payload,
+      };
+
+    case strings.UserWallet:
+      
+      return {
+        ...state,
+        user: getUserInitialState({
+          ...state.user,
+          wallet: action.payload,
+        }),
       };
 
     default:

@@ -1,10 +1,16 @@
-export function getUserInitialState(body = {}) {
+export function getUserInitialState(body = {},) {
   return {
     accessToken: body.accessToken ?? "",
     isLogin: body.isLogin ?? false,
     userName: body.userName ?? "",
     email: body.email ?? "",
     id: body.id ?? "",
+    wallet: {
+      balance: body.balance ?? 0,
+      exposure: body.exposure ?? 0,
+      walletId: body.walletId ?? "",
+      profit_loss: body.profit_loss ?? "",
+    },
   };
 }
 
@@ -15,6 +21,14 @@ export function getGameWithMarketDataInitialState(body = {}) {
     gameName: "",
     Description: "",
     markets: [],
+  };
+}
+
+export function getUserWalletInitialState(body = {}) {
+  return {
+    balance: body.balance ?? 0,
+    exposure: body.exposure ?? 0,
+    walletId: body.walletId ?? "",
   };
 }
 

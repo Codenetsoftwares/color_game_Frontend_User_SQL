@@ -1,15 +1,16 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AppProvider } from './contextApi/context';
-import Home from './screen/home/home';
-import NotFound from './screen/common/notFound';
-import GameView from './screen/gameView/gameView';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import './App.css';
-import RulesPage from './screen/common/rulesPage';
-import ForgotPassword from './screen/chnagePassword/ForgotPassword';
-import PrivateRoute from './globlaCommon/privateRoute';
-import HamburgerNavBar from './screen/common/HamburgerNavBar';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AppProvider } from "./contextApi/context";
+import Home from "./screen/home/home";
+import NotFound from "./screen/common/notFound";
+import GameView from "./screen/gameView/gameView";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
+import RulesPage from "./screen/common/rulesPage";
+import ForgotPassword from "./screen/chnagePassword/forgotPassword";
+import PrivateRoute from "./globlaCommon/privateRoute";
+import HamburgerNavBar from "./screen/common/hamburgerNavBar";
+import ProfitAndLoss from "./screen/P&L/profitAndLoss";
 
 function App() {
   return (
@@ -46,6 +47,15 @@ function App() {
             element={
               <PrivateRoute>
                 <RulesPage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/profit&loss"
+            element={
+              <PrivateRoute>
+                <ProfitAndLoss />
               </PrivateRoute>
             }
           />

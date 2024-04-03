@@ -1,7 +1,7 @@
 import { createContext, useContext, useReducer, useEffect } from 'react';
 import { reducer } from './reducer';
 import strings from '../utils/constant/stringConstant';
-import { getUserInitialState } from '../utils/getInitiateState';
+import { getUserInitialState, getUserWalletInitialState } from '../utils/getInitiateState';
 
 const AppContext = createContext();
 
@@ -9,6 +9,7 @@ const initialState = {
   user: getUserInitialState(),
   announcement: [],
   appDrawer: [],
+  userWallet: getUserWalletInitialState(),
 };
 
 const AppProvider = ({ children }) => {
