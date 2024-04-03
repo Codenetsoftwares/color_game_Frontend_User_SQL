@@ -15,6 +15,7 @@ import biddingButton from '../../../utils/constant/biddingButton';
 import { useAppContext } from '../../../contextApi/context';
 import strings from '../../../utils/constant/stringConstant';
 
+
 function GameWithMarketList({ isSingleMarket }) {
   const [user_allGamesWithMarketData, setUser_allGamesWithMarketData] = useState([]);
   const [user_gameWithMarketData, setUser_gameWithMarketData] = useState(getGameWithMarketDataInitialState());
@@ -23,6 +24,7 @@ function GameWithMarketList({ isSingleMarket }) {
   const { store, dispatch } = useAppContext();
   const [gameId, setGameId] = useState('');
   const [bidding, setBidding] = useState({ rate: '', amount: 0 });
+
   const [toggle, setToggle] = useState({
     toggleOpen: false,
     indexNo: '',
@@ -39,6 +41,7 @@ function GameWithMarketList({ isSingleMarket }) {
   };
 
   const handleToggle = (runnerid, rate, value, id) => {
+
     if (toggle.toggleOpen || toggle.indexNo !== runnerid) {
       setToggle({
         toggleOpen: false,
@@ -46,6 +49,7 @@ function GameWithMarketList({ isSingleMarket }) {
         mode: value,
       });
       handleBiddingAmount('rate', rate);
+
       handleRunnerId(id);
     } else if (toggle.indexNo === runnerid && toggle.mode !== value) {
       setToggle({
@@ -53,7 +57,9 @@ function GameWithMarketList({ isSingleMarket }) {
         indexNo: runnerid,
         mode: value,
       });
+
       handleBiddingAmount('rate', rate);
+
       handleRunnerId(id);
     } else if (toggle.indexNo === runnerid && toggle.mode === value) {
       setToggle({
@@ -61,7 +67,9 @@ function GameWithMarketList({ isSingleMarket }) {
         indexNo: runnerid,
         mode: value,
       });
+
       handleBiddingAmount('rate', rate);
+
       handleRunnerId(id);
     } else {
       setToggle({
@@ -69,7 +77,9 @@ function GameWithMarketList({ isSingleMarket }) {
         indexNo: runnerid,
         mode: value,
       });
-      handleBiddingAmount('rate', rate);
+
+      handleBiddingAmount("rate", rate);
+
       handleRunnerId(id);
     }
   };
@@ -87,6 +97,18 @@ function GameWithMarketList({ isSingleMarket }) {
     });
   };
 
+
+
+
+  const handleRunnerId = (id) => {
+    dispatch({
+      type: strings.placeBidding,
+      payload: { runnerId: id },
+    });
+  };
+
+
+
   const handleMarketId = (id) => {
     console.log(id, '===>');
     dispatch({
@@ -95,12 +117,6 @@ function GameWithMarketList({ isSingleMarket }) {
     });
   };
 
-  const handleRunnerId = (id) => {
-    dispatch({
-      type: strings.placeBidding,
-      payload: { runnerId: id },
-    });
-  };
 
   const gameIdFromUrl = useLocation().pathname.split('/')[3];
   const marketIdFromUrl = useLocation()?.pathname?.split('-')[1]?.split('/')[1];
@@ -207,7 +223,9 @@ function GameWithMarketList({ isSingleMarket }) {
                     className="col-4"
                     style={{ backgroundColor: 'lightblue' }}
                     onClick={() =>
+
                       handleToggle(runnerData._id, runnerData.rate[0].Back, 'Back', runnerData.runnerName.runnerId)
+
                     }
                   >
                     {runnerData.rate[0].Back}
@@ -217,7 +235,9 @@ function GameWithMarketList({ isSingleMarket }) {
                     className="col-4"
                     style={{ backgroundColor: 'pink' }}
                     onClick={() =>
+
                       handleToggle(runnerData._id, runnerData.rate[0].Lay, 'Lay', runnerData.runnerName.runnerId)
+
                     }
                   >
                     {runnerData.rate[0].Lay}
@@ -319,6 +339,7 @@ function GameWithMarketList({ isSingleMarket }) {
                     /\s/g,
                     '',
                   )}-${marketData?.marketName?.replace(/\s/g, '')}/${marketData?.marketId}`}
+
                   onClick={() => handleMarketId(marketData?.marketId)}
                 >
                   <span>{marketData.timeSpan}</span> | <span> {marketData.marketName}</span>
@@ -359,8 +380,10 @@ function GameWithMarketList({ isSingleMarket }) {
                   })}
                 <a
                   className={`col-12 text-dark text-decoration-none text-nowrap`}
+
                   href={`/gameView/${gameWithMarketData?.gameName?.replace(/\s/g, '')}/${gameWithMarketData?.gameId}`}
                   style={{ textAlign: 'right' }}
+
                   onClick={() => handleGameId(gameWithMarketData?.gameId)}
                 >
                   View more
