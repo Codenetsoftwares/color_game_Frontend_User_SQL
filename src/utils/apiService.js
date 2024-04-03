@@ -1,7 +1,7 @@
 import urls from '../utils/constant/UrlConstant';
 import strings from '../utils/constant/stringConstant';
 
-import { getNoAuthCallParams, makeCall } from './service';
+import { getCallParams, getNoAuthCallParams, makeCall } from './service';
 
 export async function login(body, isToast = false) {
   try {
@@ -61,6 +61,17 @@ export async function changePassword(body = {}, isToast = false) {
     const callParams = getNoAuthCallParams(strings.POST, body, isToast);
 
     const response = await makeCall(urls.changePassword, callParams, isToast);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function userBidding(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.POST, body, isToast);
+
+    const response = await makeCall(urls.userBidding, callParams, isToast);
     return response;
   } catch (error) {
     throw error;

@@ -378,7 +378,7 @@ const NavBar = () => {
   function getBody() {
     return (
       <>
-        <HamburgerNavBar/>
+        <HamburgerNavBar />
         {getNav()}
         {getRightSlider()}
         {leftNav()}
