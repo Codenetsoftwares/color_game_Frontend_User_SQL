@@ -4,7 +4,7 @@ import { login } from '../../utils/apiService';
 import { useAppContext } from '../../contextApi/context';
 import strings from '../../utils/constant/stringConstant';
 import { useFormik } from 'formik';
-import LoginSchema from '../../schema/LoginSchema';
+import LoginSchema from '../../schema/loginSchema';
 import './loginModal.css';
 
 function Login({ showLogin, setShowLogin }) {

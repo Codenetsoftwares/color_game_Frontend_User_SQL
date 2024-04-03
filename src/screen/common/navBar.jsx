@@ -20,7 +20,7 @@ import strings from '../../utils/constant/stringConstant';
 import { toast } from 'react-toastify';
 import ansmt from '../../asset/ancmntv.png';
 import AppDrawer from './appDrawer';
-import HamburgerNavBar from './HamburgerNavBar';
+import HamburgerNavBar from './hamburgerNavBar';
 
 const NavBar = () => {
   const navigate = useNavigate();
