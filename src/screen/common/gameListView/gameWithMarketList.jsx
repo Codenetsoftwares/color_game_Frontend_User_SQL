@@ -14,15 +14,20 @@ import { useLocation } from 'react-router-dom';
 import biddingButton from '../../../utils/constant/biddingButton';
 import { useAppContext } from '../../../contextApi/context';
 import strings from '../../../utils/constant/stringConstant';
+import Login from '../../loginModal/loginModal';
+
 
 function GameWithMarketList({ isSingleMarket }) {
   const [user_allGamesWithMarketData, setUser_allGamesWithMarketData] = useState([]);
   const [user_gameWithMarketData, setUser_gameWithMarketData] = useState(getGameWithMarketDataInitialState());
   const [user_marketWithRunnerData, setUser_marketWithRunnerData] = useState(getMarketWithRunnerDataInitialState());
+  const [loginModal, setLoginModal] = useState(false);
 
   const { store, dispatch } = useAppContext();
   const [gameId, setGameId] = useState('');
   const [bidding, setBidding] = useState({ rate: '', amount: 0 });
+
+  const isLoginFromStore = store.user.isLogin;
 
   const [toggle, setToggle] = useState({
     toggleOpen: false,
@@ -158,17 +163,21 @@ function GameWithMarketList({ isSingleMarket }) {
   }
 
   const handleUserBidding = async () => {
-    const values = {
-      userId: store.user.id,
-      gameId: store.placeBidding.gameId,
-      marketId: store.placeBidding.marketId,
-      runnerId: store.placeBidding.runnerId,
-      value: bidding.amount,
-      bidType: toggle.mode,
-    };
-    const response = await userBidding(values, true);
-    if (response.responseCode === 200) {
-      handleCancel();
+    if(isLoginFromStore) {
+      const values = {
+        userId: store.user.id,
+        gameId: store.placeBidding.gameId,
+        marketId: store.placeBidding.marketId,
+        runnerId: store.placeBidding.runnerId,
+        value: bidding.amount,
+        bidType: toggle.mode,
+      };
+      const response = await userBidding(values, true);
+      if(response) {
+          handleCancel();
+      }
+    } else {
+      setLoginModal(!loginModal)
     }
   };
 
@@ -376,12 +385,15 @@ function GameWithMarketList({ isSingleMarket }) {
               </>
             );
           })}
+         
       </div>
     );
   }
 
   function getBody() {
-    return marketIdFromUrl ? getMarketDetailByMarketId() : isSingleMarket ? getSingleMarket() : getWholeMarket();
+    return<> {marketIdFromUrl ? getMarketDetailByMarketId() : isSingleMarket ? getSingleMarket() : getWholeMarket()}; 
+     <Login showLogin={loginModal} setShowLogin={setLoginModal} />
+    </>
   }
 
   return getBody();
