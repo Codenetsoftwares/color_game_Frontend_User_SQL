@@ -7,6 +7,7 @@ import {
 export const reducer = (state, action) => {
   switch (action.type) {
     case strings.LOG_IN:
+      debugger;
       return { ...state, user: getUserInitialState(action.payload) };
     case strings.LOG_OUT:
       return {
@@ -28,6 +29,7 @@ export const reducer = (state, action) => {
 
     case strings.UserWallet:
       
+      debugger
       return {
         ...state,
         user: getUserInitialState({

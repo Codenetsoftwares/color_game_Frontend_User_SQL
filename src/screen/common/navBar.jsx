@@ -195,7 +195,7 @@ const NavBar = () => {
                 }}
               />
               &nbsp;&nbsp;
-              {store.user.userName} - ({store.user.wallet.walletBalance})
+              {store.user?.userName} - ({store?.user?.wallet?.walletBalance})
             </h6>
             <button
               type="button"
@@ -217,7 +217,7 @@ const NavBar = () => {
                       background: "#2FA8BA",
                     }}
                   >
-                    Exposure {store.user.wallet.exposure}
+                    Exposure {store.user?.wallet?.exposure}
                   </span>
                   <span
                     type="button"
@@ -228,7 +228,7 @@ const NavBar = () => {
                       background: "#2FA8BA",
                     }}
                   >
-                    P&L {store.user.wallet.profitLoss}
+                    P&L {store.user?.wallet?.profitLoss}
                   </span>
                 </span>
               </li>
