@@ -23,7 +23,7 @@ export async function getHeaderObject(accessToken, contentType) {
     if (accessToken) {
       return {
         ...contentType,
-        token: accessToken,
+        authorization: `Bearer ${accessToken}`,
       };
     }
     return null;
@@ -40,6 +40,7 @@ export const getCallParams = async (methodType, body) => {
     method: methodType,
     headers: await getHeaderObject(accessToken, strings.applicationJSON),
   };
+
   switch (methodType) {
     case 'GET':
       return params;

@@ -37,7 +37,7 @@ const NavBar = () => {
   };
 
   const handleBetHistoryClick = () => {
-    navigate('/betHistory');
+    navigate('/betHistory/:userId/:gameId');
   };
 
   const handleLogout = () => {

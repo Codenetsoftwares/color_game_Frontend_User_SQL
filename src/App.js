@@ -52,7 +52,7 @@ function App() {
           />
 
           <Route
-            path="/betHistory"
+            path="/betHistory/:userId/:gameId"
             element={
               <PrivateRoute>
                 <BetHistory />

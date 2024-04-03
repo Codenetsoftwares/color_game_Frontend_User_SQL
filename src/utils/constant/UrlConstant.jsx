@@ -13,6 +13,7 @@ class UrlConstant {
   userGameDetailById = `${this.url_dev}/${this.user}-filter-gameData`;
   userMarketDetailById = `${this.url_dev}/${this.user}-filter-marketData`;
   changePassword = `${this.url_dev}/${this.user}/resetpassword`;
+  userBetHistoryById = `${this.url_dev}/${this.user}-betHistory`;
 }
 
 const urls = new UrlConstant();

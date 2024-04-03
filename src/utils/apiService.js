@@ -1,7 +1,7 @@
 import urls from '../utils/constant/UrlConstant';
 import strings from '../utils/constant/stringConstant';
 
-import { getNoAuthCallParams, makeCall } from './service';
+import { getCallParams, getNoAuthCallParams, makeCall } from './service';
 
 export async function login(body, isToast = false) {
   try {
@@ -58,11 +58,37 @@ export async function user_getMarketWithRunnerData_api(body = {}, isToast = fals
 
 export async function changePassword(body = {}, isToast = false) {
   try {
-    const callParams = getNoAuthCallParams(strings.POST, body, isToast);
+    const callParams = getNoAuthCallParams(strings.GET, body, isToast);
 
-    const response = await makeCall(urls.changePassword, callParams, isToast);
+    const response = await makeCall(`urls.changePassword`, callParams, isToast);
     return response;
   } catch (error) {
     throw error;
   }
 }
+
+export async function user_getBetHistory_api(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+
+    const response = await makeCall(
+      `${urls.userBetHistoryById}/${body.userId}/${body.gameId}?page=${body.pageNumber}&limit=${body.dataLimit}`,
+      callParams,
+      isToast,
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// export async function user_getBetHistory_api(body = {}, isToast = false) {
+//   try {
+//     const callParams = await getCallParams(strings.GET, body, isToast);
+
+//     const response = await makeCall(`${urls.userBetHistoryById}/${body.userId}/${body.gameId}?page=${body.pageNumber}&limit=${body.dataLimit}`, callParams, isToast);
+//     return response;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
