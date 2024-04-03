@@ -1,7 +1,7 @@
 import { createContext, useContext, useReducer, useEffect } from 'react';
 import { reducer } from './reducer';
 import strings from '../utils/constant/stringConstant';
-import { getUserInitialState, getUserWalletInitialState } from '../utils/getInitiateState';
+import { getUserInitialState, getUserWalletInitialState, getUserPlaceBidding } from '../utils/getInitiateState';
 
 const AppContext = createContext();
 
@@ -10,6 +10,7 @@ const initialState = {
   announcement: [],
   appDrawer: [],
   userWallet: getUserWalletInitialState(),
+  placeBidding: getUserPlaceBidding(),
 };
 
 const AppProvider = ({ children }) => {

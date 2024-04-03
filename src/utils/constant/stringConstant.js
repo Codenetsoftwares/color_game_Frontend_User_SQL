@@ -11,10 +11,12 @@ export class StringConstants {
   PUT = "PUT";
 
   // reducer type
-  LOG_IN = "LOG_IN";
-  LOG_OUT = "LOG_OUT";
-  Announcement = "Announcement";
-  Name = "Name";
+
+  LOG_IN = 'LOG_IN';
+  LOG_OUT = 'LOG_OUT';
+  Announcement = 'Announcement';
+  Name = 'Name';
+  placeBidding = 'placeBidding';
   UserWallet = "UserWallet";
 }
 

@@ -9,7 +9,6 @@ import "./App.css";
 import RulesPage from "./screen/common/rulesPage";
 import ForgotPassword from "./screen/chnagePassword/forgotPassword";
 import PrivateRoute from "./globlaCommon/privateRoute";
-import HamburgerNavBar from "./screen/common/hamburgerNavBar";
 import ProfitAndLoss from "./screen/P&L/profitAndLoss";
 
 function App() {

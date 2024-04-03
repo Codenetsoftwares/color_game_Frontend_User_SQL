@@ -1,13 +1,9 @@
-import strings from "../utils/constant/stringConstant";
-import {
-  getUserInitialState,
-  getUserWalletInitialState,
-} from "../utils/getInitiateState";
+import strings from '../utils/constant/stringConstant';
+import { getUserInitialState, getUserPlaceBidding, getUserWalletInitialState } from '../utils/getInitiateState';
 
 export const reducer = (state, action) => {
   switch (action.type) {
     case strings.LOG_IN:
-      debugger;
       return { ...state, user: getUserInitialState(action.payload) };
     case strings.LOG_OUT:
       return {
@@ -28,8 +24,6 @@ export const reducer = (state, action) => {
       };
 
     case strings.UserWallet:
-      
-      debugger
       return {
         ...state,
         user: getUserInitialState({
@@ -38,6 +32,14 @@ export const reducer = (state, action) => {
         }),
       };
 
+    case strings.placeBidding:
+      return {
+        ...state,
+        placeBidding: getUserPlaceBidding({
+          ...state.placeBidding,
+          ...action.payload,
+        }),
+      };
     default:
       return state;
   }

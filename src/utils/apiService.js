@@ -1,7 +1,7 @@
 import urls from "../utils/constant/UrlConstant";
 import strings from "../utils/constant/stringConstant";
 
-import { getCallParams, getNoAuthCallParams, makeCall } from "./service";
+import { getCallParams, getNoAuthCallParams, makeCall } from './service';
 
 export async function login(body, isToast = false) {
   try {
@@ -82,11 +82,22 @@ export async function changePassword(body = {}, isToast = false) {
   }
 }
 
-export async function userWallet(userid, isToast = false) {
+export async function userWallet(userId, isToast = false) {
   try {
     const callParams = getCallParams(strings.GET, isToast);
 
-    const response = await makeCall(`${urls.userWallet}/${userid}`, callParams);
+    const response = await makeCall(`${urls.userWallet}/${userId}`, callParams);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function userBidding(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.POST, body, isToast);
+
+    const response = await makeCall(urls.userBidding, callParams, isToast);
     return response;
   } catch (error) {
     throw error;
