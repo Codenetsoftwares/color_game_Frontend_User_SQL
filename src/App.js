@@ -10,6 +10,7 @@ import RulesPage from "./screen/common/rulesPage";
 import ForgotPassword from "./screen/chnagePassword/forgotPassword";
 import PrivateRoute from "./globlaCommon/privateRoute";
 import ProfitAndLoss from "./screen/P&L/profitAndLoss";
+import Loading from "./globlaCommon/Loading";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         pauseOnHover
         theme="dark"
       />
+      <Loading />
       <BrowserRouter>
         <Routes>
           <Route path="/home" element={<Home />} />
