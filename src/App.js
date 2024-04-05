@@ -10,7 +10,8 @@ import RulesPage from "./screen/common/rulesPage";
 import ForgotPassword from "./screen/chnagePassword/forgotPassword";
 import PrivateRoute from "./globlaCommon/privateRoute";
 import ProfitAndLoss from "./screen/P&L/profitAndLoss";
-import Loading from "./globlaCommon/Loading";
+import Loading from "./globlaCommon/loading";
+import History from './screen/common/history';
 
 function App() {
   return (
@@ -48,6 +49,14 @@ function App() {
             element={
               <PrivateRoute>
                 <RulesPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/history"
+            element={
+              <PrivateRoute>
+                <History />
               </PrivateRoute>
             }
           />

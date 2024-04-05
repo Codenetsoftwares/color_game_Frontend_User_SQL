@@ -103,3 +103,17 @@ export async function userBidding(body = {}, isToast = false) {
     throw error;
   }
 }
+
+export async function betHistory(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+
+    const response = await makeCall(
+      `${urls.betHistory}/${body.userId}/${body.gameId}?page=${body.pageNumber}&limit=${body.dataLimit}`,
+      callParams,
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
