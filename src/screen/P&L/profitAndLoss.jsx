@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import AppDrawer from "../common/appDrawer";
-import Layout from "../layout/layout";
-import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css";
+import React, { useState } from 'react';
+import AppDrawer from '../common/appDrawer';
+import Layout from '../layout/layout';
+import { DayPicker } from 'react-day-picker';
+import 'react-day-picker/dist/style.css';
 
 const ProfitAndLoss = () => {
   const [selected, setSelected] = useState(<Date />);
@@ -18,18 +18,15 @@ const ProfitAndLoss = () => {
   function ProfitLoss() {
     return (
       <>
-        <div
-          class="card p-0 section"
-          style={{ marginTop: "120px", fontWeight: "700", padding: "0px" }}
-        >
+        <div class="card p-0 section" style={{ marginTop: '120px', fontWeight: '700', padding: '0px' }}>
           <span
             className="text-white"
             style={{
-              backgroundColor: "#2cb3d1",
-              display: "block",
-              fontWeight: "700",
-              padding: "0px",
-              textIndent: "5px",
+              backgroundColor: '#2cb3d1',
+              display: 'block',
+              fontWeight: '700',
+              padding: '0px',
+              textIndent: '5px',
             }}
           >
             Profit & Loss Report
@@ -38,10 +35,10 @@ const ProfitAndLoss = () => {
             <span
               className="col"
               style={{
-                display: "block",
-                fontWeight: "700",
-                padding: "0px",
-                textIndent: "5px",
+                display: 'block',
+                fontWeight: '700',
+                padding: '0px',
+                textIndent: '5px',
               }}
             >
               <DayPicker mode="single" />
@@ -50,10 +47,10 @@ const ProfitAndLoss = () => {
             <span
               className="col"
               style={{
-                display: "block",
-                fontWeight: "700",
-                padding: "0px",
-                textIndent: "5px",
+                display: 'block',
+                fontWeight: '700',
+                padding: '0px',
+                textIndent: '5px',
               }}
             >
               <DayPicker mode="single" />

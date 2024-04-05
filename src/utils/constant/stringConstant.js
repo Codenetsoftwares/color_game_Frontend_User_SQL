@@ -1,14 +1,14 @@
 export class StringConstants {
-  LOGIN = "login";
+  LOGIN = 'login';
 
   //others
-  LOCAL_STORAGE_KEY = "my_app_state";
-  applicationJSON = { "Content-Type": "application/json" };
+  LOCAL_STORAGE_KEY = 'my_app_state';
+  applicationJSON = { 'Content-Type': 'application/json' };
 
   // http methods
-  GET = "GET";
-  POST = "POST";
-  PUT = "PUT";
+  GET = 'GET';
+  POST = 'POST';
+  PUT = 'PUT';
 
   // reducer type
 
@@ -17,7 +17,7 @@ export class StringConstants {
   Announcement = 'Announcement';
   Name = 'Name';
   placeBidding = 'placeBidding';
-  UserWallet = "UserWallet";
+  UserWallet = 'UserWallet';
 }
 
 let strings = new StringConstants();

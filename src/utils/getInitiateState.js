@@ -1,4 +1,4 @@
-export function getUserInitialState(body = {},) {
+export function getUserInitialState(body = {}) {
   return {
     accessToken: body.accessToken ?? '',
     isLogin: body.isLogin ?? false,
@@ -8,8 +8,8 @@ export function getUserInitialState(body = {},) {
     wallet: {
       balance: body?.wallet?.balance ?? 0,
       exposure: body?.wallet?.exposure ?? 0,
-      walletId: body?.wallet?.walletId ?? "",
-      profit_loss: body.profit_loss ?? "",
+      walletId: body?.wallet?.walletId ?? '',
+      profit_loss: body.profit_loss ?? '',
     },
   };
 }
@@ -28,7 +28,7 @@ export function getUserWalletInitialState(body = {}) {
   return {
     balance: body.balance ?? 0,
     exposure: body.exposure ?? 0,
-    walletId: body.walletId ?? "",
+    walletId: body.walletId ?? '',
   };
 }
 

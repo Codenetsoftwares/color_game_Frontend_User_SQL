@@ -64,6 +64,14 @@ export async function makeCall(callName, callParams, isToast) {
     });
 
     const json = await response.json();
+    console.log('json====>', json);
+    debugger
+    if (json.responseCode === 401) {
+      debugger;
+      localStorage.clear();
+      sessionStorage.setItem('sessionExpierd', true);
+      window.location.href = '/home';
+    }
     if (json.success === false) {
       toast.error(json.errMessage);
       return null;
@@ -77,6 +85,7 @@ export async function makeCall(callName, callParams, isToast) {
     //  else {
     //   throw new Error('Something went wrong');
     // }
+
     return json;
   } catch (error) {
     // if (await checkStatus(error)) {
