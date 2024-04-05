@@ -48,29 +48,29 @@ export function getMarketWithRunnerDataInitialState(body = {}) {
 export function getAllGameDataInitialState(body = {}) {
   return [
     {
-      gameId: "",
-      gameName: "",
-      Description: "",
+      gameId: '',
+      gameName: '',
+      Description: '',
       isBlink: false,
-      _id: "",
+      _id: '',
       markets: [
         {
-          marketId: "",
-          marketName: "",
+          marketId: '',
+          marketName: '',
           participants: null,
           status: false,
-          _id: "",
+          _id: '',
           runners: [
             {
               runnerName: {
-                runnerId: "",
-                name: "",
+                runnerId: '',
+                name: '',
               },
               rate: [
                 {
                   Back: null,
                   Lay: null,
-                  _id: "",
+                  _id: '',
                 },
               ],
             },

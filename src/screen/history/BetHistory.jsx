@@ -6,7 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Pagination from '../common/Pagination';
 import { useAppContext } from '../../contextApi/context';
 
-import { user_getBetHistory_api } from '../../utils/apiService';
+import { user_getBetHistory_api, user_getOpenBetData_api, user_getOpenBetmarket_api } from '../../utils/apiService';
 
 const BetHistory = ({}) => {
   const [startDate, setStartDate] = useState(null);
@@ -15,6 +15,8 @@ const BetHistory = ({}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(3);
+  const [openBet, setOpenBet] = useState([]);
+  const [selectedMarket, setSelectedMarket] = useState(null);
 
   const { store } = useAppContext();
   console.log('=============> line 15 ', store.user.id);
@@ -25,7 +27,6 @@ const BetHistory = ({}) => {
   console.log('========> GAME ID ', gameIdFromstore);
 
   async function handleGetHistory() {
-    debugger;
     const response = await user_getBetHistory_api({
       userId: store.user.id,
       gameId: gameIdFromstore,
@@ -63,6 +64,24 @@ const BetHistory = ({}) => {
     // handleGetHistory()
   };
 
+  //for open bet data
+
+  async function handleGetBet() {
+    const response = await user_getOpenBetmarket_api();
+    if (response) {
+      console.log('===========>response for betOpenBetData(Line 76)', response);
+      setOpenBet(response.data);
+    } else {
+      //add loading part //
+    }
+    console.log('From:', startDate);
+    console.log('To:', endDate);
+  }
+
+  useEffect(() => {
+    handleGetBet();
+  }, []);
+  console.log('=========> line 85', openBet);
   function history() {
     return (
       <div>
@@ -209,6 +228,10 @@ const BetHistory = ({}) => {
     );
   }
 
+  const handleSelectChange = (e) => {
+    setSelectedMarket(e.target.value);
+  };
+
   function openBets() {
     return (
       <div className="card" style={{ marginTop: '120px', height: '800px' }}>
@@ -220,16 +243,93 @@ const BetHistory = ({}) => {
             <select
               className="form-select form-select-lg"
               id="selectMarket"
-              style={{ width: '100%' }} // Long width input box
+              style={{ width: '100%' }}
+              onChange={handleSelectChange}
             >
               <option>Select Market</option>
+              {openBet.map((item, index) => (
+                <option key={index} value={item.marketId}>
+                  {item.marketName}
+                </option>
+              ))}
             </select>
           </div>
+
+          {/* Render back table if market is selected */}
+          {selectedMarket !== 'Select Market' && (
+            <>
+              {renderBackTable()}
+              {renderLayTable()}
+            </>
+          )}
         </div>
       </div>
     );
   }
+  // Function to render back table
+  const renderBackTable = () => {
+    // Render back table based on selected market
 
+    return (
+      <div className="card shadow p-3 mb-5  rounded" style={{ backgroundColor: '#cfe2f3' }}>
+        <div className="card-body">
+          <table className="table">
+            {/* Table header */}
+            <thead>
+              <tr>
+                <th>Back(Bet For)</th>
+                <th>Odds</th>
+                <th>Stake</th>
+                <th>Profit</th>
+              </tr>
+            </thead>
+            {/* Table body - data to be filled dynamically */}
+            <tbody>
+              {/* Insert rows for back bets */}
+
+              <tr>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  };
+  // Function to render lay table
+  const renderLayTable = () => {
+    // Render lay table based on selected market
+    return (
+      <div className="card shadow p-3 mb-5  rounded" style={{ backgroundColor: '#f8d7da' }}>
+        <div className="card-body">
+          <table className="table">
+            {/* Table header */}
+            <thead>
+              <tr>
+                <th>Lay(Bet Against)</th>
+                <th>Odds</th>
+                <th>Stake</th>
+                <th>Liability</th>
+              </tr>
+            </thead>
+            {/* Table body - data to be filled dynamically */}
+            <tbody>
+              {/* Insert rows for lay bets */}
+              <tr>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  };
   function getBody() {
     return (
       <>

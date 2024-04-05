@@ -82,13 +82,15 @@ export async function user_getBetHistory_api(body = {}, isToast = false) {
   }
 }
 
-// export async function user_getBetHistory_api(body = {}, isToast = false) {
-//   try {
-//     const callParams = await getCallParams(strings.GET, body, isToast);
+export async function user_getOpenBetmarket_api(body = {}, isToast = false) {
+  console.log(body);
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
 
-//     const response = await makeCall(`${urls.userBetHistoryById}/${body.userId}/${body.gameId}?page=${body.pageNumber}&limit=${body.dataLimit}`, callParams, isToast);
-//     return response;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
+    const response = await makeCall(urls.userGetOpenBet, callParams, isToast);
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}

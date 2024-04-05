@@ -14,6 +14,7 @@ class UrlConstant {
   userMarketDetailById = `${this.url_dev}/${this.user}-filter-marketData`;
   changePassword = `${this.url_dev}/${this.user}/resetpassword`;
   userBetHistoryById = `${this.url_dev}/${this.user}-betHistory`;
+  userGetOpenBet = `${this.url_dev}/${this.user}-current-market`;
 }
 
 const urls = new UrlConstant();
