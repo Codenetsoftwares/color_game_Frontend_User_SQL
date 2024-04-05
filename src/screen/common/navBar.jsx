@@ -34,6 +34,10 @@ const NavBar = () => {
   const handleRulesPageClick = () => {
     navigate('/rulesPage');
   };
+  
+  const handleBetHistoryClick = () => {
+    navigate('/history');
+  };
 
   const handleLogout = () => {
     dispatch({
@@ -270,6 +274,7 @@ const NavBar = () => {
               </li>
               <li
                 class="nav-item mb-3 align-items-start"
+                onClick={handleBetHistoryClick}
                 style={{
                   color: 'white', // Initial color
                 }}

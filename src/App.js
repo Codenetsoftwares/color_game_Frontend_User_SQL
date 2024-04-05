@@ -9,6 +9,7 @@ import './App.css';
 import RulesPage from './screen/common/rulesPage';
 import ForgotPassword from './screen/chnagePassword/ForgotPassword';
 import PrivateRoute from './globlaCommon/privateRoute';
+import History from './screen/common/history';
 
 function App() {
   return (
@@ -45,6 +46,14 @@ function App() {
             element={
               <PrivateRoute>
                 <RulesPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/history"
+            element={
+              <PrivateRoute>
+                <History />
               </PrivateRoute>
             }
           />
