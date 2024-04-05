@@ -18,6 +18,7 @@ export class StringConstants {
   Name = 'Name';
   placeBidding = 'placeBidding';
   UserWallet = "UserWallet";
+  isLoading = "isLoading";
 }
 
 let strings = new StringConstants();

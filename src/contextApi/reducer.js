@@ -40,6 +40,15 @@ export const reducer = (state, action) => {
           ...action.payload,
         }),
       };
+
+    case strings.isLoading:
+      return {
+        ...state,
+        isLoading: action?.payload
+          ? [...state?.isLoading, true]
+          : state?.isLoading?.slice(0, -1),
+      };
+
     default:
       return state;
   }

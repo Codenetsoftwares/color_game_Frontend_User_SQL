@@ -45,6 +45,10 @@ function Login({ showLogin, setShowLogin }) {
   });
 
   async function loginHandler(values) {
+    dispatch({
+      type: strings.isLoading,
+      payload: true,
+    });
     const response = await login(values, true);
     console.log("res from login", response);
     if (response) {
@@ -54,6 +58,10 @@ function Login({ showLogin, setShowLogin }) {
       });
       setShowLogin(!showLogin);
     }
+    dispatch({
+      type: strings.isLoading,
+      payload : false
+    });
   }
 
   function header() {

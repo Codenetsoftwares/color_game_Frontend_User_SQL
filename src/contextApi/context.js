@@ -9,7 +9,7 @@ const initialState = {
   user: getUserInitialState(),
   announcement: [],
   appDrawer: [],
-  userWallet: getUserWalletInitialState(),
+  isLoading: [],
   placeBidding: getUserPlaceBidding(),
 };
 
