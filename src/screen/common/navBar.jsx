@@ -27,13 +27,15 @@ const NavBar = () => {
   const [showModalLogin, setShowModalLogin] = useState(false);
 
   const { store, dispatch } = useAppContext();
-  console.log("store from navbar", store);
   const userId = store.user?.id;
+  const accessTokenFromStore = localStorage.getItem(strings.LOCAL_STORAGE_KEY)?.user?.accessToken;
+
   useEffect(() => {
-    if (userId) {
+    if (userId && accessTokenFromStore) {
       handleUserWallet();
     }
-  }, [userId]);
+  }, [userId, accessTokenFromStore]);
+
   const handleUserWallet = async () => {
     console.log("userId", userId);
     const response = await userWallet(userId, true);
@@ -61,7 +63,7 @@ const NavBar = () => {
   const takeMetoProfitAndLoss = () => {
     navigate("/profit-loss");
   };
-  
+
   const handleBetHistoryClick = () => {
     navigate('/history');
   };
