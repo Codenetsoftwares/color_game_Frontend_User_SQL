@@ -1,4 +1,4 @@
-import React, { Children, useState } from "react";
+import React, { useState } from "react";
 import AppDrawer from "../common/appDrawer";
 import Layout from "../layout/layout";
 import { DayPicker } from "react-day-picker";
@@ -7,41 +7,30 @@ import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import moment from "moment";
 const ProfitAndLoss = () => {
-  const defaultStartDate = new Date();
-  defaultStartDate.setDate(defaultStartDate.getDate() - 1);
-  const [selected, setSelected] = useState(<Date />);
   const [dateValue, setDateValue] = useState({
-    startDate: defaultStartDate,
+    startDate: new Date().setDate(defaultStartDate.getDate() - 1),
     endDate: new Date(),
   });
-  let footer = <p>Please pick a day.</p>;
-  if (selected) {
-    console.log(`You picked `, selected);
-  }
-  function DatePicker() {
-    return <></>;
-  }
+
   const handleDateValue = (name, value) => {
     setDateValue((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
-  console.log(
-    "sdate",
-    moment(dateValue.startDate, "DD-MM-YYYY HH:mm").toDate()
-  );
-  console.log("sdate", moment(dateValue.endDate, "DD-MM-YYYY HH:mm").toDate());
-  const handelDate = () => {
-    const sdate = moment(dateValue.startDate, "DD-MM-YYYY HH:mm").toDate();
-    const edate = moment(dateValue.endDate, "DD-MM-YYYY HH:mm").toDate();
-    const filteredDocuments = documentView.filter((data) => {
-      const transactionDate = new Date(data.createdAt);
-      return transactionDate >= sdate && transactionDate <= edate;
-    });
-    setDocumentFilter(filteredDocuments);
-    setToggle(false);
-  };
+
+  // use to be for search, pending
+  // const handelDate = () => {
+  //   const sdate = moment(dateValue.startDate, "DD-MM-YYYY HH:mm").toDate();
+  //   const edate = moment(dateValue.endDate, "DD-MM-YYYY HH:mm").toDate();
+  //   const filteredDocuments = documentView.filter((data) => {
+  //     const transactionDate = new Date(data.createdAt);
+  //     return transactionDate >= sdate && transactionDate <= edate;
+  //   });
+  //   setDocumentFilter(filteredDocuments);
+  //   setToggle(false);
+  // };
+
   const handleReset = () => {
     setDateValue({
       startDate: defaultStartDate,
@@ -98,21 +87,21 @@ const ProfitAndLoss = () => {
               />
             </div>
             <div className="col-lg-3">
-            <div className="col-sm-6 d-flex justify-content-center ">
-            <button
-                className="btn btn-secondary"
-                style={{ backgroundColor: "#2CB3D1" }}
-              >
-                Go
-              </button>
-              <button
-                className="btn btn-secondary"
-                style={{ backgroundColor: "#2CB3D1", marginLeft: "20px" }}
-                onClick={handleReset}
-              >
-                Reset
-              </button>
-            </div>
+              <div className="col-sm-6 d-flex justify-content-center ">
+                <button
+                  className="btn btn-secondary"
+                  style={{ backgroundColor: "#2CB3D1" }}
+                >
+                  Go
+                </button>
+                <button
+                  className="btn btn-secondary"
+                  style={{ backgroundColor: "#2CB3D1", marginLeft: "20px" }}
+                  onClick={handleReset}
+                >
+                  Reset
+                </button>
+              </div>
             </div>
           </div>
         </div>
