@@ -6,7 +6,6 @@ import { getAllGameDataInitialState } from '../../utils/getInitiateState';
 import HamburgerNavBar from './hamburgerNavBar';
 import { useAppContext } from '../../contextApi/context';
 import strings from '../../utils/constant/stringConstant';
-// import "./common.css";
 
 function AppDrawer({ children, showCarousel, isMobile }) {
   const [toggleStates, setToggleStates] = useState({});
@@ -76,21 +75,21 @@ function AppDrawer({ children, showCarousel, isMobile }) {
               {/* Mapping over markets inside each gameName */}
               {toggleStates[index] && gameObj.markets.length > 0
                 ? gameObj.markets.map((marketObj, marketIndex) => (
-                    <li
-                      className="subMenuItems"
-                      key={marketIndex}
-                      onClick={() => handleAllId(gameObj?.gameId, marketObj?.marketId)}
+                  <li
+                    className="subMenuItems"
+                    key={marketIndex}
+                    onClick={() => handleAllId(gameObj?.gameId, marketObj?.marketId)}
+                  >
+                    <Link
+                      to={`/gameView/${gameObj?.gameName?.replace(/\s/g, '')}-${marketObj?.marketName?.replace(
+                        /\s/g,
+                        '',
+                      )}/${marketObj?.marketId?.replace(/\s/g, '')}`}
                     >
-                      <Link
-                        to={`/gameView/${gameObj?.gameName?.replace(/\s/g, '')}-${marketObj?.marketName?.replace(
-                          /\s/g,
-                          '',
-                        )}/${marketObj?.marketId?.replace(/\s/g, '')}`}
-                      >
-                        {marketObj.marketName}
-                      </Link>
-                    </li>
-                  ))
+                      {marketObj.marketName}
+                    </Link>
+                  </li>
+                ))
                 : null}
             </React.Fragment>
           ))}

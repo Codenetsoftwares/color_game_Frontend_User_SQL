@@ -14,7 +14,7 @@ export async function login(body, isToast = false) {
 }
 
 /*======================
-	user api call
+  user api call
 =======================*/
 export async function user_getAllGames_api(body = {}, isToast = false) {
   try {
@@ -84,8 +84,7 @@ export async function changePassword(body = {}, isToast = false) {
 
 export async function userWallet(userId, isToast = false) {
   try {
-    const callParams = getCallParams(strings.GET, isToast);
-
+    const callParams = await getCallParams(strings.GET, isToast);
     const response = await makeCall(`${urls.userWallet}/${userId}`, callParams);
     return response;
   } catch (error) {
