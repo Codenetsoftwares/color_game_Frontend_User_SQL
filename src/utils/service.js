@@ -56,6 +56,7 @@ export const getCallParams = async (methodType, body) => {
 
 export async function makeCall(callName, callParams, isToast) {
   try {
+    debugger
     let call = await fetch(callName, callParams);
     let timeout = getTimeoutPromise();
 
@@ -73,6 +74,7 @@ export async function makeCall(callName, callParams, isToast) {
       window.location.href = '/home';
     }
     if (json.success === false) {
+      console.log("jsonjsonjsonjsonjsonjson", json)
       toast.error(json.errMessage);
       return null;
     } else if (isToast && (json.success === true || json.code === 200)) {
@@ -91,6 +93,7 @@ export async function makeCall(callName, callParams, isToast) {
     // if (await checkStatus(error)) {
     //   // throw notifiers.LOGGEDOUT;
     // }
+    console.log("errorerrorerror", error)
     toast.error(error.message);
     return null;
   }

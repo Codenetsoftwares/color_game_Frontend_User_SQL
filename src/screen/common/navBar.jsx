@@ -27,16 +27,16 @@ const NavBar = () => {
   const [showModalLogin, setShowModalLogin] = useState(false);
 
   const { store, dispatch } = useAppContext();
-  console.log('store from navbar', store);
+  console.log("store from navbar", store);
   const userId = store.user?.id;
 
   const storeFromLocalStorage = JSON.parse(localStorage.getItem(strings.LOCAL_STORAGE_KEY));
   const accessTokenFromLocalStorage = storeFromLocalStorage?.user?.accessToken;
   useEffect(() => {
-    if (userId && store?.user?.isLogin && accessTokenFromLocalStorage) {
+    if (userId && accessTokenFromStore) {
       handleUserWallet();
     }
-  }, [userId, accessTokenFromLocalStorage]);
+  }, [userId, accessTokenFromStore]);
 
   const handleUserWallet = async () => {
     console.log('userId', userId);
