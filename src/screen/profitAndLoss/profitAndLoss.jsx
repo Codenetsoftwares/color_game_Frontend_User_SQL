@@ -48,76 +48,7 @@ const ProfitAndLoss = () => {
       endDate: new Date(),
     });
   };
-  // function ProfitLoss() {
-  //   return (
-  //     <>
-  //       <div
-  //         className="card p-0 section"
-  //         style={{ marginTop: "120px", fontWeight: "700", padding: "0px" }}
-  //       >
-  //         <span
-  //           className="text-white"
-  //           style={{
-  //             backgroundColor: "#2CB3D1",
-  //             display: "block",
-  //             fontWeight: "700",
-  //             padding: "0px",
-  //             textIndent: "5px",
-  //           }}
-  //         >
-  //           Profit & Loss Report
-  //         </span>
-  //         <div className="row" style={{ margin: "10px" }}>
-  //           <div className="col">
-  //             <Datetime
-  //               value={dateValue.startDate}
-  //               name="startDate"
-  //               dateFormat="DD-MM-YYYY"
-  //               onChange={(e) =>
-  //                 handleDateValue(
-  //                   "startDate",
-  //                   moment(e).format("DD-MM-YYYY HH:mm")
-  //                 )
-  //               }
-  //               timeFormat="HH:mm"
-  //             />
-  //           </div>
-  //           <div className="col">
-  //             <Datetime
-  //               value={dateValue.endDate}
-  //               name="endDate"
-  //               dateFormat="DD-MM-YYYY"
-  //               onChange={(e) =>
-  //                 handleDateValue(
-  //                   "endDate",
-  //                   moment(e).format("DD-MM-YYYY HH:mm")
-  //                 )
-  //               }
-  //               timeFormat="HH:mm"
-  //             />
-  //           </div>
-  //           <div className="col">
-  //             <div className="d-flex justify-content-end">
-  //               <button
-  //                 className="btn btn-secondary"
-  //                 style={{ backgroundColor: "#2CB3D1",marginRight:"5%" }}
-  //               >
-  //                 Go
-  //               </button>
-  //               <button
-  //                 className="btn btn-secondary ml-2"
-  //                 style={{ backgroundColor: "#2CB3D1" }}
-  //                 onClick={handleReset}
-  //               >
-  //                 Reset
-  //               </button>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </>
-  //   );
-  // }
+
   function ProfitLoss() {
     return (
       <>
