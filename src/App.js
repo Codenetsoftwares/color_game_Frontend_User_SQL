@@ -1,15 +1,17 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AppProvider } from './contextApi/context';
-import Home from './screen/home/home';
-import NotFound from './screen/common/notFound';
-import GameView from './screen/gameView/gameView';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import './App.css';
-import RulesPage from './screen/common/rulesPage';
-import ForgotPassword from './screen/chnagePassword/forgotPassword';
-import PrivateRoute from './globlaCommon/privateRoute';
-import ProfitAndLoss from './screen/P&L/profitAndLoss';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AppProvider } from "./contextApi/context";
+import Home from "./screen/home/home";
+import NotFound from "./screen/common/notFound";
+import GameView from "./screen/gameView/gameView";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
+import RulesPage from "./screen/common/rulesPage";
+import ForgotPassword from "./screen/chnagePassword/forgotPassword";
+import PrivateRoute from "./globlaCommon/privateRoute";
+import ProfitAndLoss from "./screen/profitAndLoss/profitAndLoss";
+import Loading from "./globlaCommon/loading";
+import History from './screen/common/history';
 
 function App() {
   return (
@@ -26,6 +28,7 @@ function App() {
         pauseOnHover
         theme="dark"
       />
+      <Loading />
       <BrowserRouter>
         <Routes>
           <Route path="/home" element={<Home />} />
@@ -49,9 +52,17 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/history"
+            element={
+              <PrivateRoute>
+                <History />
+              </PrivateRoute>
+            }
+          />
 
           <Route
-            path="/profit&loss"
+            path="/profit-loss"
             element={
               <PrivateRoute>
                 <ProfitAndLoss />

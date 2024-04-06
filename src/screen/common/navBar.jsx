@@ -62,7 +62,11 @@ const NavBar = () => {
   };
 
   const takeMetoProfitAndLoss = () => {
-    navigate('/profit&loss');
+    navigate("/profit-loss");
+  };
+  
+  const handleBetHistoryClick = () => {
+    navigate('/history');
   };
 
   const handleLogout = () => {
@@ -126,8 +130,8 @@ const NavBar = () => {
                   aria-controls="offcanvasDarkNavbar"
                   aria-label="Toggle navigation"
                 >
-                  <FaCoins style={{ color: '#fec015' }} />
-                  {/* &nbsp; {store.user.userTxn.walletBalance} */}
+                  <FaCoins style={{ color: "#fec015" }} />
+                  &nbsp; {store?.user?.wallet?.balance}
                 </span>
                 <span
                   className="btn btn-info w-100 d-flex align-items-center text-white border border-white"
@@ -141,7 +145,7 @@ const NavBar = () => {
                   aria-controls="offcanvasDarkNavbar"
                   aria-label="Toggle navigation"
                 >
-                  Exp : 0.00
+                  Exp : {store?.user?.wallet?.exposure}
                 </span>
               </span>
             ) : (
@@ -183,7 +187,7 @@ const NavBar = () => {
                 }}
               />
               &nbsp;&nbsp;
-              {store.user?.userName} - ({store?.user?.wallet?.walletBalance})
+              {store.user?.userName} - ({store?.user?.wallet?.balance})
             </h6>
             <button
               type="button"
@@ -216,7 +220,7 @@ const NavBar = () => {
                       background: '#2FA8BA',
                     }}
                   >
-                    P&L {store.user?.wallet?.profitLoss}
+                    P&L {store.user?.wallet?.profit_loss}
                   </span>
                 </span>
               </li>
@@ -305,6 +309,7 @@ const NavBar = () => {
               </li>
               <li
                 class="nav-item mb-3 align-items-start"
+                onClick={handleBetHistoryClick}
                 style={{
                   color: 'white', // Initial color
                   cursor: 'pointer',
