@@ -7,10 +7,13 @@ import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import moment from "moment";
 const ProfitAndLoss = () => {
+  const defaultStartDate = new Date();
+  const [selected, setSelected] = useState(<Date />);
   const [dateValue, setDateValue] = useState({
-    startDate: new Date().setDate(defaultStartDate.getDate() - 1),
+    startDate: defaultStartDate,
     endDate: new Date(),
   });
+  defaultStartDate.setDate(defaultStartDate.getDate() - 1);
 
   const handleDateValue = (name, value) => {
     setDateValue((prevData) => ({
