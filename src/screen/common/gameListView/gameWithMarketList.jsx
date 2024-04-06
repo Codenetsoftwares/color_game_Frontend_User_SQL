@@ -14,20 +14,16 @@ import { useLocation } from 'react-router-dom';
 import biddingButton from '../../../utils/constant/biddingButton';
 import { useAppContext } from '../../../contextApi/context';
 import strings from '../../../utils/constant/stringConstant';
-import Login from '../../loginModal/loginModal';
-
+import { toast } from 'react-toastify';
 
 function GameWithMarketList({ isSingleMarket }) {
   const [user_allGamesWithMarketData, setUser_allGamesWithMarketData] = useState([]);
   const [user_gameWithMarketData, setUser_gameWithMarketData] = useState(getGameWithMarketDataInitialState());
   const [user_marketWithRunnerData, setUser_marketWithRunnerData] = useState(getMarketWithRunnerDataInitialState());
-  const [loginModal, setLoginModal] = useState(false);
 
   const { store, dispatch } = useAppContext();
   const [gameId, setGameId] = useState('');
   const [bidding, setBidding] = useState({ rate: '', amount: 0 });
-
-  const isLoginFromStore = store.user.isLogin;
 
   const [toggle, setToggle] = useState({
     toggleOpen: false,
@@ -43,7 +39,7 @@ function GameWithMarketList({ isSingleMarket }) {
       [name]: value,
     }));
   };
-
+  console.log('bidiingAmount', bidding.amount);
   const handleToggle = (runnerid, rate, value, id) => {
     console.log('runnerid', id);
     if (toggle.toggleOpen || toggle.indexNo !== runnerid) {
@@ -90,7 +86,7 @@ function GameWithMarketList({ isSingleMarket }) {
 
   const handleCancel = () => {
     handleBiddingAmount('rate', '');
-    handleBiddingAmount('amount', '');
+    handleBiddingAmount('amount', 0);
     setToggle({ toggleOpen: true });
   };
 
@@ -120,6 +116,8 @@ function GameWithMarketList({ isSingleMarket }) {
   const marketIdFromUrl = useLocation()?.pathname?.split('-')[1]?.split('/')[1];
 
   console.log('store', store.placeBidding);
+
+  const winBalance = bidding.amount * (Number(bidding.rate) === 0 ? Number(bidding.rate) : Number(bidding.rate) - 1);
 
   useEffect(() => {
     if (marketIdFromUrl) {
@@ -163,21 +161,27 @@ function GameWithMarketList({ isSingleMarket }) {
   }
 
   const handleUserBidding = async () => {
-    if(isLoginFromStore) {
-      const values = {
-        userId: store.user.id,
-        gameId: store.placeBidding.gameId,
-        marketId: store.placeBidding.marketId,
-        runnerId: store.placeBidding.runnerId,
-        value: bidding.amount,
-        bidType: toggle.mode,
-      };
-      const response = await userBidding(values, true);
-      if(response) {
-          handleCancel();
+    if (bidding.amount == 0 || bidding.amount < 0 || bidding.amount == '') {
+      if (bidding.amount == 0) {
+        toast.error('Amount can not be zero');
+        return;
       }
-    } else {
-      setLoginModal(!loginModal)
+      toast.error('Amount fields cannot be empty.');
+      return;
+    }
+
+    const values = {
+      userId: store.user.id,
+      gameId: store.placeBidding.gameId,
+      marketId: store.placeBidding.marketId,
+      runnerId: store.placeBidding.runnerId,
+      value: bidding.amount,
+      bidType: toggle.mode,
+    };
+
+    const response = await userBidding(values, true);
+    if (response) {
+      handleCancel();
     }
   };
 
@@ -217,7 +221,22 @@ function GameWithMarketList({ isSingleMarket }) {
               <>
                 <div className="row py-1 px-0 m-0 border">
                   <span className={`col-4 text-dark text-decoration-none text-nowrap`}>
-                    {runnerData.runnerName.name} <span>{}</span>
+                    {runnerData.runnerName.name}{' '}
+                    <span>
+                      {toggle.indexNo === runnerData._id ? (
+                        winBalance === 0 ? (
+                          ''
+                        ) : (
+                          <span className="text-success fw-bold" mx-2>
+                            +{Math.round(Math.abs(winBalance))}
+                          </span>
+                        )
+                      ) : bidding.amount === 0 ? (
+                        ''
+                      ) : (
+                        <span className="text-danger mx-2 fw-bold">-{Math.round(Math.abs(bidding.amount))}</span>
+                      )}
+                    </span>
                   </span>
 
                   <div
@@ -256,14 +275,14 @@ function GameWithMarketList({ isSingleMarket }) {
                         <button className="col-3 rounded-start-4" style={{ width: '18%', border: '0' }}>
                           -
                         </button>
-                        <input className="col-6 " type="text" value={bidding.rate} />
+                        <input className="col-6 " type="number" value={bidding.rate} />
                         <button className="col-3 rounded-end-3" style={{ width: '18%', border: '0' }}>
                           +
                         </button>
                       </div>
                       <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                         <button
-                          className={`col-3 rounded-start-3 ${bidding.amount <= 100 ? 'disabled' : ''}`}
+                          className={`col-3  rounded-start-3 ${bidding.amount == 0 ? ' disabled' : ''}`}
                           style={{ width: '18%', border: '0' }}
                           onClick={() => handleBiddingAmount('amount', bidding.amount - 100)}
                         >
@@ -271,7 +290,7 @@ function GameWithMarketList({ isSingleMarket }) {
                         </button>
                         <input
                           className="col-6"
-                          type="text"
+                          type="number"
                           value={bidding.amount}
                           onChange={(e) => handleBiddingAmount('amount', e.target.value)}
                         />
@@ -385,15 +404,12 @@ function GameWithMarketList({ isSingleMarket }) {
               </>
             );
           })}
-         
       </div>
     );
   }
 
   function getBody() {
-    return<> {marketIdFromUrl ? getMarketDetailByMarketId() : isSingleMarket ? getSingleMarket() : getWholeMarket()}; 
-     <Login showLogin={loginModal} setShowLogin={setLoginModal} />
-    </>
+    return marketIdFromUrl ? getMarketDetailByMarketId() : isSingleMarket ? getSingleMarket() : getWholeMarket();
   }
 
   return getBody();

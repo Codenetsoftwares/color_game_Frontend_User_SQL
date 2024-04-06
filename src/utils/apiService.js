@@ -1,5 +1,5 @@
-import urls from "../utils/constant/UrlConstant";
-import strings from "../utils/constant/stringConstant";
+import urls from '../utils/constant/UrlConstant';
+import strings from '../utils/constant/stringConstant';
 
 import { getCallParams, getNoAuthCallParams, makeCall } from './service';
 
@@ -26,10 +26,7 @@ export async function user_getAllGames_api(body = {}, isToast = false) {
   }
 }
 
-export async function user_getAllGamesWithMarketData_api(
-  body = {},
-  isToast = false
-) {
+export async function user_getAllGamesWithMarketData_api(body = {}, isToast = false) {
   try {
     const callParams = getNoAuthCallParams(strings.GET, body, isToast);
     const response = await makeCall(urls.userAllGamesDetails, callParams);
@@ -39,32 +36,20 @@ export async function user_getAllGamesWithMarketData_api(
   }
 }
 
-export async function user_getGameWithMarketData_api(
-  body = {},
-  isToast = false
-) {
+export async function user_getGameWithMarketData_api(body = {}, isToast = false) {
   try {
     const callParams = getNoAuthCallParams(strings.GET, body, isToast);
-    const response = await makeCall(
-      `${urls.userGameDetailById}/${body.gameId}`,
-      callParams
-    );
+    const response = await makeCall(`${urls.userGameDetailById}/${body.gameId}`, callParams);
     return response;
   } catch (error) {
     throw error;
   }
 }
 
-export async function user_getMarketWithRunnerData_api(
-  body = {},
-  isToast = false
-) {
+export async function user_getMarketWithRunnerData_api(body = {}, isToast = false) {
   try {
     const callParams = getNoAuthCallParams(strings.GET, body, isToast);
-    const response = await makeCall(
-      `${urls.userMarketDetailById}/${body.marketId}`,
-      callParams
-    );
+    const response = await makeCall(`${urls.userMarketDetailById}/${body.marketId}`, callParams);
     return response;
   } catch (error) {
     throw error;
@@ -97,6 +82,7 @@ export async function userBidding(body = {}, isToast = false) {
     const callParams = await getCallParams(strings.POST, body, isToast);
 
     const response = await makeCall(urls.userBidding, callParams, isToast);
+
     return response;
   } catch (error) {
     throw error;
