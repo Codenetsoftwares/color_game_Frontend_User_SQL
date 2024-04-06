@@ -30,8 +30,7 @@ const NavBar = () => {
   console.log("store from navbar", store);
   const userId = store.user?.id;
 
-  const storeFromLocalStorage = JSON.parse(localStorage.getItem(strings.LOCAL_STORAGE_KEY));
-  const accessTokenFromLocalStorage = storeFromLocalStorage?.user?.accessToken;
+  const accessTokenFromStore = JSON.parse(localStorage.getItem(strings.LOCAL_STORAGE_KEY)).user?.accessToken;
   useEffect(() => {
     if (userId && accessTokenFromStore) {
       handleUserWallet();
@@ -64,7 +63,7 @@ const NavBar = () => {
   const takeMetoProfitAndLoss = () => {
     navigate("/profit-loss");
   };
-  
+
   const handleBetHistoryClick = () => {
     navigate('/history');
   };
