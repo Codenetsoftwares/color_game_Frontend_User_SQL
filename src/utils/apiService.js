@@ -89,7 +89,7 @@ export async function userWallet(userId, isToast = false) {
     const response = await makeCall(`${urls.userWallet}/${userId}`, callParams);
     return response;
   } catch (error) {
-    throw error;
+  throw error;
   }
 }
 
