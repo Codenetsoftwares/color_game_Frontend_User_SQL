@@ -30,7 +30,7 @@ const NavBar = () => {
   console.log("store from navbar", store);
   const userId = store.user?.id;
 
-  const accessTokenFromStore = JSON.parse(localStorage.getItem(strings.LOCAL_STORAGE_KEY)).user?.accessToken;
+  const accessTokenFromStore = JSON.parse(localStorage.getItem(strings.LOCAL_STORAGE_KEY))?.user?.accessToken;
   useEffect(() => {
     if (userId && accessTokenFromStore) {
       handleUserWallet();
