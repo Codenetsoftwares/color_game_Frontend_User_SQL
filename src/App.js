@@ -9,7 +9,7 @@ import "./App.css";
 import RulesPage from "./screen/common/rulesPage";
 import ForgotPassword from "./screen/chnagePassword/forgotPassword";
 import PrivateRoute from "./globlaCommon/privateRoute";
-import ProfitAndLoss from "./screen/P&L/profitAndLoss";
+import ProfitAndLoss from "./screen/profitAndLoss/profitAndLoss";
 import Loading from "./globlaCommon/loading";
 import History from './screen/common/history';
 
@@ -62,7 +62,7 @@ function App() {
           />
 
           <Route
-            path="/profit&loss"
+            path="/profit-loss"
             element={
               <PrivateRoute>
                 <ProfitAndLoss />

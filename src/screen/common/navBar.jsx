@@ -59,7 +59,7 @@ const NavBar = () => {
   };
 
   const takeMetoProfitAndLoss = () => {
-    navigate("/profit&loss");
+    navigate("/profit-loss");
   };
   
   const handleBetHistoryClick = () => {
