@@ -171,7 +171,7 @@ function GameWithMarketList({ isSingleMarket }) {
       return;
     }
 
-    if ((bidding.amount > store.user?.wallet?.balance && !(toggle.mode === "Lay")) || (((Number(bidding.rate) - 1) * bidding.amount) > store.user?.wallet?.balance)) {
+    if ((bidding.amount > store.user?.wallet?.balance && !(toggle.mode === "Lay")) || (((Number(bidding.rate) - 1) * bidding.amount) > store.user?.wallet?.balance) && !toggle.mode === "Back") {
       toast.error('insufficient amount.');
       return;
     }
