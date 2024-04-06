@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import '../common.css';
 import {
   userBidding,
+  userWallet,
   user_getAllGamesWithMarketData_api,
   user_getGameWithMarketData_api,
   user_getMarketWithRunnerData_api,
@@ -170,6 +171,11 @@ function GameWithMarketList({ isSingleMarket }) {
       return;
     }
 
+    if ((bidding.amount > store.user?.wallet?.balance && !(toggle.mode === "Lay")) || (((Number(bidding.rate) - 1) * bidding.amount) > store.user?.wallet?.balance)) {
+      toast.error('insufficient amount.');
+      return;
+    }
+
     const values = {
       userId: store.user.id,
       gameId: store.placeBidding.gameId,
@@ -179,9 +185,34 @@ function GameWithMarketList({ isSingleMarket }) {
       bidType: toggle.mode,
     };
 
+    dispatch({
+      type: strings.isLoading,
+      payload: true,
+    });
+
     const response = await userBidding(values, true);
+
+    dispatch({
+      type: strings.isLoading,
+      payload: false
+    });
+
     if (response) {
       handleCancel();
+      (async () => {
+        const response = await userWallet(store.user.id, true);
+        if (response) {
+          dispatch({
+            type: strings.UserWallet,
+            payload: {
+              ...response.data,
+            },
+          });
+          toast.info(`wallet updated ${response.message}`);
+        } else {
+          toast.error(`wallet updated ${response.message}`);
+        }
+      })();
     }
   };
 
@@ -282,6 +313,7 @@ function GameWithMarketList({ isSingleMarket }) {
                       </div>
                       <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                         <button
+                          disabled={bidding.amount == 0 ? ' disabled' : ''}
                           className={`col-3  rounded-start-3 ${bidding.amount == 0 ? ' disabled' : ''}`}
                           style={{ width: '18%', border: '0' }}
                           onClick={() => handleBiddingAmount('amount', bidding.amount - 100)}

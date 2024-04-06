@@ -56,7 +56,6 @@ export const getCallParams = async (methodType, body) => {
 
 export async function makeCall(callName, callParams, isToast) {
   try {
-    debugger
     let call = await fetch(callName, callParams);
     let timeout = getTimeoutPromise();
 
@@ -65,10 +64,7 @@ export async function makeCall(callName, callParams, isToast) {
     });
 
     const json = await response.json();
-    console.log('json====>', json);
-    debugger
     if (json.responseCode === 401) {
-      debugger;
       localStorage.clear();
       sessionStorage.setItem('sessionExpierd', true);
       window.location.href = '/home';
