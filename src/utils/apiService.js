@@ -72,7 +72,7 @@ export async function user_getBetHistory_api(body = {}, isToast = false) {
     const callParams = await getCallParams(strings.GET, body, isToast);
 
     const response = await makeCall(
-      `${urls.userBetHistoryById}/${body.userId}/${body.gameId}?page=${body.pageNumber}&limit=${body.dataLimit}`,
+      `${urls.userBetHistoryById}/${body.marketId}?page=${body.pageNumber}&limit=${body.dataLimit}`,
       callParams,
       isToast,
     );
@@ -82,13 +82,60 @@ export async function user_getBetHistory_api(body = {}, isToast = false) {
   }
 }
 
-export async function user_getOpenBetmarket_api(body = {}, isToast = false) {
+// export async function user_getOpenBetmarket_api(body = {}, isToast = false) {
+//   console.log(body);
+//   try {
+//     const callParams = await getCallParams(strings.GET, body, isToast);
+
+//     const response = await makeCall(urls.userGetOpenBet, callParams, isToast);
+
+//     return response;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+
+export async function user_getBackLayData_api(body = {}, isToast = false) {
   console.log(body);
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
 
-    const response = await makeCall(urls.userGetOpenBet, callParams, isToast);
+    const response = await makeCall(`${urls.userBackLayData}/${body.marketId}`, callParams, isToast);
 
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// dummy data api for open bet and selection
+export async function getDataFromHistoryLandingPage(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+
+    const response = await makeCall(urls.getDataFromHistoryLandingPage, callParams, isToast);
+    // const response = {
+    //   betHistory: [
+    //     {
+    //       marketId: "65f84911143d9f19ac0ded85",
+    //       marketName: "Blue Vs Yellow",
+    //     },
+    //     {
+    //       marketId: "65f84922143d9f19ac0dee7a",
+    //       marketName: "Red Vs Green",
+    //     },
+    //   ],
+    //   openBet: [
+    //     {
+    //       marketId: "65f8493b143d9f19ac0def75",
+    //       marketName: "White Vs Pink",
+    //     },
+    //     {
+    //       marketId: "65f84911143d9f19ac0ded85",
+    //       marketName: "Blue Vs Yellow",
+    //     },
+    //   ],
+    // };
     return response;
   } catch (error) {
     throw error;

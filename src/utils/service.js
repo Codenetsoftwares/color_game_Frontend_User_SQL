@@ -39,6 +39,7 @@ export const getCallParams = async (methodType, body) => {
   const params = {
     method: methodType,
     headers: await getHeaderObject(accessToken, strings.applicationJSON),
+    // authorization :`Bearer ${accessToken}`
   };
 
   switch (methodType) {

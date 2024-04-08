@@ -15,6 +15,8 @@ class UrlConstant {
   changePassword = `${this.url_dev}/${this.user}/resetpassword`;
   userBetHistoryById = `${this.url_dev}/${this.user}-betHistory`;
   userGetOpenBet = `${this.url_dev}/${this.user}-current-market`;
+  userBackLayData = `${this.url_dev}/${this.user}-currentOrderHistory`;
+  getDataFromHistoryLandingPage = `${this.url_dev}/${this.user}-market-data`;
 }
 
 const urls = new UrlConstant();
