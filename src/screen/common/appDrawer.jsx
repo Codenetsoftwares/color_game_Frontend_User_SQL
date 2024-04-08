@@ -7,7 +7,7 @@ import HamburgerNavBar from './hamburgerNavBar';
 import { useAppContext } from '../../contextApi/context';
 import strings from '../../utils/constant/stringConstant';
 
-function AppDrawer({ children, showCarousel, isMobile }) {
+function AppDrawer({ children, showCarousel, isMobile , isHomePage }) {
   const [toggleStates, setToggleStates] = useState({});
   const [user_allGames, setUser_allGames] = useState(getAllGameDataInitialState());
   const { dispatch } = useAppContext();
@@ -39,6 +39,12 @@ function AppDrawer({ children, showCarousel, isMobile }) {
       // close app drawer logic should call here
     }
   };
+  const carouselImages = [
+    "https://images.news18.com/ibnlive/uploads/2024/03/the-carnival-of-cricket-ipl-2024-begins-friday-in-chennai-2024-03-57866b703b220dfd84e70329b271fbd8-3x2.jpg",
+    "https://www.hindustantimes.com/ht-img/img/2024/01/14/550x309/TOPSHOT-TENNIS-AUS-OPEN-33_1705249861778_1705249942860.jpg",
+    "https://assets-webp.khelnow.com/d7293de2fa93b29528da214253f1d8d0/640x360/news/uploads/2024/02/football-lead-pic.jpg.webp"
+  ];
+
 
   function getLeftNavBar() {
     return (
@@ -101,54 +107,38 @@ function AppDrawer({ children, showCarousel, isMobile }) {
   function getMidCarousel() {
     return (
       <>
-        <div id="carouselExampleAutoPlaying" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner ">
-            <div class="carousel-item active">
+         <div id="carouselExampleAutoPlaying" className="carousel slide" data-bs-ride="carousel">
+        <div className="carousel-inner ">
+          {carouselImages.map((image, index) => (
+            <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
               <img
-                src="https://images.news18.com/ibnlive/uploads/2024/03/the-carnival-of-cricket-ipl-2024-begins-friday-in-chennai-2024-03-57866b703b220dfd84e70329b271fbd8-3x2.jpg"
-                class="d-block w-100"
-                alt="..."
-                style={{ height: '300px' }}
+                src={image}
+                className="d-block w-100"
+                alt={`carousel-image-${index}`}
+                style={{ height: '300px' ,objectFit:"fill" }}
               />
             </div>
-            <div class="carousel-item">
-              <img
-                src="https://www.hindustantimes.com/ht-img/img/2024/01/14/550x309/TOPSHOT-TENNIS-AUS-OPEN-33_1705249861778_1705249942860.jpg"
-                class="d-block w-100"
-                alt="..."
-                //   style={{ height: "300px", objectFit: "cover" }}
-                style={{ height: '300px' }}
-              />
-            </div>
-            <div class="carousel-item">
-              <img
-                src="https://assets-webp.khelnow.com/d7293de2fa93b29528da214253f1d8d0/640x360/news/uploads/2024/02/football-lead-pic.jpg.webp"
-                class="d-block w-100"
-                alt="..."
-                //   style={{ height: "300px", objectFit: "cover" }}
-                style={{ height: '300px' }}
-              />
-            </div>
-          </div>
-          <button
-            class="carousel-control-prev"
-            type="button"
-            data-bs-target="#carouselExampleAutoPlaying"
-            data-bs-slide="prev"
-          >
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button
-            class="carousel-control-next"
-            type="button"
-            data-bs-target="#carouselExampleAutoPlaying"
-            data-bs-slide="next"
-          >
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
+          ))}
         </div>
+        <button
+          className="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExampleAutoPlaying"
+          data-bs-slide="prev"
+        >
+          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span className="visually-hidden">Previous</span>
+        </button>
+        <button
+          className="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExampleAutoPlaying"
+          data-bs-slide="next"
+        >
+          <span className="carousel-control-next-icon" aria-hidden="true"></span>
+          <span className="visually-hidden">Next</span>
+        </button>
+      </div>
       </>
     );
   }
@@ -161,7 +151,7 @@ function AppDrawer({ children, showCarousel, isMobile }) {
         <div className="row">
           <div
             className="col-md-2 position-fixed d-none d-md-block vertical-navbar p-0"
-            style={{ border: '1px solid red', height: '100vh' }}
+            style={{ border: '1px solid red', height: '100vh', marginTop: isHomePage ? "0px" : "93px"}}
           >
             {getLeftNavBar()}
           </div>
