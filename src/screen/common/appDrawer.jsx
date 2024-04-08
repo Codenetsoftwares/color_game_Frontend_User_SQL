@@ -75,21 +75,21 @@ function AppDrawer({ children, showCarousel, isMobile }) {
               {/* Mapping over markets inside each gameName */}
               {toggleStates[index] && gameObj.markets.length > 0
                 ? gameObj.markets.map((marketObj, marketIndex) => (
-                  <li
-                    className="subMenuItems"
-                    key={marketIndex}
-                    onClick={() => handleAllId(gameObj?.gameId, marketObj?.marketId)}
-                  >
-                    <Link
-                      to={`/gameView/${gameObj?.gameName?.replace(/\s/g, '')}-${marketObj?.marketName?.replace(
-                        /\s/g,
-                        '',
-                      )}/${marketObj?.marketId?.replace(/\s/g, '')}`}
+                    <li
+                      className="subMenuItems"
+                      key={marketIndex}
+                      onClick={() => handleAllId(gameObj?.gameId, marketObj?.marketId)}
                     >
-                      {marketObj.marketName}
-                    </Link>
-                  </li>
-                ))
+                      <Link
+                        to={`/gameView/${gameObj?.gameName?.replace(/\s/g, '')}-${marketObj?.marketName?.replace(
+                          /\s/g,
+                          '',
+                        )}/${marketObj?.marketId?.replace(/\s/g, '')}`}
+                      >
+                        {marketObj.marketName}
+                      </Link>
+                    </li>
+                  ))
                 : null}
             </React.Fragment>
           ))}

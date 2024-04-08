@@ -52,7 +52,7 @@ const History = () => {
       pageNumber: currentPage,
       dataLimit: itemsPerPage,
     });
-    if(response) {
+    if (response) {
       setBetHistoryData(response.data);
       setPaginationData(response.pagination.totalPages);
     }
