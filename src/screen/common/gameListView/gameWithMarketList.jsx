@@ -254,6 +254,7 @@ function GameWithMarketList({ isSingleMarket }) {
             Lay
           </div>
         </div>
+
         {user_marketWithRunnerData &&
           user_marketWithRunnerData.runners.map((runnerData, index) => {
             // Determine if current row should display
@@ -268,16 +269,28 @@ function GameWithMarketList({ isSingleMarket }) {
               (winBalance !== 0 || Number(runnerData.runnerName.bal) - Math.round(Math.abs(winBalance)) !== 0);
             return (
               <>
+                {/* {console.log(
+                  "testing==>",index,
+                  Number(runnerData.runnerName.bal) -
+                    Math.round(Math.abs(winBalance)) >
+                    0
+                )}
+                {console.log(
+                  "testing1==>",index,
+                  Number(runnerData.runnerName.bal) +
+                    Math.round(Math.abs(winBalance)) >
+                    0
+                )} */}
                 {toggle.mode === 'Lay' ? (
                   <>
-               
+                    {/* Lay */}
                     <div className="row py-1 px-0 m-0 border">
                       <span className={`col-4 text-dark text-decoration-none text-nowrap`}>
                         {runnerData.runnerName.name}{' '}
                         <span>
                           {/* Display bidding amount if conditions met */}
                           {shouldDisplayTempLay && (
-                            <span className="text-danger fw-bold" mx-2>
+                            <>
                               {Number(runnerData.runnerName.bal) === 0 ? (
                                 ''
                               ) : Number(runnerData.runnerName.bal) > 0 ? (
@@ -289,16 +302,44 @@ function GameWithMarketList({ isSingleMarket }) {
                                   {Number(runnerData.runnerName.bal)}
                                 </span>
                               )}
-                              ({Number(runnerData.runnerName.bal) - Math.round(Math.abs(winBalance))})
-                            </span>
+
+                              {Number(runnerData.runnerName.bal) - Math.round(Math.abs(winBalance)) > 0 ? (
+                                <span className=" text-success fw-bold">
+                                  {bidding.amount != 0 && (
+                                    <span>
+                                      ({Number(runnerData.runnerName.bal) - Math.round(Math.abs(winBalance))})
+                                    </span>
+                                  )}
+                                </span>
+                              ) : (
+                                <span className=" text-danger fw-bold">
+                                  {bidding.amount != 0 && (
+                                    <span>
+                                      ({Number(runnerData.runnerName.bal) - Math.round(Math.abs(winBalance))})
+                                    </span>
+                                  )}
+                                </span>
+                              )}
+                            </>
                           )}
                         </span>
                         {/* Display hiii only if shouldDisplayTempLay flag is false */}
                         {!shouldDisplayTempLay && (
-                          <span className="text-success fw-bold" mx-2>
-                            {runnerData.runnerName.bal}(
-                            {Number(runnerData.runnerName.bal) + Math.round(Math.abs(bidding.amount))})
-                          </span>
+                          <>
+                            {Number(runnerData.runnerName.bal) === 0 ? (
+                              ''
+                            ) : Number(runnerData.runnerName.bal) > 0 ? (
+                              <span className="text-success fw-bold" mx-2>
+                                {bidding.amount != 0 && runnerData.runnerName.bal}(
+                                {Number(runnerData.runnerName.bal) + Math.round(bidding.amount)})
+                              </span>
+                            ) : (
+                              <span className="text-danger fw-bold" mx-2>
+                                {bidding.amount != 0 && runnerData.runnerName.bal}(
+                                {Number(runnerData.runnerName.bal) + Math.round(bidding.amount)})
+                              </span>
+                            )}
+                          </>
                         )}
                       </span>
 
@@ -327,60 +368,91 @@ function GameWithMarketList({ isSingleMarket }) {
                     </div>
                   </>
                 ) : (
-                  <div className="row py-1 px-0 m-0 border">
-                    <span className={`col-4 text-dark text-decoration-none text-nowrap`}>
-                      {runnerData.runnerName.name}{' '}
-                      <span>
-                        {/* Display bidding amount if conditions met */}
-                        {shouldDisplayTempBack && (
-                          <span className="text-success fw-bold" mx-2>
+                  <>
+                    {/* Back */}
+                    <div className="row py-1 px-0 m-0 border">
+                      <span className={`col-4 text-dark text-decoration-none text-nowrap`}>
+                        {runnerData.runnerName.name}{' '}
+                        <span>
+                          {/* Display bidding amount if conditions met */}
+                          {shouldDisplayTempBack && (
+                            <>
+                              {Number(runnerData.runnerName.bal) === 0 ? (
+                                ''
+                              ) : Number(runnerData.runnerName.bal) > 0 ? (
+                                <span className="text-success fw-bold" mx-2>
+                                  +{Number(runnerData.runnerName.bal)}
+                                </span>
+                              ) : (
+                                <span className="text-danger fw-bold" mx-2>
+                                  {Number(runnerData.runnerName.bal)}
+                                </span>
+                              )}
+
+                              {Number(runnerData.runnerName.bal) + Math.round(Math.abs(winBalance)) > 0 ? (
+                                <span className=" text-success  fw-bold">
+                                  {bidding.amount != 0 && (
+                                    <span>
+                                      ({Number(runnerData.runnerName.bal) + Math.round(Math.abs(winBalance))})
+                                    </span>
+                                  )}
+                                </span>
+                              ) : (
+                                <span className=" text-danger fw-bold">
+                                  {bidding.amount != 0 && (
+                                    <span>
+                                      ({Number(runnerData.runnerName.bal) + Math.round(Math.abs(winBalance))})
+                                    </span>
+                                  )}
+                                </span>
+                              )}
+                            </>
+                          )}
+                        </span>
+                        {/* Display hiii only if shouldDisplayTempLay flag is false */}
+                        {!shouldDisplayTempBack && (
+                          <>
                             {Number(runnerData.runnerName.bal) === 0 ? (
                               ''
                             ) : Number(runnerData.runnerName.bal) > 0 ? (
                               <span className="text-success fw-bold" mx-2>
-                                +{Number(runnerData.runnerName.bal)}
+                                {bidding.amount != 0 && runnerData.runnerName.bal}(
+                                {Number(runnerData.runnerName.bal) - Math.round(bidding.amount)})
                               </span>
                             ) : (
                               <span className="text-danger fw-bold" mx-2>
-                                {Number(runnerData.runnerName.bal)}
+                                {bidding.amount != 0 && runnerData.runnerName.bal}(
+                                {Number(runnerData.runnerName.bal) - Math.round(bidding.amount)})
                               </span>
                             )}
-                            {/* Inside Bracket */}(
-                            {Number(runnerData.runnerName.bal) + Math.round(Math.abs(winBalance))})
-                          </span>
+                          </>
                         )}
                       </span>
-                      {/* Display hiii only if shouldDisplayTempLay flag is false */}
-                      {!shouldDisplayTempBack && (
-                        <span className="text-danger fw-bold" mx-2>
-                          {runnerData.runnerName.bal}({Number(runnerData.runnerName.bal) - Math.round(bidding.amount)})
-                        </span>
-                      )}
-                    </span>
 
-                    <div
-                      className="col-4"
-                      style={{ backgroundColor: 'lightblue' }}
-                      onClick={() =>
-                        handleToggle(runnerData._id, runnerData.rate[0].Back, 'Back', runnerData.runnerName.runnerId)
-                      }
-                      key={index}
-                    >
-                      {runnerData.rate[0].Back}
-                      {console.log('runnerData=>>>>>', runnerData.runnerName.name)}
-                    </div>
+                      <div
+                        className="col-4"
+                        style={{ backgroundColor: 'lightblue' }}
+                        onClick={() =>
+                          handleToggle(runnerData._id, runnerData.rate[0].Back, 'Back', runnerData.runnerName.runnerId)
+                        }
+                        key={index}
+                      >
+                        {runnerData.rate[0].Back}
+                        {console.log('runnerData=>>>>>', runnerData.runnerName.name)}
+                      </div>
 
-                    <div
-                      className="col-4"
-                      style={{ backgroundColor: 'pink' }}
-                      onClick={() =>
-                        handleToggle(runnerData._id, runnerData.rate[0].Lay, 'Lay', runnerData.runnerName.runnerId)
-                      }
-                      key={index}
-                    >
-                      {runnerData.rate[0].Lay}
+                      <div
+                        className="col-4"
+                        style={{ backgroundColor: 'pink' }}
+                        onClick={() =>
+                          handleToggle(runnerData._id, runnerData.rate[0].Lay, 'Lay', runnerData.runnerName.runnerId)
+                        }
+                        key={index}
+                      >
+                        {runnerData.rate[0].Lay}
+                      </div>
                     </div>
-                  </div>
+                  </>
                 )}
 
                 {toggle.indexNo === runnerData._id && !toggle.toggleOpen && (
