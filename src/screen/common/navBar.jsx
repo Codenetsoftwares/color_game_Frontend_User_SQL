@@ -59,8 +59,8 @@ const NavBar = () => {
         }}
       >
         {!store.user.isLogin && (
-          <div class="w-100 d-flex justify-content-between"  style={{background: "#25616a"}}>
-            <img src={ansmt} style={{ width: '30px', height: '30px', marginLeft: '10px'  }} />
+          <div class="w-100 d-flex justify-content-between" style={{ background: '#25616a' }}>
+            <img src={ansmt} style={{ width: '30px', height: '30px', marginLeft: '10px' }} />
             {/* <FaCoins className="m-2" style={{ color: "#fec015" }} /> */}
             <marquee className="text-white">Your announcement text here</marquee>
             <span className="text-nowrap text-white px-2" style={{ fontSize: '14px' }}>
@@ -383,7 +383,7 @@ const NavBar = () => {
   function getBody() {
     return (
       <>
-        <HamburgerNavBar/>
+        <HamburgerNavBar />
         {getNav()}
         {getRightSlider()}
         {leftNav()}

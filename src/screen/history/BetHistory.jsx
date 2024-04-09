@@ -1,30 +1,60 @@
 import React, { useState, useEffect } from 'react';
 import AppDrawer from '../common/appDrawer';
 import Layout from '../layout/layout';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import Datetime from 'react-datetime';
+import 'react-datetime/css/react-datetime.css';
 import Pagination from '../common/Pagination';
+import moment from 'moment';
 import { useAppContext } from '../../contextApi/context';
 
 import {
   getDataFromHistoryLandingPage,
   user_getBackLayData_api,
   user_getBetHistory_api,
-  user_getOpenBetData_api,
+  // user_getOpenBetData_api,
   // user_getOpenBetmarket_api,
 } from '../../utils/apiService';
+import { getbiddingInitialState } from '../../utils/getInitiateState';
 
-const BetHistory = ({}) => {
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+const BetHistory = () => {
+  // const [startDate, setStartDate] = useState(null);
+  // const [endDate, setEndDate] = useState(null);
   const [betHistoryData, setBetHistoryData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(3);
   const [openBet, setOpenBet] = useState([]);
   const [selectedMarket, setSelectedMarket] = useState('Select Market');
+  const [selectedMarketId, setSelectedMarketId] = useState('');
+  const defaultStartDate = new Date();
+  const [selected, setSelected] = useState(<Date />);
+  const [dateValue, setDateValue] = useState({
+    startDate: defaultStartDate,
+    endDate: new Date(),
+  });
 
-  const [bidding, setBidding] = useState({ rate: '', amount: 0 });
+  defaultStartDate.setDate(defaultStartDate.getDate() - 1);
+  function formatDate(dateString) {
+    // Create a new Date object using the input string
+    let date = new Date(dateString);
+    // Extract year, month, and day
+    let year = date.getFullYear();
+    let month = ('0' + (date.getMonth() + 1)).slice(-2); // Adding 1 to month because January is 0
+    let day = ('0' + date.getDate()).slice(-2);
+    // Concatenate the parts with '-' separator
+    return `${year}-${month}-${day}`;
+  }
+  console.log('date===>', formatDate(dateValue.startDate));
+  const handleDateValue = (name, value) => {
+    setDateValue((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // const [openBetsBackLaydata, setOpenBetsBackLaydata] = useState([]);
+
+  // const [bidding, setBidding] = useState(getbiddingInitialState());
   const [marketSelectionbetHistory, setMarketSelectionbetHistory] = useState([]); // from dummy data into bet history selection
   const [openBetSelectionbetHistory, setopenBetSelectionbetHistory] = useState([]); // from dummy data into open bet selection
 
@@ -38,25 +68,23 @@ const BetHistory = ({}) => {
   console.log('=============> line 15 ', store.user.id);
 
   // static market id and game id
-  const marketIdFromstore = store.userTxn?.marketId ?? '65f84911143d9f19ac0ded85';
-  const gameIdFromstore = store.userTxn?.gameId ?? '66053792d1a49b35bfd975aa';
+  // const marketIdFromstore =
+  //   store.userTxn?.marketId ?? "65f84911143d9f19ac0ded85";
+  // const gameIdFromstore = store.userTxn?.gameId ?? "66053792d1a49b35bfd975aa";
 
-  console.log('========> GAME ID ', gameIdFromstore);
+  // console.log("========> GAME ID ", gameIdFromstore);
 
   // the api called for bet history data
   async function handleGetHistory() {
-    if (Object.values(selectedOptions).some((option) => option === '' || option === 'Open this select menu')) {
-      setFetchData(false);
-      return; // If any select has this option selected, exit function
-    }
-
-    setFetchData(true);
     const response = await user_getBetHistory_api({
-      // userId: store.user.id,
-      marketId: marketIdFromstore,
+      marketId: selectedMarketId,
+      marketName: marketSelectionbetHistory,
       pageNumber: currentPage,
       dataLimit: totalItems,
+      startDate: formatDate(dateValue.startDate),
+      endDate: formatDate(dateValue.endDate),
     });
+
     if (response) {
       console.log('response for betHistoryData ', response);
       setBetHistoryData(response.data);
@@ -65,12 +93,14 @@ const BetHistory = ({}) => {
     } else {
       //add loading part //
     }
-    console.log('From:', startDate);
-    console.log('To:', endDate);
+    // console.log("From:", startDate);
+    // console.log("To:", endDate);
   }
   // useeffect for bet history data
   useEffect(() => {
-    handleGetHistory();
+    if (selectedMarketId != '') {
+      handleGetHistory();
+    }
   }, [currentPage, totalItems]);
   console.log('==========> line65', betHistoryData);
 
@@ -90,28 +120,8 @@ const BetHistory = ({}) => {
     // handleGetHistory()
   };
 
-  //for open bet data that is not in use now
-
-  // async function handleGetBet() {
-  //   const response = await user;
-  //   if (response) {
-  //     console.log("===========>response for betOpenBetData(Line 76)", response);
-  //     setOpenBet(response.data);
-  //   } else {
-  //     //add loading part //
-  //   }
-  //   console.log("From:", startDate);
-  //   console.log("To:", endDate);
-  // }
-
-  // useeffect for  open bets selection input box only
-
-  // useEffect(() => {
-  //   handleGetBet();
-  // }, []);
-
-  //dummy sata response which has to be replaced by actual api for both open bets and bet history
-  async function handleGetDummyData() {
+  //this is the select market response whic for both open bets and bet history
+  async function handleGetSelectData() {
     const response = await getDataFromHistoryLandingPage();
     if (response) {
       console.log('===========>response for betOpenBetDataSelect and marketname(Line 237)', response);
@@ -120,12 +130,12 @@ const BetHistory = ({}) => {
     } else {
       //add loading part //
     }
-    console.log('From:', startDate);
-    console.log('To:', endDate);
+    // console.log("From:", startDate);
+    // console.log("To:", endDate);
   }
   // useeffect for bet history and open bets selection input boxes only
   useEffect(() => {
-    handleGetDummyData();
+    handleGetSelectData();
   }, []);
   console.log('=========> marketSelectionbetHistory line 108', marketSelectionbetHistory);
   console.log('=========> openBetSelectionbetHistor line 109', openBetSelectionbetHistory);
@@ -134,32 +144,39 @@ const BetHistory = ({}) => {
   const handleSelectChange = (e) => {
     setSelectedMarket(e.target.value);
   };
+  console.log('=====. line 157', selectedMarket);
 
-  const handleGetHistoryChange = (e, selectName) => {
-    setSelectedOptions((prevState) => ({
-      ...prevState,
-      [selectName]: e.target.value,
-    }));
+  const handleGetHistoryChange = (e) => {
+    setSelectedMarketId(e.target.value);
   };
+  console.log('Market ID:', selectedMarketId);
 
   // this is back lay open bets data but this api needs to be updated
   async function handleGetData() {
     const response = await user_getBackLayData_api({
-      marketId: marketIdFromstore,
+      marketId: selectedMarket,
     });
     if (response) {
-      console.log('===========>response for betOpenBetData(Line 237)', response);
-      // setOpenBet(response.data);
+      console.log('===========>response for betOpenBetData(Line 173)', response);
+      setOpenBet(response.data);
     } else {
       //add loading part //
     }
-    console.log('From:', startDate);
-    console.log('To:', endDate);
   }
   // this is useEffect for  back lay open bets data but this api needs to be updated
   useEffect(() => {
-    handleGetData();
-  }, []);
+    if (selectedMarket != '') {
+      handleGetData();
+    }
+  }, [selectedMarket]);
+  console.log('============> openBet', openBet);
+
+  const handleReset = () => {
+    setDateValue({
+      startDate: defaultStartDate,
+      endDate: new Date(),
+    });
+  };
 
   // this is the complete get history selection card with bet history data table
   function history() {
@@ -178,8 +195,6 @@ const BetHistory = ({}) => {
                   >
                     <option selected>Open this select menu</option>
                     <option value="1">OLD DATA</option>
-                    {/* <option value="2">Two</option> */}
-                    {/* <option value="3">Three</option> */}
                   </select>
                 </div>
               </div>
@@ -191,8 +206,8 @@ const BetHistory = ({}) => {
                   <select
                     className="form-select form-select-sm"
                     aria-label=".form-select-sm example"
-                    value={selectedOptions.select2}
-                    onChange={(e) => handleGetHistoryChange(e, 'select2')}
+                    value={selectedMarketId || ''}
+                    onChange={handleGetHistoryChange}
                   >
                     <option selected>Open this select menu</option>
                     {marketSelectionbetHistory.map((market, index) => (
@@ -216,8 +231,6 @@ const BetHistory = ({}) => {
                   >
                     <option selected>Open this select menu</option>
                     <option value="1">SETTLE</option>
-                    {/* <option value="2">Two</option> */}
-                    {/* <option value="3">Three</option> */}
                   </select>
                 </div>
               </div>
@@ -228,11 +241,23 @@ const BetHistory = ({}) => {
                 <div className="form-group">
                   <label>From:</label>
                   <div className="input-group" style={{ maxWidth: '100%' }}>
-                    <DatePicker
+                    {/* <DatePicker
                       selected={startDate}
-                      onChange={(date) => setStartDate(date)}
+                      onChange={(date) => {
+                        console.log("Start Date Selected:", date);
+
+                        setStartDate(date);
+                      }}
                       dateFormat="MM/dd/yyyy"
                       className="form-control"
+                    /> */}
+
+                    <Datetime
+                      value={dateValue.startDate}
+                      name="startDate"
+                      dateFormat="DD-MM-YYYY"
+                      onChange={(e) => handleDateValue('startDate', moment(e).format('DD-MM-YYYY HH:mm'))}
+                      timeFormat="HH:mm"
                     />
                   </div>
                 </div>
@@ -242,11 +267,22 @@ const BetHistory = ({}) => {
                 <div className="form-group">
                   <label>To:</label>
                   <div className="input-group" style={{ maxWidth: '100%' }}>
-                    <DatePicker
+                    {/* <DatePicker
                       selected={endDate}
-                      onChange={(date) => setEndDate(date)}
+                      onChange={(date) => {
+                        console.log("End Date Selected:", date);
+                        setEndDate(date);
+                      }}
                       dateFormat="MM/dd/yyyy"
                       className="form-control"
+                    /> */}
+
+                    <Datetime
+                      value={dateValue.endDate}
+                      name="endDate"
+                      dateFormat="DD-MM-YYYY"
+                      onChange={(e) => handleDateValue('endDate', moment(e).format('DD-MM-YYYY HH:mm'))}
+                      timeFormat="HH:mm"
                     />
                   </div>
                 </div>
@@ -261,68 +297,66 @@ const BetHistory = ({}) => {
           </div>
         </div>
 
-        {fetchData && (
-          <div className="card shadow p-3 mb-5 bg-white rounded">
-            <div className="card-header bg-primary text-white">
-              <h5 className="card-title">Bet History</h5>
-            </div>
-            <div className="card-body">
-              {/* Show entries dropdown */}
-              <div className="mb-3">
-                <label htmlFor="showEntriesDropdown" className="form-label">
-                  Show entries
-                </label>
-                <select
-                  className="form-select"
-                  id="showEntriesDropdown"
-                  value={totalItems}
-                  onChange={handleEntriesChange}
-                >
-                  <option value="3">3</option>
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                </select>
-              </div>
-
-              <div style={{ overflow: 'auto' }}>
-                <table className="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th scope="col">Game Name</th>
-                      <th scope="col">Market Name</th>
-                      <th scope="col">Runner Name</th>
-                      <th scope="col">Rate</th>
-                      <th scope="col">Value</th>
-                      <th scope="col">Type</th>
-                      <th scope="col">Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {betHistoryData.map((item, index) => (
-                      <tr key={index}>
-                        <td>{item.gameName}</td>
-                        <td>{item.marketName}</td>
-                        <td>{item.runnerName}</td>
-                        <td>{item.rate}</td>
-                        <td>{item.value}</td>
-                        <td>{item.type}</td>
-                        <td>{new Date(item.date).toLocaleString()}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                handlePageChange={handlePageChange}
-                startIndex={(currentPage - 1) * totalItems + 1}
-                endIndex={Math.min(currentPage * totalItems, totalItems)}
-                totalData={totalItems}
-              />
-            </div>
+        <div className="card shadow p-3 mb-5 bg-white rounded">
+          <div className="card-header bg-primary text-white">
+            <h5 className="card-title">Bet History</h5>
           </div>
-        )}
+          <div className="card-body">
+            {/* Show entries dropdown */}
+            <div className="mb-3">
+              <label htmlFor="showEntriesDropdown" className="form-label">
+                Show entries
+              </label>
+              <select
+                className="form-select"
+                id="showEntriesDropdown"
+                value={totalItems}
+                onChange={handleEntriesChange}
+              >
+                <option value="3">3</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+
+            <div style={{ overflow: 'auto' }}>
+              <table className="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col">Game Name</th>
+                    <th scope="col">Market Name</th>
+                    <th scope="col">Runner Name</th>
+                    <th scope="col">Rate</th>
+                    <th scope="col">Value</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {betHistoryData.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.gameName}</td>
+                      <td>{item.marketName}</td>
+                      <td>{item.runnerName}</td>
+                      <td>{item.rate}</td>
+                      <td>{item.value}</td>
+                      <td>{item.type}</td>
+                      <td>{new Date(item.date).toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              handlePageChange={handlePageChange}
+              startIndex={(currentPage - 1) * totalItems + 1}
+              endIndex={Math.min(currentPage * totalItems, totalItems)}
+              totalData={totalItems}
+            />
+          </div>
+        </div>
       </div>
     );
   }
@@ -341,6 +375,7 @@ const BetHistory = ({}) => {
               id="selectMarket"
               style={{ width: '100%' }}
               onChange={handleSelectChange}
+              // onChange={handleGetHistoryChange}
             >
               <option>Select Market</option>
               {openBetSelectionbetHistory.map((item, index) => (
@@ -351,7 +386,7 @@ const BetHistory = ({}) => {
             </select>
           </div>
 
-          {/* Render back table if market is selected */}
+          {/* Render back  and laytable if market is selected */}
           {selectedMarket !== 'Select Market' && (
             <>
               {renderBackTable()}
@@ -364,7 +399,7 @@ const BetHistory = ({}) => {
   }
   // Function to render back table called in open bets function
   const renderBackTable = () => {
-    // Render back table based on selected market
+    // Rendering of  back table based on selected market
 
     return (
       <div className="card shadow p-3 mb-5  rounded" style={{ backgroundColor: '#cfe2f3' }}>
@@ -383,22 +418,19 @@ const BetHistory = ({}) => {
             <tbody>
               {/* Insert rows for back bets */}
               {openBet
-                .filter((item) => item.marketName === selectedMarket && item.type === 'Lay')
+                .filter((item) => item.type === 'Back')
+
                 .map((item, index) => (
                   <tr key={index}>
                     <td>{item.runnerName}</td>
                     <td>{item.rate}</td>
                     <td>{item.value}</td>
-                    <td>Calculate liability here</td> {/* You need to calculate liability */}
+                    <td>
+                      {item.bidAmount}(-{item.value})
+                    </td>{' '}
+                    {/* You need to calculate liability */}
                   </tr>
                 ))}
-
-              {/* <tr>
-                <td>...</td>
-                <td>...</td>
-                <td>...</td>
-                <td>...</td>
-              </tr> */}
             </tbody>
           </table>
         </div>
@@ -407,7 +439,7 @@ const BetHistory = ({}) => {
   };
   // Function to render lay table  called in open bets function
   const renderLayTable = () => {
-    // Render lay table based on selected market
+    // Rendering of  lay table based on selected market
     return (
       <div className="card shadow p-3 mb-5  rounded" style={{ backgroundColor: '#f8d7da' }}>
         <div className="card-body">
@@ -424,12 +456,21 @@ const BetHistory = ({}) => {
             {/* Table body - data to be filled dynamically */}
             <tbody>
               {/* Insert rows for lay bets */}
-              <tr>
-                <td>...</td>
-                <td>...</td>
-                <td>...</td>
-                <td>...</td>
-              </tr>
+
+              {openBet
+                .filter((item) => item.type === 'Lay')
+
+                .map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.runnerName}</td>
+                    <td>{item.rate}</td>
+                    <td>{item.value}</td>
+                    <td>
+                      {item.value}(-{item.bidAmount})
+                    </td>{' '}
+                    {/* You need to calculate liability */}
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

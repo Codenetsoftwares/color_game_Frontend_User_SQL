@@ -72,7 +72,7 @@ export async function user_getBetHistory_api(body = {}, isToast = false) {
     const callParams = await getCallParams(strings.GET, body, isToast);
 
     const response = await makeCall(
-      `${urls.userBetHistoryById}/${body.marketId}?page=${body.pageNumber}&limit=${body.dataLimit}`,
+      `${urls.userBetHistoryById}/${body.marketId}?page=${body.pageNumber}&limit=${body.dataLimit}&startDate=${body.startDate}&endDate=${body.endDate}`,
       callParams,
       isToast,
     );
@@ -99,7 +99,6 @@ export async function user_getBackLayData_api(body = {}, isToast = false) {
   console.log(body);
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
-
     const response = await makeCall(`${urls.userBackLayData}/${body.marketId}`, callParams, isToast);
 
     return response;
