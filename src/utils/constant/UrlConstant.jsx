@@ -16,6 +16,9 @@ class UrlConstant {
   betHistory = `${this.url_dev}/${this.user}-betHistory`;
   userWallet = `${this.url_dev}/${this.user}/view-wallet`;
   userBidding = `${this.url_dev}/user-bidding`;
+  profitAndLoss =`${this.url_dev}/profit_loss`;
+  profitAndLossMarket =`${this.url_dev}/profit_loss_market`;
+  profitAndLossRunner =`${this.url_dev}/profit_loss_runner`;
 }
 
 const urls = new UrlConstant();
