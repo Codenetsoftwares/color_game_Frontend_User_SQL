@@ -35,6 +35,23 @@ function GameWithMarketList({ isSingleMarket }) {
     runnerName: '',
   });
 
+  const gameIdFromUrl = useLocation().pathname.split('/')[3];
+  const marketIdFromUrl = useLocation()?.pathname?.split('-')[1]?.split('/')[1];
+
+  useEffect(() => {
+    handleRefreshOrGetInitialData()
+  }, [marketIdFromUrl]);
+
+  function handleRefreshOrGetInitialData() {
+    if (marketIdFromUrl) {
+      user_getMarketsWithRunnerData();
+    } else if (isSingleMarket) {
+      user_getGameWithMarketData();
+    } else {
+      user_getAllGamesWithMarketData();
+    }
+  }
+
   const handleBiddingAmount = (name, value) => {
     setBidding((prevData) => ({
       ...prevData,
@@ -114,8 +131,6 @@ function GameWithMarketList({ isSingleMarket }) {
     });
   };
 
-  const gameIdFromUrl = useLocation().pathname.split('/')[3];
-  const marketIdFromUrl = useLocation()?.pathname?.split('-')[1]?.split('/')[1];
 
   console.log('store', store.placeBidding);
 
@@ -126,15 +141,6 @@ function GameWithMarketList({ isSingleMarket }) {
 
   const winBalance = bidding.amount * (Number(bidding.rate) === 0 ? Number(bidding.rate) : Number(bidding.rate) - 1);
 
-  useEffect(() => {
-    if (marketIdFromUrl) {
-      user_getMarketsWithRunnerData();
-    } else if (isSingleMarket) {
-      user_getGameWithMarketData();
-    } else {
-      user_getAllGamesWithMarketData();
-    }
-  }, [marketIdFromUrl]);
 
   async function user_getMarketsWithRunnerData() {
     const response = await user_getMarketWithRunnerData_api({
@@ -224,6 +230,7 @@ function GameWithMarketList({ isSingleMarket }) {
         }
       })();
     }
+    handleRefreshOrGetInitialData()
   };
 
   function getMarketDetailByMarketId() {
