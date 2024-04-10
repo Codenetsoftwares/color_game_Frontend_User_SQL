@@ -59,8 +59,8 @@ export async function user_getMarketWithRunnerData_api(body = {}, isToast = fals
 export async function changePassword(body = {}, isToast = false) {
   try {
     const callParams = getNoAuthCallParams(strings.GET, body, isToast);
+    const response = await makeCall(urls.changePassword, callParams, isToast);
 
-    const response = await makeCall(`urls.changePassword`, callParams, isToast);
     return response;
   } catch (error) {
     throw error;
@@ -70,12 +70,12 @@ export async function changePassword(body = {}, isToast = false) {
 export async function user_getBetHistory_api(body = {}, isToast = false) {
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
-
     const response = await makeCall(
       `${urls.userBetHistoryById}/${body.marketId}?page=${body.pageNumber}&limit=${body.dataLimit}&startDate=${body.startDate}&endDate=${body.endDate}`,
       callParams,
       isToast,
     );
+
     return response;
   } catch (error) {
     throw error;
@@ -111,40 +111,19 @@ export async function user_getBackLayData_api(body = {}, isToast = false) {
 export async function getDataFromHistoryLandingPage(body = {}, isToast = false) {
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
-
     const response = await makeCall(urls.getDataFromHistoryLandingPage, callParams, isToast);
-    // const response = {
-    //   betHistory: [
-    //     {
-    //       marketId: "65f84911143d9f19ac0ded85",
-    //       marketName: "Blue Vs Yellow",
-    //     },
-    //     {
-    //       marketId: "65f84922143d9f19ac0dee7a",
-    //       marketName: "Red Vs Green",
-    //     },
-    //   ],
-    //   openBet: [
-    //     {
-    //       marketId: "65f8493b143d9f19ac0def75",
-    //       marketName: "White Vs Pink",
-    //     },
-    //     {
-    //       marketId: "65f84911143d9f19ac0ded85",
-    //       marketName: "Blue Vs Yellow",
-    //     },
-    //   ],
-    // };
+
     return response;
   } catch (error) {
     throw error;
   }
 }
 
-export async function userWallet(userId, isToast = false) {
+export async function userWallet(userId, isToast = false, dispatch) {
   try {
     const callParams = await getCallParams(strings.GET, isToast);
     const response = await makeCall(`${urls.userWallet}/${userId}`, callParams);
+
     return response;
   } catch (error) {
     throw error;
@@ -154,7 +133,6 @@ export async function userWallet(userId, isToast = false) {
 export async function userBidding(body = {}, isToast = false) {
   try {
     const callParams = await getCallParams(strings.POST, body, isToast);
-
     const response = await makeCall(urls.userBidding, callParams, isToast);
 
     return response;
@@ -166,50 +144,47 @@ export async function userBidding(body = {}, isToast = false) {
 export async function betHistory(body = {}, isToast = false) {
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
-
     const response = await makeCall(
       `${urls.betHistory}/${body.userId}/${body.gameId}?page=${body.pageNumber}&limit=${body.dataLimit}`,
       callParams,
     );
+
     return response;
   } catch (error) {
     throw error;
   }
 }
 
-export async function profitAndLoss_Api(body = {} , isToast=false){
-  try{
-    const callParams =await getCallParams(strings.GET,body,isToast);
+export async function profitAndLoss_Api(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(`${urls.profitAndLoss}?startDate=${body.startDate}&endDate=${body.endDate}`, callParams, isToast);
 
-    const response = await makeCall (`${urls.profitAndLoss}?startDate=${body.startDate}&endDate=${body.endDate}`, callParams , isToast);
-
-    return response ;
-}catch(error){
-  throw error ;
-}
-}
-
-export async function profitAndLossMarket_Api(body = {} , isToast=false){
-  try{
-    const callParams =await getCallParams(strings.GET,body,isToast);
-
-    const response = await makeCall (`${urls.profitAndLossMarket}/${body.gameId}?startDate=${body.startDate}&endDate=${body.endDate}`, callParams , isToast);
-
-    return response ;
-}catch(error){
-  throw error ;
-}
+    return response;
+  } catch (error) {
+    throw error;
+  }
 }
 
-export async function profitAndLossRunner_Api(body = {} , isToast=false){
-  try{
-    const callParams =await getCallParams(strings.GET,body,isToast);
+export async function profitAndLossMarket_Api(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(`${urls.profitAndLossMarket}/${body.gameId}?startDate=${body.startDate}&endDate=${body.endDate}`, callParams, isToast);
 
-    const response = await makeCall (`${urls.profitAndLossRunner}/${body.marketId}?startDate=${body.startDate}&endDate=${body.endDate}`, callParams , isToast);
-
-    return response ;
-}catch(error){
-  throw error ;
+    return response;
+  } catch (error) {
+    throw error;
+  }
 }
+
+export async function profitAndLossRunner_Api(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(`${urls.profitAndLossRunner}/${body.marketId}?startDate=${body.startDate}&endDate=${body.endDate}`, callParams, isToast);
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
 }
 

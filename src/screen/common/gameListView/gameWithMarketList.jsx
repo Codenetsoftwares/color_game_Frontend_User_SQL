@@ -216,7 +216,7 @@ function GameWithMarketList({ isSingleMarket }) {
     if (response) {
       handleCancel();
       (async () => {
-        const response = await userWallet(store.user.id, true);
+        const response = await userWallet(store.user.id, true, dispatch);
         if (response) {
           dispatch({
             type: strings.UserWallet,
