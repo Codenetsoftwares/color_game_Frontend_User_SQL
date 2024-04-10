@@ -6,6 +6,10 @@ import { useAppContext } from '../../contextApi/context';
 import { betHistory } from '../../utils/apiService';
 import { useLocation } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
+import Datetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
+import moment from "moment";
+import strings from '../../utils/constant/stringConstant';
 
 const loading = () => {
   return (
@@ -18,7 +22,7 @@ const loading = () => {
 };
 
 const History = () => {
-  const { store } = useAppContext();
+  const { dispatch , store } = useAppContext();
 
   console.log('===========>ID line 13', store.user.id);
   const [betHistoryData, setBetHistoryData] = useState([]);
@@ -46,6 +50,10 @@ const History = () => {
   console.log('UserId', userId);
 
   async function getHistoryData() {
+    dispatch({
+      type: strings.isLoading,
+      payload: true,
+    });
     const response = await betHistory({
       userId: store.user.id,
       gameId: gameIdFromstore,
@@ -56,6 +64,11 @@ const History = () => {
       setBetHistoryData(response.data);
       setPaginationData(response.pagination.totalPages);
     }
+
+    dispatch({
+      type: strings.isLoading,
+      payload : false
+    });
   }
 
   useEffect(() => {
@@ -92,6 +105,21 @@ const History = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
+  };
+
+  const defaultStartDate = new Date();
+  const [selected, setSelected] = useState(<Date />);
+  const [dateValue, setDateValue] = useState({
+    startDate: defaultStartDate,
+    endDate: new Date(),
+  });
+  defaultStartDate.setDate(defaultStartDate.getDate() - 1);
+
+  const handleDateValue = (name, value) => {
+    setDateValue((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   // Function to handle search change
@@ -147,12 +175,24 @@ const History = () => {
               <div className="form-group">
                 <label>From:</label>
                 <div className="input-group" style={{ maxWidth: '100%' }}>
-                  <DatePicker
+                  {/* <DatePicker
                     selected={startDate}
                     onChange={(date) => setStartDate(date)}
                     dateFormat="MM/dd/yyyy"
                     className="form-control"
-                  />
+                  /> */}
+                   <Datetime
+                value={dateValue.startDate}
+                name="startDate"
+                dateFormat="DD-MM-YYYY"
+                onChange={(e) =>
+                  handleDateValue(
+                    "startDate",
+                    moment(e).format("DD-MM-YYYY HH:mm")
+                  )
+                }
+                timeFormat="HH:mm"
+              />
                 </div>
               </div>
             </div>
@@ -160,12 +200,18 @@ const History = () => {
               <div className="form-group">
                 <label>To:</label>
                 <div className="input-group" style={{ maxWidth: '100%' }}>
-                  <DatePicker
-                    selected={endDate}
-                    onChange={(date) => setEndDate(date)}
-                    dateFormat="MM/dd/yyyy"
-                    className="form-control"
-                  />
+                    <Datetime
+                value={dateValue.endDate}
+                name="endDate"
+                dateFormat="DD-MM-YYYY"
+                onChange={(e) =>
+                  handleDateValue(
+                    "endDate",
+                    moment(e).format("DD-MM-YYYY HH:mm")
+                  )
+                }
+                timeFormat="HH:mm"
+              />
                 </div>
               </div>
             </div>
