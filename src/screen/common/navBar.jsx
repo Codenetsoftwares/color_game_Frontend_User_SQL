@@ -27,7 +27,7 @@ const NavBar = () => {
   const [showModalLogin, setShowModalLogin] = useState(false);
 
   const { store, dispatch } = useAppContext();
-  console.log("store from navbar", store);
+  console.log('store from navbar', store);
   const userId = store.user?.id;
 
   const accessTokenFromStore = JSON.parse(localStorage.getItem(strings.LOCAL_STORAGE_KEY))?.user?.accessToken;
@@ -61,7 +61,7 @@ const NavBar = () => {
   };
 
   const takeMetoProfitAndLoss = () => {
-    navigate("/profit-loss");
+    navigate('/profit-loss');
   };
 
   const handleBetHistoryClick = () => {
@@ -129,7 +129,7 @@ const NavBar = () => {
                   aria-controls="offcanvasDarkNavbar"
                   aria-label="Toggle navigation"
                 >
-                  <FaCoins style={{ color: "#fec015" }} />
+                  <FaCoins style={{ color: '#fec015' }} />
                   &nbsp; {store?.user?.wallet?.balance}
                 </span>
                 <span

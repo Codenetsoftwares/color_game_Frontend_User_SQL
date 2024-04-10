@@ -24,6 +24,5 @@
 }
 
 button[disabled] {
-	background-color: orange;
+  background-color: orange;
 }
-

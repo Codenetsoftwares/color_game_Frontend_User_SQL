@@ -1,24 +1,24 @@
 export class StringConstants {
-	LOGIN = 'login';
+  LOGIN = 'login';
 
-	//others
-	LOCAL_STORAGE_KEY = 'my_app_state';
-	applicationJSON = { 'Content-Type': 'application/json' };
+  //others
+  LOCAL_STORAGE_KEY = 'my_app_state';
+  applicationJSON = { 'Content-Type': 'application/json' };
 
-	// http methods
-	GET = 'GET';
-	POST = 'POST';
-	PUT = 'PUT';
+  // http methods
+  GET = 'GET';
+  POST = 'POST';
+  PUT = 'PUT';
 
-	// reducer type
+  // reducer type
 
-	LOG_IN = 'LOG_IN';
-	LOG_OUT = 'LOG_OUT';
-	Announcement = 'Announcement';
-	Name = 'Name';
-	placeBidding = 'placeBidding';
-	UserWallet = 'UserWallet';
-  isLoading = "isLoading";
+  LOG_IN = 'LOG_IN';
+  LOG_OUT = 'LOG_OUT';
+  Announcement = 'Announcement';
+  Name = 'Name';
+  placeBidding = 'placeBidding';
+  UserWallet = 'UserWallet';
+  isLoading = 'isLoading';
 }
 
 let strings = new StringConstants();

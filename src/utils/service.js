@@ -24,6 +24,7 @@ export async function getHeaderObject(accessToken, contentType) {
       return {
         ...contentType,
         authorization: `Bearer ${accessToken}`,
+        authorization: `Bearer ${accessToken}`,
       };
     }
     return null;
@@ -39,8 +40,9 @@ export const getCallParams = async (methodType, body) => {
   const params = {
     method: methodType,
     headers: await getHeaderObject(accessToken, strings.applicationJSON),
+    // authorization :`Bearer ${accessToken}`
   };
-  console.log('methodType from getCallParams line 43 ', methodType);
+
   switch (methodType) {
     case 'GET':
       return params;
@@ -70,7 +72,7 @@ export async function makeCall(callName, callParams, isToast) {
       window.location.href = '/home';
     }
     if (json.success === false) {
-      console.log("jsonjsonjsonjsonjsonjson", json)
+      console.log('jsonjsonjsonjsonjsonjson', json);
       toast.error(json.errMessage);
       return null;
     } else if (isToast && (json.success === true || json.code === 200)) {
@@ -89,7 +91,7 @@ export async function makeCall(callName, callParams, isToast) {
     // if (await checkStatus(error)) {
     //   // throw notifiers.LOGGEDOUT;
     // }
-    console.log("errorerrorerror", error)
+    console.log('errorerrorerror', error);
     toast.error(error.message);
     return null;
   }

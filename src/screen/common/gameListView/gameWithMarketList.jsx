@@ -21,6 +21,7 @@ function GameWithMarketList({ isSingleMarket }) {
   const [user_allGamesWithMarketData, setUser_allGamesWithMarketData] = useState([]);
   const [user_gameWithMarketData, setUser_gameWithMarketData] = useState(getGameWithMarketDataInitialState());
   const [user_marketWithRunnerData, setUser_marketWithRunnerData] = useState(getMarketWithRunnerDataInitialState());
+  console.log('============> line 19 game id ', user_gameWithMarketData);
 
   const { store, dispatch } = useAppContext();
   const [gameId, setGameId] = useState('');
@@ -171,7 +172,10 @@ function GameWithMarketList({ isSingleMarket }) {
       return;
     }
 
-    if ((bidding.amount > store.user?.wallet?.balance && !(toggle.mode === "Lay")) || (((Number(bidding.rate) - 1) * bidding.amount) > store.user?.wallet?.balance) && !toggle.mode === "Back") {
+    if (
+      (bidding.amount > store.user?.wallet?.balance && !(toggle.mode === 'Lay')) ||
+      ((Number(bidding.rate) - 1) * bidding.amount > store.user?.wallet?.balance && !toggle.mode === 'Back')
+    ) {
       toast.error('insufficient amount.');
       return;
     }
@@ -194,7 +198,7 @@ function GameWithMarketList({ isSingleMarket }) {
 
     dispatch({
       type: strings.isLoading,
-      payload: false
+      payload: false,
     });
 
     if (response) {

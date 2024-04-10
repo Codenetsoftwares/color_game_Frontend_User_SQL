@@ -245,7 +245,7 @@ const Home = () => {
     return (
       <div className="global-margin-top-logged">
         <AppDrawer showCarousel={true} isMobile={false} isHomePage={true}>
-          <GameWithMarketList isSingleMarket={false}  />
+          <GameWithMarketList isSingleMarket={false} />
         </AppDrawer>
       </div>
     );
