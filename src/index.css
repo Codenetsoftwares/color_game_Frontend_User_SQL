@@ -1,28 +1,28 @@
 .custom-header button {
-  position: absolute;
-  right: 15px;
+	position: absolute;
+	right: 15px;
 }
 .appbody aside {
-  width: auto !important;
-  min-width: auto !important;
+	width: auto !important;
+	min-width: auto !important;
 }
 .modal-header button {
-  position: absolute;
-  right: 24px;
+	position: absolute;
+	right: 24px;
 }
 
 .global-margin-top {
-  margin-top: 125px;
+	margin-top: 125px;
 }
 
 .global-margin-top-logged {
-  margin-top: 95px;
+	margin-top: 95px;
 }
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
-button[disabled] {
+/* button[disabled] {
   background-color: orange;
-}
+} */
