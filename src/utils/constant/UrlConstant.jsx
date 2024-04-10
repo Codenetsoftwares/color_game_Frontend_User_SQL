@@ -13,6 +13,10 @@ class UrlConstant {
   userGameDetailById = `${this.url_dev}/${this.user}-filter-gameData`;
   userMarketDetailById = `${this.url_dev}/${this.user}-filter-marketData`;
   changePassword = `${this.url_dev}/${this.user}/resetpassword`;
+  userBetHistoryById = `${this.url_dev}/${this.user}-betHistory`;
+  userGetOpenBet = `${this.url_dev}/${this.user}-current-market`;
+  userBackLayData = `${this.url_dev}/${this.user}-currentOrderHistory`;
+  getDataFromHistoryLandingPage = `${this.url_dev}/${this.user}-market-data`;
   betHistory = `${this.url_dev}/${this.user}-betHistory`;
   userWallet = `${this.url_dev}/${this.user}/view-wallet`;
   userBidding = `${this.url_dev}/user-bidding`;

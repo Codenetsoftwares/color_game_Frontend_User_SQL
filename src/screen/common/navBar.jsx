@@ -65,7 +65,7 @@ const NavBar = () => {
   };
 
   const handleBetHistoryClick = () => {
-    navigate('/history');
+    navigate('/betHistory');
   };
 
   const handleLogout = () => {

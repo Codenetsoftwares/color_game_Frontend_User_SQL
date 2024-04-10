@@ -244,7 +244,7 @@ const Home = () => {
   function getLoginHomePage() {
     return (
       <div className="global-margin-top-logged">
-        <AppDrawer showCarousel={true} isMobile={false}>
+        <AppDrawer showCarousel={true} isMobile={false} isHomePage={true}>
           <GameWithMarketList isSingleMarket={false} />
         </AppDrawer>
       </div>

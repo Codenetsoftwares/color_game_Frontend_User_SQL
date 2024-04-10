@@ -21,6 +21,7 @@ function GameWithMarketList({ isSingleMarket }) {
   const [user_allGamesWithMarketData, setUser_allGamesWithMarketData] = useState([]);
   const [user_gameWithMarketData, setUser_gameWithMarketData] = useState(getGameWithMarketDataInitialState());
   const [user_marketWithRunnerData, setUser_marketWithRunnerData] = useState(getMarketWithRunnerDataInitialState());
+  console.log('============> line 19 game id ', user_gameWithMarketData);
 
   const { store, dispatch } = useAppContext();
   const [gameId, setGameId] = useState('');
