@@ -131,34 +131,26 @@ const ProfitAndLoss = () => {
   function ProfitLoss() {
     return (
       <>
-        <div
-          className="card p-0 section"
-          style={{ marginTop: "120px", fontWeight: "700", padding: "0px" }}
-        >
+        <div className="card p-0 section" style={{ marginTop: '120px', fontWeight: '700', padding: '0px' }}>
           <span
             className="text-white"
             style={{
-              backgroundColor: "#2CB3D1",
-              display: "block",
-              fontWeight: "700",
-              padding: "0px",
-              textIndent: "5px",
+              backgroundColor: '#2CB3D1',
+              display: 'block',
+              fontWeight: '700',
+              padding: '0px',
+              textIndent: '5px',
             }}
           >
             Profit & Loss Report
           </span>
-          <div className="row" style={{ margin: "10px" }}>
+          <div className="row" style={{ margin: '10px' }}>
             <div className="col-sm-3 col-md-4 col-lg-3">
               <Datetime
                 value={dateValue.startDate}
                 name="startDate"
                 dateFormat="DD-MM-YYYY"
-                onChange={(e) =>
-                  handleDateValue(
-                    "startDate",
-                    moment(e).format("DD-MM-YYYY HH:mm")
-                  )
-                }
+                onChange={(e) => handleDateValue('startDate', moment(e).format('DD-MM-YYYY HH:mm'))}
                 timeFormat="HH:mm"
               />
             </div>
@@ -167,12 +159,7 @@ const ProfitAndLoss = () => {
                 value={dateValue.endDate}
                 name="endDate"
                 dateFormat="DD-MM-YYYY"
-                onChange={(e) =>
-                  handleDateValue(
-                    "endDate",
-                    moment(e).format("DD-MM-YYYY HH:mm")
-                  )
-                }
+                onChange={(e) => handleDateValue('endDate', moment(e).format('DD-MM-YYYY HH:mm'))}
                 timeFormat="HH:mm"
               />
             </div>
@@ -187,7 +174,7 @@ const ProfitAndLoss = () => {
                 </button>
                 <button
                   className="btn btn-secondary"
-                  style={{ backgroundColor: "#2CB3D1", marginLeft: "20px" }}
+                  style={{ backgroundColor: '#2CB3D1', marginLeft: '20px' }}
                   onClick={handleReset}
                 >
                   Reset
@@ -203,11 +190,8 @@ const ProfitAndLoss = () => {
   function ProfitLossData() {
     return (
       <>
-        <div className="card p-0 section" style={{ marginTop: "15px" }}>
-          <div
-            className="table-container overflow-x-scroll"
-            style={{ overflowX: "auto", margin: "10px" }}
-          >
+        <div className="card p-0 section" style={{ marginTop: '15px' }}>
+          <div className="table-container overflow-x-scroll" style={{ overflowX: 'auto', margin: '10px' }}>
             <table className="table table-bordered">
               <thead>
                 <tr>

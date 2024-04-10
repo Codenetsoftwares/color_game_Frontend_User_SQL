@@ -6,9 +6,9 @@ import { useAppContext } from '../../contextApi/context';
 import { betHistory } from '../../utils/apiService';
 import { useLocation } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
-import Datetime from "react-datetime";
-import "react-datetime/css/react-datetime.css";
-import moment from "moment";
+import Datetime from 'react-datetime';
+import 'react-datetime/css/react-datetime.css';
+import moment from 'moment';
 import strings from '../../utils/constant/stringConstant';
 
 const loading = () => {
@@ -22,7 +22,7 @@ const loading = () => {
 };
 
 const History = () => {
-  const { dispatch , store } = useAppContext();
+  const { dispatch, store } = useAppContext();
 
   console.log('===========>ID line 13', store.user.id);
   const [betHistoryData, setBetHistoryData] = useState([]);
@@ -60,14 +60,14 @@ const History = () => {
       pageNumber: currentPage,
       dataLimit: itemsPerPage,
     });
-    if(response) {
+    if (response) {
       setBetHistoryData(response.data);
       setPaginationData(response.pagination.totalPages);
     }
 
     dispatch({
       type: strings.isLoading,
-      payload : false
+      payload: false,
     });
   }
 
@@ -181,18 +181,13 @@ const History = () => {
                     dateFormat="MM/dd/yyyy"
                     className="form-control"
                   /> */}
-                   <Datetime
-                value={dateValue.startDate}
-                name="startDate"
-                dateFormat="DD-MM-YYYY"
-                onChange={(e) =>
-                  handleDateValue(
-                    "startDate",
-                    moment(e).format("DD-MM-YYYY HH:mm")
-                  )
-                }
-                timeFormat="HH:mm"
-              />
+                  <Datetime
+                    value={dateValue.startDate}
+                    name="startDate"
+                    dateFormat="DD-MM-YYYY"
+                    onChange={(e) => handleDateValue('startDate', moment(e).format('DD-MM-YYYY HH:mm'))}
+                    timeFormat="HH:mm"
+                  />
                 </div>
               </div>
             </div>
@@ -200,18 +195,13 @@ const History = () => {
               <div className="form-group">
                 <label>To:</label>
                 <div className="input-group" style={{ maxWidth: '100%' }}>
-                    <Datetime
-                value={dateValue.endDate}
-                name="endDate"
-                dateFormat="DD-MM-YYYY"
-                onChange={(e) =>
-                  handleDateValue(
-                    "endDate",
-                    moment(e).format("DD-MM-YYYY HH:mm")
-                  )
-                }
-                timeFormat="HH:mm"
-              />
+                  <Datetime
+                    value={dateValue.endDate}
+                    name="endDate"
+                    dateFormat="DD-MM-YYYY"
+                    onChange={(e) => handleDateValue('endDate', moment(e).format('DD-MM-YYYY HH:mm'))}
+                    timeFormat="HH:mm"
+                  />
                 </div>
               </div>
             </div>
@@ -365,3 +355,4 @@ const History = () => {
 };
 
 export default History;
+// pagination can be refferred from this page but not to be navigated

@@ -102,3 +102,10 @@ export function getUserPlaceBidding(body = {}) {
     runnerId: body.runnerId ?? '',
   };
 }
+
+export function getbiddingInitialState(body = {}) {
+  return {
+    rate: '',
+    amount: '',
+  };
+}

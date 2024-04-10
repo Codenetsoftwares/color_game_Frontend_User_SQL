@@ -21,6 +21,7 @@ function GameWithMarketList({ isSingleMarket }) {
   const [user_allGamesWithMarketData, setUser_allGamesWithMarketData] = useState([]);
   const [user_gameWithMarketData, setUser_gameWithMarketData] = useState(getGameWithMarketDataInitialState());
   const [user_marketWithRunnerData, setUser_marketWithRunnerData] = useState(getMarketWithRunnerDataInitialState());
+  console.log('============> line 19 game id ', user_gameWithMarketData);
 
   const { store, dispatch } = useAppContext();
   const [gameId, setGameId] = useState('');
@@ -33,6 +34,23 @@ function GameWithMarketList({ isSingleMarket }) {
     stateindex: 0,
     runnerName: '',
   });
+
+  const gameIdFromUrl = useLocation().pathname.split('/')[3];
+  const marketIdFromUrl = useLocation()?.pathname?.split('-')[1]?.split('/')[1];
+
+  useEffect(() => {
+    handleRefreshOrGetInitialData()
+  }, [marketIdFromUrl]);
+
+  function handleRefreshOrGetInitialData() {
+    if (marketIdFromUrl) {
+      user_getMarketsWithRunnerData();
+    } else if (isSingleMarket) {
+      user_getGameWithMarketData();
+    } else {
+      user_getAllGamesWithMarketData();
+    }
+  }
 
   const handleBiddingAmount = (name, value) => {
     setBidding((prevData) => ({
@@ -113,32 +131,27 @@ function GameWithMarketList({ isSingleMarket }) {
     });
   };
 
-  const gameIdFromUrl = useLocation().pathname.split('/')[3];
-  const marketIdFromUrl = useLocation()?.pathname?.split('-')[1]?.split('/')[1];
 
   console.log('store', store.placeBidding);
 
+  // const Number(runnerData.runnerName.bal) = 0;
+  // const Number(runnerData.runnerName.bal)RunnerBlue = 100;
+  // const Number(runnerData.runnerName.bal)Runner2 = 100;
+  console.log('mode', toggle.mode);
+
   const winBalance = bidding.amount * (Number(bidding.rate) === 0 ? Number(bidding.rate) : Number(bidding.rate) - 1);
 
-  useEffect(() => {
-    if (marketIdFromUrl) {
-      user_getMarketsWithRunnerData();
-    } else if (isSingleMarket) {
-      user_getGameWithMarketData();
-    } else {
-      user_getAllGamesWithMarketData();
-    }
-  }, [marketIdFromUrl]);
 
   async function user_getMarketsWithRunnerData() {
     const response = await user_getMarketWithRunnerData_api({
       marketId: marketIdFromUrl,
+      userId: store?.user?.id,
     });
     if (response) {
       setUser_marketWithRunnerData(response.data);
     }
   }
-
+  const temp = 'back';
   async function user_getAllGamesWithMarketData() {
     const response = await user_getAllGamesWithMarketData_api();
     if (response) {
@@ -171,7 +184,10 @@ function GameWithMarketList({ isSingleMarket }) {
       return;
     }
 
-    if ((bidding.amount > store.user?.wallet?.balance && !(toggle.mode === "Lay")) || (((Number(bidding.rate) - 1) * bidding.amount) > store.user?.wallet?.balance) && !toggle.mode === "Back") {
+    if (
+      (bidding.amount > store.user?.wallet?.balance && !(toggle.mode === 'Lay')) ||
+      ((Number(bidding.rate) - 1) * bidding.amount > store.user?.wallet?.balance && !(toggle.mode === 'Back'))
+    ) {
       toast.error('insufficient amount.');
       return;
     }
@@ -194,7 +210,7 @@ function GameWithMarketList({ isSingleMarket }) {
 
     dispatch({
       type: strings.isLoading,
-      payload: false
+      payload: false,
     });
 
     if (response) {
@@ -214,6 +230,7 @@ function GameWithMarketList({ isSingleMarket }) {
         }
       })();
     }
+    handleRefreshOrGetInitialData()
   };
 
   function getMarketDetailByMarketId() {
@@ -246,128 +263,297 @@ function GameWithMarketList({ isSingleMarket }) {
             Lay
           </div>
         </div>
+
         {user_marketWithRunnerData &&
-          user_marketWithRunnerData.runners.map((runnerData) => {
+          user_marketWithRunnerData.runners.map((runnerData, index) => {
+            // Determine if current row should display
+            const shouldDisplayTempLay =
+              toggle.mode === 'Lay' &&
+              toggle.indexNo === runnerData._id &&
+              (winBalance !== 0 || Number(runnerData.runnerName.bal) - Math.round(Math.abs(winBalance)) !== 0);
+
+            const shouldDisplayTempBack =
+              toggle.mode === 'Back' &&
+              toggle.indexNo === runnerData._id &&
+              (winBalance !== 0 || Number(runnerData.runnerName.bal) - Math.round(Math.abs(winBalance)) !== 0);
             return (
               <>
-                <div className="row py-1 px-0 m-0 border">
-                  <span className={`col-4 text-dark text-decoration-none text-nowrap`}>
-                    {runnerData.runnerName.name}{' '}
-                    <span>
-                      {toggle.indexNo === runnerData._id ? (
-                        winBalance === 0 ? (
-                          ''
-                        ) : (
-                          <span className="text-success fw-bold" mx-2>
-                            +{Math.round(Math.abs(winBalance))}
-                          </span>
-                        )
-                      ) : bidding.amount === 0 ? (
-                        ''
-                      ) : (
-                        <span className="text-danger mx-2 fw-bold">-{Math.round(Math.abs(bidding.amount))}</span>
-                      )}
-                    </span>
-                  </span>
-
-                  <div
-                    className="col-4"
-                    style={{ backgroundColor: 'lightblue' }}
-                    onClick={() =>
-                      handleToggle(runnerData._id, runnerData.rate[0].Back, 'Back', runnerData.runnerName.runnerId)
-                    }
-                  >
-                    {runnerData.rate[0].Back}
-                  </div>
-
-                  <div
-                    className="col-4"
-                    style={{ backgroundColor: 'pink' }}
-                    onClick={() =>
-                      handleToggle(runnerData._id, runnerData.rate[0].Lay, 'Lay', runnerData.runnerName.runnerId)
-                    }
-                  >
-                    {runnerData.rate[0].Lay}
-                  </div>
-                </div>
-
-                {toggle.indexNo === runnerData._id && !toggle.toggleOpen && (
-                  <div style={{ background: '#c6e7ee' }}>
-                    <div className="row py-1 px-0 m-0">
-                      <div className="d-none d-sm-block d-md-block d-lg-block d-xl-block col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                        <button
-                          className=" btn btn-sm bg-white border border-2 rounded-3"
-                          onClick={() => handleCancel()}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                      <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                        <button className="col-3 rounded-start-4" style={{ width: '18%', border: '0' }}>
-                          -
-                        </button>
-                        <input className="col-6 " type="number" value={bidding.rate} />
-                        <button className="col-3 rounded-end-3" style={{ width: '18%', border: '0' }}>
-                          +
-                        </button>
-                      </div>
-                      <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                        <button
-                          disabled={bidding.amount == 0 ? ' disabled' : ''}
-                          className={`col-3  rounded-start-3 ${bidding.amount == 0 ? ' disabled' : ''}`}
-                          style={{ width: '18%', border: '0' }}
-                          onClick={() => handleBiddingAmount('amount', bidding.amount - 100)}
-                        >
-                          -
-                        </button>
-                        <input
-                          className="col-6"
-                          type="number"
-                          value={bidding.amount}
-                          onChange={(e) => handleBiddingAmount('amount', e.target.value)}
-                        />
-                        <button
-                          className="col-3 rounded-end-3"
-                          style={{ width: '18%', border: '0' }}
-                          onClick={() => handleBiddingAmount('amount', bidding.amount + 100)}
-                        >
-                          +
-                        </button>
-                      </div>
-                      <div className="d-none d-sm-block d-md-block d-lg-block d-xl-block col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                        <button
-                          className="btn btn-sm bg-white border border-2 rounded-3"
-                          onClick={() => handleUserBidding()}
-                        >
-                          Place Bet
-                        </button>
-                      </div>
-                    </div>
-                    <div className="row py-1 px-0 m-0">{handleBidding()}</div>
-                    <div className="row py-1 px-0 m-0">
-                      <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
-                        <button
-                          className=" btn btn-sm bg-white border border-2 rounded-3 col-12"
-                          onClick={() => handleCancel()}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                      <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
-                        <button
-                          className="btn btn-sm bg-white border border-2 rounded-3 col-12"
-                          onClick={() => handleUserBidding()}
-                        >
-                          Place Bet
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                {/* {console.log(
+                  "testing==>",index,
+                  Number(runnerData.runnerName.bal) -
+                    Math.round(Math.abs(winBalance)) >
+                    0
                 )}
+                {console.log(
+                  "testing1==>",index,
+                  Number(runnerData.runnerName.bal) +
+                    Math.round(Math.abs(winBalance)) >
+                    0
+                )} */}
+                {toggle.mode === 'Lay' ? (
+                  <>
+                    {/* Lay */}
+                    <div className="row py-1 px-0 m-0 border">
+                      <span className={`col-4 text-dark text-decoration-none text-nowrap`}>
+                        {runnerData.runnerName.name}
+                        <span>
+                          {/* Display bidding amount if conditions met */}
+                          {shouldDisplayTempLay && (
+                            <>
+                              {Number(runnerData.runnerName.bal) === 0 ? (
+                                ''
+                              ) : Number(runnerData.runnerName.bal) > 0 ? (
+                                <span className="text-success fw-bold a" mx-2>
+                                  +{Number(runnerData.runnerName.bal)}
+                                </span>
+                              ) : (
+                                <span className="text-danger fw-bold a" mx-2>
+                                  {Number(runnerData.runnerName.bal)}
+                                </span>
+                              )}
+
+                              {Number(runnerData.runnerName.bal) - Math.round(Math.abs(winBalance)) > 0 ? (
+                                <span className=" text-success fw-bold b">
+                                  {bidding.amount != 0 && (
+                                    <span>
+                                      ({Number(runnerData.runnerName.bal) - Math.round(Math.abs(winBalance))})
+                                    </span>
+                                  )}
+                                </span>
+                              ) : (
+                                <span className=" text-danger fw-bold b">
+                                  {bidding.amount != 0 && (
+                                    <span>
+                                      ({Number(runnerData.runnerName.bal) - Math.round(Math.abs(winBalance))})
+                                    </span>
+                                  )}
+                                </span>
+                              )}
+                            </>
+                          )}
+                        </span>
+                        {/* Display hiii only if shouldDisplayTempLay flag is false */}
+                        {!shouldDisplayTempLay && (
+                          <>
+                            {Number(runnerData.runnerName.bal) === 0 ? (
+                              ''
+                            ) : Number(runnerData.runnerName.bal) > 0 ? (
+                              <span className="text-success fw-bold c" mx-2>
+                                {bidding.amount != 0 && runnerData.runnerName.bal}(
+                                {Number(runnerData.runnerName.bal) + Math.round(bidding.amount)})
+                              </span>
+                            ) : (
+                              <span className="text-danger fw-bold c" mx-2>
+                                {bidding.amount != 0 && runnerData.runnerName.bal}
+
+                                <span className="text-success d fw-bold">
+                                  ({Number(runnerData.runnerName.bal) + Math.round(bidding.amount)})
+                                </span>
+                              </span>
+                            )}
+                          </>
+                        )}
+                      </span>
+
+                      <div
+                        className="col-4"
+                        style={{ backgroundColor: 'lightblue' }}
+                        onClick={() =>
+                          handleToggle(runnerData._id, runnerData.rate[0].Back, 'Back', runnerData.runnerName.runnerId)
+                        }
+                        key={index}
+                      >
+                        {runnerData.rate[0].Back}
+                        {console.log('runnerData=>>>>>', runnerData.runnerName.name)}
+                      </div>
+
+                      <div
+                        className="col-4"
+                        style={{ backgroundColor: 'pink' }}
+                        onClick={() =>
+                          handleToggle(runnerData._id, runnerData.rate[0].Lay, 'Lay', runnerData.runnerName.runnerId)
+                        }
+                        key={index}
+                      >
+                        {runnerData.rate[0].Lay}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* Back */}
+                    <div className="row py-1 px-0 m-0 border">
+                      <span className={`col-4 text-dark text-decoration-none text-nowrap`}>
+                        {runnerData.runnerName.name}
+                        <span>
+                          {/* Display bidding amount if conditions met */}
+                          {shouldDisplayTempBack && (
+                            <>
+                              {Number(runnerData.runnerName.bal) === 0 ? (
+                                ''
+                              ) : Number(runnerData.runnerName.bal) > 0 ? (
+                                <span className="text-success fw-bold d" mx-2>
+                                  +{Number(runnerData.runnerName.bal)}
+                                </span>
+                              ) : (
+                                <span className="text-danger fw-bold d" mx-2>
+                                  {Number(runnerData.runnerName.bal)}
+                                </span>
+                              )}
+
+                              {Number(runnerData.runnerName.bal) + Math.round(Math.abs(winBalance)) > 0 ? (
+                                <span className=" text-success  fw-bold">
+                                  {bidding.amount != 0 && (
+                                    <span>
+                                      ({Number(runnerData.runnerName.bal) + Math.round(Math.abs(winBalance))})
+                                    </span>
+                                  )}
+                                </span>
+                              ) : (
+                                <span className=" text-danger fw-bold e">
+                                  {bidding.amount != 0 && (
+                                    <span>
+                                      ({Number(runnerData.runnerName.bal) + Math.round(Math.abs(winBalance))})
+                                    </span>
+                                  )}
+                                </span>
+                              )}
+                            </>
+                          )}
+                        </span>
+                        {/* Display hiii only if shouldDisplayTempLay flag is false */}
+                        {!shouldDisplayTempBack && (
+                          <>
+                            {Number(runnerData.runnerName.bal) === 0 ? (
+                              ''
+                            ) : Number(runnerData.runnerName.bal) > 0 ? (
+                              <span className="text-success  fw-bold" mx-2>
+                                {bidding.amount != 0 && runnerData.runnerName.bal}
+                                <span className={`3 text-${Number(runnerData.runnerName.bal) - Math.round(bidding.amount) > 0 ? 'success' : 'danger'} fw-bold`}>
+                                  ({Number(runnerData.runnerName.bal) - Math.round(bidding.amount)})
+                                </span>
+                              </span>
+                            ) : (
+                              <span className="text-danger fw-bold f" mx-2>
+                                {bidding.amount != 0 && runnerData.runnerName.bal}(
+                                {Number(runnerData.runnerName.bal) - Math.round(bidding.amount)})
+                              </span>
+                            )}
+                          </>
+                        )}
+                      </span>
+
+                      <div
+                        className="col-4"
+                        style={{ backgroundColor: 'lightblue' }}
+                        onClick={() =>
+                          handleToggle(runnerData._id, runnerData.rate[0].Back, 'Back', runnerData.runnerName.runnerId)
+                        }
+                        key={index}
+                      >
+                        {runnerData.rate[0].Back}
+                        {console.log('runnerData=>>>>>', runnerData.runnerName.name)}
+                      </div>
+
+                      <div
+                        className="col-4"
+                        style={{ backgroundColor: 'pink' }}
+                        onClick={() =>
+                          handleToggle(runnerData._id, runnerData.rate[0].Lay, 'Lay', runnerData.runnerName.runnerId)
+                        }
+                        key={index}
+                      >
+                        {runnerData.rate[0].Lay}
+                      </div>
+                    </div>
+                  </>
+                )
+                }
+
+                {
+                  toggle.indexNo === runnerData._id && !toggle.toggleOpen && (
+                    <div style={{ background: '#c6e7ee' }}>
+                      <div className="row py-1 px-0 m-0">
+                        <div className="d-none d-sm-block d-md-block d-lg-block d-xl-block col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                          <button
+                            className=" btn btn-sm bg-white border border-2 rounded-3"
+                            onClick={() => handleCancel()}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                        <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                          <button className="col-3 rounded-start-4" style={{ width: '18%', border: '0' }}>
+                            -
+                          </button>
+                          <input className="col-6 " type="number" value={bidding.rate} />
+                          <button className="col-3 rounded-end-3" style={{ width: '18%', border: '0' }}>
+                            +
+                          </button>
+                        </div>
+                        <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                          <button
+                            disabled={bidding.amount == 0 ? ' disabled' : ''}
+                            className={`col-3  rounded-start-3 `}
+                            style={{ width: '18%', border: '0' }}
+                            onClick={
+                              bidding.amount >= 100
+                                ? () => handleBiddingAmount('amount', Number(bidding.amount) - 100)
+                                : () => handleBiddingAmount('amount', Number(bidding.amount) - Number(bidding.amount))
+                            }
+                          >
+                            -
+                          </button>
+                          <input
+                            className="col-6"
+                            type="number"
+                            value={bidding.amount}
+                            onChange={(e) => handleBiddingAmount('amount', e.target.value)}
+                          />
+                          <button
+                            className="col-3 rounded-end-3"
+                            style={{ width: '18%', border: '0' }}
+                            onClick={() => handleBiddingAmount('amount', Number(bidding.amount) + 100)}
+                          >
+                            +
+                          </button>
+                        </div>
+                        <div className="d-none d-sm-block d-md-block d-lg-block d-xl-block col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                          <button
+                            className="btn btn-sm bg-white border border-2 rounded-3"
+                            onClick={() => handleUserBidding()}
+                          >
+                            Place Bet
+                          </button>
+                        </div>
+                      </div>
+                      <div className="row py-1 px-0 m-0">{handleBidding()}</div>
+                      <div className="row py-1 px-0 m-0">
+                        <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
+                          <button
+                            className=" btn btn-sm bg-white border border-2 rounded-3 col-12"
+                            onClick={() => handleCancel()}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                        <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
+                          <button
+                            className="btn btn-sm bg-white border border-2 rounded-3 col-12"
+                            onClick={() => handleUserBidding()}
+                          >
+                            Place Bet
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                }
               </>
             );
-          })}
-      </div>
+          })
+        }
+      </div >
     );
   }
 

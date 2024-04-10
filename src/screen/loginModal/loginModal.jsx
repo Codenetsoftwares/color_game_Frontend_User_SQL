@@ -52,7 +52,7 @@ function Login({ showLogin, setShowLogin }) {
     }
     dispatch({
       type: strings.isLoading,
-      payload : false
+      payload: false,
     });
   }
 
