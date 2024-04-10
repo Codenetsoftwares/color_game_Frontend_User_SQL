@@ -14,7 +14,7 @@ export async function login(body, isToast = false) {
 }
 
 /*======================
-	user api call
+  user api call
 =======================*/
 export async function user_getAllGames_api(body = {}, isToast = false) {
   try {
@@ -135,6 +135,42 @@ export async function getDataFromHistoryLandingPage(body = {}, isToast = false) 
     //     },
     //   ],
     // };
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function userWallet(userId, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, isToast);
+    const response = await makeCall(`${urls.userWallet}/${userId}`, callParams);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function userBidding(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.POST, body, isToast);
+
+    const response = await makeCall(urls.userBidding, callParams, isToast);
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function betHistory(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+
+    const response = await makeCall(
+      `${urls.betHistory}/${body.userId}/${body.gameId}?page=${body.pageNumber}&limit=${body.dataLimit}`,
+      callParams,
+    );
     return response;
   } catch (error) {
     throw error;

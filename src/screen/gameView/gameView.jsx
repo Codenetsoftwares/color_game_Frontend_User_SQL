@@ -11,7 +11,7 @@ const GameView = () => {
   function gamePage() {
     return (
       <div className={`global-margin-top${store.user.isLogin ? '-logged' : ''}`}>
-        <AppDrawer showCarousel={true} isMobile={false}>
+        <AppDrawer showCarousel={true} isMobile={false} isHomePage={true}>
           <GameWithMarketList isSingleMarket={true} />
         </AppDrawer>
       </div>

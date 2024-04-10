@@ -24,6 +24,7 @@ export async function getHeaderObject(accessToken, contentType) {
       return {
         ...contentType,
         authorization: `Bearer ${accessToken}`,
+        authorization: `Bearer ${accessToken}`,
       };
     }
     return null;
@@ -35,7 +36,7 @@ export async function getHeaderObject(accessToken, contentType) {
 // getNoAuthCallParams private api call
 export const getCallParams = async (methodType, body) => {
   const store = JSON.parse(localStorage.getItem(strings.LOCAL_STORAGE_KEY));
-  const accessToken = store.user.accessToken;
+  const accessToken = store.user?.accessToken;
   const params = {
     method: methodType,
     headers: await getHeaderObject(accessToken, strings.applicationJSON),
@@ -65,7 +66,13 @@ export async function makeCall(callName, callParams, isToast) {
     });
 
     const json = await response.json();
+    if (json.responseCode === 401) {
+      localStorage.clear();
+      sessionStorage.setItem('sessionExpierd', true);
+      window.location.href = '/home';
+    }
     if (json.success === false) {
+      console.log('jsonjsonjsonjsonjsonjson', json);
       toast.error(json.errMessage);
       return null;
     } else if (isToast && (json.success === true || json.code === 200)) {
@@ -78,11 +85,13 @@ export async function makeCall(callName, callParams, isToast) {
     //  else {
     //   throw new Error('Something went wrong');
     // }
+
     return json;
   } catch (error) {
     // if (await checkStatus(error)) {
     //   // throw notifiers.LOGGEDOUT;
     // }
+    console.log('errorerrorerror', error);
     toast.error(error.message);
     return null;
   }

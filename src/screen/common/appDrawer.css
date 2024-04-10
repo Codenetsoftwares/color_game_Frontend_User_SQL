@@ -14,7 +14,9 @@
   color: #034e52;
   position: relative;
   font-weight: 700;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 .sidebar ul li.subMenuItems a {
@@ -23,7 +25,9 @@
   text-decoration: none;
   color: black;
   position: relative;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
   background-color: #adc2c7;
   font-size: small;
   opacity: 50%;
@@ -31,19 +35,15 @@
 }
 
 .sidebar ul li.MenuHead a::after {
-  content: "\2193";
+  content: '\2193';
   position: absolute;
   bottom: 10px;
   right: 10px;
   font-size: 0.8em;
 }
 
-
-
-
-
 .sidebar ul li.subMenuItems a::after {
-  content: " \2192";
+  content: ' \2192';
   position: absolute;
   bottom: 10px;
   right: 10px;
@@ -51,7 +51,7 @@
 }
 
 .sidebar ul li.subMenuHead a::after {
-  content: " \2191";
+  content: ' \2191';
   position: absolute;
   bottom: 10px;
   right: 10px;

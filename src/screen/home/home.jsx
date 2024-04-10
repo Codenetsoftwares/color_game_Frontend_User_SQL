@@ -1,23 +1,23 @@
-import "./home.css";
-import { dSlider, dHitGames, sGif, fFooterI } from "../../utils/dummyData";
-import { useEffect, useState } from "react";
-import HandImg from "../../asset/best_betting_image-removeBg-preview.png";
-import LogoImg from "../../asset/Logo.png";
-import { useAppContext } from "../../contextApi/context";
-import { useLocation, useNavigate } from "react-router-dom";
-import Layout from "../layout/layout";
-import AppDrawer from "../common/appDrawer";
-import GameWithMarketList from "../common/gameListView/gameWithMarketList";
-import spribe from "../../asset/spribe-large.webp";
-import evolution from "../../asset/evolution-gaming_2-removebg-preview.png";
-import betgames from "../../asset/betgames-tv-removebg-preview.png";
-import betsoft from "../../asset/bet_soft-removebg-preview.png";
-import eighteen from "../../asset/+18-removebg-preview.png";
-import evoplay from "../../asset/evoplay-removebg-preview.png";
-import pragmaticpplay from "../../asset/pragmatic-live-casino-removebg-preview.png";
-import zugi from "../../asset/zugi-removebg-preview.png";
-import superspade from "../../asset/SuperSpade-Games-logo-png-removebg-preview.png";
-import Login from "../loginModal/loginModal";
+import './home.css';
+import { dSlider, dHitGames, sGif, fFooterI } from '../../utils/dummyData';
+import { useEffect, useState } from 'react';
+import HandImg from '../../asset/best_betting_image-removeBg-preview.png';
+import LogoImg from '../../asset/Logo.png';
+import { useAppContext } from '../../contextApi/context';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Layout from '../layout/layout';
+import AppDrawer from '../common/appDrawer';
+import GameWithMarketList from '../common/gameListView/gameWithMarketList';
+import spribe from '../../asset/spribe-large.webp';
+import evolution from '../../asset/evolution-gaming_2-removebg-preview.png';
+import betgames from '../../asset/betgames-tv-removebg-preview.png';
+import betsoft from '../../asset/bet_soft-removebg-preview.png';
+import eighteen from '../../asset/+18-removebg-preview.png';
+import evoplay from '../../asset/evoplay-removebg-preview.png';
+import pragmaticpplay from '../../asset/pragmatic-live-casino-removebg-preview.png';
+import zugi from '../../asset/zugi-removebg-preview.png';
+import superspade from '../../asset/SuperSpade-Games-logo-png-removebg-preview.png';
+import Login from '../loginModal/loginModal';
 
 const Home = () => {
   const [sliderData, setSliderData] = useState(dSlider);
@@ -29,6 +29,9 @@ const Home = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
   const [selectedFooterImage, setSelectedFooterImage] = useState(null);
+
+  const isSessionExpired = sessionStorage?.getItem('sessionExpierd');
+  console.log('sessionExpierd', isSessionExpired);
 
   // Function to handle click on game image
   const handleGameClick = (game) => {
@@ -58,17 +61,20 @@ const Home = () => {
   const { store } = useAppContext();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (location.pathname === "/") navigate("/home");
-  }, []);
+  // useEffect(() => {
+  //   if (location.pathname === '/') navigate('/home');
+  // }, []);
+
+  // useEffect(() => {
+  //   if (isSessionExpired) {
+  //     handleGameClick();
+  //     sessionStorage.clear();
+  //   }
+  // }, []);
 
   function carrousel() {
     return (
-      <div
-        id="carouselExampleCaptions"
-        className="carousel slide"
-        data-bs-ride="carousel"
-      >
+      <div id="carouselExampleCaptions" className="carousel slide" data-bs-ride="carousel">
         <div className="carousel-indicators">
           {sliderData.map((item, index) => (
             <button
@@ -76,23 +82,16 @@ const Home = () => {
               type="button"
               data-bs-target="#carouselExampleCaptions"
               data-bs-slide-to={index}
-              className={index === 0 ? "active" : ""}
-              aria-current={index === 0 ? "true" : "false"}
+              className={index === 0 ? 'active' : ''}
+              aria-current={index === 0 ? 'true' : 'false'}
               aria-label={`Slide ${index + 1}`}
             />
           ))}
         </div>
         <div className="carousel-inner">
           {sliderData.map((item, index) => (
-            <div
-              key={index}
-              className={`carousel-item ${index === 0 ? "active" : ""}`}
-            >
-              <img
-                src={item.image}
-                className="d-block w-100"
-                alt={`Slide ${index + 1}`}
-              />
+            <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
+              <img src={item.image} className="d-block w-100" alt={`Slide ${index + 1}`} />
             </div>
           ))}
         </div>
@@ -124,16 +123,12 @@ const Home = () => {
         <br />
         <div className="card-deck">
           {hitGameData.map((item, index) => (
-            <div
-              className="card rounded-lg"
-              key={index}
-              onClick={() => handleGameClick(item)}
-            >
+            <div className="card rounded-lg" key={index} onClick={() => handleGameClick(item)}>
               <img
                 src={item.image}
                 className="card-img-top rounded"
                 alt={`Card ${index}`}
-                style={{ cursor: "pointer" }}
+                style={{ cursor: 'pointer' }}
               />
             </div>
           ))}
@@ -146,16 +141,13 @@ const Home = () => {
     return (
       <div className="row m-0">
         {gifData.map((item, index) => (
-          <div
-            className={`col-sm-6 p-0 ${index != 0 ? "ps-md-3" : ""}`}
-            key={index}
-          >
+          <div className={`col-sm-6 p-0 ${index != 0 ? 'ps-md-3' : ''}`} key={index}>
             <div className="card">
               <img
                 src={item.image}
                 className="card-img-top"
                 alt={`Gif ${index}`}
-                style={{ maxHeight: "200px", objectFit: "cover" }}
+                style={{ maxHeight: '200px', objectFit: 'cover' }}
               />
             </div>
           </div>
@@ -171,10 +163,10 @@ const Home = () => {
         <div
           className="1-app"
           style={{
-            backgroundColor: "#080F1C",
-            color: "white",
-            paddingTop: "50px",
-            paddingBottom: "50px",
+            backgroundColor: '#080F1C',
+            color: 'white',
+            paddingTop: '50px',
+            paddingBottom: '50px',
           }}
         >
           <div className="container">
@@ -184,9 +176,9 @@ const Home = () => {
                   src={HandImg}
                   alt="Betting Logo"
                   style={{
-                    maxWidth: "100%",
-                    height: "auto",
-                    marginBottom: "20px",
+                    maxWidth: '100%',
+                    height: 'auto',
+                    marginBottom: '20px',
                   }}
                 />
               </div>
@@ -195,17 +187,14 @@ const Home = () => {
                   src={LogoImg}
                   alt="App Logo"
                   style={{
-                    width: "100%",
-                    maxWidth: "200px",
-                    marginBottom: "30px",
+                    width: '100%',
+                    maxWidth: '200px',
+                    marginBottom: '30px',
                   }}
                 />
-                <h2 style={{ color: "#FFD700", marginBottom: "20px" }}>
-                  Get in on the Action!
-                </h2>
-                <p style={{ marginBottom: "30px" }}>
-                  Download our app now and enjoy the excitement of betting
-                  anytime, anywhere!
+                <h2 style={{ color: '#FFD700', marginBottom: '20px' }}>Get in on the Action!</h2>
+                <p style={{ marginBottom: '30px' }}>
+                  Download our app now and enjoy the excitement of betting anytime, anywhere!
                 </p>
                 <button className="btn btn-warning btn-lg">Download Now</button>
               </div>
@@ -243,9 +232,8 @@ const Home = () => {
           </div>
           <div className="text-center">
             <p className="text-white fs-6">
-              You must be over 18 years old, or the legal age at which gambling
-              or gaming activities are allowed under the law or jurisdiction
-              that applies to you.
+              You must be over 18 years old, or the legal age at which gambling or gaming activities are allowed under
+              the law or jurisdiction that applies to you.
             </p>
           </div>
         </div>
@@ -256,7 +244,7 @@ const Home = () => {
   function getLoginHomePage() {
     return (
       <div className="global-margin-top-logged">
-        <AppDrawer showCarousel={true} isMobile={false}>
+        <AppDrawer showCarousel={true} isMobile={false} isHomePage={true}>
           <GameWithMarketList isSingleMarket={false} />
         </AppDrawer>
       </div>

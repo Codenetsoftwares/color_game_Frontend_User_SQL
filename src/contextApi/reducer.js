@@ -1,5 +1,5 @@
 import strings from '../utils/constant/stringConstant';
-import { getUserInitialState } from '../utils/getInitiateState';
+import { getUserInitialState, getUserPlaceBidding, getUserWalletInitialState } from '../utils/getInitiateState';
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -21,6 +21,30 @@ export const reducer = (state, action) => {
       return {
         ...state,
         announcement: action.payload,
+      };
+
+    case strings.UserWallet:
+      return {
+        ...state,
+        user: getUserInitialState({
+          ...state.user,
+          wallet: action.payload,
+        }),
+      };
+
+    case strings.placeBidding:
+      return {
+        ...state,
+        placeBidding: getUserPlaceBidding({
+          ...state.placeBidding,
+          ...action.payload,
+        }),
+      };
+
+    case strings.isLoading:
+      return {
+        ...state,
+        isLoading: action?.payload ? [...state?.isLoading, true] : state?.isLoading?.slice(0, -1),
       };
 
     default:

@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Logo from '../../asset/Logo.png';
 import { useAppContext } from '../../contextApi/context';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-
 import {
   FaCoins,
   FaUser,
@@ -21,12 +20,37 @@ import { toast } from 'react-toastify';
 import ansmt from '../../asset/ancmntv.png';
 import AppDrawer from './appDrawer';
 import HamburgerNavBar from './hamburgerNavBar';
+import { userWallet } from '../../utils/apiService';
 
 const NavBar = () => {
   const navigate = useNavigate();
   const [showModalLogin, setShowModalLogin] = useState(false);
 
   const { store, dispatch } = useAppContext();
+  console.log('store from navbar', store);
+  const userId = store.user?.id;
+
+  const accessTokenFromStore = JSON.parse(localStorage.getItem(strings.LOCAL_STORAGE_KEY))?.user?.accessToken;
+  useEffect(() => {
+    if (userId && accessTokenFromStore) {
+      handleUserWallet();
+    }
+  }, [userId, accessTokenFromStore]);
+
+  const handleUserWallet = async () => {
+    console.log('userId', userId);
+    const response = await userWallet(userId, true);
+    console.log(' response wallet=>>>>', response);
+    if (response) {
+      dispatch({
+        type: strings.UserWallet,
+        payload: {
+          ...response.data,
+        },
+      });
+      console.log(response);
+    }
+  };
 
   const handlePasswordChangeClick = () => {
     navigate('/forgetPassword');
@@ -36,8 +60,12 @@ const NavBar = () => {
     navigate('/rulesPage');
   };
 
+  const takeMetoProfitAndLoss = () => {
+    navigate('/profit-loss');
+  };
+
   const handleBetHistoryClick = () => {
-    navigate('/betHistory/:userId/:gameId');
+    navigate('/history');
   };
 
   const handleLogout = () => {
@@ -102,7 +130,7 @@ const NavBar = () => {
                   aria-label="Toggle navigation"
                 >
                   <FaCoins style={{ color: '#fec015' }} />
-                  &nbsp; 0.00
+                  &nbsp; {store?.user?.wallet?.balance}
                 </span>
                 <span
                   className="btn btn-info w-100 d-flex align-items-center text-white border border-white"
@@ -116,7 +144,7 @@ const NavBar = () => {
                   aria-controls="offcanvasDarkNavbar"
                   aria-label="Toggle navigation"
                 >
-                  Exp : 0.00
+                  Exp : {store?.user?.wallet?.exposure}
                 </span>
               </span>
             ) : (
@@ -158,7 +186,7 @@ const NavBar = () => {
                 }}
               />
               &nbsp;&nbsp;
-              {store.user.userName} - (0.00)
+              {store.user?.userName} - ({store?.user?.wallet?.balance})
             </h6>
             <button
               type="button"
@@ -180,7 +208,7 @@ const NavBar = () => {
                       background: '#2FA8BA',
                     }}
                   >
-                    Exposure 0.00
+                    Exposure {store.user?.wallet?.exposure}
                   </span>
                   <span
                     type="button"
@@ -191,7 +219,7 @@ const NavBar = () => {
                       background: '#2FA8BA',
                     }}
                   >
-                    P&L 0.00
+                    P&L {store.user?.wallet?.profit_loss}
                   </span>
                 </span>
               </li>
@@ -200,6 +228,7 @@ const NavBar = () => {
                 class="nav-item mb-3 align-items-start text-start"
                 style={{
                   color: 'white', // Initial color
+                  cursor: 'pointer',
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.color = '#2FA8BA'; // Color change on hover
@@ -219,6 +248,7 @@ const NavBar = () => {
                 class="nav-item mb-3 align-items-start"
                 style={{
                   color: 'white', // Initial color
+                  cursor: 'pointer',
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.color = '#2FA8BA'; // Color change on hover
@@ -239,6 +269,7 @@ const NavBar = () => {
                 class="nav-item mb-3 align-items-start"
                 style={{
                   color: 'white', // Initial color
+                  cursor: 'pointer',
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.color = '#2FA8BA'; // Color change on hover
@@ -258,6 +289,7 @@ const NavBar = () => {
                 class="nav-item mb-3 align-items-start"
                 style={{
                   color: 'white', // Initial color
+                  cursor: 'pointer',
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.color = '#2FA8BA'; // Color change on hover
@@ -265,6 +297,7 @@ const NavBar = () => {
                 onMouseOut={(e) => {
                   e.currentTarget.style.color = 'white'; // Color back to original on mouse out
                 }}
+                onClick={takeMetoProfitAndLoss}
               >
                 <FaChartLine
                   style={{
@@ -274,10 +307,11 @@ const NavBar = () => {
                 Profit & Loss
               </li>
               <li
-                onClick={handleBetHistoryClick}
                 class="nav-item mb-3 align-items-start"
+                onClick={handleBetHistoryClick}
                 style={{
                   color: 'white', // Initial color
+                  cursor: 'pointer',
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.color = '#2FA8BA'; // Color change on hover
@@ -298,6 +332,7 @@ const NavBar = () => {
                 class="nav-item mb-3 align-items-start"
                 style={{
                   color: 'white', // Initial color
+                  cursor: 'pointer',
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.color = '#2FA8BA'; // Color change on hover
@@ -319,6 +354,7 @@ const NavBar = () => {
                 class="nav-item mb-3 align-items-start text-start"
                 style={{
                   color: 'white', // Initial color
+                  cursor: 'pointer',
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.color = '#2FA8BA'; // Color change on hover
@@ -339,6 +375,7 @@ const NavBar = () => {
                 class="nav-item mb-3 align-items-start"
                 style={{
                   color: 'white', // Initial color
+                  cursor: 'pointer',
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.color = '#2FA8BA'; // Color change on hover

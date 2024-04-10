@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { login } from '../../utils/apiService';
+import { login, userWallet } from '../../utils/apiService';
 import { useAppContext } from '../../contextApi/context';
 import strings from '../../utils/constant/stringConstant';
 import { useFormik } from 'formik';
@@ -10,7 +10,7 @@ import './loginModal.css';
 function Login({ showLogin, setShowLogin }) {
   const [loginCred, setLoginCred] = useState(setInitialValues());
 
-  const { dispatch } = useAppContext();
+  const { dispatch, store } = useAppContext();
 
   useEffect(() => {
     if (!showLogin) {
@@ -36,14 +36,13 @@ function Login({ showLogin, setShowLogin }) {
     enableReinitialize: true,
   });
 
-  useEffect(() => {
-    if (!showLogin) {
-      resetForm();
-    }
-  }, [showLogin]);
-
   async function loginHandler(values) {
+    dispatch({
+      type: strings.isLoading,
+      payload: true,
+    });
     const response = await login(values, true);
+    console.log('res from login', response);
     if (response) {
       dispatch({
         type: strings.LOG_IN,
@@ -51,6 +50,10 @@ function Login({ showLogin, setShowLogin }) {
       });
       setShowLogin(!showLogin);
     }
+    dispatch({
+      type: strings.isLoading,
+      payload: false,
+    });
   }
 
   function header() {

@@ -17,6 +17,9 @@ class UrlConstant {
   userGetOpenBet = `${this.url_dev}/${this.user}-current-market`;
   userBackLayData = `${this.url_dev}/${this.user}-currentOrderHistory`;
   getDataFromHistoryLandingPage = `${this.url_dev}/${this.user}-market-data`;
+  betHistory = `${this.url_dev}/${this.user}-betHistory`;
+  userWallet = `${this.url_dev}/${this.user}/view-wallet`;
+  userBidding = `${this.url_dev}/user-bidding`;
 }
 
 const urls = new UrlConstant();
