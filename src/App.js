@@ -13,7 +13,6 @@ import HamburgerNavBar from './screen/common/hamburgerNavBar';
 import BetHistory from './screen/history/BetHistory';
 import ProfitAndLoss from './screen/profitAndLoss/profitAndLoss';
 import Loading from './globlaCommon/loading';
-// import History from './screen/common/history';
 
 function App() {
   return (
@@ -63,14 +62,6 @@ function App() {
               </PrivateRoute>
             }
           />
-          {/* <Route
-            path="/history"
-            element={
-              <PrivateRoute>
-                <History />
-              </PrivateRoute>
-            }
-          /> */}
 
           <Route
             path="/profit-loss"
