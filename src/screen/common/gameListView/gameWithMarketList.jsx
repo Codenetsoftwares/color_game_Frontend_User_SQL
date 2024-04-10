@@ -300,17 +300,17 @@ function GameWithMarketList({ isSingleMarket }) {
                           {/* Display bidding amount if conditions met */}
                           {shouldDisplayTempLay && (
                             <>
-                              {Number(runnerData.runnerName.bal) === 0 ? (
+                              {Number(runnerData.runnerName.bal) === 0 && !bidding.amount ? (
                                 ''
                               ) : Number(runnerData.runnerName.bal) > 0 ? (
                                 <span className="text-success fw-bold a" mx-2>
                                   +{Number(runnerData.runnerName.bal)}
                                 </span>
-                              ) : (
-                                <span className="text-danger fw-bold a" mx-2>
+                              ) : (<>
+                                {runnerData.runnerName.bal != 0 && <span className="text-danger fw-bold a" mx-2>
                                   {Number(runnerData.runnerName.bal)}
-                                </span>
-                              )}
+                                </span>}
+                              </>)}
 
                               {Number(runnerData.runnerName.bal) - Math.round(Math.abs(winBalance)) > 0 ? (
                                 <span className=" text-success fw-bold b">
@@ -335,7 +335,7 @@ function GameWithMarketList({ isSingleMarket }) {
                         {/* Display hiii only if shouldDisplayTempLay flag is false */}
                         {!shouldDisplayTempLay && (
                           <>
-                            {Number(runnerData.runnerName.bal) === 0 ? (
+                            {Number(runnerData.runnerName.bal) === 0 && !bidding.amount ? (
                               ''
                             ) : Number(runnerData.runnerName.bal) > 0 ? (
                               <span className="text-success fw-bold c" mx-2>
@@ -344,7 +344,7 @@ function GameWithMarketList({ isSingleMarket }) {
                               </span>
                             ) : (
                               <span className="text-danger fw-bold c" mx-2>
-                                {bidding.amount != 0 && runnerData.runnerName.bal}
+                                {runnerData.runnerName.bal != 0 && bidding.amount != 0 && runnerData.runnerName.bal}
 
                                 <span className="text-success d fw-bold">
                                   ({Number(runnerData.runnerName.bal) + Math.round(bidding.amount)})
@@ -389,17 +389,17 @@ function GameWithMarketList({ isSingleMarket }) {
                           {/* Display bidding amount if conditions met */}
                           {shouldDisplayTempBack && (
                             <>
-                              {Number(runnerData.runnerName.bal) === 0 ? (
+                              {Number(runnerData.runnerName.bal) && !bidding.amount ? (
                                 ''
                               ) : Number(runnerData.runnerName.bal) > 0 ? (
                                 <span className="text-success fw-bold d" mx-2>
                                   +{Number(runnerData.runnerName.bal)}
                                 </span>
-                              ) : (
-                                <span className="text-danger fw-bold d" mx-2>
+                              ) : (<>
+                                {runnerData.runnerName.bal != 0 && <span className="text-danger fw-bold d" mx-2>
                                   {Number(runnerData.runnerName.bal)}
-                                </span>
-                              )}
+                                </span>}
+                              </>)}
 
                               {Number(runnerData.runnerName.bal) + Math.round(Math.abs(winBalance)) > 0 ? (
                                 <span className=" text-success  fw-bold">
@@ -424,7 +424,7 @@ function GameWithMarketList({ isSingleMarket }) {
                         {/* Display hiii only if shouldDisplayTempLay flag is false */}
                         {!shouldDisplayTempBack && (
                           <>
-                            {Number(runnerData.runnerName.bal) === 0 ? (
+                            {Number(runnerData.runnerName.bal) === 0 && !bidding.amount ? (
                               ''
                             ) : Number(runnerData.runnerName.bal) > 0 ? (
                               <span className="text-success  fw-bold" mx-2>
@@ -435,7 +435,7 @@ function GameWithMarketList({ isSingleMarket }) {
                               </span>
                             ) : (
                               <span className="text-danger fw-bold f" mx-2>
-                                {bidding.amount != 0 && runnerData.runnerName.bal}(
+                                {runnerData.runnerName.bal != 0 && bidding.amount != 0 && runnerData.runnerName.bal}(
                                 {Number(runnerData.runnerName.bal) - Math.round(bidding.amount)})
                               </span>
                             )}
