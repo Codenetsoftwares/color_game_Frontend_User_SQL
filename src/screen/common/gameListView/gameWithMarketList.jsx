@@ -138,6 +138,7 @@ function GameWithMarketList({ isSingleMarket }) {
   async function user_getMarketsWithRunnerData() {
     const response = await user_getMarketWithRunnerData_api({
       marketId: marketIdFromUrl,
+      userId: store?.user?.id,
     });
     if (response) {
       setUser_marketWithRunnerData(response.data);
@@ -286,7 +287,7 @@ function GameWithMarketList({ isSingleMarket }) {
                     {/* Lay */}
                     <div className="row py-1 px-0 m-0 border">
                       <span className={`col-4 text-dark text-decoration-none text-nowrap`}>
-                        {runnerData.runnerName.name}{' '}
+                        {runnerData.runnerName.name}
                         <span>
                           {/* Display bidding amount if conditions met */}
                           {shouldDisplayTempLay && (
@@ -334,9 +335,12 @@ function GameWithMarketList({ isSingleMarket }) {
                                 {Number(runnerData.runnerName.bal) + Math.round(bidding.amount)})
                               </span>
                             ) : (
-                              <span className="text-danger fw-bold" mx-2>
-                                {bidding.amount != 0 && runnerData.runnerName.bal}(
-                                {Number(runnerData.runnerName.bal) + Math.round(bidding.amount)})
+                              <span className="text-danger fw-bold " mx-2>
+                                {bidding.amount != 0 && runnerData.runnerName.bal}
+
+                                <span className="text-success d fw-bold">
+                                  ({Number(runnerData.runnerName.bal) + Math.round(bidding.amount)})
+                                </span>
                               </span>
                             )}
                           </>
@@ -372,7 +376,7 @@ function GameWithMarketList({ isSingleMarket }) {
                     {/* Back */}
                     <div className="row py-1 px-0 m-0 border">
                       <span className={`col-4 text-dark text-decoration-none text-nowrap`}>
-                        {runnerData.runnerName.name}{' '}
+                        {runnerData.runnerName.name}
                         <span>
                           {/* Display bidding amount if conditions met */}
                           {shouldDisplayTempBack && (
@@ -415,9 +419,11 @@ function GameWithMarketList({ isSingleMarket }) {
                             {Number(runnerData.runnerName.bal) === 0 ? (
                               ''
                             ) : Number(runnerData.runnerName.bal) > 0 ? (
-                              <span className="text-success fw-bold" mx-2>
-                                {bidding.amount != 0 && runnerData.runnerName.bal}(
-                                {Number(runnerData.runnerName.bal) - Math.round(bidding.amount)})
+                              <span className="text-success  fw-bold" mx-2>
+                                {bidding.amount != 0 && runnerData.runnerName.bal}
+                                <span className="text-danger  fw-bold">
+                                  ({Number(runnerData.runnerName.bal) - Math.round(bidding.amount)})
+                                </span>
                               </span>
                             ) : (
                               <span className="text-danger fw-bold" mx-2>
