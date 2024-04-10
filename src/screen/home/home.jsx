@@ -18,7 +18,7 @@ import pragmaticpplay from '../../asset/pragmatic-live-casino-removebg-preview.p
 import zugi from '../../asset/zugi-removebg-preview.png';
 import superspade from '../../asset/SuperSpade-Games-logo-png-removebg-preview.png';
 import Login from '../loginModal/loginModal';
-
+import AOS from 'aos';
 const Home = () => {
   const [sliderData, setSliderData] = useState(dSlider);
   const [hitGameData, setHitGameData] = useState(dHitGames);
@@ -60,6 +60,9 @@ const Home = () => {
   const location = useLocation();
   const { store } = useAppContext();
   const navigate = useNavigate();
+  useEffect(() => {
+    AOS.init();
+  }, []);
 
   // useEffect(() => {
   //   if (location.pathname === '/') navigate('/home');
