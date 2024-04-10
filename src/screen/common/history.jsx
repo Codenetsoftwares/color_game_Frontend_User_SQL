@@ -355,4 +355,4 @@ const History = () => {
 };
 
 export default History;
-// pagination code can reffer 
+// pagination can be refferred from this page but not to be navigated
