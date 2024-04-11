@@ -158,7 +158,11 @@ export async function betHistory(body = {}, isToast = false) {
 export async function profitAndLoss_Api(body = {}, isToast = false) {
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
-    const response = await makeCall(`${urls.profitAndLoss}?startDate=${body.startDate}&endDate=${body.endDate}`, callParams, isToast);
+    const response = await makeCall(
+      `${urls.profitAndLoss}?startDate=${body.startDate}&endDate=${body.endDate}`,
+      callParams,
+      isToast,
+    );
 
     return response;
   } catch (error) {
@@ -169,7 +173,11 @@ export async function profitAndLoss_Api(body = {}, isToast = false) {
 export async function profitAndLossMarket_Api(body = {}, isToast = false) {
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
-    const response = await makeCall(`${urls.profitAndLossMarket}/${body.gameId}?startDate=${body.startDate}&endDate=${body.endDate}`, callParams, isToast);
+    const response = await makeCall(
+      `${urls.profitAndLossMarket}/${body.gameId}?startDate=${body.startDate}&endDate=${body.endDate}`,
+      callParams,
+      isToast,
+    );
 
     return response;
   } catch (error) {
@@ -180,11 +188,14 @@ export async function profitAndLossMarket_Api(body = {}, isToast = false) {
 export async function profitAndLossRunner_Api(body = {}, isToast = false) {
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
-    const response = await makeCall(`${urls.profitAndLossRunner}/${body.marketId}?startDate=${body.startDate}&endDate=${body.endDate}`, callParams, isToast);
+    const response = await makeCall(
+      `${urls.profitAndLossRunner}/${body.marketId}?startDate=${body.startDate}&endDate=${body.endDate}`,
+      callParams,
+      isToast,
+    );
 
     return response;
   } catch (error) {
     throw error;
   }
 }
-

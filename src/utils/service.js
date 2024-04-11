@@ -2,7 +2,6 @@ import { toast } from 'react-toastify';
 import urls from '../utils/constant/UrlConstant';
 import strings from '../utils/constant/stringConstant';
 
-
 export function getNoAuthCallParams(methodType, body) {
   const params = {
     method: methodType,

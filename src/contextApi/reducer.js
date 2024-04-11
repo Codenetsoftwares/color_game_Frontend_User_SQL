@@ -47,7 +47,6 @@ export const reducer = (state, action) => {
         isLoading: action?.payload ? [...state?.isLoading, true] : state?.isLoading?.slice(0, -1),
       };
 
-
     default:
       return state;
   }

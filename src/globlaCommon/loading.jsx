@@ -11,7 +11,7 @@ const Loading = () => {
           className="d-flex justify-content-center"
           style={{
             height: '100vh',
-            opacity: .8,
+            opacity: 0.8,
             position: 'fixed',
             top: 0,
             zIndex: 1000000,

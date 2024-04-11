@@ -16,12 +16,13 @@ import biddingButton from '../../../utils/constant/biddingButton';
 import { useAppContext } from '../../../contextApi/context';
 import strings from '../../../utils/constant/stringConstant';
 import { toast } from 'react-toastify';
-import Login from '../../loginModal/loginModal'
+import Login from '../../loginModal/loginModal';
 
 function GameWithMarketList({ isSingleMarket }) {
   const [user_allGamesWithMarketData, setUser_allGamesWithMarketData] = useState([]);
   const [user_gameWithMarketData, setUser_gameWithMarketData] = useState(getGameWithMarketDataInitialState());
   const [user_marketWithRunnerData, setUser_marketWithRunnerData] = useState(getMarketWithRunnerDataInitialState());
+  const [preExposure, setPreExposure] = useState(0);
   console.log('============> line 19 game id ', user_gameWithMarketData);
 
   const { store, dispatch } = useAppContext();
@@ -40,7 +41,7 @@ function GameWithMarketList({ isSingleMarket }) {
   const marketIdFromUrl = useLocation()?.pathname?.split('-')[1]?.split('/')[1];
 
   useEffect(() => {
-    handleRefreshOrGetInitialData()
+    handleRefreshOrGetInitialData();
   }, [marketIdFromUrl]);
 
   function handleRefreshOrGetInitialData() {
@@ -132,7 +133,6 @@ function GameWithMarketList({ isSingleMarket }) {
     });
   };
 
-
   console.log('store', store.placeBidding);
 
   // const Number(runnerData.runnerName.bal) = 0;
@@ -140,8 +140,21 @@ function GameWithMarketList({ isSingleMarket }) {
   // const Number(runnerData.runnerName.bal)Runner2 = 100;
   console.log('mode', toggle.mode);
 
-  const winBalance = bidding.amount * (Number(bidding.rate) === 0 ? Number(bidding.rate) : Number(bidding.rate) - 1);
+  function getMaxNegativeBalance(runners) {
+    debugger;
+    let maxNegativeRunner = 0;
 
+    // Iterate through the runners
+    runners.forEach((runner) => {
+      if (runner.runnerName.bal < maxNegativeRunner) {
+        maxNegativeRunner = runner.runnerName.bal;
+      }
+    });
+    debugger;
+    return maxNegativeRunner;
+  }
+
+  const winBalance = bidding.amount * (Number(bidding.rate) === 0 ? Number(bidding.rate) : Number(bidding.rate) - 1);
 
   async function user_getMarketsWithRunnerData() {
     dispatch({
@@ -157,6 +170,9 @@ function GameWithMarketList({ isSingleMarket }) {
       payload: false,
     });
     if (response) {
+      console.log('response===>', response.data);
+      const preMaxExposure = getMaxNegativeBalance(response.data.runners);
+      setPreExposure(preMaxExposure);
       setUser_marketWithRunnerData(response.data);
     }
   }
@@ -178,8 +194,8 @@ function GameWithMarketList({ isSingleMarket }) {
 
   const handleUserBidding = async () => {
     if (!store.user.isLogin) {
-      setLoginModal(true)
-      return
+      setLoginModal(true);
+      return;
     }
     if (bidding.amount == 0 || bidding.amount < 0 || bidding.amount == '') {
       if (bidding.amount == 0) {
@@ -205,6 +221,7 @@ function GameWithMarketList({ isSingleMarket }) {
       runnerId: store.placeBidding.runnerId,
       value: bidding.amount,
       bidType: toggle.mode,
+      preExposure: preExposure,
     };
 
     dispatch({
@@ -244,7 +261,7 @@ function GameWithMarketList({ isSingleMarket }) {
       })();
     }
     handleCancel();
-    handleRefreshOrGetInitialData()
+    handleRefreshOrGetInitialData();
   };
 
   function getMarketDetailByMarketId() {
@@ -320,11 +337,15 @@ function GameWithMarketList({ isSingleMarket }) {
                                 <span className="text-success fw-bold a" mx-2>
                                   +{Number(runnerData.runnerName.bal)}
                                 </span>
-                              ) : (<>
-                                {runnerData.runnerName.bal != 0 && <span className="text-danger fw-bold a" mx-2>
-                                  {Number(runnerData.runnerName.bal)}
-                                </span>}
-                              </>)}
+                              ) : (
+                                <>
+                                  {runnerData.runnerName.bal != 0 && (
+                                    <span className="text-danger fw-bold a" mx-2>
+                                      {Number(runnerData.runnerName.bal)}
+                                    </span>
+                                  )}
+                                </>
+                              )}
 
                               {Number(runnerData.runnerName.bal) - Math.round(Math.abs(winBalance)) > 0 ? (
                                 <span className=" text-success fw-bold b">
@@ -409,11 +430,15 @@ function GameWithMarketList({ isSingleMarket }) {
                                 <span className="text-success fw-bold d" mx-2>
                                   +{Number(runnerData.runnerName.bal)}
                                 </span>
-                              ) : (<>
-                                {runnerData.runnerName.bal != 0 && <span className="text-danger fw-bold d" mx-2>
-                                  {Number(runnerData.runnerName.bal)}
-                                </span>}
-                              </>)}
+                              ) : (
+                                <>
+                                  {runnerData.runnerName.bal != 0 && (
+                                    <span className="text-danger fw-bold d" mx-2>
+                                      {Number(runnerData.runnerName.bal)}
+                                    </span>
+                                  )}
+                                </>
+                              )}
 
                               {Number(runnerData.runnerName.bal) + Math.round(Math.abs(winBalance)) > 0 ? (
                                 <span className=" text-success  fw-bold">
@@ -443,7 +468,13 @@ function GameWithMarketList({ isSingleMarket }) {
                             ) : Number(runnerData.runnerName.bal) > 0 ? (
                               <span className="text-success  fw-bold" mx-2>
                                 {bidding.amount != 0 && runnerData.runnerName.bal}
-                                <span className={`3 text-${Number(runnerData.runnerName.bal) - Math.round(bidding.amount) > 0 ? 'success' : 'danger'} fw-bold`}>
+                                <span
+                                  className={`3 text-${
+                                    Number(runnerData.runnerName.bal) - Math.round(bidding.amount) > 0
+                                      ? 'success'
+                                      : 'danger'
+                                  } fw-bold`}
+                                >
                                   ({Number(runnerData.runnerName.bal) - Math.round(bidding.amount)})
                                 </span>
                               </span>
@@ -481,93 +512,89 @@ function GameWithMarketList({ isSingleMarket }) {
                       </div>
                     </div>
                   </>
-                )
-                }
+                )}
 
-                {
-                  toggle.indexNo === runnerData._id && !toggle.toggleOpen && (
-                    <div style={{ background: '#c6e7ee' }}>
-                      <div className="row py-1 px-0 m-0">
-                        <div className="d-none d-sm-block d-md-block d-lg-block d-xl-block col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                          <button
-                            className=" btn btn-sm bg-white border border-2 rounded-3"
-                            onClick={() => handleCancel()}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                        <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                          <button className="col-3 rounded-start-4" style={{ width: '18%', border: '0' }}>
-                            -
-                          </button>
-                          <input className="col-6 " type="number" value={bidding.rate} />
-                          <button className="col-3 rounded-end-3" style={{ width: '18%', border: '0' }}>
-                            +
-                          </button>
-                        </div>
-                        <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                          <button
-                            disabled={bidding.amount == 0 ? ' disabled' : ''}
-                            className={`col-3  rounded-start-3 `}
-                            style={{ width: '18%', border: '0' }}
-                            onClick={
-                              bidding.amount >= 100
-                                ? () => handleBiddingAmount('amount', Number(bidding.amount) - 100)
-                                : () => handleBiddingAmount('amount', Number(bidding.amount) - Number(bidding.amount))
-                            }
-                          >
-                            -
-                          </button>
-                          <input
-                            className="col-6"
-                            type="number"
-                            value={bidding.amount}
-                            onChange={(e) => handleBiddingAmount('amount', e.target.value)}
-                          />
-                          <button
-                            className="col-3 rounded-end-3"
-                            style={{ width: '18%', border: '0' }}
-                            onClick={() => handleBiddingAmount('amount', Number(bidding.amount) + 100)}
-                          >
-                            +
-                          </button>
-                        </div>
-                        <div className="d-none d-sm-block d-md-block d-lg-block d-xl-block col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                          <button
-                            className="btn btn-sm bg-white border border-2 rounded-3"
-                            onClick={() => handleUserBidding()}
-                          >
-                            Place Bet
-                          </button>
-                        </div>
+                {toggle.indexNo === runnerData._id && !toggle.toggleOpen && (
+                  <div style={{ background: '#c6e7ee' }}>
+                    <div className="row py-1 px-0 m-0">
+                      <div className="d-none d-sm-block d-md-block d-lg-block d-xl-block col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                        <button
+                          className=" btn btn-sm bg-white border border-2 rounded-3"
+                          onClick={() => handleCancel()}
+                        >
+                          Cancel
+                        </button>
                       </div>
-                      <div className="row py-1 px-0 m-0">{handleBidding()}</div>
-                      <div className="row py-1 px-0 m-0">
-                        <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
-                          <button
-                            className=" btn btn-sm bg-white border border-2 rounded-3 col-12"
-                            onClick={() => handleCancel()}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                        <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
-                          <button
-                            className="btn btn-sm bg-white border border-2 rounded-3 col-12"
-                            onClick={() => handleUserBidding()}
-                          >
-                            Place Bet
-                          </button>
-                        </div>
+                      <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                        <button className="col-3 rounded-start-4" style={{ width: '18%', border: '0' }}>
+                          -
+                        </button>
+                        <input className="col-6 " type="number" value={bidding.rate} />
+                        <button className="col-3 rounded-end-3" style={{ width: '18%', border: '0' }}>
+                          +
+                        </button>
+                      </div>
+                      <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                        <button
+                          disabled={bidding.amount == 0 ? ' disabled' : ''}
+                          className={`col-3  rounded-start-3 `}
+                          style={{ width: '18%', border: '0' }}
+                          onClick={
+                            bidding.amount >= 100
+                              ? () => handleBiddingAmount('amount', Number(bidding.amount) - 100)
+                              : () => handleBiddingAmount('amount', Number(bidding.amount) - Number(bidding.amount))
+                          }
+                        >
+                          -
+                        </button>
+                        <input
+                          className="col-6"
+                          type="number"
+                          value={bidding.amount}
+                          onChange={(e) => handleBiddingAmount('amount', e.target.value)}
+                        />
+                        <button
+                          className="col-3 rounded-end-3"
+                          style={{ width: '18%', border: '0' }}
+                          onClick={() => handleBiddingAmount('amount', Number(bidding.amount) + 100)}
+                        >
+                          +
+                        </button>
+                      </div>
+                      <div className="d-none d-sm-block d-md-block d-lg-block d-xl-block col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                        <button
+                          className="btn btn-sm bg-white border border-2 rounded-3"
+                          onClick={() => handleUserBidding()}
+                        >
+                          Place Bet
+                        </button>
                       </div>
                     </div>
-                  )
-                }
+                    <div className="row py-1 px-0 m-0">{handleBidding()}</div>
+                    <div className="row py-1 px-0 m-0">
+                      <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
+                        <button
+                          className=" btn btn-sm bg-white border border-2 rounded-3 col-12"
+                          onClick={() => handleCancel()}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                      <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
+                        <button
+                          className="btn btn-sm bg-white border border-2 rounded-3 col-12"
+                          onClick={() => handleUserBidding()}
+                        >
+                          Place Bet
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </>
             );
-          })
-        }
-      </div >
+          })}
+      </div>
     );
   }
 
@@ -641,7 +668,12 @@ function GameWithMarketList({ isSingleMarket }) {
   }
 
   function getBody() {
-    return <>{marketIdFromUrl ? getMarketDetailByMarketId() : isSingleMarket ? getSingleMarket() : getWholeMarket()}; <Login showLogin={loginModal} setShowLogin={setLoginModal} /></>
+    return (
+      <>
+        {marketIdFromUrl ? getMarketDetailByMarketId() : isSingleMarket ? getSingleMarket() : getWholeMarket()}
+        ; <Login showLogin={loginModal} setShowLogin={setLoginModal} />
+      </>
+    );
   }
 
   return getBody();

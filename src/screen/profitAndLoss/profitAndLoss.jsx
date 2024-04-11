@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from "react";
-import AppDrawer from "../common/appDrawer";
-import Layout from "../layout/layout";
-import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css";
-import Datetime from "react-datetime";
-import "react-datetime/css/react-datetime.css";
-import moment from "moment";
-import { useAppContext } from "../../contextApi/context";
-import {
-  profitAndLossMarket_Api,
-  profitAndLossRunner_Api,
-  profitAndLoss_Api,
-} from "../../utils/apiService";
+import React, { useEffect, useState } from 'react';
+import AppDrawer from '../common/appDrawer';
+import Layout from '../layout/layout';
+import { DayPicker } from 'react-day-picker';
+import 'react-day-picker/dist/style.css';
+import Datetime from 'react-datetime';
+import 'react-datetime/css/react-datetime.css';
+import moment from 'moment';
+import { useAppContext } from '../../contextApi/context';
+import { profitAndLossMarket_Api, profitAndLossRunner_Api, profitAndLoss_Api } from '../../utils/apiService';
 
 const ProfitAndLoss = () => {
   const { dispatch, store } = useAppContext();
@@ -29,7 +25,7 @@ const ProfitAndLoss = () => {
     endDate: new Date(),
   });
 
-  console.log("===========> line 30", gameIds);
+  console.log('===========> line 30', gameIds);
 
   const handleGameClick = async (value) => {
     try {
@@ -39,27 +35,25 @@ const ProfitAndLoss = () => {
         endDate: formatDate(dateValue.endDate),
       });
       // Process the response as needed
-      console.log("Data for selected game ID:", response);
+      console.log('Data for selected game ID:', response);
       setProfitAndLossGameData(response.data);
-      const uniqueMarketId = [
-        ...new Set(response.data.map((item) => item.marketId)),
-      ];
+      const uniqueMarketId = [...new Set(response.data.map((item) => item.marketId))];
       setMarketIdData(uniqueMarketId);
     } catch (error) {
-      console.error("Error fetching data for game ID:", value, error);
+      console.error('Error fetching data for game ID:', value, error);
     }
   };
 
-  console.log("=========> Game ID from Api LINE 47", profitAndLossGameData); //click market data fm game id
-  console.log("+++++++++>marketId++++++>", marketIdData); // market id
+  console.log('=========> Game ID from Api LINE 47', profitAndLossGameData); //click market data fm game id
+  console.log('+++++++++>marketId++++++>', marketIdData); // market id
   function formatDate(dateString) {
     // Create a new Date object using the input string
     let date = new Date(dateString);
 
     // Extract year, month, and day
     let year = date.getFullYear();
-    let month = ("0" + (date.getMonth() + 1)).slice(-2); // Adding 1 to month because January is 0
-    let day = ("0" + date.getDate()).slice(-2);
+    let month = ('0' + (date.getMonth() + 1)).slice(-2); // Adding 1 to month because January is 0
+    let day = ('0' + date.getDate()).slice(-2);
 
     // Concatenate the parts with '-' separator
     return `${year}-${month}-${day}`;
@@ -83,7 +77,7 @@ const ProfitAndLoss = () => {
   //   setDocumentFilter(filteredDocuments);
   //   setToggle(false);
   // };
-  console.log("++++++>=",marketIdData)
+  console.log('++++++>=', marketIdData);
   const handleMarketClick = async (marketIdData) => {
     try {
       const response = await profitAndLossRunner_Api({
@@ -91,11 +85,11 @@ const ProfitAndLoss = () => {
         startDate: formatDate(dateValue.startDate),
         endDate: formatDate(dateValue.endDate),
       });
-      console.log("&&&&&&&&&&bhaiAye++++>",response)
+      console.log('&&&&&&&&&&bhaiAye++++>', response);
       setProfitAndLossMarketData(response.data);
-      console.log("marketsdffbjkdfnsj=====>",profitAndLossMarketData)
+      console.log('marketsdffbjkdfnsj=====>', profitAndLossMarketData);
     } catch (error) {
-      console.error("Error fetching data for market ID:", marketIdData, error);
+      console.error('Error fetching data for market ID:', marketIdData, error);
     }
   };
 
@@ -107,9 +101,7 @@ const ProfitAndLoss = () => {
     if (response) {
       // console.log("__________++++>", response);
       setProfitAndLossData(response.data);
-      const uniqueGameIds = [
-        ...new Set(response.data.map((item) => item.gameId)),
-      ];
+      const uniqueGameIds = [...new Set(response.data.map((item) => item.gameId))];
       setGameIds(uniqueGameIds);
     }
   };
@@ -167,7 +159,7 @@ const ProfitAndLoss = () => {
               <div className="col-sm-6 d-flex justify-content-center ">
                 <button
                   className="btn btn-secondary"
-                  style={{ backgroundColor: "#2CB3D1" }}
+                  style={{ backgroundColor: '#2CB3D1' }}
                   onClick={handleFetchDateData}
                 >
                   Go
@@ -195,22 +187,13 @@ const ProfitAndLoss = () => {
             <table className="table table-bordered">
               <thead>
                 <tr>
-                  <th
-                    scope="col"
-                    style={{ backgroundColor: "#2CB3D1", color: "white" }}
-                  >
+                  <th scope="col" style={{ backgroundColor: '#2CB3D1', color: 'white' }}>
                     Game Name
                   </th>
-                  <th
-                    scope="col"
-                    style={{ backgroundColor: "#2CB3D1", color: "white" }}
-                  >
+                  <th scope="col" style={{ backgroundColor: '#2CB3D1', color: 'white' }}>
                     Profit&Loss
                   </th>
-                  <th
-                    scope="col"
-                    style={{ backgroundColor: "#2CB3D1", color: "white" }}
-                  >
+                  <th scope="col" style={{ backgroundColor: '#2CB3D1', color: 'white' }}>
                     Total P&L
                   </th>
                 </tr>
@@ -219,9 +202,7 @@ const ProfitAndLoss = () => {
                 {profitAndLossData
                   ? profitAndLossData.map((item, index) => (
                       <tr key={index}>
-                        <td onClick={() => handleGameClick(item.gameId)}>
-                          {item.gameName}
-                        </td>
+                        <td onClick={() => handleGameClick(item.gameId)}>{item.gameName}</td>
                         <td>{item.profitLoss}</td>
                         <td>{item.profitLoss}</td>
                       </tr>
@@ -231,30 +212,18 @@ const ProfitAndLoss = () => {
             </table>
           </div>
         </div>
-        <div className="card p-0 section" style={{ marginTop: "15px" }}>
-          <div
-            className="table-container overflow-x-scroll"
-            style={{ overflowX: "auto", margin: "10px" }}
-          >
+        <div className="card p-0 section" style={{ marginTop: '15px' }}>
+          <div className="table-container overflow-x-scroll" style={{ overflowX: 'auto', margin: '10px' }}>
             <table className="table table-bordered">
               <thead>
                 <tr>
-                  <th
-                    scope="col"
-                    style={{ backgroundColor: "#2CB3D1", color: "white" }}
-                  >
+                  <th scope="col" style={{ backgroundColor: '#2CB3D1', color: 'white' }}>
                     gameName
                   </th>
-                  <th
-                    scope="col"
-                    style={{ backgroundColor: "#2CB3D1", color: "white" }}
-                  >
+                  <th scope="col" style={{ backgroundColor: '#2CB3D1', color: 'white' }}>
                     marketName
                   </th>
-                  <th
-                    scope="col"
-                    style={{ backgroundColor: "#2CB3D1", color: "white" }}
-                  >
+                  <th scope="col" style={{ backgroundColor: '#2CB3D1', color: 'white' }}>
                     profitLoss
                   </th>
                 </tr>
@@ -264,9 +233,7 @@ const ProfitAndLoss = () => {
                   ? profitAndLossGameData.map((item, index) => (
                       <tr key={index}>
                         <td>{item.gameName}</td>
-                        <td onClick={() => handleMarketClick(item.marketId)}>
-                          {item.marketName}
-                        </td>
+                        <td onClick={() => handleMarketClick(item.marketId)}>{item.marketName}</td>
                         <td>{item.profitLoss}</td>
                       </tr>
                     ))
@@ -275,36 +242,21 @@ const ProfitAndLoss = () => {
             </table>
           </div>
         </div>
-        <div className="card p-0 section" style={{ marginTop: "15px" }}>
-          <div
-            className="table-container overflow-x-scroll"
-            style={{ overflowX: "auto", margin: "10px" }}
-          >
+        <div className="card p-0 section" style={{ marginTop: '15px' }}>
+          <div className="table-container overflow-x-scroll" style={{ overflowX: 'auto', margin: '10px' }}>
             <table className="table table-bordered">
               <thead>
                 <tr>
-                  <th
-                    scope="col"
-                    style={{ backgroundColor: "#2CB3D1", color: "white" }}
-                  >
+                  <th scope="col" style={{ backgroundColor: '#2CB3D1', color: 'white' }}>
                     runnerName
                   </th>
-                  <th
-                    scope="col"
-                    style={{ backgroundColor: "#2CB3D1", color: "white" }}
-                  >
+                  <th scope="col" style={{ backgroundColor: '#2CB3D1', color: 'white' }}>
                     marketName
                   </th>
-                  <th
-                    scope="col"
-                    style={{ backgroundColor: "#2CB3D1", color: "white" }}
-                  >
+                  <th scope="col" style={{ backgroundColor: '#2CB3D1', color: 'white' }}>
                     gameName
                   </th>
-                  <th
-                    scope="col"
-                    style={{ backgroundColor: "#2CB3D1", color: "white" }}
-                  >
+                  <th scope="col" style={{ backgroundColor: '#2CB3D1', color: 'white' }}>
                     profitLoss
                   </th>
                 </tr>
@@ -328,7 +280,7 @@ const ProfitAndLoss = () => {
     );
   }
   return (
-    < div  data-aos="zoom-in">
+    <div data-aos="zoom-in">
       <AppDrawer showCarousel={false}>
         <Layout />
         {ProfitLoss()}

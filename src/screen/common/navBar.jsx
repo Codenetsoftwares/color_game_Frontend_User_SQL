@@ -77,7 +77,7 @@ const NavBar = () => {
     // if (closeButton) {
     //   closeButton.click();
     // }
-    navigate('/home')
+    navigate('/home');
     toast.info('Logout successfully');
   };
 
