@@ -3,20 +3,30 @@ import { useAppContext } from '../../contextApi/context';
 import NavBar from '../common/navBar';
 import { user_getAllGames_api } from '../../utils/apiService';
 import './layout.css';
+import strings from '../../utils/constant/stringConstant';
 
 function Layout() {
   const [user_allGames, setUser_allGames] = useState([]);
-  const appDrawerFromStore = useAppContext();
+
+  const { dispatch } = useAppContext();
 
   useEffect(() => {
     user_getAllGames();
   }, []);
 
   async function user_getAllGames() {
+    dispatch({
+      type: strings.isLoading,
+      payload: true,
+    });
     const response = await user_getAllGames_api();
     if (response) {
       setUser_allGames(response.data);
     }
+    dispatch({
+      type: strings.isLoading,
+      payload: false,
+    });
   }
 
   function getNavBarOption() {

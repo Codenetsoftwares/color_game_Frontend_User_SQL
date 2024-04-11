@@ -16,6 +16,7 @@ import biddingButton from '../../../utils/constant/biddingButton';
 import { useAppContext } from '../../../contextApi/context';
 import strings from '../../../utils/constant/stringConstant';
 import { toast } from 'react-toastify';
+import Login from '../../loginModal/loginModal'
 
 function GameWithMarketList({ isSingleMarket }) {
   const [user_allGamesWithMarketData, setUser_allGamesWithMarketData] = useState([]);
@@ -26,7 +27,7 @@ function GameWithMarketList({ isSingleMarket }) {
   const { store, dispatch } = useAppContext();
   const [gameId, setGameId] = useState('');
   const [bidding, setBidding] = useState({ rate: '', amount: 0 });
-
+  const [loginModal, setLoginModal] = useState(false);
   const [toggle, setToggle] = useState({
     toggleOpen: false,
     indexNo: '',
@@ -143,19 +144,20 @@ function GameWithMarketList({ isSingleMarket }) {
 
 
   async function user_getMarketsWithRunnerData() {
+    dispatch({
+      type: strings.isLoading,
+      payload: true,
+    });
     const response = await user_getMarketWithRunnerData_api({
       marketId: marketIdFromUrl,
       userId: store?.user?.id,
     });
+    dispatch({
+      type: strings.isLoading,
+      payload: false,
+    });
     if (response) {
       setUser_marketWithRunnerData(response.data);
-    }
-  }
-  const temp = 'back';
-  async function user_getAllGamesWithMarketData() {
-    const response = await user_getAllGamesWithMarketData_api();
-    if (response) {
-      setUser_allGamesWithMarketData(response.data);
     }
   }
   async function user_getAllGamesWithMarketData() {
@@ -175,6 +177,10 @@ function GameWithMarketList({ isSingleMarket }) {
   }
 
   const handleUserBidding = async () => {
+    if (!store.user.isLogin) {
+      setLoginModal(true)
+      return
+    }
     if (bidding.amount == 0 || bidding.amount < 0 || bidding.amount == '') {
       if (bidding.amount == 0) {
         toast.error('Amount can not be zero');
@@ -214,9 +220,16 @@ function GameWithMarketList({ isSingleMarket }) {
     });
 
     if (response) {
-      handleCancel();
       (async () => {
+        dispatch({
+          type: strings.isLoading,
+          payload: true,
+        });
         const response = await userWallet(store.user.id, true, dispatch);
+        dispatch({
+          type: strings.isLoading,
+          payload: false,
+        });
         if (response) {
           dispatch({
             type: strings.UserWallet,
@@ -230,6 +243,7 @@ function GameWithMarketList({ isSingleMarket }) {
         }
       })();
     }
+    handleCancel();
     handleRefreshOrGetInitialData()
   };
 
@@ -627,7 +641,7 @@ function GameWithMarketList({ isSingleMarket }) {
   }
 
   function getBody() {
-    return marketIdFromUrl ? getMarketDetailByMarketId() : isSingleMarket ? getSingleMarket() : getWholeMarket();
+    return <>{marketIdFromUrl ? getMarketDetailByMarketId() : isSingleMarket ? getSingleMarket() : getWholeMarket()}; <Login showLogin={loginModal} setShowLogin={setLoginModal} /></>
   }
 
   return getBody();

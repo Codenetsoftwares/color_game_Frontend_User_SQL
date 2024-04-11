@@ -11,12 +11,12 @@ const Loading = () => {
           className="d-flex justify-content-center"
           style={{
             height: '100vh',
-            opacity: 0.8,
+            opacity: .8,
             position: 'fixed',
             top: 0,
             zIndex: 1000000,
             width: '100%',
-            backgroundColor: 'black',
+            backgroundColor: '#686767',
           }}
         >
           <Hourglass

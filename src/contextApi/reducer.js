@@ -41,11 +41,12 @@ export const reducer = (state, action) => {
         }),
       };
 
-    // case strings.isLoading:
-    //   return {
-    //     ...state,
-    //     isLoading: action?.payload ? [...state?.isLoading, true] : state?.isLoading?.slice(0, -1),
-    //   };
+    case strings.isLoading:
+      return {
+        ...state,
+        isLoading: action?.payload ? [...state?.isLoading, true] : state?.isLoading?.slice(0, -1),
+      };
+
 
     default:
       return state;
