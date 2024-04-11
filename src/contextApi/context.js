@@ -9,7 +9,7 @@ const initialState = {
   user: getUserInitialState(),
   announcement: [],
   appDrawer: [],
-  isLoading: [],
+  isLoading: false,
   placeBidding: getUserPlaceBidding(),
 };
 
@@ -22,7 +22,9 @@ const AppProvider = ({ children }) => {
 
   // Save state to local storage whenever it changes
   useEffect(() => {
-    localStorage.setItem(strings.LOCAL_STORAGE_KEY, JSON.stringify(store));
+    const dummyStore = { ...store }
+    // delete dummyStore.isLoading
+    localStorage.setItem(strings.LOCAL_STORAGE_KEY, JSON.stringify(dummyStore));
   }, [store]);
 
   return <AppContext.Provider value={{ store, dispatch }}>{children}</AppContext.Provider>;

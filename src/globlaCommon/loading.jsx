@@ -6,7 +6,8 @@ const Loading = () => {
   const isLoadingFromStore = store?.isLoading;
   return (
     <>
-      {isLoadingFromStore && isLoadingFromStore.length && (
+      {/* {isLoadingFromStore && isLoadingFromStore.length && ( */}
+      {isLoadingFromStore && (
         <div
           className="d-flex justify-content-center"
           style={{
