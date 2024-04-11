@@ -74,7 +74,10 @@ const NavBar = () => {
       payload: { isLogin: false },
     });
     const closeButton = document.querySelector('.btn-close');
-    closeButton.click();
+    // if (closeButton) {
+    //   closeButton.click();
+    // }
+    navigate('/home')
     toast.info('Logout successfully');
   };
 
