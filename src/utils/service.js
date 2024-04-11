@@ -2,16 +2,16 @@ import { toast } from 'react-toastify';
 import urls from '../utils/constant/UrlConstant';
 import strings from '../utils/constant/stringConstant';
 
-// getNoAuthCallParams public api call
+
 export function getNoAuthCallParams(methodType, body) {
   const params = {
     method: methodType,
     headers: strings.applicationJSON,
   };
   switch (methodType) {
-    case 'GET':
+    case strings.GET:
       return params;
-    case 'POST':
+    case strings.POST:
       return { ...params, body: JSON.stringify(body) };
     default:
       return false;
@@ -23,7 +23,6 @@ export async function getHeaderObject(accessToken, contentType) {
     if (accessToken) {
       return {
         ...contentType,
-        authorization: `Bearer ${accessToken}`,
         authorization: `Bearer ${accessToken}`,
       };
     }
@@ -40,7 +39,6 @@ export const getCallParams = async (methodType, body) => {
   const params = {
     method: methodType,
     headers: await getHeaderObject(accessToken, strings.applicationJSON),
-    // authorization :`Bearer ${accessToken}`
   };
 
   switch (methodType) {
@@ -72,7 +70,6 @@ export async function makeCall(callName, callParams, isToast) {
       window.location.href = '/home';
     }
     if (json.success === false) {
-      console.log('jsonjsonjsonjsonjsonjson', json);
       toast.error(json.errMessage);
       return null;
     } else if (isToast && (json.success === true || json.code === 200)) {
@@ -91,7 +88,6 @@ export async function makeCall(callName, callParams, isToast) {
     // if (await checkStatus(error)) {
     //   // throw notifiers.LOGGEDOUT;
     // }
-    console.log('errorerrorerror', error);
     toast.error(error.message);
     return null;
   }

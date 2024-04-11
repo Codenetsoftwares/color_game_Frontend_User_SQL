@@ -58,7 +58,7 @@ export async function user_getMarketWithRunnerData_api(body = {}, isToast = fals
 
 export async function changePassword(body = {}, isToast = false) {
   try {
-    const callParams = getNoAuthCallParams(strings.GET, body, isToast);
+    const callParams = getNoAuthCallParams(strings.POST, body, isToast);
     const response = await makeCall(urls.changePassword, callParams, isToast);
 
     return response;
