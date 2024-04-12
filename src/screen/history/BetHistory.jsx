@@ -17,17 +17,17 @@ import {
 import { getbiddingInitialState } from '../../utils/getInitiateState';
 
 const BetHistory = () => {
-  // const [startDate, setStartDate] = useState(null);
-  // const [endDate, setEndDate] = useState(null);
   const [betHistoryData, setBetHistoryData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalItems, setTotalItems] = useState(3);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalEntries, setTotalEntries] = useState(5);
   const [openBet, setOpenBet] = useState([]);
-  const [selectedMarket, setSelectedMarket] = useState('Select Market');
+  const [selectedMarket, setSelectedMarket] = useState('');
   const [selectedMarketId, setSelectedMarketId] = useState('');
   const defaultStartDate = new Date();
   const [selected, setSelected] = useState(<Date />);
+  // <Date/>
   const [dateValue, setDateValue] = useState({
     startDate: defaultStartDate,
     endDate: new Date(),
@@ -45,6 +45,7 @@ const BetHistory = () => {
     return `${year}-${month}-${day}`;
   }
   console.log('date===>', formatDate(dateValue.startDate));
+  console.log('date===> end date', formatDate(dateValue.endDate));
   const handleDateValue = (name, value) => {
     setDateValue((prevData) => ({
       ...prevData,
@@ -52,9 +53,6 @@ const BetHistory = () => {
     }));
   };
 
-  // const [openBetsBackLaydata, setOpenBetsBackLaydata] = useState([]);
-
-  // const [bidding, setBidding] = useState(getbiddingInitialState());
   const [marketSelectionbetHistory, setMarketSelectionbetHistory] = useState([]); // from dummy data into bet history selection
   const [openBetSelectionbetHistory, setopenBetSelectionbetHistory] = useState([]); // from dummy data into open bet selection
 
@@ -67,20 +65,15 @@ const BetHistory = () => {
   const { store } = useAppContext();
   console.log('=============> line 15 ', store.user.id);
 
-  // static market id and game id
-  // const marketIdFromstore =
-  //   store.userTxn?.marketId ?? "65f84911143d9f19ac0ded85";
-  // const gameIdFromstore = store.userTxn?.gameId ?? "66053792d1a49b35bfd975aa";
-
-  // console.log("========> GAME ID ", gameIdFromstore);
-
+  let startIndex = Math.min((currentPage - 1) * totalEntries + 1);
+  let endIndex = Math.min(currentPage * totalEntries, totalItems);
   // the api called for bet history data
   async function handleGetHistory() {
     const response = await user_getBetHistory_api({
       marketId: selectedMarketId,
       marketName: marketSelectionbetHistory,
       pageNumber: currentPage,
-      dataLimit: totalItems,
+      dataLimit: totalEntries,
       startDate: formatDate(dateValue.startDate),
       endDate: formatDate(dateValue.endDate),
     });
@@ -93,8 +86,6 @@ const BetHistory = () => {
     } else {
       //add loading part //
     }
-    // console.log("From:", startDate);
-    // console.log("To:", endDate);
   }
   // useeffect for bet history data
   useEffect(() => {
@@ -113,7 +104,7 @@ const BetHistory = () => {
   const handleEntriesChange = (event) => {
     const entries = Number(event.target.value);
     console.log('entries', entries);
-    setTotalItems(entries);
+    setTotalEntries(entries);
     // After updating totalItems, we need to fetch data for the first page with the new number of items
     setCurrentPage(1);
 
@@ -130,8 +121,6 @@ const BetHistory = () => {
     } else {
       //add loading part //
     }
-    // console.log("From:", startDate);
-    // console.log("To:", endDate);
   }
   // useeffect for bet history and open bets selection input boxes only
   useEffect(() => {
@@ -147,6 +136,7 @@ const BetHistory = () => {
   console.log('=====. line 157', selectedMarket);
 
   const handleGetHistoryChange = (e) => {
+    console.log('empty value line 150', e.target.value);
     setSelectedMarketId(e.target.value);
   };
   console.log('Market ID:', selectedMarketId);
@@ -170,13 +160,7 @@ const BetHistory = () => {
     }
   }, [selectedMarket]);
   console.log('============> openBet', openBet);
-
-  const handleReset = () => {
-    setDateValue({
-      startDate: defaultStartDate,
-      endDate: new Date(),
-    });
-  };
+  console.log('============> selectMarketId', selectedMarket);
 
   // this is the complete get history selection card with bet history data table
   function history() {
@@ -209,7 +193,7 @@ const BetHistory = () => {
                     value={selectedMarketId || ''}
                     onChange={handleGetHistoryChange}
                   >
-                    <option selected>Open this select menu</option>
+                    <option value="">Open this select menu</option>
                     {marketSelectionbetHistory.map((market, index) => (
                       <option key={index} value={market.marketId}>
                         {market.marketName}
@@ -241,17 +225,6 @@ const BetHistory = () => {
                 <div className="form-group">
                   <label>From:</label>
                   <div className="input-group" style={{ maxWidth: '100%' }}>
-                    {/* <DatePicker
-                      selected={startDate}
-                      onChange={(date) => {
-                        console.log("Start Date Selected:", date);
-
-                        setStartDate(date);
-                      }}
-                      dateFormat="MM/dd/yyyy"
-                      className="form-control"
-                    /> */}
-
                     <Datetime
                       value={dateValue.startDate}
                       name="startDate"
@@ -267,16 +240,6 @@ const BetHistory = () => {
                 <div className="form-group">
                   <label>To:</label>
                   <div className="input-group" style={{ maxWidth: '100%' }}>
-                    {/* <DatePicker
-                      selected={endDate}
-                      onChange={(date) => {
-                        console.log("End Date Selected:", date);
-                        setEndDate(date);
-                      }}
-                      dateFormat="MM/dd/yyyy"
-                      className="form-control"
-                    /> */}
-
                     <Datetime
                       value={dateValue.endDate}
                       name="endDate"
@@ -289,7 +252,7 @@ const BetHistory = () => {
               </div>
 
               <div className="col">
-                <button className="btn btn-primary" onClick={handleGetHistory}>
+                <button className="btn btn-primary" onClick={() => handleGetHistory()}>
                   Get History
                 </button>
               </div>
@@ -310,7 +273,7 @@ const BetHistory = () => {
               <select
                 className="form-select"
                 id="showEntriesDropdown"
-                value={totalItems}
+                value={totalEntries}
                 onChange={handleEntriesChange}
               >
                 <option value="3">3</option>
@@ -351,8 +314,8 @@ const BetHistory = () => {
               currentPage={currentPage}
               totalPages={totalPages}
               handlePageChange={handlePageChange}
-              startIndex={(currentPage - 1) * totalItems + 1}
-              endIndex={Math.min(currentPage * totalItems, totalItems)}
+              startIndex={startIndex}
+              endIndex={endIndex}
               totalData={totalItems}
             />
           </div>
@@ -375,7 +338,6 @@ const BetHistory = () => {
               id="selectMarket"
               style={{ width: '100%' }}
               onChange={handleSelectChange}
-              // onChange={handleGetHistoryChange}
             >
               <option>Select Market</option>
               {openBetSelectionbetHistory.map((item, index) => (
