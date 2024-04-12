@@ -141,7 +141,7 @@ function GameWithMarketList({ isSingleMarket }) {
   console.log('mode', toggle.mode);
 
   function getMaxNegativeBalance(runners) {
-    debugger;
+    // debugger;
     let maxNegativeRunner = 0;
 
     // Iterate through the runners
