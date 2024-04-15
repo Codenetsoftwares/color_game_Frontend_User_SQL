@@ -9,23 +9,39 @@ import {
   profitAndLossRunner_Api,
   profitAndLoss_Api,
 } from "../../utils/apiService";
+import Pagination from "../common/Pagination";
+
 const ProfitAndLoss = () => {
   const { dispatch, store } = useAppContext();
   const [profitAndLossGameData, setProfitAndLossGameData] = useState([]);
   const [profitAndLossMarketData, setProfitAndLossMarketData] = useState([]);
   const [profitAndLossData, setProfitAndLossData] = useState([]);
+  const [totalEntries, setTotalEntries] = useState(5);
+
+  const [pagination ,setPagination]=useState({
+    totalItems:0,
+    currentPage:1,
+    totalPages:1
+  })
+ 
+  let startIndex = Math.min((pagination.currentPage - 1) *totalEntries + 1);
+  let endIndex = Math.min(pagination.currentPage *totalEntries, pagination.totalItems);
+  
   const defaultStartDate = new Date();
   defaultStartDate.setDate(defaultStartDate.getDate() - 1);
   const [dateValue, setDateValue] = useState({
     startDate: defaultStartDate,
     endDate: new Date(),
   });
+
   const handleGameClick = async (value) => {
     try {
       const response = await profitAndLossMarket_Api({
         gameId: value,
         startDate: formatDate(dateValue.startDate),
         endDate: formatDate(dateValue.endDate),
+        pageNumber:pagination.currentPage,
+        dataLimit: totalEntries,
       });
       setProfitAndLossGameData(response.data);
     } catch (error) {
@@ -38,6 +54,8 @@ const ProfitAndLoss = () => {
         marketId: marketIdData,
         startDate: formatDate(dateValue.startDate),
         endDate: formatDate(dateValue.endDate),
+        pageNumber: pagination.currentPage,
+        dataLimit:totalEntries,
       });
       if (
         response.data &&
@@ -56,14 +74,28 @@ const ProfitAndLoss = () => {
     const response = await profitAndLoss_Api({
       startDate: formatDate(dateValue.startDate),
       endDate: formatDate(dateValue.endDate),
+      pageNumber: pagination.currentPage,
+      dataLimit: totalEntries,
     });
     if (response) {
       setProfitAndLossData(response.data);
+      // setTotalPages(response.pagination.totalPages);
+      // setTotalItems(response.pagination.totalItems);
+      setPagination(prevState => ({
+        ...prevState,
+        totalPages: response.pagination.totalPages
+      }));
+      setPagination(prevState => ({
+        ...prevState,
+        totalItems: response.pagination.totalItems
+        
+      }));
     }
   };
   useEffect(() => {
     handleFetchDateData();
-  }, []);
+  }, [pagination.currentPage, pagination.totalItems, totalEntries]);
+
   const handleDateValue = (name, value) => {
     setDateValue((prevData) => ({
       ...prevData,
@@ -79,6 +111,29 @@ const ProfitAndLoss = () => {
     setProfitAndLossGameData([]);
     setProfitAndLossMarketData([]);
   };
+
+   // entries for no. of entries for pagination
+   const handleEntriesChange = (event) => {
+    const entries = Number(event.target.value);
+    console.log("entries", entries);
+    setTotalEntries(entries);
+    // After updating totalItems, we need to fetch data for the first page with the new number of items
+    setPagination(prevState => ({
+      ...prevState,
+      currentPage: 1
+    }));
+  };
+
+
+   // pagination handlechange (to be solved later )
+   const handlePageChange = (pageNumber) => {
+    setPagination(prevState => ({
+      ...prevState,
+      currentPage: pageNumber
+    }));
+  };
+
+ 
   function formatDate(dateString) {
     let date = new Date(dateString);
     let year = date.getFullYear();
@@ -101,6 +156,19 @@ const ProfitAndLoss = () => {
           profitAndLossGameData={profitAndLossGameData}
           handleMarketClick={handleMarketClick}
           profitAndLossMarketData={profitAndLossMarketData}
+
+          // for pagination
+          totalEntries={totalEntries}
+          handleEntriesChange={handleEntriesChange}
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          handlePageChange={handlePageChange}
+          startIndex={startIndex}
+          endIndex={endIndex}
+          totalItems={pagination.totalItems}
+        
+          // second table paginetion 
+
         />
       </AppDrawer>
     </div>
@@ -117,6 +185,19 @@ const ProfitLoss = ({
   profitAndLossGameData,
   handleMarketClick,
   profitAndLossMarketData,
+   
+  // for pagination table 1
+  totalEntries,
+  handleEntriesChange,
+  currentPage,
+  totalPages,
+  handlePageChange,
+  startIndex,
+  endIndex,
+  totalItems
+  //for paginetion table 2
+
+  
 }) => {
   return (
     <>
@@ -193,6 +274,22 @@ const ProfitLoss = ({
             className="table-container overflow-x-scroll"
             style={{ overflowX: "auto", margin: "10px" }}
           >
+            {/* show entries deopdown */}
+            <div className="mb-3">
+              <label htmlFor="showEntriesDropdown" className="form-label">
+                Show entries
+              </label>
+              <select
+                className="form-select"
+                id="showEntriesDropdown"
+                value={totalEntries}
+                onChange={handleEntriesChange}
+              >
+                <option value="3">3</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+              </select>
+            </div>
             <table className="table table-bordered">
               <thead>
                 <tr>
@@ -232,6 +329,14 @@ const ProfitLoss = ({
               </tbody>
             </table>
           </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+            startIndex={startIndex}
+            endIndex={endIndex}
+            totalData={totalItems}
+          />
         </div>
       ) : (
         <div
@@ -304,6 +409,14 @@ const ProfitLoss = ({
               </tbody>
             </table>
           </div>
+            <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+            startIndex={startIndex}
+            endIndex={endIndex}
+            totalData={totalItems}
+          />
         </div>
       )}
     </>
