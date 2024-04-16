@@ -671,7 +671,7 @@ function GameWithMarketList({ isSingleMarket }) {
     return (
       <>
         {marketIdFromUrl ? getMarketDetailByMarketId() : isSingleMarket ? getSingleMarket() : getWholeMarket()}
-        ; <Login showLogin={loginModal} setShowLogin={setLoginModal} />
+        <Login showLogin={loginModal} setShowLogin={setLoginModal} />
       </>
     );
   }
