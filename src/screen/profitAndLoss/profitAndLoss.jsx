@@ -11,27 +11,20 @@ import {
 } from "../../utils/apiService";
 import Pagination from "../common/Pagination";
 
-const ProfitAndLoss = () => {
+const ProfitAndLoss = ( ) => {
   const { dispatch, store } = useAppContext();
   const [profitAndLossGameData, setProfitAndLossGameData] = useState([]);
   const [profitAndLossMarketData, setProfitAndLossMarketData] = useState([]);
   const [profitAndLossData, setProfitAndLossData] = useState([]);
   const [totalEntries, setTotalEntries] = useState(5);
-  const [totalEntriesTwo, setTotalEntriesTwo] = useState(5);
+
+  
   //first table
   const [pagination, setPagination] = useState({
     totalItems: 0,
     currentPage: 1,
     totalPages: 1,
   });
-  //second table
-  const [paginationTow, setPaginetionTwo] = useState({
-    totalItems: 0,
-    currentPage: 1,
-    totalPages: 1,
-  });
-
-
 
   //first table
 
@@ -41,15 +34,7 @@ const ProfitAndLoss = () => {
     pagination.totalItems
   );
 
-  //second table
 
-  let startIndexTwo = Math.min(
-    (paginationTow.currentPage - 1) * totalEntriesTwo + 1
-  );
-  let endIndexTwo = Math.min(
-    paginationTow.currentPage * totalEntriesTwo,
-    paginationTow.totalItems
-  );
 
   const defaultStartDate = new Date();
   defaultStartDate.setDate(defaultStartDate.getDate() - 1);
@@ -58,17 +43,19 @@ const ProfitAndLoss = () => {
     endDate: new Date(),
   });
 
+
+   //check this for table two
   const handleGameClick = async (value) => {
     try {
       const response = await profitAndLossMarket_Api({
         gameId: value,
         startDate: formatDate(dateValue.startDate),
         endDate: formatDate(dateValue.endDate),
-        pageNumber: paginationTow.currentPage,
-        dataLimit: totalEntriesTwo,
+        pageNumber: pagination.currentPage,
+        dataLimit: totalEntries,
       });
       setProfitAndLossGameData(response.data);
-      setPaginetionTwo((prevState) => ({
+      setPagination((prevState) => ({
         ...prevState,
         totalPages: response.pagination.totalPages,
         totalItems: response.pagination.totalItems,
@@ -77,14 +64,17 @@ const ProfitAndLoss = () => {
       console.error("Error fetching data for game ID:", value, error);
     }
   };
+
+ 
+  //check this api for third table 
   const handleMarketClick = async (marketIdData) => {
     try {
       const response = await profitAndLossRunner_Api({
         marketId: marketIdData,
         startDate: formatDate(dateValue.startDate),
         endDate: formatDate(dateValue.endDate),
-        pageNumber: paginationTow.currentPage,
-        dataLimit: totalEntriesTwo,
+        pageNumber: pagination.currentPage,
+        dataLimit: totalEntries,
       });
       if (
         response.data &&
@@ -92,7 +82,7 @@ const ProfitAndLoss = () => {
         response.data[0].runnerName
       ) {
         setProfitAndLossGameData(response.data);
-        setPaginetionTwo((prevState) => ({
+        setPagination((prevState) => ({
           ...prevState,
           totalPages: response.pagination.totalPages,
           totalItems: response.pagination.totalItems,
@@ -104,6 +94,10 @@ const ProfitAndLoss = () => {
       console.error("Error fetching data for market ID:", marketIdData, error);
     }
   };
+
+
+
+
   const handleFetchDateData = async () => {
     const response = await profitAndLoss_Api({
       startDate: formatDate(dateValue.startDate),
@@ -112,24 +106,19 @@ const ProfitAndLoss = () => {
       dataLimit: totalEntries,
     });
     if (response) {
-      setProfitAndLossData(response.data);
-      // setTotalPages(response.pagination.totalPages);
-      // setTotalItems(response.pagination.totalItems);
-      setPagination((prevState) => ({
+        setProfitAndLossData(response.data);
+        setPagination((prevState) => ({
         ...prevState,
         totalPages: response.pagination.totalPages,
         totalItems: response.pagination.totalItems,
       }));
-      // setPagination(prevState => ({
-      //   ...prevState,
-      //   totalItems: response.pagination.totalItems
-
-      // }));
     }
   };
+
   useEffect(() => {
     handleFetchDateData();
   }, [pagination.currentPage, pagination.totalItems, totalEntries]);
+
 
   const handleDateValue = (name, value) => {
     
@@ -138,6 +127,7 @@ const ProfitAndLoss = () => {
       [name]: value,
     }));
   };
+
   const handleReset = () => {
     setDateValue({
       startDate: defaultStartDate,
@@ -159,18 +149,7 @@ const ProfitAndLoss = () => {
       currentPage: 1,
     }));
   };
-  // table two total entries pagination
-  const handleEntriesTwoChange = (event) => {
-    const entries = Number(event.target.value);
-    console.log("entries", entries);
-    setTotalEntriesTwo(entries);
-    // After updating totalItems, we need to fetch data for the first page with the new number of items
-    setPaginetionTwo((prevState) => ({
-      ...prevState,
-      currentPage: 1,
-    }));
-  };
-console.log('showing entries:',paginationTow  , 'total entries :',totalEntriesTwo )
+
   // pagination handlechange (to be solved later )
   const handlePageChange = (pageNumber) => {
     setPagination((prevState) => ({
@@ -179,13 +158,7 @@ console.log('showing entries:',paginationTow  , 'total entries :',totalEntriesTw
     }));
   };
 
-  //paginetion handleChange table Two
-  const handlePageChangeTwo = (pageNumberTwo) => {
-    setPaginetionTwo((prevState) => ({
-      ...prevState,
-      currentPage: pageNumberTwo,
-    }));
-  };
+
 
   // Define isValidDate function here
 const isValidDate = (current) => {
@@ -223,12 +196,6 @@ const isValidDate = (current) => {
           startIndex={startIndex}
           endIndex={endIndex}
           totalItems={pagination.totalItems}
-          // second table paginetion
-          handleEntriesTwoChange={handleEntriesTwoChange}
-          handlePageChangeTwo={handlePageChangeTwo}
-          startIndexTwo={startIndexTwo}
-          endIndexTwo={endIndexTwo}
-          totalEntriesTwo={totalEntriesTwo}
           isValidDate={isValidDate}
         />
       </AppDrawer>
@@ -256,29 +223,24 @@ const ProfitLoss = ({
   startIndex,
   endIndex,
   totalItems,
-  //for paginetion table 2
-  handleEntriesTwoChange,
-  handlePageChangeTwo,
-  endIndexTwo,
-  startIndexTwo,
-  totalEntriesTwo,
   isValidDate
 
 }) => {
   return (
     <>
       <div
-        className="card p-0 section"
-        style={{ marginTop: "120px", fontWeight: "700", padding: "0px" }}
+        className="card section"
+        style={{ marginTop: "120px", fontWeight: "700" ,width:"100%"}}
       >
         <span
           className="text-white"
           style={{
             backgroundColor: "#2CB3D1",
             display: "block",
-            fontWeight: "700",
+            // fontWeight: "700",
             padding: "0px",
             textIndent: "5px",
+            textAlign:"center"
           }}
         >
           Profit & Loss Report
@@ -314,14 +276,14 @@ const ProfitLoss = ({
           <div className="col-lg-3">
             <div className="col-sm-6 d-flex justify-content-center ">
               <button
-                className="btn btn-secondary"
+                className="btn btn-secondary proLossButton"
                 style={{ backgroundColor: "#2CB3D1", fontWeight: "bold" }}
                 onClick={handleFetchDateData}
               >
                 Go
               </button>
               <button
-                className="btn btn-secondary"
+                className="btn btn-secondary proLossButton"
                 style={{
                   backgroundColor: "#2CB3D1",
                   marginLeft: "20px",
@@ -337,10 +299,10 @@ const ProfitLoss = ({
       </div>
       <br />
       {profitAndLossData.length > 0 ? (
-        <div className="card p-0 section" style={{ marginTop: "15px" }}>
+        <div className="card p-0 section" style={{width:"100%"}}>
           <div
             className="table-container overflow-x-scroll"
-            style={{ overflowX: "auto", margin: "10px" }}
+            style={{ overflowX: "auto", margin: "10px"  }}
           >
             {/* show entries deopdown */}
             <div className="mb-3">
@@ -363,19 +325,19 @@ const ProfitLoss = ({
                 <tr>
                   <th
                     scope="col"
-                    style={{ backgroundColor: "#2CB3D1", color: "white" }}
+                    style={{ backgroundColor: "#2CB3D1", color: "white" ,textAlign:"center" }}
                   >
                     Game Name
                   </th>
                   <th
                     scope="col"
-                    style={{ backgroundColor: "#2CB3D1", color: "white" }}
+                    style={{ backgroundColor: "#2CB3D1", color: "white" ,textAlign:"center" }}
                   >
                     Profit&Loss
                   </th>
                   <th
                     scope="col"
-                    style={{ backgroundColor: "#2CB3D1", color: "white" }}
+                    style={{ backgroundColor: "#2CB3D1", color: "white" ,textAlign:"center" }}
                   >
                     Total P&L
                   </th>
@@ -386,7 +348,7 @@ const ProfitLoss = ({
                   <tr key={index}>
                     <td
                       onClick={() => handleGameClick(item.gameId)}
-                      style={{ cursor: "pointer" }}
+                      style={{ cursor: "pointer", fontWeight: "bold" }}
                     >
                       {item.gameName}
                     </td>
@@ -397,7 +359,7 @@ const ProfitLoss = ({
               </tbody>
             </table>
           </div>
-         <div style={{margin:"10px"}}>
+         <div style={{margin:"10px" , display:"flex",justifyContent:"center"}}>
            <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
@@ -407,16 +369,6 @@ const ProfitLoss = ({
             totalData={totalItems}
           />
          </div>
-          {/* <Pagination
-            currentPage={paginationTow.currentPage}
-            totalPages={paginationTow.totalPages}
-            handlePageChangeTwo={handlePageChangeTwo}
-            startIndexTwo={startIndexTwo}
-            endIndexTwo={endIndexTwo}
-            totalData={paginationTow.totalItems}
-            totalEntriesTwo={totalEntriesTwo}
-            handleEntriesTwoChange={handleEntriesTwoChange}
-          /> */}
         </div>
       ) : (
         <div
@@ -428,13 +380,12 @@ const ProfitLoss = ({
         </div>
       )}
 
-      {profitAndLossGameData.length > 0 && (
+      {/* {profitAndLossGameData.length > 0 && (
         <div className="card p-0 section" style={{ marginTop: "15px" }}>
           <div
             className="table-container overflow-x-scroll"
             style={{ overflowX: "auto", margin: "10px" }}
           >
-            {/* show entries deopdown */}
             <div className="mb-3">
               <label htmlFor="showEntriesDropdown" className="form-label">
                 Show entries
@@ -453,12 +404,6 @@ const ProfitLoss = ({
             <table className="table table-bordered">
               <thead>
                 <tr>
-                  {/* {profitAndLossGameData.data.runnerName ? <th
-                  scope="col"
-                  style={{ backgroundColor: "#2CB3D1", color: "white" }}
-                >
-                  runnerName
-                </th>:null} */}
                   {profitAndLossGameData[0].runnerName && (
                     <th
                       scope="col"
@@ -490,12 +435,12 @@ const ProfitLoss = ({
               <tbody>
                 {profitAndLossGameData.map((item, index) => (
                   <tr key={index}>
-                    {/* <td>{item.runnerName}</td>    */}
+                
                     {item.runnerName && <td>{item.runnerName}</td>}
                     <td>{item.gameName}</td>
                     <td
                       onClick={() => handleMarketClick(item.marketId)}
-                      style={{ cursor: "pointer" }}
+                      style={{ cursor: "pointer" ,fontWeight: "bold" }}
                     >
                       {item.marketName}
                     </td>
@@ -504,17 +449,11 @@ const ProfitLoss = ({
                 ))}
               </tbody>
             </table>
+          </div >
+          <div style={{margin:"10px" , display:"flex",justifyContent:"center"}}>
           </div>
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            handlePageChangeTwo={handlePageChangeTwo}
-            startIndexTwo={startIndexTwo}
-            endIndexTwo={endIndexTwo}
-            totalData={totalItems}
-          />
         </div>
-      )}
+      )} */}
     </>
   );
 };

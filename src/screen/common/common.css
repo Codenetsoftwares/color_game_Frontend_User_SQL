@@ -266,3 +266,14 @@ hamburgerNavbar
     transform: rotateY(360deg);
   }
 }
+
+/*======================
+profit and loss 
+=======================*/
+
+.proLossButton{
+  height: 35px;
+  width: 100px;
+  margin: 5px;
+  text-align: center;
+}
