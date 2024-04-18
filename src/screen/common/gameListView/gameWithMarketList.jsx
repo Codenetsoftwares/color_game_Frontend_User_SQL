@@ -23,6 +23,7 @@ function GameWithMarketList({ isSingleMarket }) {
   const [user_gameWithMarketData, setUser_gameWithMarketData] = useState(getGameWithMarketDataInitialState());
   const [user_marketWithRunnerData, setUser_marketWithRunnerData] = useState(getMarketWithRunnerDataInitialState());
   const [preExposure, setPreExposure] = useState(0);
+  const [newToBeDecided, setNewToBeDecided] = useState(0);
   console.log('============> line 19 game id ', user_gameWithMarketData);
 
   const { store, dispatch } = useAppContext();
@@ -141,7 +142,6 @@ function GameWithMarketList({ isSingleMarket }) {
   console.log('mode', toggle.mode);
 
   function getMaxNegativeBalance(runners) {
-    // debugger;
     let maxNegativeRunner = 0;
 
     // Iterate through the runners
@@ -150,7 +150,6 @@ function GameWithMarketList({ isSingleMarket }) {
         maxNegativeRunner = runner.runnerName.bal;
       }
     });
-    debugger;
     return maxNegativeRunner;
   }
 
@@ -197,6 +196,11 @@ function GameWithMarketList({ isSingleMarket }) {
       setLoginModal(true);
       return;
     }
+
+    // preExposure
+    // currentBetEffectiveAmt
+    // finalEffectiveAmt
+
     if (bidding.amount == 0 || bidding.amount < 0 || bidding.amount == '') {
       if (bidding.amount == 0) {
         toast.error('Amount can not be zero');
@@ -221,7 +225,8 @@ function GameWithMarketList({ isSingleMarket }) {
       runnerId: store.placeBidding.runnerId,
       value: bidding.amount,
       bidType: toggle.mode,
-      preExposure: preExposure,
+      exposure: 0,
+      wallet: 0
     };
 
     dispatch({
@@ -469,11 +474,10 @@ function GameWithMarketList({ isSingleMarket }) {
                               <span className="text-success  fw-bold" mx-2>
                                 {bidding.amount != 0 && runnerData.runnerName.bal}
                                 <span
-                                  className={`3 text-${
-                                    Number(runnerData.runnerName.bal) - Math.round(bidding.amount) > 0
-                                      ? 'success'
-                                      : 'danger'
-                                  } fw-bold`}
+                                  className={`3 text-${Number(runnerData.runnerName.bal) - Math.round(bidding.amount) > 0
+                                    ? 'success'
+                                    : 'danger'
+                                    } fw-bold`}
                                 >
                                   ({Number(runnerData.runnerName.bal) - Math.round(bidding.amount)})
                                 </span>
