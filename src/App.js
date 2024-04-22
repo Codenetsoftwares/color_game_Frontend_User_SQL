@@ -1,18 +1,20 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AppProvider } from './contextApi/context';
-import Home from './screen/home/home';
-import NotFound from './screen/common/notFound';
-import GameView from './screen/gameView/gameView';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import './App.css';
-import RulesPage from './screen/common/rulesPage';
-import ForgotPassword from './screen/chnagePassword/forgotPassword';
-import PrivateRoute from './globlaCommon/privateRoute';
-import HamburgerNavBar from './screen/common/hamburgerNavBar';
-import BetHistory from './screen/history/BetHistory';
-import ProfitAndLoss from './screen/profitAndLoss/profitAndLoss';
-import Loading from './globlaCommon/loading';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AppProvider } from "./contextApi/context";
+import Home from "./screen/home/home";
+import NotFound from "./screen/common/notFound";
+import GameView from "./screen/gameView/gameView";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
+import RulesPage from "./screen/common/rulesPage";
+import ForgotPassword from "./screen/chnagePassword/forgotPassword";
+import PrivateRoute from "./globlaCommon/privateRoute";
+import HamburgerNavBar from "./screen/common/hamburgerNavBar";
+import BetHistory from "./screen/history/BetHistory";
+import ProfitAndLoss from "./screen/profitAndLoss/profitAndLoss";
+import Loading from "./globlaCommon/loading";
+import GameNameList from "./screen/profitAndLoss/gameNameList";
+import MarketNameList from "./screen/profitAndLoss/marketNameList";
 
 function App() {
   return (
@@ -70,6 +72,22 @@ function App() {
                 <ProfitAndLoss />
               </PrivateRoute>
             }
+          />
+          <Route
+            path="/gameNameList/:gameId"
+            element={
+              <PrivateRoute>
+                <GameNameList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+          path="/marketNameList/:marketId"
+          element={
+            <PrivateRoute>
+              <MarketNameList/>
+            </PrivateRoute>
+          }
           />
 
           {/* not found */}
