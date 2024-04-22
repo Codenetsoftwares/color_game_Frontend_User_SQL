@@ -27,7 +27,7 @@ const NavBar = () => {
   const [showModalLogin, setShowModalLogin] = useState(false);
 
   const { store, dispatch } = useAppContext();
-  console.log('store from navbar', store);
+
   const userId = store.user?.id;
 
   const accessTokenFromStore = JSON.parse(localStorage.getItem(strings.LOCAL_STORAGE_KEY))?.user?.accessToken;

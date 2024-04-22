@@ -267,7 +267,6 @@ hamburgerNavbar
   }
 }
 
-
 .background {
   min-height: 80vh;
   display: flex;
@@ -277,8 +276,8 @@ hamburgerNavbar
 }
 
 .background::before {
-  content: "";
-  background-image: url("../../asset/suspended.png.png");
+  content: '';
+  background-image: url('../../asset/suspended.png.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

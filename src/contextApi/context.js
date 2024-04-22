@@ -22,7 +22,7 @@ const AppProvider = ({ children }) => {
 
   // Save state to local storage whenever it changes
   useEffect(() => {
-    const dummyStore = { ...store }
+    const dummyStore = { ...store };
     // delete dummyStore.isLoading
     localStorage.setItem(strings.LOCAL_STORAGE_KEY, JSON.stringify(dummyStore));
   }, [store]);

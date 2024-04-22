@@ -13,8 +13,8 @@
 }
 
 .background::before {
-  content: "";
-  background-image: url("../../Assets/suspended.png.png");
+  content: '';
+  background-image: url('../../Assets/suspended.png.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
