@@ -40,14 +40,14 @@ const NavBar = () => {
 
   useEffect(() => {
     let currentExposure = null;
-    store.user.wallet?.marketListExposure.forEach(entry => {
+    store.user.wallet?.marketListExposure.forEach((entry) => {
       currentExposure += Object.values(entry)[0];
-    })
+    });
 
     setExposureAndWallet({
       ...exposureAndWallet,
-      exposure: currentExposure
-    })
+      exposure: currentExposure,
+    });
   }, [store.user.wallet?.marketListExposure]);
 
   const handleUserWallet = async () => {

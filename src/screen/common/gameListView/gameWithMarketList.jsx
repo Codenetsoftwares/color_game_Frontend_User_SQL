@@ -24,7 +24,10 @@ function GameWithMarketList({ isSingleMarket }) {
   const [user_marketWithRunnerData, setUser_marketWithRunnerData] = useState(getMarketWithRunnerDataInitialState());
   const [preExposure, setPreExposure] = useState(0);
   const [newToBeDecided, setNewToBeDecided] = useState(0);
-  const [exposureAndWallet, setExposureAndWallet] = useState({ exposure: null, wallet: null });
+  const [exposureAndWallet, setExposureAndWallet] = useState({
+    exposure: null,
+    wallet: null,
+  });
 
   const { store, dispatch } = useAppContext();
 
@@ -54,14 +57,14 @@ function GameWithMarketList({ isSingleMarket }) {
 
   useEffect(() => {
     let currentExposure = null;
-    store.user.wallet?.marketListExposure.forEach(entry => {
+    store.user.wallet?.marketListExposure.forEach((entry) => {
       currentExposure += Object.values(entry)[0];
-    })
+    });
 
     setExposureAndWallet({
       ...exposureAndWallet,
-      exposure: currentExposure
-    })
+      exposure: currentExposure,
+    });
   }, [store.user.wallet?.marketListExposure]);
 
   console.log('Arr=>>>>', arr);
@@ -277,29 +280,30 @@ function GameWithMarketList({ isSingleMarket }) {
       return;
     }
 
-    let marketListExposureUpdated = []
+    let marketListExposureUpdated = [];
     if (store.user.wallet?.marketListExposure && store.user.wallet?.marketListExposure.length > 0) {
-      marketListExposureUpdated = [...store.user.wallet?.marketListExposure]
+      marketListExposureUpdated = [...store.user.wallet?.marketListExposure];
     }
 
-    let currentMarketExposure = { [store.placeBidding.marketId]: Math.abs(highestNegetive) }
+    let currentMarketExposure = {
+      [store.placeBidding.marketId]: Math.abs(highestNegetive),
+    };
 
     if (marketListExposureUpdated?.length === 0) {
-      marketListExposureUpdated.push(currentMarketExposure)
+      marketListExposureUpdated.push(currentMarketExposure);
     } else {
       let flag = true;
-      marketListExposureUpdated.forEach(entry => {
+      marketListExposureUpdated.forEach((entry) => {
         if (entry[store.placeBidding.marketId]) {
-          entry[store.placeBidding.marketId] = Math.abs(highestNegetive)
+          entry[store.placeBidding.marketId] = Math.abs(highestNegetive);
           flag = false;
         }
-      })
+      });
 
       if (flag) {
-        marketListExposureUpdated.push(currentMarketExposure)
+        marketListExposureUpdated.push(currentMarketExposure);
       }
     }
-
 
     const values = {
       userId: store.user.id,
@@ -310,7 +314,7 @@ function GameWithMarketList({ isSingleMarket }) {
       bidType: toggle.mode,
       exposure: Math.abs(highestNegetive),
       wallet: bal,
-      marketListExposure: marketListExposureUpdated ?? []
+      marketListExposure: marketListExposureUpdated ?? [],
     };
 
     dispatch({
@@ -559,10 +563,11 @@ function GameWithMarketList({ isSingleMarket }) {
                                   <span className="text-success  fw-bold" mx-2>
                                     {bidding.amount != 0 && runnerData.runnerName.bal}
                                     <span
-                                      className={`3 text-${Number(runnerData.runnerName.bal) - Math.round(bidding.amount) > 0
-                                        ? 'success'
-                                        : 'danger'
-                                        } fw-bold`}
+                                      className={`3 text-${
+                                        Number(runnerData.runnerName.bal) - Math.round(bidding.amount) > 0
+                                          ? 'success'
+                                          : 'danger'
+                                      } fw-bold`}
                                     >
                                       ({Number(runnerData.runnerName.bal) - Math.round(bidding.amount)})
                                     </span>
@@ -685,7 +690,7 @@ function GameWithMarketList({ isSingleMarket }) {
                           <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
                             <button
                               className="btn btn-sm bg-white border border-2 rounded-3 col-12"
-                              onClick={() => handleUserBidding()}
+                              onClick={() => handleUserBidding(index, bidding.amount, toggle.mode)}
                             >
                               Place Bet
                             </button>
