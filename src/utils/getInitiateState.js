@@ -10,6 +10,7 @@ export function getUserInitialState(body = {}) {
       exposure: body?.wallet?.exposure ?? 0,
       walletId: body?.wallet?.walletId ?? '',
       profit_loss: body.profit_loss ?? '',
+      marketListExposure: body?.wallet?.marketListExposure ?? [],
     },
   };
 }

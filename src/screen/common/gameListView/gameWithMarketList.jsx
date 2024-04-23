@@ -24,6 +24,7 @@ function GameWithMarketList({ isSingleMarket }) {
   const [user_marketWithRunnerData, setUser_marketWithRunnerData] = useState(getMarketWithRunnerDataInitialState());
   const [preExposure, setPreExposure] = useState(0);
   const [newToBeDecided, setNewToBeDecided] = useState(0);
+  const [exposureAndWallet, setExposureAndWallet] = useState({ exposure: null, wallet: null });
 
   const { store, dispatch } = useAppContext();
 
@@ -51,8 +52,21 @@ function GameWithMarketList({ isSingleMarket }) {
     }
   }, [bidding.amount]);
 
+  useEffect(() => {
+    let currentExposure = null;
+    store.user.wallet?.marketListExposure.forEach(entry => {
+      currentExposure += Object.values(entry)[0];
+    })
+
+    setExposureAndWallet({
+      ...exposureAndWallet,
+      exposure: currentExposure
+    })
+  }, [store.user.wallet?.marketListExposure]);
+
   console.log('Arr=>>>>', arr);
-  console.log('Store=>>>', store.user.wallet.exposure);
+  // console.log('Store=>>>', prevExposureForCurrentMarket);
+  console.log('exposureAndWallet=>>>', exposureAndWallet);
   useEffect(() => {
     handleRefreshOrGetInitialData();
   }, [marketIdFromUrl]);
@@ -235,11 +249,11 @@ function GameWithMarketList({ isSingleMarket }) {
 
     console.log('Negetive', highestNegetive);
 
-    if (Math.abs(store.user.wallet.exposure) >= Math.abs(highestNegetive)) {
-      difference = Math.abs(store.user.wallet.exposure) - Math.abs(highestNegetive);
+    if (Math.abs(preExposure) >= Math.abs(highestNegetive)) {
+      difference = Math.abs(preExposure) - Math.abs(highestNegetive);
       bal = store.user.wallet.balance + difference;
     } else {
-      difference = Math.abs(highestNegetive) - Math.abs(store.user.wallet.exposure);
+      difference = Math.abs(highestNegetive) - Math.abs(preExposure);
       bal = store.user.wallet.balance - difference;
     }
     if (!store.user.isLogin) {
@@ -263,6 +277,30 @@ function GameWithMarketList({ isSingleMarket }) {
       return;
     }
 
+    let marketListExposureUpdated = []
+    if (store.user.wallet?.marketListExposure && store.user.wallet?.marketListExposure.length > 0) {
+      marketListExposureUpdated = [...store.user.wallet?.marketListExposure]
+    }
+
+    let currentMarketExposure = { [store.placeBidding.marketId]: Math.abs(highestNegetive) }
+
+    if (marketListExposureUpdated?.length === 0) {
+      marketListExposureUpdated.push(currentMarketExposure)
+    } else {
+      let flag = true;
+      marketListExposureUpdated.forEach(entry => {
+        if (entry[store.placeBidding.marketId]) {
+          entry[store.placeBidding.marketId] = Math.abs(highestNegetive)
+          flag = false;
+        }
+      })
+
+      if (flag) {
+        marketListExposureUpdated.push(currentMarketExposure)
+      }
+    }
+
+
     const values = {
       userId: store.user.id,
       gameId: store.placeBidding.gameId,
@@ -272,6 +310,7 @@ function GameWithMarketList({ isSingleMarket }) {
       bidType: toggle.mode,
       exposure: Math.abs(highestNegetive),
       wallet: bal,
+      marketListExposure: marketListExposureUpdated ?? []
     };
 
     dispatch({
@@ -520,11 +559,10 @@ function GameWithMarketList({ isSingleMarket }) {
                                   <span className="text-success  fw-bold" mx-2>
                                     {bidding.amount != 0 && runnerData.runnerName.bal}
                                     <span
-                                      className={`3 text-${
-                                        Number(runnerData.runnerName.bal) - Math.round(bidding.amount) > 0
-                                          ? 'success'
-                                          : 'danger'
-                                      } fw-bold`}
+                                      className={`3 text-${Number(runnerData.runnerName.bal) - Math.round(bidding.amount) > 0
+                                        ? 'success'
+                                        : 'danger'
+                                        } fw-bold`}
                                     >
                                       ({Number(runnerData.runnerName.bal) - Math.round(bidding.amount)})
                                     </span>
