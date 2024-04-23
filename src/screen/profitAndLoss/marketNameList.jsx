@@ -4,11 +4,14 @@ import Layout from "../layout/layout";
 import { useParams } from "react-router-dom";
 import Pagination from "../common/Pagination";
 import { profitAndLossRunner_Api } from "../../utils/apiService";
+import strings from "../../utils/constant/stringConstant";
+import { useAppContext } from "../../contextApi/context";
 
 const MarketNameList = () => {
   const { marketId } = useParams();
   console.log("++++++++++*******>runnerData", marketId);
   const [marketData, setMarketData] = useState([]);
+  const { dispatch } = useAppContext();
   const [totalEntries, setTotalEntries] = useState(5);
      //first table
      const [pagination, setPagination] = useState({
@@ -71,6 +74,12 @@ const MarketNameList = () => {
 
   //  check this api for third table
   const handleMarketData = async () => {
+
+    dispatch({
+      type: strings.isLoading,
+      payload: true,
+    });
+
     const response = await profitAndLossRunner_Api({
       marketId: marketId,
       startDate: formatDate(dateValue.startDate),
@@ -84,6 +93,11 @@ const MarketNameList = () => {
       totalPages: response.pagination.totalPages,
       totalItems: response.pagination.totalItems,
     }));
+
+    dispatch({
+      type: strings.isLoading,
+      payload: false,
+    });
   };
 
   const MarketNameTableList = ({
@@ -101,7 +115,6 @@ const MarketNameList = () => {
     return (
       <>
         <div style={{ marginTop: "120px" }}>
-          <div>second page</div>
           {marketData.length > 0 ? (
             <div className="card p-0 section" style={{ marginTop: "15px" }}>
               <div
@@ -123,7 +136,7 @@ const MarketNameList = () => {
                     <option value="10">10</option>
                   </select>
                 </div>
-                <table className="table table-bordered">
+                <table className="table table-bordered" style={{textAlign:"center"}}>
                   <thead>
                     <tr>
                       <th
@@ -153,13 +166,13 @@ const MarketNameList = () => {
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody style={{textAlign:"center"}}>
                     {marketData.map((item, index) => (
                       <tr key={index}>
                         <td>{item.runnerName}</td>
                         <td>{item.marketName}</td>
                         <td>{item.gameName}</td>
-                        <td>{item.profitLoss}</td>
+                        <td style={{ color: item.profitLoss >= 0 ? "green" : "red"  }}>{item.profitLoss}</td>
                       </tr>
                     ))}
                   </tbody>

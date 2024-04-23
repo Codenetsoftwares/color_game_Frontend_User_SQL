@@ -8,10 +8,14 @@ import {
   profitAndLossRunner_Api,
 } from "../../utils/apiService";
 import Pagination from "../common/Pagination";
+import { useAppContext } from "../../contextApi/context";
+import strings from "../../utils/constant/stringConstant";
 
 const GameNameList = () => {
  
   const { gameId } = useParams();
+  const { dispatch } = useAppContext();
+
   const [totalEntries, setTotalEntries] = useState(5);
    //first table
    const [pagination, setPagination] = useState({
@@ -69,7 +73,12 @@ const GameNameList = () => {
   }, [pagination.currentPage, pagination.totalItems, totalEntries]);
 
   const handleUserProfit = async () => {
-
+ 
+    dispatch({
+      type: strings.isLoading,
+      payload: true,
+    });
+    
     const response = await profitAndLossMarket_Api ({
       gameId: gameId,
       startDate: formatDate(dateValue.startDate),
@@ -79,6 +88,16 @@ const GameNameList = () => {
     }, true);
    console.log("response",response);
    setRunnerGameData(response.data);
+   setPagination((prevState) => ({
+    ...prevState,
+    totalPages: response.pagination.totalPages,
+    totalItems: response.pagination.totalItems,
+  }));
+
+  dispatch({
+    type: strings.isLoading,
+    payload: false,
+  });
   };
 
   console.log("++++++++>line number 50",runnerGameData);
@@ -99,9 +118,8 @@ const GameNameList = () => {
     return (
       <>
         <div style={{ marginTop: "120px" }}>
-          <div>first page</div>
-          {
-            runnerGameData.length > 0 ? (
+
+          {runnerGameData.length > 0 ? (
               <div className="card p-0 section" style={{ marginTop: "15px" }}>
                 <div
                   className="table-container overflow-x-scroll"
@@ -123,36 +141,36 @@ const GameNameList = () => {
                     </select>
                   </div>
                   <table className="table table-bordered">
-                    <thead>
+                    <thead style={{textAlign:"center"}}>
                       <tr>
                         <th
                           scope="col"
                           style={{ backgroundColor: "#2CB3D1", color: "white" }}
                         >
-                          gameName
+                          GameName
                         </th>
                         <th
                           scope="col"
                           style={{ backgroundColor: "#2CB3D1", color: "white" }}
                         >
-                          marketName
+                          MarketName
                         </th>
                         <th
                           scope="col"
                           style={{ backgroundColor: "#2CB3D1", color: "white" }}
                         >
-                          profitLoss
+                          ProfitLoss
                         </th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody style={{textAlign:"center"}}>
                       {runnerGameData.map((item, index) => (
                         <tr key={index}>
                           <td>{item.gameName}</td>
                           <td  style={{ cursor: "pointer", fontWeight: "bold" }}>
                             <Link to={`/marketNameList/${item.marketId}`}>{item.marketName}</Link>
                            </td>
-                          <td>{item.profitLoss}</td>
+                          <td style={{ color: item.profitLoss >= 0 ? "green" : "red"  }}>{item.profitLoss}</td>
                         </tr>
                       ))}
                     </tbody>

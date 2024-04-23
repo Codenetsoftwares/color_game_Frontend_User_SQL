@@ -11,6 +11,8 @@ import {
 } from "../../utils/apiService";
 import Pagination from "../common/Pagination";
 import { Link, useNavigate } from "react-router-dom";
+import strings from "../../utils/constant/stringConstant";
+
 const ProfitAndLoss = ( ) => {
 
   const [profitAndLossGameData, setProfitAndLossGameData] = useState([]);
@@ -18,7 +20,7 @@ const ProfitAndLoss = ( ) => {
   const [profitAndLossData, setProfitAndLossData] = useState([]);
   const [totalEntries, setTotalEntries] = useState(5);
   const navigate = useNavigate();
-
+  const { dispatch } = useAppContext();
   //first table
   const [pagination, setPagination] = useState({
     totalItems: 0,
@@ -47,6 +49,12 @@ const ProfitAndLoss = ( ) => {
 
 
   const handleFetchDateData = async () => {
+
+    dispatch({
+      type: strings.isLoading,
+      payload: true,
+    });
+
     const response = await profitAndLoss_Api({
       startDate: formatDate(dateValue.startDate),
       endDate: formatDate(dateValue.endDate),
@@ -61,6 +69,10 @@ const ProfitAndLoss = ( ) => {
         totalItems: response.pagination.totalItems,
       }));
     }
+    dispatch({
+      type: strings.isLoading,
+      payload: false,
+    });
   };
   useEffect(() => {
     handleFetchDateData();
@@ -103,6 +115,7 @@ const ProfitAndLoss = ( ) => {
 const isValidDate = (current) => {
   return current.isBefore(moment(), "day");
 };
+
   function formatDate(dateString) {
     let date = new Date(dateString);
     let year = date.getFullYear();
@@ -161,11 +174,14 @@ const ProfitLoss = ({
                 onChange={(e) =>
                   handleDateValue(
                     "startDate",
-                    moment(e).format("DD-MM-YYYY HH:mm")
+                    moment(e).format("DD-MM-YYYY")
                   )
                 }
-                timeFormat="HH:mm"
-                isValidDate={isValidDate}
+                timeFormat={false}
+                // timeFormat="HH:mm"
+                isValidDate={(current) =>
+                  current.isBefore(new Date())
+                }
               />
             </div>
             <div className="col-sm-3 col-md-4 col-lg-3">
@@ -174,10 +190,13 @@ const ProfitLoss = ({
                 name="endDate"
                 dateFormat="DD-MM-YYYY"
                 onChange={(e) =>
-                  handleDateValue("endDate", moment(e).format("DD-MM-YYYY HH:mm"))
+                  handleDateValue("endDate", moment(e).format("DD-MM-YYYY"))
                 }
-                timeFormat="HH:mm"
-                isValidDate={isValidDate}
+                timeFormat={false}
+                // timeFormat="HH:mm"
+                isValidDate={(current) =>
+                  current.isBefore(new Date())
+                }
               />
             </div>
             <div className="col-lg-3">
@@ -250,7 +269,7 @@ const ProfitLoss = ({
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody style={{textAlign:"center"}}>
                   {profitAndLossData.map((item, index) => (
                     <tr key={index}>
                       <td
@@ -261,8 +280,8 @@ const ProfitLoss = ({
                         {item.gameName}
                         </Link>
                       </td>
-                      <td>{item.profitLoss}</td>
-                      <td>{item.profitLoss}</td>
+                      <td style={{ color: item.profitLoss >= 0 ? "green" : "red"  }}>{item.profitLoss}</td>
+                      <td style={{ color: item.profitLoss >= 0 ? "green" : "red"  }}>{item.profitLoss}</td>
                     </tr>
                   ))}
                 </tbody>
