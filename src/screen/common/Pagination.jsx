@@ -13,7 +13,7 @@ const Pagination = ({ currentPage, totalPages, handlePageChange, startIndex, end
 
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(
-        <li key={i} className={`page-item ${currentPage === i ? 'disabled' : ''}`}>
+        <li key={i} className={`page-item ${currentPage === i ? 'active' : ''}`}>
           <button className="page-link" onClick={() => handlePageChange(i)}>
             {i}
           </button>
@@ -23,6 +23,7 @@ const Pagination = ({ currentPage, totalPages, handlePageChange, startIndex, end
 
     return pageNumbers;
   };
+
   return (
     <div className="col-lg-12 col-sm-6">
     <div className="white_box mb_30">

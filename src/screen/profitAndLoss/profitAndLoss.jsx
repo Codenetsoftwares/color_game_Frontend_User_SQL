@@ -96,7 +96,7 @@ const ProfitAndLoss = ( ) => {
   // entries for no. of entries for pagination
   const handleEntriesChange = (event) => {
     const entries = Number(event.target.value);
-    console.log("entries", entries);
+    console.log('entries', entries);
     setTotalEntries(entries);
     // After updating totalItems, we need to fetch data for the first page with the new number of items
     setPagination((prevState) => ({
@@ -119,8 +119,8 @@ const isValidDate = (current) => {
   function formatDate(dateString) {
     let date = new Date(dateString);
     let year = date.getFullYear();
-    let month = ("0" + (date.getMonth() + 1)).slice(-2);
-    let day = ("0" + date.getDate()).slice(-2);
+    let month = ('0' + (date.getMonth() + 1)).slice(-2);
+    let day = ('0' + date.getDate()).slice(-2);
     return `${year}-${month}-${day}`;
   }
 

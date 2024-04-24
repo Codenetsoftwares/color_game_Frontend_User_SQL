@@ -50,7 +50,7 @@ export const reducer = (state, action) => {
     case strings.isLoading:
       return {
         ...state,
-        isLoading: action.payload
+        isLoading: action.payload,
       };
 
     default:

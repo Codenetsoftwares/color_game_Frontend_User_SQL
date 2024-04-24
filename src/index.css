@@ -23,6 +23,6 @@
   box-sizing: border-box;
 }
 
-/* button[disabled] {
-  background-color: orange;
-} */
+button[disabled] {
+  background-color: #f0f0f0;
+}

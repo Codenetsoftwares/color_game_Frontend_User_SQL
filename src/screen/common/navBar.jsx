@@ -25,9 +25,10 @@ import { userWallet } from '../../utils/apiService';
 const NavBar = () => {
   const navigate = useNavigate();
   const [showModalLogin, setShowModalLogin] = useState(false);
+  const [exposureAndWallet, setExposureAndWallet] = useState({ exposure: null, wallet: null });
 
   const { store, dispatch } = useAppContext();
-  console.log('store from navbar', store);
+
   const userId = store.user?.id;
 
   const accessTokenFromStore = JSON.parse(localStorage.getItem(strings.LOCAL_STORAGE_KEY))?.user?.accessToken;
@@ -36,6 +37,18 @@ const NavBar = () => {
       handleUserWallet();
     }
   }, [userId, accessTokenFromStore]);
+
+  useEffect(() => {
+    let currentExposure = null;
+    store.user.wallet?.marketListExposure.forEach((entry) => {
+      currentExposure += Object.values(entry)[0];
+    });
+
+    setExposureAndWallet({
+      ...exposureAndWallet,
+      exposure: currentExposure,
+    });
+  }, [store.user.wallet?.marketListExposure]);
 
   const handleUserWallet = async () => {
     console.log('userId', userId);
@@ -147,7 +160,7 @@ const NavBar = () => {
                   aria-controls="offcanvasDarkNavbar"
                   aria-label="Toggle navigation"
                 >
-                  Exp : {store?.user?.wallet?.exposure}
+                  Exp : {exposureAndWallet.exposure ?? 0}
                 </span>
               </span>
             ) : (
