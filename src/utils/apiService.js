@@ -161,7 +161,7 @@ export async function profitAndLoss_Api(body = {}, isToast = false) {
     const response = await makeCall(
       `${urls.profitAndLoss}?startDate=${body.startDate}&endDate=${body.endDate}&page=${body.pageNumber}&limit=${body.dataLimit}`,
       callParams,
-      isToast,
+      // isToast,
     );
 
     return response;
@@ -171,12 +171,12 @@ export async function profitAndLoss_Api(body = {}, isToast = false) {
 }
 
 export async function profitAndLossMarket_Api(body = {}, isToast = false) {
+  console.log("body",body)
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
-    const response = await makeCall(
-      `${urls.profitAndLossMarket}/${body.gameId}?startDate=${body.startDate}&endDate=${body.endDate}&page=${body.pageNumber}&limit=${body.dataLimit}`,
+    const response = await makeCall(`${urls.profitAndLossMarket}/${body.gameId}?startDate=${body.startDate}&endDate=${body.endDate}&page=${body.pageNumber}&limit=${body.dataLimit}`,
       callParams,
-      isToast,
+      // isToast,
     );
 
     return response;
@@ -191,7 +191,7 @@ export async function profitAndLossRunner_Api(body = {}, isToast = false) {
     const response = await makeCall(
       `${urls.profitAndLossRunner}/${body.marketId}?startDate=${body.startDate}&endDate=${body.endDate}&page=${body.pageNumber}&limit=${body.dataLimit}`,
       callParams,
-      isToast,
+      // isToast,
     );
 
     return response;
