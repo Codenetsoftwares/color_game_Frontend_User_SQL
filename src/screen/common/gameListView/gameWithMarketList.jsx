@@ -432,7 +432,7 @@ function GameWithMarketList({ isSingleMarket }) {
                       0);
 
                 const shouldDisplayTempBack =
-                  toggle.mode === "Back" &&
+                  toggle.mode === "back" &&
                   toggle.indexNo === runnerData.id &&
                   (winBalance !== 0 ||
                     Number(runnerData.runnerName.bal) -
@@ -543,7 +543,7 @@ function GameWithMarketList({ isSingleMarket }) {
                               handleToggle(
                                 runnerData.id,
                                 runnerData.rate[0].back,
-                                "Back",
+                                "back",
                                 runnerData.runnerName.runnerId
                               )
                             }
