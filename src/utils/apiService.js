@@ -58,7 +58,7 @@ export async function user_getMarketWithRunnerData_api(body = {}, isToast = fals
 
 export async function changePassword(body = {}, isToast = false) {
   try {
-    const callParams = getNoAuthCallParams(strings.POST, body, isToast);
+    const callParams = await getCallParams(strings.POST, body, isToast);
     const response = await makeCall(urls.changePassword, callParams, isToast);
 
     return response;
@@ -198,4 +198,16 @@ export async function profitAndLossRunner_Api(body = {}, isToast = false) {
   } catch (error) {
     throw error;
   }
-}
+};
+
+
+export async function user_carrouselImageDynamic_api(body = {}, isToast = false) {
+  try {
+    const callParams = getNoAuthCallParams(strings.GET, body, isToast);
+    const response = await makeCall(urls.user_carrouselImageDynamic, callParams);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+
+};
