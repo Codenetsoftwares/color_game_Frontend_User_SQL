@@ -301,7 +301,7 @@ const BetHistory = () => {
         </div>
 
         <div className="card shadow p-3 mb-5 bg-white rounded">
-          <div className="card-header bg-primary text-white">
+          <div className="card-header"  style={{ backgroundColor: "#2CB3D1", color: "white" ,textAlign:"center" }} >
             <h5 className="card-title">Bet History</h5>
           </div>
           {betHistoryData.length > 0 ? (
@@ -372,7 +372,7 @@ const BetHistory = () => {
   function openBets() {
     return (
       <div className="card" style={{ marginTop: "120px", height: "800px" }}>
-        <div className="card-header bg-primary text-white">
+        <div className="card-header"  style={{ backgroundColor: "#2CB3D1", color: "white" ,textAlign:"center" }}>
           <h5 className="card-title">Open Bets</h5>
         </div>
         <div className="card-body">
