@@ -57,10 +57,11 @@ const BetHistory = () => {
   const [marketSelectionbetHistory, setMarketSelectionbetHistory] = useState(
     []
   ); // from dummy data into bet history selection
+  console.log('=======>>> market selection',marketSelectionbetHistory)
   const [openBetSelectionbetHistory, setopenBetSelectionbetHistory] = useState(
     []
   ); // from dummy data into open bet selection
-
+console.log('========>>>>>> line 63 selection data',openBetSelectionbetHistory)
   const [selectedOptions, setSelectedOptions] = useState({
     select1: "",
     select2: "",
@@ -69,6 +70,7 @@ const BetHistory = () => {
   const [fetchData, setFetchData] = useState(true);
   const { store } = useAppContext();
   console.log("=============> line 15 ", store.user?.UserId);
+
 
   let startIndex = Math.min((currentPage - 1) * totalEntries + 1);
   let endIndex = Math.min(currentPage * totalEntries, totalItems);
@@ -85,7 +87,7 @@ const BetHistory = () => {
 
     if (response) {
       console.log("response for betHistoryData ", response);
-      setBetHistoryData(response.data);
+      setBetHistoryData(response.data.rows);
       setTotalPages(response.pagination.totalPages);
       setTotalItems(response.pagination.totalItems);
     } else {
@@ -97,7 +99,7 @@ const BetHistory = () => {
     if (selectedMarketId != "") {
       handleGetHistory();
     }
-  }, [currentPage, totalItems]);
+  }, [currentPage, totalItems,totalEntries]);
   console.log("==========> line65", betHistoryData);
 
   // pagination handlechange (to be solved later )
@@ -161,12 +163,12 @@ const BetHistory = () => {
     const response = await user_getBackLayData_api({
       marketId: selectedMarket,
     });
-    if (response) {
+    if (response && response.data && response.data.rows) {
       console.log(
         "===========>response for betOpenBetData(Line 173)",
         response
       );
-      setOpenBet(response.data);
+      setOpenBet(response.data.rows);
     } else {
       //add loading part //
     }
@@ -425,37 +427,33 @@ const BetHistory = () => {
               </thead>
               {/* Table body - data to be filled dynamically */}
               <tbody>
-                {/* Insert rows for back bets */}
-                {openBet
-                  .filter((item) => item.type === "Back")
-                  .map((item, index) => (
-                    <tr key={index}>
-                      <td className="d-none d-sm-table-cell">
-                        {item.runnerName}
-                      </td>
-                      <td className="d-none d-sm-table-cell">{item.rate}</td>
-                      <td className="d-none d-sm-table-cell">{item.value}</td>
-                      <td className="d-none d-sm-table-cell">
-                        {item.bidAmount}(-{item.value})
-                      </td>
-                      <td className="d-table-cell d-sm-none">
-                        <div>
-                          <strong>Back(Bet For):</strong> {item.runnerName}
-                        </div>
-                        <div>
-                          <strong>Odds:</strong> {item.rate}
-                        </div>
-                        <div>
-                          <strong>Stake:</strong> {item.value}
-                        </div>
-                        <div>
-                          <strong>Profit:</strong> {item.bidAmount}(-
-                          {item.value})
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
+  {/* Insert rows for back bets */}
+  {openBet
+    .filter((item) => item.type === "back")  // Ensure correct type matching (case-sensitive)
+    .map((item, index) => (
+      <tr key={index}>
+        <td className="d-none d-sm-table-cell">{item.runnerName}</td>
+        <td className="d-none d-sm-table-cell">{item.rate}</td>
+        <td className="d-none d-sm-table-cell">{item.value}</td>
+        <td className="d-none d-sm-table-cell">{item.bidAmount}(-{item.value})</td>
+        <td className="d-table-cell d-sm-none">
+          <div>
+            <strong>Back (Bet For):</strong> {item.runnerName}
+          </div>
+          <div>
+            <strong>Odds:</strong> {item.rate}
+          </div>
+          <div>
+            <strong>Stake:</strong> {item.value}
+          </div>
+          <div>
+            <strong>Profit:</strong> {item.bidAmount}(-{item.value})
+          </div>
+        </td>
+      </tr>
+    ))}
+</tbody>
+
             </table>
           </div>
         </div>
@@ -487,7 +485,7 @@ const BetHistory = () => {
               <tbody>
                 {/* Insert rows for lay bets */}
                 {openBet
-                  .filter((item) => item.type === "Lay")
+                  .filter((item) => item.type === "lay")
                   .map((item, index) => (
                     <tr key={index}>
                       <td className="d-none d-sm-table-cell">
