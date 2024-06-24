@@ -32,7 +32,7 @@ const BetHistory = () => {
     startDate: defaultStartDate,
     endDate: new Date(),
   });
-  const [dateVisible, setDateVisible] = useState(false); // date visible only when user selects date 
+  const [dateVisible, setDateVisible] = useState(false); // date visible only when user selects date
 
   defaultStartDate.setDate(defaultStartDate.getDate() - 1);
   function formatDate(dateString) {
@@ -68,7 +68,7 @@ const BetHistory = () => {
   });
   const [fetchData, setFetchData] = useState(true);
   const { store } = useAppContext();
-  console.log("=============> line 15 ", store.user.id);
+  console.log("=============> line 15 ", store.user?.UserId);
 
   let startIndex = Math.min((currentPage - 1) * totalEntries + 1);
   let endIndex = Math.min(currentPage * totalEntries, totalItems);
@@ -153,7 +153,6 @@ const BetHistory = () => {
     console.log("empty value line 150", e.target.value);
     setSelectedMarketId(e.target.value);
     setDateVisible(true); // Show date picker when market is selected
-   
   };
   console.log("Market ID:", selectedMarketId);
 
@@ -181,8 +180,8 @@ const BetHistory = () => {
   console.log("============> openBet", openBet);
   console.log("============> selectMarketId", selectedMarket);
 
-   // Function to render "No data found" message when history data is empty
-   const renderNoDataFound = () => {
+  // Function to render "No data found" message when history data is empty
+  const renderNoDataFound = () => {
     return (
       <div className="card-body">
         <p>No data found</p>
@@ -250,68 +249,59 @@ const BetHistory = () => {
               </div>
             </div>
 
-{dateVisible && (<div className="row align-items-center">
-              <div className="col">
-                <div className="form-group">
-                  <label>From:</label>
-                  <div className="input-group" style={{ maxWidth: "100%" }}>
-                    <Datetime
-                      value={dateValue.startDate}
-                      name="startDate"
-                      dateFormat="DD-MM-YYYY"
-                      onChange={(e) =>
-                        handleDateValue(
-                          "startDate",
-                          moment(e).toDate()
-                        )
-                     }
-                      timeFormat="HH:mm"
-                      isValidDate={(current) =>
-                        current.isBefore(new Date())
-                      }
-                    />
+            {dateVisible && (
+              <div className="row align-items-center">
+                <div className="col">
+                  <div className="form-group">
+                    <label>From:</label>
+                    <div className="input-group" style={{ maxWidth: "100%" }}>
+                      <Datetime
+                        value={dateValue.startDate}
+                        name="startDate"
+                        dateFormat="DD-MM-YYYY"
+                        onChange={(e) =>
+                          handleDateValue("startDate", moment(e).toDate())
+                        }
+                        timeFormat="HH:mm"
+                        isValidDate={(current) => current.isBefore(new Date())}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="col">
-                <div className="form-group">
-                  <label>To:</label>
-                  <div className="input-group" style={{ maxWidth: "100%" }}>
-                    <Datetime
-                      value={dateValue.endDate}
-                      name="endDate"
-                      dateFormat="DD-MM-YYYY"
-                      onChange={(e) =>
-                        handleDateValue(
-                          "endDate",
-                          moment(e).toDate()
-                        )
-                      }
-                      timeFormat="HH:mm"
-                      isValidDate={(current) =>
-                        current.isBefore(new Date())
-                      }
-                    />
+                <div className="col">
+                  <div className="form-group">
+                    <label>To:</label>
+                    <div className="input-group" style={{ maxWidth: "100%" }}>
+                      <Datetime
+                        value={dateValue.endDate}
+                        name="endDate"
+                        dateFormat="DD-MM-YYYY"
+                        onChange={(e) =>
+                          handleDateValue("endDate", moment(e).toDate())
+                        }
+                        timeFormat="HH:mm"
+                        isValidDate={(current) => current.isBefore(new Date())}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="col">
-                <button
-                  className="btn btn-primary"
-                  onClick={() => handleGetHistory()}
-                >
-                  Get History
-                </button>
+                <div className="col">
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => handleGetHistory()}
+                  >
+                    Get History
+                  </button>
+                </div>
               </div>
-            </div>)}           
-
+            )}
           </div>
         </div>
 
         <div className="card shadow p-3 mb-5 bg-white rounded">
-          <div className="card-header bg-primary text-white">
+          <div className="card-header"  style={{ backgroundColor: "#2CB3D1", color: "white" ,textAlign:"center" }} >
             <h5 className="card-title">Bet History</h5>
           </div>
           {betHistoryData.length > 0 ? (
@@ -382,7 +372,7 @@ const BetHistory = () => {
   function openBets() {
     return (
       <div className="card" style={{ marginTop: "120px", height: "800px" }}>
-        <div className="card-header bg-primary text-white">
+        <div className="card-header"  style={{ backgroundColor: "#2CB3D1", color: "white" ,textAlign:"center" }}>
           <h5 className="card-title">Open Bets</h5>
         </div>
         <div className="card-body">

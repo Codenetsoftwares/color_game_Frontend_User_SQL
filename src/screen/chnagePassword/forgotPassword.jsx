@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
-import AppDrawer from '../common/appDrawer';
-import Layout from '../layout/layout';
-import { useFormik } from 'formik';
-import { useAppContext } from '../../contextApi/context';
-import { changePassword } from '../../utils/apiService';
-import validationSchema from '../../schema/validationSchema';
-import strings from '../../utils/constant/stringConstant';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import AppDrawer from "../common/appDrawer";
+import Layout from "../layout/layout";
+import { useFormik } from "formik";
+import { useAppContext } from "../../contextApi/context";
+import { changePassword } from "../../utils/apiService";
+import validationSchema from "../../schema/validationSchema";
+import strings from "../../utils/constant/stringConstant";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const { store, dispatch } = useAppContext();
   const [resetPassword, setResetPassword] = useState(setInitialValues());
 
-  console.log('===========>ID', store);
+  console.log("===========>ID", store);
 
   function setInitialValues() {
     return {
-      oldPassword: '',
-      password: '',
-      confirmPassword: '',
-      userId: store.user.id,
+      oldPassword: "",
+      password: "",
+      confirmPassword: "",
+      userId: store.user?.UserId,
     };
   }
 
@@ -44,7 +44,7 @@ const ForgotPassword = () => {
         payload: { isLogin: false },
       });
 
-      navigate('/');
+      navigate("/");
     }
   }
 
@@ -63,7 +63,9 @@ const ForgotPassword = () => {
               value={values.oldPassword}
               onChange={handleChange}
             />
-            {errors.oldPassword && touched.oldPassword && <span className="error-message">{errors.oldPassword}</span>}
+            {errors.oldPassword && touched.oldPassword && (
+              <span className="error-message">{errors.oldPassword}</span>
+            )}
           </div>
           <div className="form-group">
             <label htmlFor="exampleInputPassword1">New Password</label>
@@ -75,7 +77,9 @@ const ForgotPassword = () => {
               value={values.newPassword}
               onChange={handleChange}
             />
-            {errors.newPassword && touched.newPassword && <span className="error-message">{errors.newPassword}</span>}
+            {errors.newPassword && touched.newPassword && (
+              <span className="error-message">{errors.newPassword}</span>
+            )}
           </div>
           <div className="form-group">
             <label htmlFor="exampleInputPassword1">Confirm Password</label>
@@ -92,7 +96,11 @@ const ForgotPassword = () => {
             )}
           </div>
 
-          <button type="button" className="btn btn-primary" onClick={handleSubmit}>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={handleSubmit}
+          >
             Change Password
           </button>
         </form>
