@@ -1,7 +1,7 @@
-import urls from '../utils/constant/UrlConstant';
-import strings from '../utils/constant/stringConstant';
+import urls from "../utils/constant/UrlConstant";
+import strings from "../utils/constant/stringConstant";
 
-import { getCallParams, getNoAuthCallParams, makeCall } from './service';
+import { getCallParams, getNoAuthCallParams, makeCall } from "./service";
 
 export async function login(body, isToast = false) {
   try {
@@ -26,7 +26,10 @@ export async function user_getAllGames_api(body = {}, isToast = false) {
   }
 }
 
-export async function user_getAllGamesWithMarketData_api(body = {}, isToast = false) {
+export async function user_getAllGamesWithMarketData_api(
+  body = {},
+  isToast = false
+) {
   try {
     const callParams = getNoAuthCallParams(strings.GET, body, isToast);
     const response = await makeCall(urls.userAllGamesDetails, callParams);
@@ -36,20 +39,32 @@ export async function user_getAllGamesWithMarketData_api(body = {}, isToast = fa
   }
 }
 
-export async function user_getGameWithMarketData_api(body = {}, isToast = false) {
+export async function user_getGameWithMarketData_api(
+  body = {},
+  isToast = false
+) {
   try {
     const callParams = getNoAuthCallParams(strings.GET, body, isToast);
-    const response = await makeCall(`${urls.userGameDetailById}/${body.gameId}`, callParams);
+    const response = await makeCall(
+      `${urls.userGameDetailById}/${body.gameId}`,
+      callParams
+    );
     return response;
   } catch (error) {
     throw error;
   }
 }
 
-export async function user_getMarketWithRunnerData_api(body = {}, isToast = false) {
+export async function user_getMarketWithRunnerData_api(
+  body = {},
+  isToast = false
+) {
   try {
     const callParams = getNoAuthCallParams(strings.POST, body, isToast);
-    const response = await makeCall(`${urls.userMarketDetailById}/${body.marketId}`, callParams);
+    const response = await makeCall(
+      `${urls.userMarketDetailById}/${body.marketId}`,
+      callParams
+    );
     return response;
   } catch (error) {
     throw error;
@@ -73,7 +88,7 @@ export async function user_getBetHistory_api(body = {}, isToast = false) {
     const response = await makeCall(
       `${urls.userBetHistoryById}/${body.marketId}?page=${body.pageNumber}&limit=${body.dataLimit}&startDate=${body.startDate}&endDate=${body.endDate}`,
       callParams,
-      isToast,
+      isToast
     );
 
     return response;
@@ -99,7 +114,11 @@ export async function user_getBackLayData_api(body = {}, isToast = false) {
   console.log(body);
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
-    const response = await makeCall(`${urls.userBackLayData}/${body.marketId}`, callParams, isToast);
+    const response = await makeCall(
+      `${urls.userBackLayData}/${body.marketId}`,
+      callParams,
+      isToast
+    );
 
     return response;
   } catch (error) {
@@ -108,10 +127,17 @@ export async function user_getBackLayData_api(body = {}, isToast = false) {
 }
 
 // dummy data api for open bet and selection
-export async function getDataFromHistoryLandingPage(body = {}, isToast = false) {
+export async function getDataFromHistoryLandingPage(
+  body = {},
+  isToast = false
+) {
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
-    const response = await makeCall(urls.getDataFromHistoryLandingPage, callParams, isToast);
+    const response = await makeCall(
+      urls.getDataFromHistoryLandingPage,
+      callParams,
+      isToast
+    );
 
     return response;
   } catch (error) {
@@ -146,7 +172,7 @@ export async function betHistory(body = {}, isToast = false) {
     const callParams = await getCallParams(strings.GET, body, isToast);
     const response = await makeCall(
       `${urls.betHistory}/${body.userId}/${body.gameId}?page=${body.pageNumber}&limit=${body.dataLimit}`,
-      callParams,
+      callParams
     );
 
     return response;
@@ -160,7 +186,7 @@ export async function profitAndLoss_Api(body = {}, isToast = false) {
     const callParams = await getCallParams(strings.GET, body, isToast);
     const response = await makeCall(
       `${urls.profitAndLoss}?startDate=${body.startDate}&endDate=${body.endDate}&page=${body.pageNumber}&limit=${body.dataLimit}`,
-      callParams,
+      callParams
       // isToast,
     );
 
@@ -171,11 +197,12 @@ export async function profitAndLoss_Api(body = {}, isToast = false) {
 }
 
 export async function profitAndLossMarket_Api(body = {}, isToast = false) {
-  console.log("body",body)
+  console.log("body", body);
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
-    const response = await makeCall(`${urls.profitAndLossMarket}/${body.gameId}?startDate=${body.startDate}&endDate=${body.endDate}&page=${body.pageNumber}&limit=${body.dataLimit}`,
-      callParams,
+    const response = await makeCall(
+      `${urls.profitAndLossMarket}/${body.gameId}?startDate=${body.startDate}&endDate=${body.endDate}&page=${body.pageNumber}&limit=${body.dataLimit}`,
+      callParams
       // isToast,
     );
 
@@ -190,9 +217,20 @@ export async function profitAndLossRunner_Api(body = {}, isToast = false) {
     const callParams = await getCallParams(strings.GET, body, isToast);
     const response = await makeCall(
       `${urls.profitAndLossRunner}/${body.marketId}?startDate=${body.startDate}&endDate=${body.endDate}&page=${body.pageNumber}&limit=${body.dataLimit}`,
-      callParams,
+      callParams
       // isToast,
     );
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function ResetUserPassword(body = {}, isToast = false) {
+  try {
+    const callParams = getNoAuthCallParams(strings.POST, body, isToast);
+    const response = await makeCall(urls.resetPassword, callParams, isToast);
 
     return response;
   } catch (error) {

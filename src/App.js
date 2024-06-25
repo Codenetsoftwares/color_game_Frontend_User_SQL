@@ -15,6 +15,7 @@ import ProfitAndLoss from "./screen/profitAndLoss/profitAndLoss";
 import Loading from "./globlaCommon/loading";
 import GameNameList from "./screen/profitAndLoss/gameNameList";
 import MarketNameList from "./screen/profitAndLoss/marketNameList";
+import ResetPassword from "./screen/common/ResetPassword";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Routes>
           <Route path="/home" element={<Home />} />
           <Route path="/" element={<Home />} />
+          <Route path="/passwordReset" element={<ResetPassword/>} />
           <Route path="/gameView/:gameName/:id" element={<GameView />} />
 
           {/* private routes */}

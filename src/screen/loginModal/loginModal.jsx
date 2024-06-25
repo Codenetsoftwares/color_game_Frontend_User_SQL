@@ -6,9 +6,11 @@ import strings from '../../utils/constant/stringConstant';
 import { useFormik } from 'formik';
 import LoginSchema from '../../schema/loginSchema';
 import './loginModal.css';
+import { useNavigate } from 'react-router-dom';
 
 function Login({ showLogin, setShowLogin }) {
   const [loginCred, setLoginCred] = useState(setInitialValues());
+  const navigate = useNavigate();
 
   const { dispatch, store } = useAppContext();
 
@@ -99,6 +101,8 @@ function Login({ showLogin, setShowLogin }) {
 
   function footer() {
     return (
+      <div className="d-flex flex-column w-100">
+
       <Button
         variant="secondary"
         onClick={handleSubmit}
@@ -108,6 +112,18 @@ function Login({ showLogin, setShowLogin }) {
       >
         Sign in
       </Button>
+      <Button
+      variant="link"
+      onClick={() => navigate('/passwordReset')}
+      style={{ textDecoration: 'none', color: '#1AA0D1' }}
+    >
+      Reset Password
+    </Button>
+
+</div>
+     
+
+
     );
   }
 
