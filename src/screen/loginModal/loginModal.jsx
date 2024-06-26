@@ -80,7 +80,7 @@ function Login({ showLogin, setShowLogin }) {
           <input
             type="text"
             className="form-control w-75"
-            placeholder="enter userName"
+            placeholder="Enter Username"
             name="userName"
             style={{ border: "1px solid black" }}
             value={values.userName}
@@ -100,7 +100,7 @@ function Login({ showLogin, setShowLogin }) {
           <input
             type="password"
             className="form-control w-75"
-            placeholder="enter password"
+            placeholder="Enter Password"
             name="password"
             // style={{ border: '1px solid black' }}
             value={values.password}

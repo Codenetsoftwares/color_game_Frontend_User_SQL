@@ -75,7 +75,7 @@ const ResetPassword = () => {
                     className="form-control"
                     id="userName"
                     name="userName"
-                    placeholder="Enter your username"
+                    placeholder="Enter Your Username"
                     value={values.userName}
                     onChange={handleChange}
                   />
@@ -87,7 +87,7 @@ const ResetPassword = () => {
                     className="form-control"
                     id="oldPassword"
                     name="oldPassword"
-                    placeholder="Enter old password"
+                    placeholder="Enter Old Password"
                     value={values.oldPassword}
                     onChange={handleChange}
                   />
@@ -99,7 +99,7 @@ const ResetPassword = () => {
                     className="form-control"
                     id="newPassword"
                     name="newPassword"
-                    placeholder="Enter new password"
+                    placeholder="Enter New Password"
                     value={values.newPassword}
                     onChange={handleChange}
                   />
