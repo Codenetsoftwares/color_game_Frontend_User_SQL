@@ -34,18 +34,22 @@ function Layout() {
       <ul
         className="mb-0 d-flex"
         style={{
-          listStyleType: 'none',
-          overflowX: 'auto',
+          listStyleType: "none",
+          overflowX: "auto",
           padding: 0,
-          backgroundColor: 'rgb(23 101 119)',
+          backgroundColor: "rgb(23 101 119)",
         }}
       >
         <li key={0} className="p-2 text-white" style={{ fontWeight: 600 }}>
-          <a className="text-white text-decoration-none" href={`/home`}>
-            {'Home'}
+          <a
+            className=" text-decoration-none"
+            href={`/home`}
+            style={{ color: "rgb(23 101 119)" }}
+          >
+            {"Home"}
           </a>
         </li>
-        {user_allGames.map((gameObj, index) => (
+        {/* {user_allGames.map((gameObj, index) => (
           <li key={index + 1} className="p-2 text-white" style={{ fontWeight: 600 }}>
             <a
               className={`text-white text-decoration-none text-nowrap ${gameObj.isBlink ? 'blink_me' : ''}`}
@@ -54,7 +58,7 @@ function Layout() {
               {gameObj.gameName}
             </a>
           </li>
-        ))}
+        ))} */}
       </ul>
     );
   }

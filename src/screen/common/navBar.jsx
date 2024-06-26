@@ -92,13 +92,18 @@ const NavBar = () => {
       type: strings.LOG_OUT,
       payload: { isLogin: false },
     });
-    const closeButton = document.querySelector('.btn-close');
+    const closeButton = document.querySelector(".btn-close");
     if (closeButton) {
       closeButton.click();
     }
-    navigate('/home');
-    toast.info('Logout successfully');
+    navigate("/home");
+    toast.info("Logout successfully");
   };
+
+  // date formatting to show in Navbar
+  const currentDate = new Date();
+  const options = { year: "numeric", month: "short", day: "numeric" };
+  const formattedDate = currentDate.toLocaleDateString("en-US", options);
 
   function getNav() {
     return (
@@ -120,13 +125,13 @@ const NavBar = () => {
             />
             {/* <FaCoins className="m-2" style={{ color: "#fec015" }} /> */}
             <marquee className="text-white">
-              Your announcement text here
+              This is a Demo Announcement
             </marquee>
             <span
               className="text-nowrap text-white px-2"
               style={{ fontSize: "14px" }}
             >
-              March 24, 2024
+              {formattedDate}
             </span>
           </div>
         )}
@@ -145,7 +150,7 @@ const NavBar = () => {
           >
             ☰
           </button>
-          <a class="navbar-brand" href="#">
+          <a class="navbar-brand" href={`/home`}>
             <img src={Logo} style={{ width: "150px" }} />
           </a>
           <button class="navbar-toggler border-0" type="button">
