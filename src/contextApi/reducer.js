@@ -4,7 +4,11 @@ import { getUserInitialState, getUserPlaceBidding, getUserWalletInitialState } f
 export const reducer = (state, action) => {
   switch (action.type) {
     case strings.LOG_IN:
-      return { ...state, user: getUserInitialState(action.payload) };
+      return {
+        ...state, user: getUserInitialState(action.payload) 
+        
+      };
+      
     case strings.LOG_OUT:
       return {
         ...state,

@@ -73,7 +73,7 @@ export async function user_getMarketWithRunnerData_api(
 
 export async function changePassword(body = {}, isToast = false) {
   try {
-    const callParams = getNoAuthCallParams(strings.POST, body, isToast);
+    const callParams = await getCallParams(strings.POST, body, isToast);
     const response = await makeCall(urls.changePassword, callParams, isToast);
 
     return response;
@@ -216,24 +216,32 @@ export async function profitAndLossRunner_Api(body = {}, isToast = false) {
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
     const response = await makeCall(
-      `${urls.profitAndLossRunner}/${body.marketId}?startDate=${body.startDate}&endDate=${body.endDate}&page=${body.pageNumber}&limit=${body.dataLimit}`,
-      callParams
-      // isToast,
-    );
+      `${urls.profitAndLossRunner}/${body.marketId}?startDate=${body.startDate}&endDate=${body.endDate}&page=${body.pageNumber}&limit=${body.dataLimit}`,callParams);
 
     return response;
   } catch (error) {
     throw error;
   }
-}
+};
+
+
+export async function user_carrouselImageDynamic_api(body = {}, isToast = false) {
+  try {
+    const callParams = getNoAuthCallParams(strings.GET, body, isToast);
+    const response = await makeCall(urls.user_carrouselImageDynamic, callParams);
+   return response;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export async function ResetUserPassword(body = {}, isToast = false) {
   try {
     const callParams = getNoAuthCallParams(strings.POST, body, isToast);
     const response = await makeCall(urls.resetPassword, callParams, isToast);
-
     return response;
   } catch (error) {
     throw error;
   }
-}
+};
+

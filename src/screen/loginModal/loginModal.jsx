@@ -8,6 +8,7 @@ import LoginSchema from '../../schema/loginSchema';
 import './loginModal.css';
 import { useNavigate } from 'react-router-dom';
 
+
 function Login({ showLogin, setShowLogin }) {
   const [loginCred, setLoginCred] = useState(setInitialValues());
   const navigate = useNavigate();
@@ -22,16 +23,24 @@ function Login({ showLogin, setShowLogin }) {
 
   function setInitialValues() {
     return {
-      userName: '',
-      password: '',
+      userName: "",
+      password: "",
     };
   }
 
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit, resetForm } = useFormik({
+  const {
+    values,
+    errors,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    resetForm,
+  } = useFormik({
     initialValues: loginCred,
     validationSchema: LoginSchema,
     onSubmit: (values, action) => {
-      console.log('values++===============>', values);
+      console.log("values++===============>", values);
       loginHandler(values);
       resetForm();
     },
@@ -44,11 +53,13 @@ function Login({ showLogin, setShowLogin }) {
       payload: true,
     });
     const response = await login(values, true);
-    console.log('res from login', response);
+    console.log("res from login", response);
     if (response) {
+
       dispatch({
         type: strings.LOG_IN,
         payload: { isLogin: true, ...response.data },
+       
       });
       setShowLogin(!showLogin);
     }
@@ -71,12 +82,17 @@ function Login({ showLogin, setShowLogin }) {
             className="form-control w-75"
             placeholder="enter userName"
             name="userName"
-            style={{ border: '1px solid black' }}
+            style={{ border: "1px solid black" }}
             value={values.userName}
             onChange={handleChange}
           />
-          <span className="position-absolute small" style={{ left: '60px', top: '36px' }}>
-            {errors.userName && touched.userName ? <p>{errors.userName}</p> : null}
+          <span
+            className="position-absolute small"
+            style={{ left: "60px", top: "36px" }}
+          >
+            {errors.userName && touched.userName ? (
+              <p>{errors.userName}</p>
+            ) : null}
           </span>
         </div>
         <br />
@@ -91,8 +107,13 @@ function Login({ showLogin, setShowLogin }) {
             onChange={handleChange}
           />
 
-          <span className="position-absolute small" style={{ left: '60px', top: '36px' }}>
-            {errors.password && touched.password ? <p>{errors.password}</p> : null}
+          <span
+            className="position-absolute small"
+            style={{ left: "60px", top: "36px" }}
+          >
+            {errors.password && touched.password ? (
+              <p>{errors.password}</p>
+            ) : null}
           </span>
         </div>
       </div>
@@ -107,7 +128,7 @@ function Login({ showLogin, setShowLogin }) {
         variant="secondary"
         onClick={handleSubmit}
         style={{
-          backgroundImage: 'linear-gradient(to top, #044469 4%, #1AA0D1 92%)',
+          backgroundImage: "linear-gradient(to top, #044469 4%, #1AA0D1 92%)",
         }}
       >
         Sign in

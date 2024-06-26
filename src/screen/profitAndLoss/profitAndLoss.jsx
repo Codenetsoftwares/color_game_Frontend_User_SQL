@@ -27,6 +27,8 @@ const ProfitAndLoss = ( ) => {
     currentPage: 1,
     totalPages: 1,
   });
+
+  console.log('======>>>>>>> profit and loss data',profitAndLossData,profitAndLossMarketData,profitAndLossGameData)
   //first table
   let startIndex = Math.min((pagination.currentPage - 1) * totalEntries + 1);
   let endIndex = Math.min(
@@ -276,12 +278,12 @@ const ProfitLoss = ({
                        
                         style={{ cursor: "pointer", fontWeight: "bold" }}
                       >
-                        <Link to={`/gameNameList/${item.gameId}`}>
+                        <Link to={`/gameNameList/${item.gameId}`}> 
                         {item.gameName}
                         </Link>
                       </td>
-                      <td style={{ color: item.profitLoss >= 0 ? "green" : "red"  }}>{item.profitLoss}</td>
-                      <td style={{ color: item.profitLoss >= 0 ? "green" : "red"  }}>{item.profitLoss}</td>
+                      <td style={{ color: item.profitLoss >= 0 ? "green" : "red"  }}>{item.totalProfitLoss}</td>
+                      <td style={{ color: item.profitLoss >= 0 ? "green" : "red"  }}>{item.totalProfitLoss}</td>
                     </tr>
                   ))}
                 </tbody>
