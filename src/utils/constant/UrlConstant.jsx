@@ -24,8 +24,8 @@ class UrlConstant {
   profitAndLoss = `${this.url_dev}/profit_loss`;
   profitAndLossMarket = `${this.url_dev}/profit_loss_market`;
   profitAndLossRunner = `${this.url_dev}/profit_loss_runner`;
-
   user_carrouselImageDynamic=`${this.url_dev}/admin/slider-text-img`;
+  resetPassword=`${this.url_dev}/reset-password`;
 }
 
 const urls = new UrlConstant();

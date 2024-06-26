@@ -19,6 +19,7 @@ export class StringConstants {
   placeBidding = 'placeBidding';
   UserWallet = 'UserWallet';
   isLoading = 'isLoading';
+  RESET_PASSWORD = 'RESET_PASSWORD';
 }
 
 let strings = new StringConstants();
