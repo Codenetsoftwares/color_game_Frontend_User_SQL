@@ -13,8 +13,7 @@ import Pagination from "../common/Pagination";
 import { Link, useNavigate } from "react-router-dom";
 import strings from "../../utils/constant/stringConstant";
 
-const ProfitAndLoss = ( ) => {
-
+const ProfitAndLoss = () => {
   const [profitAndLossGameData, setProfitAndLossGameData] = useState([]);
   const [profitAndLossMarketData, setProfitAndLossMarketData] = useState([]);
   const [profitAndLossData, setProfitAndLossData] = useState([]);
@@ -28,7 +27,12 @@ const ProfitAndLoss = ( ) => {
     totalPages: 1,
   });
 
-  console.log('======>>>>>>> profit and loss data',profitAndLossData,profitAndLossMarketData,profitAndLossGameData)
+  console.log(
+    "======>>>>>>> profit and loss data",
+    profitAndLossData,
+    profitAndLossMarketData,
+    profitAndLossGameData
+  );
   //first table
   let startIndex = Math.min((pagination.currentPage - 1) * totalEntries + 1);
   let endIndex = Math.min(
@@ -37,38 +41,47 @@ const ProfitAndLoss = ( ) => {
   );
   const defaultStartDate = new Date();
   defaultStartDate.setDate(defaultStartDate.getDate() - 1);
+  console.log(
+    "defaultStartDate",
+    moment(defaultStartDate).format("YYYY-MM-DD")
+
+    // .toLocaleDateString()
+    // .split("/")
+    // .reverse()
+    // .join("/")
+    // .replace(/\//g, "-")
+  );
   const [dateValue, setDateValue] = useState({
-    startDate: defaultStartDate,
-    endDate: new Date(),
+    startDate: moment(defaultStartDate).format("YYYY-MM-DD"),
+    endDate: moment(new Date()).format("YYYY-MM-DD"),
   });
-      //check this for table two
-     const handleGameClick = async (gameId) => {
-       navigate(`/gameNameList/${gameId}`);
-      };
+  //check this for table two
+  const handleGameClick = async (gameId) => {
+    navigate(`/gameNameList/${gameId}`);
+  };
 
-    console.log("dataline number +++++>",profitAndLossGameData)
+  console.log("dataline number +++++>", profitAndLossGameData);
 
-
-
+  console.log("date without fn", dateValue.endDate);
+  console.log("date with fn", formatDate(dateValue.endDate));
   const handleFetchDateData = async () => {
-
     dispatch({
       type: strings.isLoading,
       payload: true,
     });
 
     const response = await profitAndLoss_Api({
-      startDate: formatDate(dateValue.startDate),
-      endDate: formatDate(dateValue.endDate),
+      startDate: dateValue.startDate,
+      endDate: dateValue.endDate,
       pageNumber: pagination.currentPage,
       dataLimit: totalEntries,
     });
     if (response) {
-        setProfitAndLossData(response.data);
-        setPagination((prevState) => ({
+      setProfitAndLossData(response.data);
+      setPagination((prevState) => ({
         ...prevState,
-        totalPages: response.pagination.totalPages,
-        totalItems: response.pagination.totalItems,
+        totalPages: response?.pagination?.totalPages,
+        totalItems: response?.pagination?.totalItems,
       }));
     }
     dispatch({
@@ -98,7 +111,7 @@ const ProfitAndLoss = ( ) => {
   // entries for no. of entries for pagination
   const handleEntriesChange = (event) => {
     const entries = Number(event.target.value);
-    console.log('entries', entries);
+    console.log("entries", entries);
     setTotalEntries(entries);
     // After updating totalItems, we need to fetch data for the first page with the new number of items
     setPagination((prevState) => ({
@@ -114,19 +127,19 @@ const ProfitAndLoss = ( ) => {
     }));
   };
   // Define isValidDate function here
-const isValidDate = (current) => {
-  return current.isBefore(moment(), "day");
-};
+  const isValidDate = (current) => {
+    return current.isBefore(moment(), "day");
+  };
 
   function formatDate(dateString) {
     let date = new Date(dateString);
     let year = date.getFullYear();
-    let month = ('0' + (date.getMonth() + 1)).slice(-2);
-    let day = ('0' + date.getDate()).slice(-2);
+    let month = ("0" + (date.getMonth() + 1)).slice(-2);
+    let day = ("0" + date.getDate()).slice(-2);
     return `${year}-${month}-${day}`;
   }
 
-const ProfitLoss = ({
+  const ProfitLoss = ({
     dateValue,
     handleDateValue,
     handleFetchDateData,
@@ -146,13 +159,13 @@ const ProfitLoss = ({
     startIndex,
     endIndex,
     totalItems,
-    isValidDate
+    isValidDate,
   }) => {
     return (
       <>
         <div
           className="card section"
-          style={{ marginTop: "120px", fontWeight: "700" ,width:"100%"}}
+          style={{ marginTop: "120px", fontWeight: "700", width: "100%" }}
         >
           <span
             className="text-white"
@@ -162,7 +175,7 @@ const ProfitLoss = ({
               // fontWeight: "700",
               padding: "0px",
               textIndent: "5px",
-              textAlign:"center"
+              textAlign: "center",
             }}
           >
             Profit & Loss Report
@@ -172,33 +185,26 @@ const ProfitLoss = ({
               <Datetime
                 value={dateValue.startDate}
                 name="startDate"
-                dateFormat="DD-MM-YYYY"
+                dateFormat="YYYY-MM-DD"
                 onChange={(e) =>
-                  handleDateValue(
-                    "startDate",
-                    moment(e).format("DD-MM-YYYY")
-                  )
+                  handleDateValue("startDate", moment(e).format("YYYY-MM-DD"))
                 }
                 timeFormat={false}
                 // timeFormat="HH:mm"
-                isValidDate={(current) =>
-                  current.isBefore(new Date())
-                }
+                isValidDate={(current) => current.isBefore(new Date())}
               />
             </div>
             <div className="col-sm-3 col-md-4 col-lg-3">
               <Datetime
                 value={dateValue.endDate}
                 name="endDate"
-                dateFormat="DD-MM-YYYY"
+                dateFormat="YYYY-MM-DD"
                 onChange={(e) =>
-                  handleDateValue("endDate", moment(e).format("DD-MM-YYYY"))
+                  handleDateValue("endDate", moment(e).format("YYYY-MM-DD"))
                 }
                 timeFormat={false}
                 // timeFormat="HH:mm"
-                isValidDate={(current) =>
-                  current.isBefore(new Date())
-                }
+                isValidDate={(current) => current.isBefore(new Date())}
               />
             </div>
             <div className="col-lg-3">
@@ -227,10 +233,10 @@ const ProfitLoss = ({
         </div>
         <br />
         {profitAndLossData.length > 0 ? (
-          <div className="card p-0 section" style={{width:"100%"}}>
+          <div className="card p-0 section" style={{ width: "100%" }}>
             <div
               className="table-container overflow-x-scroll"
-              style={{ overflowX: "auto", margin: "10px"  }}
+              style={{ overflowX: "auto", margin: "10px" }}
             >
               {/* show entries deopdown */}
               <div className="mb-3">
@@ -253,52 +259,79 @@ const ProfitLoss = ({
                   <tr>
                     <th
                       scope="col"
-                      style={{ backgroundColor: "#2CB3D1", color: "white" ,textAlign:"center" }}
+                      style={{
+                        backgroundColor: "#2CB3D1",
+                        color: "white",
+                        textAlign: "center",
+                      }}
                     >
                       Game Name
                     </th>
                     <th
                       scope="col"
-                      style={{ backgroundColor: "#2CB3D1", color: "white" ,textAlign:"center" }}
+                      style={{
+                        backgroundColor: "#2CB3D1",
+                        color: "white",
+                        textAlign: "center",
+                      }}
                     >
                       Profit&Loss
                     </th>
                     <th
                       scope="col"
-                      style={{ backgroundColor: "#2CB3D1", color: "white" ,textAlign:"center" }}
+                      style={{
+                        backgroundColor: "#2CB3D1",
+                        color: "white",
+                        textAlign: "center",
+                      }}
                     >
                       Total P&L
                     </th>
                   </tr>
                 </thead>
-                <tbody style={{textAlign:"center"}}>
+                <tbody style={{ textAlign: "center" }}>
                   {profitAndLossData.map((item, index) => (
                     <tr key={index}>
-                      <td
-                       
-                        style={{ cursor: "pointer", fontWeight: "bold" }}
-                      >
-                        <Link to={`/gameNameList/${item.gameId}`}> 
-                        {item.gameName}
+                      <td style={{ cursor: "pointer", fontWeight: "bold" }}>
+                        <Link to={`/gameNameList/${item.gameId}`}>
+                          {item.gameName}
                         </Link>
                       </td>
-                      <td style={{ color: item.profitLoss >= 0 ? "green" : "red"  }}>{item.totalProfitLoss}</td>
-                      <td style={{ color: item.profitLoss >= 0 ? "green" : "red"  }}>{item.totalProfitLoss}</td>
+                      <td
+                        style={{
+                          color: item.profitLoss >= 0 ? "green" : "red",
+                        }}
+                      >
+                        {item.totalProfitLoss}
+                      </td>
+                      <td
+                        style={{
+                          color: item.profitLoss >= 0 ? "green" : "red",
+                        }}
+                      >
+                        {item.totalProfitLoss}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-           <div style={{margin:"10px" , display:"flex",justifyContent:"center"}}>
-             <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              handlePageChange={handlePageChange}
-              startIndex={startIndex}
-              endIndex={endIndex}
-              totalData={totalItems}
-            />
-           </div>
+            <div
+              style={{
+                margin: "10px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                handlePageChange={handlePageChange}
+                startIndex={startIndex}
+                endIndex={endIndex}
+                totalData={totalItems}
+              />
+            </div>
           </div>
         ) : (
           <div
