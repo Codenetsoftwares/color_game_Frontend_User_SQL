@@ -13,6 +13,18 @@ export async function login(body, isToast = false) {
   }
 }
 
+
+// Logout function
+export async function logout(body, isToast = false) {
+  try {
+    const callParams = getNoAuthCallParams(strings.POST, body, isToast);
+    const response = await makeCall(urls.userLogout, callParams, isToast);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
 /*======================
   user api call
 =======================*/
