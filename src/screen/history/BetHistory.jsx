@@ -153,11 +153,24 @@ const BetHistory = () => {
   };
   console.log("=====. line 157", selectedMarket);
 
-  const handleGetHistoryChange = (e) => {
+  const handleGetHistoryChange = (e, selectName) => {
+    const { value } = e.target;
+
+    setSelectedOptions((prevState) => ({
+      ...prevState,
+      [selectName]: value,
+    }));
+
+    // Additional logic based on the selected option, if required
+    console.log(`Selected====> ${selectName}:`, value);
+  };
+
+  const handleGetMarketChange = (e) => {
     console.log("empty value line 150", e.target.value);
     setSelectedMarketId(e.target.value);
     setDateVisible(true); // Show date picker when market is selected
   };
+
   console.log("Market ID:", selectedMarketId);
 
   // this is back lay open bets data but this api needs to be updated
@@ -202,7 +215,7 @@ const BetHistory = () => {
         >
           <div className="card-body">
             <div className="row">
-              {/* <div className="col">
+              <div className="col">
                 <div className="form-group">
                   <select
                     className="form-select form-select-sm"
@@ -218,7 +231,7 @@ const BetHistory = () => {
                 </div>
               </div>
 
-              <div className="col-auto">&nbsp;</div> */}
+              <div className="col-auto">&nbsp;</div>
 
               <div className="col">
                 <div className="form-group">
@@ -226,7 +239,7 @@ const BetHistory = () => {
                     className="form-select form-select-sm"
                     aria-label=".form-select-sm example"
                     value={selectedMarketId || ""}
-                    onChange={handleGetHistoryChange}
+                    onChange={handleGetMarketChange}
                   >
                     <option value="">Open this select market</option>
                     {marketSelectionbetHistory.map((market, index) => (
@@ -404,7 +417,7 @@ const BetHistory = () => {
               style={{ width: "100%" }}
               onChange={handleSelectChange}
             >
-              <option>Select Market</option>
+              <option value={""}>Select Market</option>
               {openBetSelectionbetHistory.map((item, index) => (
                 <option key={index} value={item.marketId}>
                   {item.marketName}
@@ -414,7 +427,7 @@ const BetHistory = () => {
           </div>
 
           {/* Render back  and laytable if market is selected */}
-          {selectedMarket && (
+          {selectedMarket.length > 0 && !selectedMarket == "" && (
             <>
               {renderBackTable()}
               {renderLayTable()}
@@ -507,8 +520,7 @@ const BetHistory = () => {
               {/* Table body - data to be filled dynamically */}
               <tbody>
                 {/* Insert rows for lay bets */}
-                {
-                openBet
+                {openBet
                   .filter((item) => item.type === "lay")
                   .map((item, index) => (
                     <tr key={index}>
