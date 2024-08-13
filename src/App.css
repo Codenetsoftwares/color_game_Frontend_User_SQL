@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+.avoid-clicks {
+  pointer-events: none;
+  opacity: 0.7 ;
+}
