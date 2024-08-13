@@ -57,11 +57,14 @@ const BetHistory = () => {
   const [marketSelectionbetHistory, setMarketSelectionbetHistory] = useState(
     []
   ); // from dummy data into bet history selection
-  console.log('=======>>> market selection',marketSelectionbetHistory)
+  console.log("=======>>> market selection", marketSelectionbetHistory);
   const [openBetSelectionbetHistory, setopenBetSelectionbetHistory] = useState(
     []
   ); // from dummy data into open bet selection
-console.log('========>>>>>> line 63 selection data',openBetSelectionbetHistory)
+  console.log(
+    "========>>>>>> line 63 selection data",
+    openBetSelectionbetHistory
+  );
   const [selectedOptions, setSelectedOptions] = useState({
     select1: "",
     select2: "",
@@ -70,7 +73,6 @@ console.log('========>>>>>> line 63 selection data',openBetSelectionbetHistory)
   const [fetchData, setFetchData] = useState(true);
   const { store } = useAppContext();
   console.log("=============> line 15 ", store.user?.UserId);
-
 
   let startIndex = Math.min((currentPage - 1) * totalEntries + 1);
   let endIndex = Math.min(currentPage * totalEntries, totalItems);
@@ -99,7 +101,7 @@ console.log('========>>>>>> line 63 selection data',openBetSelectionbetHistory)
     if (selectedMarketId != "") {
       handleGetHistory();
     }
-  }, [currentPage, totalItems,totalEntries]);
+  }, [currentPage, totalItems, totalEntries]);
   console.log("==========> line65", betHistoryData);
 
   // pagination handlechange (to be solved later )
@@ -208,8 +210,10 @@ console.log('========>>>>>> line 63 selection data',openBetSelectionbetHistory)
                     value={selectedOptions.select1}
                     onChange={(e) => handleGetHistoryChange(e, "select1")}
                   >
-                    <option selected>Open this select menu</option>
-                    <option value="1">OLD DATA</option>
+                    <option selected>Data Source</option>
+                    <option value="old-data">OLD DATA</option>
+                    <option value="live-data">LIVE DATA</option>
+                    <option value="backup-data">BACKUP DATA</option>
                   </select>
                 </div>
               </div>
@@ -246,64 +250,72 @@ console.log('========>>>>>> line 63 selection data',openBetSelectionbetHistory)
                   >
                     <option selected>Open this select menu</option>
                     <option value="1">SETTLE</option>
+                    <option value="1">UNSETTLE</option>
                   </select>
                 </div>
               </div>
             </div>
 
-            {dateVisible && (
-              <div className="row align-items-center">
-                <div className="col">
-                  <div className="form-group">
-                    <label>From:</label>
-                    <div className="input-group" style={{ maxWidth: "100%" }}>
-                      <Datetime
-                        value={dateValue.startDate}
-                        name="startDate"
-                        dateFormat="DD-MM-YYYY"
-                        onChange={(e) =>
-                          handleDateValue("startDate", moment(e).toDate())
-                        }
-                        timeFormat="HH:mm"
-                        isValidDate={(current) => current.isBefore(new Date())}
-                      />
-                    </div>
+            {/* {dateVisible && ( */}
+            <div className="row align-items-center">
+              <div className="col">
+                <div className="form-group">
+                  <label>From:</label>
+                  <div className="input-group" style={{ maxWidth: "100%" }}>
+                    <Datetime
+                      value={dateValue.startDate}
+                      name="startDate"
+                      dateFormat="DD-MM-YYYY"
+                      onChange={(e) =>
+                        handleDateValue("startDate", moment(e).toDate())
+                      }
+                      timeFormat="HH:mm"
+                      isValidDate={(current) => current.isBefore(new Date())}
+                    />
                   </div>
-                </div>
-
-                <div className="col">
-                  <div className="form-group">
-                    <label>To:</label>
-                    <div className="input-group" style={{ maxWidth: "100%" }}>
-                      <Datetime
-                        value={dateValue.endDate}
-                        name="endDate"
-                        dateFormat="DD-MM-YYYY"
-                        onChange={(e) =>
-                          handleDateValue("endDate", moment(e).toDate())
-                        }
-                        timeFormat="HH:mm"
-                        isValidDate={(current) => current.isBefore(new Date())}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col">
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => handleGetHistory()}
-                  >
-                    Get History
-                  </button>
                 </div>
               </div>
-            )}
+
+              <div className="col">
+                <div className="form-group">
+                  <label>To:</label>
+                  <div className="input-group" style={{ maxWidth: "100%" }}>
+                    <Datetime
+                      value={dateValue.endDate}
+                      name="endDate"
+                      dateFormat="DD-MM-YYYY"
+                      onChange={(e) =>
+                        handleDateValue("endDate", moment(e).toDate())
+                      }
+                      timeFormat="HH:mm"
+                      isValidDate={(current) => current.isBefore(new Date())}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="col">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => handleGetHistory()}
+                >
+                  Get History
+                </button>
+              </div>
+            </div>
+            {/* )} */}
           </div>
         </div>
 
         <div className="card shadow p-3 mb-5 bg-white rounded">
-          <div className="card-header"  style={{ backgroundColor: "#2CB3D1", color: "white" ,textAlign:"center" }} >
+          <div
+            className="card-header"
+            style={{
+              backgroundColor: "#2CB3D1",
+              color: "white",
+              textAlign: "center",
+            }}
+          >
             <h5 className="card-title">Bet History</h5>
           </div>
           {betHistoryData.length > 0 ? (
@@ -373,34 +385,48 @@ console.log('========>>>>>> line 63 selection data',openBetSelectionbetHistory)
   // this is the open bets section with selection with conditinally rendering back and lay table data with market selection
   function openBets() {
     return (
-      <div className="card" style={{ marginTop: "120px", height: "800px" }}>
-        <div className="card-header"  style={{ backgroundColor: "#2CB3D1", color: "white" ,textAlign:"center" }}>
-          <h5 className="card-title">Open Bets</h5>
-        </div>
-        <div className="card-body">
-          <div className="form-group">
-            <select
-              className="form-select form-select-lg"
-              id="selectMarket"
-              style={{ width: "100%" }}
-              onChange={handleSelectChange}
-            >
-              <option>Select Market</option>
-              {openBetSelectionbetHistory.map((item, index) => (
-                <option key={index} value={item.marketId}>
-                  {item.marketName}
-                </option>
-              ))}
-            </select>
+      <div
+        className="card overflow-auto"
+        style={{ marginTop: "120px", height: "800px" }}
+      >
+        <div >
+          <div
+            className="card-header"
+            style={{
+              backgroundColor: "#2CB3D1",
+              color: "white",
+              textAlign: "center",
+            }}
+          >
+            <h5 className="card-title">Open Bets</h5>
           </div>
+          <div className="card-body">
+            <div className="form-group ">
+              <select
+                className="form-select form-select-lg"
+                id="selectMarket"
+                style={{ width: "100%" }}
+                onChange={handleSelectChange}
+              >
+                <option>Select Market</option>
+                {openBetSelectionbetHistory.map((item, index) => (
+                  <option key={index} value={item.marketId}>
+                    {item.marketName}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* Render back  and laytable if market is selected */}
-          {selectedMarket !== "Select Market" && (
-            <>
-              {renderBackTable()}
-              {renderLayTable()}
-            </>
-          )}
+            {/* Render back  and laytable if market is selected */}
+            <div >
+              {selectedMarket && (
+                <>
+                  {renderBackTable()}
+                  {renderLayTable()}
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -427,33 +453,37 @@ console.log('========>>>>>> line 63 selection data',openBetSelectionbetHistory)
               </thead>
               {/* Table body - data to be filled dynamically */}
               <tbody>
-  {/* Insert rows for back bets */}
-  {openBet
-    .filter((item) => item.type === "back")  // Ensure correct type matching (case-sensitive)
-    .map((item, index) => (
-      <tr key={index}>
-        <td className="d-none d-sm-table-cell">{item.runnerName}</td>
-        <td className="d-none d-sm-table-cell">{item.rate}</td>
-        <td className="d-none d-sm-table-cell">{item.value}</td>
-        <td className="d-none d-sm-table-cell">{item.bidAmount}(-{item.value})</td>
-        <td className="d-table-cell d-sm-none">
-          <div>
-            <strong>Back (Bet For):</strong> {item.runnerName}
-          </div>
-          <div>
-            <strong>Odds:</strong> {item.rate}
-          </div>
-          <div>
-            <strong>Stake:</strong> {item.value}
-          </div>
-          <div>
-            <strong>Profit:</strong> {item.bidAmount}(-{item.value})
-          </div>
-        </td>
-      </tr>
-    ))}
-</tbody>
-
+                {/* Insert rows for back bets */}
+                {openBet
+                  .filter((item) => item.type === "back") // Ensure correct type matching (case-sensitive)
+                  .map((item, index) => (
+                    <tr key={index}>
+                      <td className="d-none d-sm-table-cell">
+                        {item.runnerName}
+                      </td>
+                      <td className="d-none d-sm-table-cell">{item.rate}</td>
+                      <td className="d-none d-sm-table-cell">{item.value}</td>
+                      <td className="d-none d-sm-table-cell">
+                        {item.bidAmount}(-{item.value})
+                      </td>
+                      <td className="d-table-cell d-sm-none">
+                        <div>
+                          <strong>Back (Bet For):</strong> {item.runnerName}
+                        </div>
+                        <div>
+                          <strong>Odds:</strong> {item.rate}
+                        </div>
+                        <div>
+                          <strong>Stake:</strong> {item.value}
+                        </div>
+                        <div>
+                          <strong>Profit:</strong> {item.bidAmount}(-
+                          {item.value})
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
             </table>
           </div>
         </div>
