@@ -837,7 +837,7 @@ function GameWithMarketList({ isSingleMarket }) {
           </div>
         ) : (
           <div class="background">
-            <h1>Suspended</h1>
+            <h1 className="fw-bold fs-1 text-danger mb-5">SUSPENDED</h1>
           </div>
         )}
       </>
