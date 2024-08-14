@@ -26,9 +26,9 @@
 button[disabled] {
   background-color: #f0f0f0;
 }
- body{
+ /* body{
 overflow-y: scroll;
- }
+ } */
 /* .timer-loader {
   display: flex;
   justify-content: center;
@@ -36,9 +36,9 @@ overflow-y: scroll;
   height: 100vh; 
 } */
 
-.circle {
-  width: 60px; /* Adjust the size */
-  height: 60px; /* Adjust the size */
+/* .circle {
+  width: 60px; 
+  height: 60px; 
   border-radius: 50%;
   position: relative;
   display: flex;
@@ -49,7 +49,7 @@ overflow-y: scroll;
 
 .time {
   position: absolute;
-  font-size: 18px; /* Adjust the font size */
+  font-size: 18px; 
   color: #2cb3d1;
   font-weight: bold;
-}
+} */
