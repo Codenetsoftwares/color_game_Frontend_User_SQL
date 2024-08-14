@@ -48,6 +48,7 @@ function GameWithMarketList({ isSingleMarket }) {
   });
   const arr = [];
   const arr1 = [];
+  const [isActive, setIsActive] = useState(true);
 
   const gameIdFromUrl = useLocation().pathname.split("/")[3];
   // const gameIdFromUrl = useLocation()?.pathname?.split('-')[1]?.split('/')[1];
@@ -221,6 +222,7 @@ function GameWithMarketList({ isSingleMarket }) {
       const preMaxExposure = getMaxNegativeBalance(response.data.runners);
       setPreExposure(preMaxExposure);
       setUser_marketWithRunnerData(response.data);
+      setIsActive(response.data.isActive);
     }
   }
   async function user_getAllGamesWithMarketData() {
@@ -395,451 +397,469 @@ function GameWithMarketList({ isSingleMarket }) {
 
     return (
       <>
-        {user_marketWithRunnerData.isActive ? (
-          <div className="row p-0 m-0">
+        {/* Background: Market Data and UI */}
+        <div
+          className={`row p-0 m-0 position-relative ${!isActive ? "" : ""}`}
+          style={{ zIndex: 1 }} // Lower z-index for background content
+        >
+          {/* Foreground: SUSPENDED message */}
+          {!isActive && (
             <div
-              className="col-12 p-1 mt-2"
-              style={{ backgroundColor: "#a1aed4" }}
+              className="position-absolute  d-flex justify-content-center align-items-center"
+              style={{
+                zIndex: 10, // Ensure this is higher than the zIndex of other content
+                backgroundColor: "rgba(0, 0, 0, 0.2)", // Optional: semi-transparent background
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 0,
+              }}
             >
-              {user_marketWithRunnerData.marketName} |{" "}
-              {user_marketWithRunnerData.timeSpan}
-            </div>
-            <div className="row py-1 px-0 m-0 ">
-              <div className="col-4"></div>
-              <div
-                className="col-4 rounded-top-3"
-                style={{ backgroundColor: "lightblue" }}
+              <h1
+                className="fw-bold fs-3 text-white"
+                style={{
+                  zIndex: 11,
+                  width: "100% ",
+                  height: "100% ",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
-                Back
-              </div>
-              <div
-                className="col-4 rounded-top-3"
-                style={{ backgroundColor: "pink" }}
-              >
-                Lay
-              </div>
+                <span>SUSPENDED</span>
+              </h1>
             </div>
+          )}
+          <div
+            className="col-12 p-1 mt-2"
+            style={{ backgroundColor: "#a1aed4" }}
+          >
+            {user_marketWithRunnerData.marketName} |{" "}
+            {user_marketWithRunnerData.timeSpan}
+          </div>
+          <div className="row py-1 px-0 m-0 ">
+            <div className="col-4"></div>
+            <div
+              className="col-4 rounded-top-3"
+              style={{ backgroundColor: "lightblue" }}
+            >
+              Back
+            </div>
+            <div
+              className="col-4 rounded-top-3"
+              style={{ backgroundColor: "pink" }}
+            >
+              Lay
+            </div>
+          </div>
 
-            {user_marketWithRunnerData &&
-              user_marketWithRunnerData.runners.map((runnerData, index) => {
-                // Determine if current row should display
-                const shouldDisplayTempLay =
-                  toggle.mode === "lay" &&
-                  toggle.indexNo === runnerData.id &&
-                  (winBalance !== 0 ||
-                    Number(runnerData.runnerName.bal) -
-                      Math.round(Math.abs(winBalance)) !==
-                      0);
+          {user_marketWithRunnerData &&
+            user_marketWithRunnerData.runners.map((runnerData, index) => {
+              // Determine if current row should display
+              const shouldDisplayTempLay =
+                toggle.mode === "lay" &&
+                toggle.indexNo === runnerData.id &&
+                (winBalance !== 0 ||
+                  Number(runnerData.runnerName.bal) -
+                    Math.round(Math.abs(winBalance)) !==
+                    0);
 
-                const shouldDisplayTempBack =
-                  toggle.mode === "back" &&
-                  toggle.indexNo === runnerData.id &&
-                  (winBalance !== 0 ||
-                    Number(runnerData.runnerName.bal) -
-                      Math.round(Math.abs(winBalance)) !==
-                      0);
-                return (
-                  <>
-                    {toggle.mode === "lay" ? (
-                      <>
-                        {/* Lay */}
-                        <div className="row py-1 px-0 m-0 border">
-                          <span
-                            className={`col-4 text-dark text-decoration-none text-nowrap`}
-                          >
-                            {runnerData.runnerName.name}{" "}
-                            <span>
-                              {/* Display bidding amount if conditions met */}
-                              {shouldDisplayTempLay && (
-                                <>
-                                  {Number(runnerData.runnerName.bal) === 0 &&
-                                  !bidding.amount ? (
-                                    ""
-                                  ) : Number(runnerData.runnerName.bal) > 0 ? (
-                                    <span
-                                      className="text-success fw-bold a"
-                                      mx-2
-                                    >
-                                      +{Number(runnerData.runnerName.bal)}
-                                    </span>
-                                  ) : (
-                                    <>
-                                      {runnerData.runnerName.bal != 0 && (
-                                        <span
-                                          className="text-danger fw-bold a"
-                                          mx-2
-                                        >
-                                          {Number(runnerData.runnerName.bal)}
-                                        </span>
-                                      )}
-                                    </>
-                                  )}
-
-                                  {Number(runnerData.runnerName.bal) -
-                                    Math.round(Math.abs(winBalance)) >
-                                  0 ? (
-                                    <span className=" text-success fw-bold b">
-                                      {bidding.amount != 0 && (
-                                        <span>
-                                          (
-                                          {Number(runnerData.runnerName.bal) -
-                                            Math.round(Math.abs(winBalance))}
-                                          ){" "}
-                                        </span>
-                                      )}
-                                    </span>
-                                  ) : (
-                                    <span className=" text-danger fw-bold b">
-                                      {bidding.amount != 0 && (
-                                        <span>
-                                          (
-                                          {Number(runnerData.runnerName.bal) -
-                                            Math.round(Math.abs(winBalance))}
-                                          )
-                                        </span>
-                                      )}
-                                    </span>
-                                  )}
-                                </>
-                              )}
-                            </span>
-                            {/* Display hiii only if shouldDisplayTempLay flag is false */}
-                            {!shouldDisplayTempLay && (
+              const shouldDisplayTempBack =
+                toggle.mode === "back" &&
+                toggle.indexNo === runnerData.id &&
+                (winBalance !== 0 ||
+                  Number(runnerData.runnerName.bal) -
+                    Math.round(Math.abs(winBalance)) !==
+                    0);
+              return (
+                <>
+                  {toggle.mode === "lay" ? (
+                    <>
+                      {/* Lay */}
+                      <div className="row py-1 px-0 m-0 border">
+                        <span
+                          className={`col-4 text-dark text-decoration-none text-nowrap`}
+                        >
+                          {runnerData.runnerName.name}{" "}
+                          <span>
+                            {/* Display bidding amount if conditions met */}
+                            {shouldDisplayTempLay && (
                               <>
                                 {Number(runnerData.runnerName.bal) === 0 &&
                                 !bidding.amount ? (
                                   ""
                                 ) : Number(runnerData.runnerName.bal) > 0 ? (
-                                  <span className="text-success fw-bold c" mx-2>
-                                    {bidding.amount != 0 &&
-                                      runnerData.runnerName.bal}
-                                    (
-                                    {Number(runnerData.runnerName.bal) +
-                                      Math.round(bidding.amount)}
-                                    ){" "}
+                                  <span className="text-success fw-bold a" mx-2>
+                                    +{Number(runnerData.runnerName.bal)}
                                   </span>
                                 ) : (
-                                  <span className="text-danger fw-bold c" mx-2>
-                                    {runnerData.runnerName.bal != 0 &&
-                                      bidding.amount != 0 &&
-                                      runnerData.runnerName.bal}
+                                  <>
+                                    {runnerData.runnerName.bal != 0 && (
+                                      <span
+                                        className="text-danger fw-bold a"
+                                        mx-2
+                                      >
+                                        {Number(runnerData.runnerName.bal)}
+                                      </span>
+                                    )}
+                                  </>
+                                )}
 
-                                    <span className="text-success d fw-bold">
-                                      (
-                                      {Number(runnerData.runnerName.bal) +
-                                        Math.round(bidding.amount)}
-                                      )
-                                    </span>
+                                {Number(runnerData.runnerName.bal) -
+                                  Math.round(Math.abs(winBalance)) >
+                                0 ? (
+                                  <span className=" text-success fw-bold b">
+                                    {bidding.amount != 0 && (
+                                      <span>
+                                        (
+                                        {Number(runnerData.runnerName.bal) -
+                                          Math.round(Math.abs(winBalance))}
+                                        ){" "}
+                                      </span>
+                                    )}
+                                  </span>
+                                ) : (
+                                  <span className=" text-danger fw-bold b">
+                                    {bidding.amount != 0 && (
+                                      <span>
+                                        (
+                                        {Number(runnerData.runnerName.bal) -
+                                          Math.round(Math.abs(winBalance))}
+                                        )
+                                      </span>
+                                    )}
                                   </span>
                                 )}
                               </>
                             )}
                           </span>
-
-                          <div
-                            className="col-4"
-                            style={{ backgroundColor: "lightblue" }}
-                            onClick={() =>
-                              handleToggle(
-                                runnerData.id,
-                                runnerData.rate[0].back,
-                                "back",
-                                runnerData.runnerName.runnerId
-                              )
-                            }
-                            key={index}
-                          >
-                            {runnerData.rate[0].back}
-                          </div>
-
-                          <div
-                            className="col-4"
-                            style={{ backgroundColor: "pink" }}
-                            onClick={() =>
-                              handleToggle(
-                                runnerData.id,
-                                runnerData.rate[0].lay,
-                                "lay",
-                                runnerData.runnerName.runnerId
-                              )
-                            }
-                            key={index}
-                          >
-                            {runnerData.rate[0].lay}
-                          </div>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        {/* Back */}
-                        <div className="row py-1 px-0 m-0 border">
-                          <span
-                            className={`col-4 text-dark text-decoration-none text-nowrap`}
-                          >
-                            {runnerData.runnerName.name}
-                            <span>
-                              {/* Display bidding amount if conditions met */}
-                              {shouldDisplayTempBack && (
-                                <>
-                                  {Number(runnerData.runnerName.bal) &&
-                                  !bidding.amount ? (
-                                    ""
-                                  ) : Number(runnerData.runnerName.bal) > 0 ? (
-                                    <span
-                                      className="text-success fw-bold d"
-                                      mx-2
-                                    >
-                                      +{Number(runnerData.runnerName.bal)}
-                                    </span>
-                                  ) : (
-                                    <>
-                                      {runnerData.runnerName.bal != 0 && (
-                                        <span
-                                          className="text-danger fw-bold d"
-                                          mx-2
-                                        >
-                                          {Number(runnerData.runnerName.bal)}
-                                        </span>
-                                      )}
-                                    </>
-                                  )}
-
+                          {/* Display hiii only if shouldDisplayTempLay flag is false */}
+                          {!shouldDisplayTempLay && (
+                            <>
+                              {Number(runnerData.runnerName.bal) === 0 &&
+                              !bidding.amount ? (
+                                ""
+                              ) : Number(runnerData.runnerName.bal) > 0 ? (
+                                <span className="text-success fw-bold c" mx-2>
+                                  {bidding.amount != 0 &&
+                                    runnerData.runnerName.bal}
+                                  (
                                   {Number(runnerData.runnerName.bal) +
-                                    Math.round(Math.abs(winBalance)) >
-                                  0 ? (
-                                    <span className=" text-success  fw-bold">
-                                      {bidding.amount != 0 && (
-                                        <span>
-                                          (
-                                          {Number(runnerData.runnerName.bal) +
-                                            Math.round(Math.abs(winBalance))}
-                                          )
-                                        </span>
-                                      )}
-                                    </span>
-                                  ) : (
-                                    <span className=" text-danger fw-bold e">
-                                      {bidding.amount != 0 && (
-                                        <span>
-                                          (
-                                          {Number(runnerData.runnerName.bal) +
-                                            Math.round(Math.abs(winBalance))}
-                                          )
-                                        </span>
-                                      )}
-                                    </span>
-                                  )}
-                                </>
+                                    Math.round(bidding.amount)}
+                                  ){" "}
+                                </span>
+                              ) : (
+                                <span className="text-danger fw-bold c" mx-2>
+                                  {runnerData.runnerName.bal != 0 &&
+                                    bidding.amount != 0 &&
+                                    runnerData.runnerName.bal}
+
+                                  <span className="text-success d fw-bold">
+                                    (
+                                    {Number(runnerData.runnerName.bal) +
+                                      Math.round(bidding.amount)}
+                                    )
+                                  </span>
+                                </span>
                               )}
-                            </span>
-                            {/* Display hiii only if shouldDisplayTempLay flag is false */}
-                            {!shouldDisplayTempBack && (
+                            </>
+                          )}
+                        </span>
+
+                        <div
+                          className="col-4"
+                          style={{ backgroundColor: "lightblue" }}
+                          onClick={() =>
+                            handleToggle(
+                              runnerData.id,
+                              runnerData.rate[0].back,
+                              "back",
+                              runnerData.runnerName.runnerId
+                            )
+                          }
+                          key={index}
+                        >
+                          {runnerData.rate[0].back}
+                        </div>
+
+                        <div
+                          className="col-4"
+                          style={{ backgroundColor: "pink" }}
+                          onClick={() =>
+                            handleToggle(
+                              runnerData.id,
+                              runnerData.rate[0].lay,
+                              "lay",
+                              runnerData.runnerName.runnerId
+                            )
+                          }
+                          key={index}
+                        >
+                          {runnerData.rate[0].lay}
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Back */}
+                      <div className="row py-1 px-0 m-0 border">
+                        <span
+                          className={`col-4 text-dark text-decoration-none text-nowrap`}
+                        >
+                          {runnerData.runnerName.name}
+                          <span>
+                            {/* Display bidding amount if conditions met */}
+                            {shouldDisplayTempBack && (
                               <>
-                                {Number(runnerData.runnerName.bal) === 0 &&
+                                {Number(runnerData.runnerName.bal) &&
                                 !bidding.amount ? (
                                   ""
                                 ) : Number(runnerData.runnerName.bal) > 0 ? (
-                                  <span className="text-success  fw-bold" mx-2>
-                                    {bidding.amount != 0 &&
-                                      runnerData.runnerName.bal}
-                                    <span
-                                      className={`3 text-${
-                                        Number(runnerData.runnerName.bal) -
-                                          Math.round(bidding.amount) >
-                                        0
-                                          ? "success"
-                                          : "danger"
-                                      } fw-bold`}
-                                    >
-                                      (
-                                      {Number(runnerData.runnerName.bal) -
-                                        Math.round(bidding.amount)}
-                                      )
-                                    </span>
+                                  <span className="text-success fw-bold d" mx-2>
+                                    +{Number(runnerData.runnerName.bal)}
                                   </span>
                                 ) : (
-                                  <span className="text-danger fw-bold f" mx-2>
-                                    {runnerData.runnerName.bal != 0 &&
-                                      bidding.amount != 0 &&
-                                      runnerData.runnerName.bal}
+                                  <>
+                                    {runnerData.runnerName.bal != 0 && (
+                                      <span
+                                        className="text-danger fw-bold d"
+                                        mx-2
+                                      >
+                                        {Number(runnerData.runnerName.bal)}
+                                      </span>
+                                    )}
+                                  </>
+                                )}
+
+                                {Number(runnerData.runnerName.bal) +
+                                  Math.round(Math.abs(winBalance)) >
+                                0 ? (
+                                  <span className=" text-success  fw-bold">
+                                    {bidding.amount != 0 && (
+                                      <span>
+                                        (
+                                        {Number(runnerData.runnerName.bal) +
+                                          Math.round(Math.abs(winBalance))}
+                                        )
+                                      </span>
+                                    )}
+                                  </span>
+                                ) : (
+                                  <span className=" text-danger fw-bold e">
+                                    {bidding.amount != 0 && (
+                                      <span>
+                                        (
+                                        {Number(runnerData.runnerName.bal) +
+                                          Math.round(Math.abs(winBalance))}
+                                        )
+                                      </span>
+                                    )}
+                                  </span>
+                                )}
+                              </>
+                            )}
+                          </span>
+                          {/* Display hiii only if shouldDisplayTempLay flag is false */}
+                          {!shouldDisplayTempBack && (
+                            <>
+                              {Number(runnerData.runnerName.bal) === 0 &&
+                              !bidding.amount ? (
+                                ""
+                              ) : Number(runnerData.runnerName.bal) > 0 ? (
+                                <span className="text-success  fw-bold" mx-2>
+                                  {bidding.amount != 0 &&
+                                    runnerData.runnerName.bal}
+                                  <span
+                                    className={`3 text-${
+                                      Number(runnerData.runnerName.bal) -
+                                        Math.round(bidding.amount) >
+                                      0
+                                        ? "success"
+                                        : "danger"
+                                    } fw-bold`}
+                                  >
                                     (
                                     {Number(runnerData.runnerName.bal) -
                                       Math.round(bidding.amount)}
                                     )
                                   </span>
-                                )}
-                              </>
-                            )}
-                          </span>
+                                </span>
+                              ) : (
+                                <span className="text-danger fw-bold f" mx-2>
+                                  {runnerData.runnerName.bal != 0 &&
+                                    bidding.amount != 0 &&
+                                    runnerData.runnerName.bal}
+                                  (
+                                  {Number(runnerData.runnerName.bal) -
+                                    Math.round(bidding.amount)}
+                                  )
+                                </span>
+                              )}
+                            </>
+                          )}
+                        </span>
 
-                          <div
-                            className="col-4"
-                            style={{ backgroundColor: "lightblue" }}
-                            onClick={() =>
-                              handleToggle(
-                                runnerData.id,
-                                runnerData.rate[0].back,
-                                "back",
-                                runnerData.runnerName.runnerId
-                              )
-                            }
-                            key={index}
-                          >
-                            {console.log("ASDF", runnerData)}
-                            {runnerData.rate[0].back}
-                          </div>
+                        <div
+                          className="col-4"
+                          style={{ backgroundColor: "lightblue" }}
+                          onClick={() =>
+                            handleToggle(
+                              runnerData.id,
+                              runnerData.rate[0].back,
+                              "back",
+                              runnerData.runnerName.runnerId
+                            )
+                          }
+                          key={index}
+                        >
+                          {console.log("ASDF", runnerData)}
+                          {runnerData.rate[0].back}
+                        </div>
 
-                          <div
-                            className="col-4"
-                            style={{ backgroundColor: "pink" }}
-                            onClick={() =>
-                              handleToggle(
-                                runnerData.id,
-                                runnerData.rate[0].lay,
-                                "lay",
-                                runnerData.runnerName.runnerId
-                              )
-                            }
-                            key={index}
-                          >
-                            {runnerData.rate[0].lay}
-                          </div>
-                        </div>
-                      </>
-                    )}
-
-                    {toggle.indexNo === runnerData.id && !toggle.toggleOpen && (
-                      <div
-                        style={{
-                          background: `${
-                            toggle.mode === "lay" ? "#f1e0e3" : "#c6e7ee"
-                          }`,
-                        }}
-                      >
-                        <div className="row py-1 px-0 m-0">
-                          <div className="d-none d-sm-block d-md-block d-lg-block d-xl-block col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                            <button
-                              className=" btn btn-sm bg-white border border-2 rounded-3"
-                              onClick={() => handleCancel()}
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                          <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <button
-                              className="col-3 rounded-start-4"
-                              style={{ width: "18%", border: "0" }}
-                            >
-                              -
-                            </button>
-                            <input
-                              className="col-6 "
-                              type="number"
-                              value={bidding.rate}
-                            />
-                            <button
-                              className="col-3 rounded-end-3"
-                              style={{ width: "18%", border: "0" }}
-                            >
-                              +
-                            </button>
-                          </div>
-                          <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <button
-                              disabled={bidding.amount == 0 ? " disabled" : ""}
-                              className={`col-3  rounded-start-3 `}
-                              style={{ width: "18%", border: "0" }}
-                              onClick={
-                                bidding.amount >= 100
-                                  ? () =>
-                                      handleBiddingAmount(
-                                        "amount",
-                                        Number(bidding.amount) - 100
-                                      )
-                                  : () =>
-                                      handleBiddingAmount(
-                                        "amount",
-                                        Number(bidding.amount) -
-                                          Number(bidding.amount)
-                                      )
-                              }
-                            >
-                              -
-                            </button>
-                            <input
-                              className="col-6"
-                              type="number"
-                              value={bidding.amount}
-                              onChange={(e) =>
-                                handleBiddingAmount("amount", e.target.value)
-                              }
-                            />
-                            <button
-                              className="col-3 rounded-end-3"
-                              style={{ width: "18%", border: "0" }}
-                              onClick={() =>
-                                handleBiddingAmount(
-                                  "amount",
-                                  Number(bidding.amount) + 100
-                                )
-                              }
-                            >
-                              +
-                            </button>
-                          </div>
-                          <div className="d-none d-sm-block d-md-block d-lg-block d-xl-block col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                            <button
-                              className="btn btn-sm bg-white border border-2 rounded-3"
-                              onClick={() =>
-                                handleUserBidding(
-                                  index,
-                                  bidding.amount,
-                                  toggle.mode
-                                )
-                              }
-                            >
-                              Place Bet
-                            </button>
-                          </div>
-                        </div>
-                        <div className="row py-1 px-0 m-0">
-                          {handleBidding()}
-                        </div>
-                        <div className="row py-1 px-0 m-0">
-                          <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
-                            <button
-                              className=" btn btn-sm bg-white border border-2 rounded-3 col-12"
-                              onClick={() => handleCancel()}
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                          <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
-                            <button
-                              className="btn btn-sm bg-white border border-2 rounded-3 col-12"
-                              onClick={() =>
-                                handleUserBidding(
-                                  index,
-                                  bidding.amount,
-                                  toggle.mode
-                                )
-                              }
-                            >
-                              Place Bet
-                            </button>
-                          </div>
+                        <div
+                          className="col-4"
+                          style={{ backgroundColor: "pink" }}
+                          onClick={() =>
+                            handleToggle(
+                              runnerData.id,
+                              runnerData.rate[0].lay,
+                              "lay",
+                              runnerData.runnerName.runnerId
+                            )
+                          }
+                          key={index}
+                        >
+                          {runnerData.rate[0].lay}
                         </div>
                       </div>
-                    )}
-                  </>
-                );
-              })}
-          </div>
-        ) : (
-          <div class="background">
-            <h1>Suspended</h1>
-          </div>
-        )}
+                    </>
+                  )}
+
+                  {toggle.indexNo === runnerData.id && !toggle.toggleOpen && (
+                    <div
+                      style={{
+                        background: `${
+                          toggle.mode === "lay" ? "#f1e0e3" : "#c6e7ee"
+                        }`,
+                      }}
+                    >
+                      <div className="row py-1 px-0 m-0">
+                        <div className="d-none d-sm-block d-md-block d-lg-block d-xl-block col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                          <button
+                            className=" btn btn-sm bg-white border border-2 rounded-3"
+                            onClick={() => handleCancel()}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                        <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                          <button
+                            className="col-3 rounded-start-4"
+                            style={{ width: "18%", border: "0" }}
+                          >
+                            -
+                          </button>
+                          <input
+                            className="col-6 "
+                            type="number"
+                            value={bidding.rate}
+                          />
+                          <button
+                            className="col-3 rounded-end-3"
+                            style={{ width: "18%", border: "0" }}
+                          >
+                            +
+                          </button>
+                        </div>
+                        <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                          <button
+                            disabled={bidding.amount == 0 ? " disabled" : ""}
+                            className={`col-3  rounded-start-3 `}
+                            style={{ width: "18%", border: "0" }}
+                            onClick={
+                              bidding.amount >= 100
+                                ? () =>
+                                    handleBiddingAmount(
+                                      "amount",
+                                      Number(bidding.amount) - 100
+                                    )
+                                : () =>
+                                    handleBiddingAmount(
+                                      "amount",
+                                      Number(bidding.amount) -
+                                        Number(bidding.amount)
+                                    )
+                            }
+                          >
+                            -
+                          </button>
+                          <input
+                            className="col-6"
+                            type="number"
+                            value={bidding.amount}
+                            onChange={(e) =>
+                              handleBiddingAmount("amount", e.target.value)
+                            }
+                          />
+                          <button
+                            className="col-3 rounded-end-3"
+                            style={{ width: "18%", border: "0" }}
+                            onClick={() =>
+                              handleBiddingAmount(
+                                "amount",
+                                Number(bidding.amount) + 100
+                              )
+                            }
+                          >
+                            +
+                          </button>
+                        </div>
+                        <div className="d-none d-sm-block d-md-block d-lg-block d-xl-block col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                          <button
+                            className="btn btn-sm bg-white border border-2 rounded-3"
+                            onClick={() =>
+                              handleUserBidding(
+                                index,
+                                bidding.amount,
+                                toggle.mode
+                              )
+                            }
+                          >
+                            Place Bet
+                          </button>
+                        </div>
+                      </div>
+                      <div className="row py-1 px-0 m-0">{handleBidding()}</div>
+                      <div className="row py-1 px-0 m-0">
+                        <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
+                          <button
+                            className=" btn btn-sm bg-white border border-2 rounded-3 col-12"
+                            onClick={() => handleCancel()}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                        <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
+                          <button
+                            className="btn btn-sm bg-white border border-2 rounded-3 col-12"
+                            onClick={() =>
+                              handleUserBidding(
+                                index,
+                                bidding.amount,
+                                toggle.mode
+                              )
+                            }
+                          >
+                            Place Bet
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              );
+            })}
+        </div>
       </>
     );
   }
