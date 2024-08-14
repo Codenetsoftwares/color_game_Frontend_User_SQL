@@ -153,11 +153,24 @@ const BetHistory = () => {
   };
   console.log("=====. line 157", selectedMarket);
 
-  const handleGetHistoryChange = (e) => {
+  const handleGetHistoryChange = (e, selectName) => {
+    const { value } = e.target;
+
+    setSelectedOptions((prevState) => ({
+      ...prevState,
+      [selectName]: value,
+    }));
+
+    // Additional logic based on the selected option, if required
+    console.log(`Selected====> ${selectName}:`, value);
+  };
+
+  const handleGetMarketChange = (e) => {
     console.log("empty value line 150", e.target.value);
     setSelectedMarketId(e.target.value);
     setDateVisible(true); // Show date picker when market is selected
   };
+
   console.log("Market ID:", selectedMarketId);
 
   // this is back lay open bets data but this api needs to be updated
@@ -226,7 +239,7 @@ const BetHistory = () => {
                     className="form-select form-select-sm"
                     aria-label=".form-select-sm example"
                     value={selectedMarketId || ""}
-                    onChange={handleGetHistoryChange}
+                    onChange={handleGetMarketChange}
                   >
                     <option value="">Open this select market</option>
                     {marketSelectionbetHistory.map((market, index) => (
@@ -385,48 +398,41 @@ const BetHistory = () => {
   // this is the open bets section with selection with conditinally rendering back and lay table data with market selection
   function openBets() {
     return (
-      <div
-        className="card overflow-auto"
-        style={{ marginTop: "120px", height: "800px" }}
-      >
-        <div >
-          <div
-            className="card-header"
-            style={{
-              backgroundColor: "#2CB3D1",
-              color: "white",
-              textAlign: "center",
-            }}
-          >
-            <h5 className="card-title">Open Bets</h5>
+      <div className="card" style={{ marginTop: "120px", height: "800px" }}>
+        <div
+          className="card-header"
+          style={{
+            backgroundColor: "#2CB3D1",
+            color: "white",
+            textAlign: "center",
+          }}
+        >
+          <h5 className="card-title">Open Bets</h5>
+        </div>
+        <div className="card-body">
+          <div className="form-group">
+            <select
+              className="form-select form-select-lg"
+              id="selectMarket"
+              style={{ width: "100%" }}
+              onChange={handleSelectChange}
+            >
+              <option value={""}>Select Market</option>
+              {openBetSelectionbetHistory.map((item, index) => (
+                <option key={index} value={item.marketId}>
+                  {item.marketName}
+                </option>
+              ))}
+            </select>
           </div>
-          <div className="card-body">
-            <div className="form-group ">
-              <select
-                className="form-select form-select-lg"
-                id="selectMarket"
-                style={{ width: "100%" }}
-                onChange={handleSelectChange}
-              >
-                <option>Select Market</option>
-                {openBetSelectionbetHistory.map((item, index) => (
-                  <option key={index} value={item.marketId}>
-                    {item.marketName}
-                  </option>
-                ))}
-              </select>
-            </div>
 
-            {/* Render back  and laytable if market is selected */}
-            <div >
-              {selectedMarket && (
-                <>
-                  {renderBackTable()}
-                  {renderLayTable()}
-                </>
-              )}
-            </div>
-          </div>
+          {/* Render back  and laytable if market is selected */}
+          {selectedMarket.length > 0 && !selectedMarket == "" && (
+            <>
+              {renderBackTable()}
+              {renderLayTable()}
+            </>
+          )}
         </div>
       </div>
     );
