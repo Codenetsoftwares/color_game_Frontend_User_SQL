@@ -157,7 +157,7 @@ function AppDrawer({ children, showCarousel, isMobile, isHomePage }) {
           <div
             className="col-md-10 offset-md-2"
             style={{
-              border: '1px solid red',
+              // border: '1px solid red',
               height: '100vh',
               // overflowY: 'auto',
             }}

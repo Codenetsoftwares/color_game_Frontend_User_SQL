@@ -20,7 +20,7 @@ import { toast } from "react-toastify";
 import ansmt from "../../asset/ancmntv.png";
 import AppDrawer from "./appDrawer";
 import HamburgerNavBar from "./hamburgerNavBar";
-import { userWallet } from "../../utils/apiService";
+import { logout, userWallet } from "../../utils/apiService";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -87,17 +87,44 @@ const NavBar = () => {
     navigate("/betHistory");
   };
 
-  const handleLogout = () => {
-    dispatch({
-      type: strings.LOG_OUT,
-      payload: { isLogin: false },
-    });
-    const closeButton = document.querySelector(".btn-close");
-    if (closeButton) {
-      closeButton.click();
+  // const handleLogout = () => {
+  //   dispatch({
+  //     type: strings.LOG_OUT,
+  //     payload: { isLogin: false },
+  //   });
+  //   const closeButton = document.querySelector(".btn-close");
+  //   if (closeButton) {
+  //     closeButton.click();
+  //   }
+  //   navigate("/home");
+  //   toast.info("Logout successfully");
+  // };
+
+  const handleLogout = async () => {
+    try {
+      // Call the logout API
+      const response = await logout({ userId }, true);
+      
+      if (response && response.success) {
+        dispatch({
+          type: strings.LOG_OUT,
+          payload: { isLogin: false },
+        });
+
+        const closeButton = document.querySelector(".btn-close");
+        if (closeButton) {
+          closeButton.click();
+        }
+
+        navigate("/home");
+        toast.info("Logout successfully");
+      } else {
+        toast.error(response.message || "Logout failed");
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("An error occurred during logout");
     }
-    navigate("/home");
-    toast.info("Logout successfully");
   };
 
   // date formatting to show in Navbar

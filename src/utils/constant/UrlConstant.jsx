@@ -9,6 +9,7 @@ class UrlConstant {
   // user api
   user = 'user';
   login = `${this.url_dev}/${this.user}-login`;
+  userLogout = `${this.url_dev}/${this.user}-logout`; // added logout api
   userGames = `${this.url_dev}/${this.user}-games`;
   userAllGamesDetails = `${this.url_dev}/${this.user}-all-gameData`;
   userGameDetailById = `${this.url_dev}/${this.user}-filter-gameData`;
