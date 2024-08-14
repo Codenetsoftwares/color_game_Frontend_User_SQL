@@ -17,7 +17,6 @@ import { useAppContext } from "../../../contextApi/context";
 import strings from "../../../utils/constant/stringConstant";
 import { toast } from "react-toastify";
 import Login from "../../loginModal/loginModal";
-import CountdownTimer from "../../../globlaCommon/CountdownTimer";
 
 function GameWithMarketList({ isSingleMarket }) {
   const [user_allGamesWithMarketData, setUser_allGamesWithMarketData] =
@@ -436,17 +435,9 @@ function GameWithMarketList({ isSingleMarket }) {
             style={{ backgroundColor: "#a1aed4" }}
           >
             {user_marketWithRunnerData.marketName} |{" "}
-            <span className="text-end">
-              {new Date("2024-08-13T08:00:00.000Z") < new Date() ? null : (
-                <>
-                  <CountdownTimer endDate={"2024-08-13T08:00:00.000Z"} />
-                </>
-              )}
-            </span>
             {user_marketWithRunnerData.timeSpan}
           </div>
-
-          <div className="row py-1 px-0 m-0">
+          <div className="row py-1 px-0 m-0 ">
             <div className="col-4"></div>
             <div
               className="col-4 rounded-top-3"
@@ -464,6 +455,7 @@ function GameWithMarketList({ isSingleMarket }) {
 
           {user_marketWithRunnerData &&
             user_marketWithRunnerData.runners.map((runnerData, index) => {
+              // Determine if current row should display
               const shouldDisplayTempLay =
                 toggle.mode === "lay" &&
                 toggle.indexNo === runnerData.id &&
@@ -479,7 +471,6 @@ function GameWithMarketList({ isSingleMarket }) {
                   Number(runnerData.runnerName.bal) -
                     Math.round(Math.abs(winBalance)) !==
                     0);
-
               return (
                 <>
                   {toggle.mode === "lay" ? (
@@ -491,6 +482,7 @@ function GameWithMarketList({ isSingleMarket }) {
                         >
                           {runnerData.runnerName.name}{" "}
                           <span>
+                            {/* Display bidding amount if conditions met */}
                             {shouldDisplayTempLay && (
                               <>
                                 {Number(runnerData.runnerName.bal) === 0 &&
@@ -541,6 +533,7 @@ function GameWithMarketList({ isSingleMarket }) {
                               </>
                             )}
                           </span>
+                          {/* Display hiii only if shouldDisplayTempLay flag is false */}
                           {!shouldDisplayTempLay && (
                             <>
                               {Number(runnerData.runnerName.bal) === 0 &&
@@ -615,6 +608,7 @@ function GameWithMarketList({ isSingleMarket }) {
                         >
                           {runnerData.runnerName.name}
                           <span>
+                            {/* Display bidding amount if conditions met */}
                             {shouldDisplayTempBack && (
                               <>
                                 {Number(runnerData.runnerName.bal) &&
@@ -665,6 +659,7 @@ function GameWithMarketList({ isSingleMarket }) {
                               </>
                             )}
                           </span>
+                          {/* Display hiii only if shouldDisplayTempLay flag is false */}
                           {!shouldDisplayTempBack && (
                             <>
                               {Number(runnerData.runnerName.bal) === 0 &&
@@ -717,6 +712,7 @@ function GameWithMarketList({ isSingleMarket }) {
                           }
                           key={index}
                         >
+                          {console.log("ASDF", runnerData)}
                           {runnerData.rate[0].back}
                         </div>
 
@@ -737,6 +733,128 @@ function GameWithMarketList({ isSingleMarket }) {
                         </div>
                       </div>
                     </>
+                  )}
+
+                  {toggle.indexNo === runnerData.id && !toggle.toggleOpen && (
+                    <div
+                      style={{
+                        background: `${
+                          toggle.mode === "lay" ? "#f1e0e3" : "#c6e7ee"
+                        }`,
+                      }}
+                    >
+                      <div className="row py-1 px-0 m-0">
+                        <div className="d-none d-sm-block d-md-block d-lg-block d-xl-block col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                          <button
+                            className=" btn btn-sm bg-white border border-2 rounded-3"
+                            onClick={() => handleCancel()}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                        <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                          <button
+                            className="col-3 rounded-start-4"
+                            style={{ width: "18%", border: "0" }}
+                          >
+                            -
+                          </button>
+                          <input
+                            className="col-6 "
+                            type="number"
+                            value={bidding.rate}
+                          />
+                          <button
+                            className="col-3 rounded-end-3"
+                            style={{ width: "18%", border: "0" }}
+                          >
+                            +
+                          </button>
+                        </div>
+                        <div className="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                          <button
+                            disabled={bidding.amount == 0 ? " disabled" : ""}
+                            className={`col-3  rounded-start-3 `}
+                            style={{ width: "18%", border: "0" }}
+                            onClick={
+                              bidding.amount >= 100
+                                ? () =>
+                                    handleBiddingAmount(
+                                      "amount",
+                                      Number(bidding.amount) - 100
+                                    )
+                                : () =>
+                                    handleBiddingAmount(
+                                      "amount",
+                                      Number(bidding.amount) -
+                                        Number(bidding.amount)
+                                    )
+                            }
+                          >
+                            -
+                          </button>
+                          <input
+                            className="col-6"
+                            type="number"
+                            value={bidding.amount}
+                            onChange={(e) =>
+                              handleBiddingAmount("amount", e.target.value)
+                            }
+                          />
+                          <button
+                            className="col-3 rounded-end-3"
+                            style={{ width: "18%", border: "0" }}
+                            onClick={() =>
+                              handleBiddingAmount(
+                                "amount",
+                                Number(bidding.amount) + 100
+                              )
+                            }
+                          >
+                            +
+                          </button>
+                        </div>
+                        <div className="d-none d-sm-block d-md-block d-lg-block d-xl-block col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                          <button
+                            className="btn btn-sm bg-white border border-2 rounded-3"
+                            onClick={() =>
+                              handleUserBidding(
+                                index,
+                                bidding.amount,
+                                toggle.mode
+                              )
+                            }
+                          >
+                            Place Bet
+                          </button>
+                        </div>
+                      </div>
+                      <div className="row py-1 px-0 m-0">{handleBidding()}</div>
+                      <div className="row py-1 px-0 m-0">
+                        <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
+                          <button
+                            className=" btn btn-sm bg-white border border-2 rounded-3 col-12"
+                            onClick={() => handleCancel()}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                        <div className="d-block col-6 d-sm-none d-md-none d-lg-none d-xl-none">
+                          <button
+                            className="btn btn-sm bg-white border border-2 rounded-3 col-12"
+                            onClick={() =>
+                              handleUserBidding(
+                                index,
+                                bidding.amount,
+                                toggle.mode
+                              )
+                            }
+                          >
+                            Place Bet
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   )}
                 </>
               );
