@@ -46,19 +46,12 @@ const CountdownTimer = ({ endDate }) => {
 };
 
 const calculateTimeLeft = (endDate) => {
-  console.log("endDate", endDate);
-  const differenceInMilliseconds = moment.utc(endDate).diff(moment.utc());
+  const utcDate = moment(endDate?.slice(0, -1)).utc().format();
+  const differenceInMilliseconds = moment.utc(utcDate).diff(moment.utc());
   const difference = moment.duration(differenceInMilliseconds);
-  console.log("difference", difference, differenceInMilliseconds);
-
-  // For example, to get the difference in days, hours, minutes
-  // const days = difference.days();
-  // const hours = difference.hours();
-  // const minutes = difference.minutes();
-  // const seconds = difference.seconds();
   let timeLeft = {};
 
-  if (difference > 0) {
+  if (differenceInMilliseconds > 0) {
     timeLeft = {
       days: difference.days(),
       hours: difference.hours(),
