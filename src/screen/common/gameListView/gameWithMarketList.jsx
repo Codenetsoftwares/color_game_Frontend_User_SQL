@@ -17,6 +17,7 @@ import { useAppContext } from "../../../contextApi/context";
 import strings from "../../../utils/constant/stringConstant";
 import { toast } from "react-toastify";
 import Login from "../../loginModal/loginModal";
+import Timer from "../Timer";
 
 function GameWithMarketList({ isSingleMarket }) {
   const [user_allGamesWithMarketData, setUser_allGamesWithMarketData] =
@@ -27,7 +28,46 @@ function GameWithMarketList({ isSingleMarket }) {
   const [user_marketWithRunnerData, setUser_marketWithRunnerData] = useState(
     getMarketWithRunnerDataInitialState()
   );
-  const [preExposure, setPreExposure] = useState(0);
+  console.log("====>>> data for runner ", user_allGamesWithMarketData);
+
+   const [startTimes, setStartTimes] = useState([]);
+   console.log('start times:',startTimes)
+  const [endTimes, setEndTimes] = useState([]);
+  console.log('end times:',endTimes)
+
+  // Iterate over each game in the user_allGamesWithMarketData array
+// user_allGamesWithMarketData.map((game, gameIndex) => {
+//   console.log(`Game ${gameIndex}: ${game.gameName}`);
+  
+//   // Iterate over each market in the game's markets array
+//   game.markets.map((market, marketIndex) => {
+//     console.log(`  Market ${marketIndex}: ${market.marketName}`);
+//     // console.log('===>>> start time',`    Start Time: ${market.startTime}`);
+//     console.log('===>>> start time',market.startTime)
+//     setStartTimes(market.startTime)
+//     console.log(`    End Time: ${market.endTime}`);
+//   });
+// });
+
+useEffect(() => {
+  const newStartTimes = user_allGamesWithMarketData.flatMap(game =>
+    game.markets.map(market => market.startTime)
+  );
+  // Update the state with the new start times
+  setStartTimes(newStartTimes);
+
+  // Extract all end times from the data
+  const newEndTimes = user_allGamesWithMarketData.flatMap(game =>
+    game.markets.map(market => market.endTime)
+  );
+  // Update the state with the new end times
+  setEndTimes(newEndTimes);
+}, [user_allGamesWithMarketData]);
+  
+
+
+
+const [preExposure, setPreExposure] = useState(0);
   const [newToBeDecided, setNewToBeDecided] = useState(0);
   const [exposureAndWallet, setExposureAndWallet] = useState({
     exposure: null,
@@ -227,8 +267,10 @@ function GameWithMarketList({ isSingleMarket }) {
   }
   async function user_getAllGamesWithMarketData() {
     const response = await user_getAllGamesWithMarketData_api();
+    // console.log('====>>> response from',response )
     if (response) {
-      setUser_allGamesWithMarketData(response.data);
+      console.log("====>>> response from", response);
+      setUser_allGamesWithMarketData(response.data); // data for start time and end time fileld is coming
     }
   }
 
@@ -430,12 +472,37 @@ function GameWithMarketList({ isSingleMarket }) {
               </h1>
             </div>
           )}
+          .{/* timer needed to show here  */}
           <div
             className="col-12 p-1 mt-2"
             style={{ backgroundColor: "#a1aed4" }}
           >
             {user_marketWithRunnerData.marketName} |{" "}
             {user_marketWithRunnerData.timeSpan}
+            {/* <Timer
+
+              startTime= {startTimes.map((time, index) => (
+          <li key={index}>{time}</li>
+        ))}
+              endTime=  {endTimes.map((time, index) => (
+                <li key={index}>{time}</li>
+              ))}
+            /> */}
+
+<h3>Start Times:</h3>
+      <ul>
+        {startTimes.map((time, index) => (
+         
+          <li key={index}>{time}</li>
+        ))}
+      </ul>
+
+      <h3>End Times:</h3>
+      <ul>
+        {endTimes.map((time, index) => (
+          <li key={index}>{time}</li>
+        ))}
+      </ul>
           </div>
           <div className="row py-1 px-0 m-0 ">
             <div className="col-4"></div>
@@ -452,7 +519,6 @@ function GameWithMarketList({ isSingleMarket }) {
               Lay
             </div>
           </div>
-
           {user_marketWithRunnerData &&
             user_marketWithRunnerData.runners.map((runnerData, index) => {
               // Determine if current row should display
