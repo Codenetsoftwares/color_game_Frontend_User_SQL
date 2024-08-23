@@ -17,7 +17,7 @@ import { useAppContext } from "../../../contextApi/context";
 import strings from "../../../utils/constant/stringConstant";
 import { toast } from "react-toastify";
 import Login from "../../loginModal/loginModal";
-
+import CountdownTimer from "../../../globlaCommon/CountdownTimer"
 function GameWithMarketList({ isSingleMarket }) {
   const [user_allGamesWithMarketData, setUser_allGamesWithMarketData] =
     useState([]);
@@ -378,6 +378,18 @@ function GameWithMarketList({ isSingleMarket }) {
   };
 
   function getMarketDetailByMarketId() {
+    function convertUTCtoIST(utcDateString) {
+      // Create a Date object from the UTC date string
+      const utcDate = new Date(utcDateString);
+
+      // Get the IST offset (UTC+5:30)
+      const istOffset = 5.5 * 60 * 60 * 1000; // 5 hours 30 minutes in milliseconds
+
+      // Convert UTC to IST by adding the offset
+      const istDate = new Date(utcDate.getTime() + istOffset);
+
+      return istDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+    }
     const handleBidding = () => {
       const nData = biddingButton.map((list) => (
         <div className={`${list.col} p-0`}>
@@ -435,7 +447,16 @@ function GameWithMarketList({ isSingleMarket }) {
             style={{ backgroundColor: "#a1aed4" }}
           >
             {user_marketWithRunnerData.marketName} |{" "}
-            {user_marketWithRunnerData.timeSpan}
+            {console.log(
+              "user_marketWithRunnerData",
+              user_marketWithRunnerData
+            )}
+            {new Date(convertUTCtoIST(user_marketWithRunnerData.endTime)) <
+            new Date() ? null : (
+              <>
+                <CountdownTimer endDate={user_marketWithRunnerData.endTime} />
+              </>
+            )}
           </div>
           <div className="row py-1 px-0 m-0 ">
             <div className="col-4"></div>
