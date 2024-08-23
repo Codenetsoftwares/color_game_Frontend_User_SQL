@@ -56,8 +56,6 @@ function GameWithMarketList({ isSingleMarket }) {
 
   console.log("data to send", gameIdFromUrl);
 
-  console.log("gi", isActive);
-
   useEffect(() => {
     if (user_marketWithRunnerData?.runners?.length) {
       for (let i = 0; i < user_marketWithRunnerData.runners.length; i++) {
@@ -99,9 +97,7 @@ function GameWithMarketList({ isSingleMarket }) {
   useEffect(() => {
     const eventSource = updateMarketEventEmitter();
     eventSource.onmessage = function (event) {
-      console.log("JSON.parse(event.data)", JSON.parse(event.data));
       const update = JSON.parse(event.data);
-
       if (update?.length) {
         setIsActive(false);
         update?.forEach((market) => {
@@ -227,7 +223,7 @@ function GameWithMarketList({ isSingleMarket }) {
       ? Number(bidding.rate)
       : Number(bidding.rate) - 1);
 
-// Rerender When IsActive will get False
+  // Rerender When IsActive will get False
   useEffect(() => {
     user_getMarketsWithRunnerData();
   }, [isActive]);
@@ -291,11 +287,7 @@ function GameWithMarketList({ isSingleMarket }) {
       }
     }
 
-    console.log("user_marketWithRunnerData", user_marketWithRunnerData);
-    console.log("New Array", arr);
     const highestNegetive = lowestNegativeNumber(arr);
-
-    console.log("Negetive", highestNegetive);
 
     if (Math.abs(preExposure) >= Math.abs(highestNegetive)) {
       difference = Math.abs(preExposure) - Math.abs(highestNegetive);
@@ -483,7 +475,7 @@ function GameWithMarketList({ isSingleMarket }) {
               user_marketWithRunnerData
             )}
             {new Date(convertUTCtoIST(user_marketWithRunnerData.endTime)) <
-            new Date() ? null : (
+              new Date() ? null : (
               <>
                 <CountdownTimer endDate={user_marketWithRunnerData.endTime} />
               </>
@@ -513,16 +505,16 @@ function GameWithMarketList({ isSingleMarket }) {
                 toggle.indexNo === runnerData.id &&
                 (winBalance !== 0 ||
                   Number(runnerData.runnerName.bal) -
-                    Math.round(Math.abs(winBalance)) !==
-                    0);
+                  Math.round(Math.abs(winBalance)) !==
+                  0);
 
               const shouldDisplayTempBack =
                 toggle.mode === "back" &&
                 toggle.indexNo === runnerData.id &&
                 (winBalance !== 0 ||
                   Number(runnerData.runnerName.bal) -
-                    Math.round(Math.abs(winBalance)) !==
-                    0);
+                  Math.round(Math.abs(winBalance)) !==
+                  0);
               return (
                 <>
                   {toggle.mode === "lay" ? (
@@ -538,7 +530,7 @@ function GameWithMarketList({ isSingleMarket }) {
                             {shouldDisplayTempLay && (
                               <>
                                 {Number(runnerData.runnerName.bal) === 0 &&
-                                !bidding.amount ? (
+                                  !bidding.amount ? (
                                   ""
                                 ) : Number(runnerData.runnerName.bal) > 0 ? (
                                   <span className="text-success fw-bold a" mx-2>
@@ -559,7 +551,7 @@ function GameWithMarketList({ isSingleMarket }) {
 
                                 {Number(runnerData.runnerName.bal) -
                                   Math.round(Math.abs(winBalance)) >
-                                0 ? (
+                                  0 ? (
                                   <span className=" text-success fw-bold b">
                                     {bidding.amount != 0 && (
                                       <span>
@@ -589,7 +581,7 @@ function GameWithMarketList({ isSingleMarket }) {
                           {!shouldDisplayTempLay && (
                             <>
                               {Number(runnerData.runnerName.bal) === 0 &&
-                              !bidding.amount ? (
+                                !bidding.amount ? (
                                 ""
                               ) : Number(runnerData.runnerName.bal) > 0 ? (
                                 <span className="text-success fw-bold c" mx-2>
@@ -664,7 +656,7 @@ function GameWithMarketList({ isSingleMarket }) {
                             {shouldDisplayTempBack && (
                               <>
                                 {Number(runnerData.runnerName.bal) &&
-                                !bidding.amount ? (
+                                  !bidding.amount ? (
                                   ""
                                 ) : Number(runnerData.runnerName.bal) > 0 ? (
                                   <span className="text-success fw-bold d" mx-2>
@@ -685,7 +677,7 @@ function GameWithMarketList({ isSingleMarket }) {
 
                                 {Number(runnerData.runnerName.bal) +
                                   Math.round(Math.abs(winBalance)) >
-                                0 ? (
+                                  0 ? (
                                   <span className=" text-success  fw-bold">
                                     {bidding.amount != 0 && (
                                       <span>
@@ -715,20 +707,19 @@ function GameWithMarketList({ isSingleMarket }) {
                           {!shouldDisplayTempBack && (
                             <>
                               {Number(runnerData.runnerName.bal) === 0 &&
-                              !bidding.amount ? (
+                                !bidding.amount ? (
                                 ""
                               ) : Number(runnerData.runnerName.bal) > 0 ? (
                                 <span className="text-success  fw-bold" mx-2>
                                   {bidding.amount != 0 &&
                                     runnerData.runnerName.bal}
                                   <span
-                                    className={`3 text-${
-                                      Number(runnerData.runnerName.bal) -
-                                        Math.round(bidding.amount) >
+                                    className={`3 text-${Number(runnerData.runnerName.bal) -
+                                      Math.round(bidding.amount) >
                                       0
-                                        ? "success"
-                                        : "danger"
-                                    } fw-bold`}
+                                      ? "success"
+                                      : "danger"
+                                      } fw-bold`}
                                   >
                                     (
                                     {Number(runnerData.runnerName.bal) -
@@ -790,9 +781,8 @@ function GameWithMarketList({ isSingleMarket }) {
                   {toggle.indexNo === runnerData.id && !toggle.toggleOpen && (
                     <div
                       style={{
-                        background: `${
-                          toggle.mode === "lay" ? "#f1e0e3" : "#c6e7ee"
-                        }`,
+                        background: `${toggle.mode === "lay" ? "#f1e0e3" : "#c6e7ee"
+                          }`,
                       }}
                     >
                       <div className="row py-1 px-0 m-0">
@@ -831,16 +821,16 @@ function GameWithMarketList({ isSingleMarket }) {
                             onClick={
                               bidding.amount >= 100
                                 ? () =>
-                                    handleBiddingAmount(
-                                      "amount",
-                                      Number(bidding.amount) - 100
-                                    )
+                                  handleBiddingAmount(
+                                    "amount",
+                                    Number(bidding.amount) - 100
+                                  )
                                 : () =>
-                                    handleBiddingAmount(
-                                      "amount",
-                                      Number(bidding.amount) -
-                                        Number(bidding.amount)
-                                    )
+                                  handleBiddingAmount(
+                                    "amount",
+                                    Number(bidding.amount) -
+                                    Number(bidding.amount)
+                                  )
                             }
                           >
                             -
@@ -931,9 +921,8 @@ function GameWithMarketList({ isSingleMarket }) {
                   href={`/gameView/${user_gameWithMarketData?.gameName?.replace(
                     /\s/g,
                     ""
-                  )}-${marketData?.marketName?.replace(/\s/g, "")}/${
-                    marketData?.marketId
-                  }`}
+                  )}-${marketData?.marketName?.replace(/\s/g, "")}/${marketData?.marketId
+                    }`}
                   onClick={() => handleMarketId(marketData?.marketId)}
                 >
                   <span>{marketData.timeSpan}</span> |{" "}
@@ -1004,8 +993,8 @@ function GameWithMarketList({ isSingleMarket }) {
         {gameIdFromUrl
           ? getMarketDetailByMarketId()
           : isSingleMarket
-          ? getSingleMarket()
-          : getWholeMarket()}
+            ? getSingleMarket()
+            : getWholeMarket()}
         <Login showLogin={loginModal} setShowLogin={setLoginModal} />
       </>
     );
