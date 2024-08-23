@@ -3,7 +3,7 @@ import { AppProvider } from "./contextApi/context";
 import Home from "./screen/home/home";
 import NotFound from "./screen/common/notFound";
 import GameView from "./screen/gameView/gameView";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import RulesPage from "./screen/common/rulesPage";
@@ -20,7 +20,18 @@ import { useEffect } from "react";
 import updateMarketEventEmitter from "./screen/common/updateMarketEvent";
 
 function App() {
-  useEffect(() => { updateMarketEventEmitter() }, [])
+  useEffect(() => {
+    // console.log("=>>>>", updateMarketEventEmitter());
+    const eventSource = updateMarketEventEmitter();
+    eventSource.onmessage = function (event) {
+      console.log("JSON.parse(event.data)", JSON.parse(event.data));
+      toast.info(event.data);
+    };
+    eventSource.onerror = (err) => {
+      console.error("EventSource failed:", err);
+      eventSource.close();
+    };
+  }, []);
   return (
     <AppProvider>
       <ToastContainer
