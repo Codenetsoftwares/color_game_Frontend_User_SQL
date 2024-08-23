@@ -46,8 +46,7 @@ const CountdownTimer = ({ endDate }) => {
 };
 
 const calculateTimeLeft = (endDate) => {
-  const utcDate = moment(endDate?.slice(0, -1)).utc().format();
-  const differenceInMilliseconds = moment.utc(utcDate).diff(moment.utc());
+  const differenceInMilliseconds = moment.utc(endDate).diff(moment.utc());
   const difference = moment.duration(differenceInMilliseconds);
   let timeLeft = {};
 
