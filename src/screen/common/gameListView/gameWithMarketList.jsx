@@ -939,53 +939,62 @@ function GameWithMarketList({ isSingleMarket }) {
     );
   }
 
-  function getWholeMarket() {
-    return (
-      <div className="row p-0 m-0">
-        {user_allGamesWithMarketData &&
-          user_allGamesWithMarketData.map((gameWithMarketData) => {
-            return (
-              <>
-                <div
-                  className="col-12 p-1 mt-2"
-                  style={{ backgroundColor: "#a1aed4" }}
-                >
-                  {gameWithMarketData.gameName}
-                </div>
-                {gameWithMarketData &&
-                  gameWithMarketData.markets.map((marketData) => {
-                    return (
-                      <div className="row py-1 px-0 m-0 border">
-                        <div className="col-4">
-                          <span>{marketData.timeSpan}</span> |{" "}
-                          <span> {marketData.marketName}</span>
-                        </div>
-                        <div
-                          className="col-8"
-                          style={{ backgroundColor: "orange" }}
-                        >
-                          col-8
-                        </div>
-                      </div>
-                    );
-                  })}
-                <a
-                  className={`col-12 text-dark text-decoration-none text-nowrap`}
-                  href={`/gameView/${gameWithMarketData?.gameName?.replace(
-                    /\s/g,
-                    ""
-                  )}/${gameWithMarketData?.gameId}`}
-                  style={{ textAlign: "right" }}
-                  onClick={() => handleGameId(gameWithMarketData?.gameId)}
-                >
-                  View more
-                </a>
-              </>
-            );
-          })}
-      </div>
-    );
-  }
+   function getWholeMarket() {
+     return (
+       <div className="row p-0 m-0">
+         {user_allGamesWithMarketData &&
+           user_allGamesWithMarketData.slice(0, 3).map((gameWithMarketData) => {
+             return (
+               <>
+                 <div
+                   className="col-12 p-1 mt-2"
+                   style={{ backgroundColor: "#a1aed4" }}
+                 >
+                   {gameWithMarketData.gameName}
+                 </div>
+                 {gameWithMarketData &&
+                   gameWithMarketData.markets.slice(0, 3).map((marketData) => {
+                     return (
+                       <div className="row py-1 px-0 m-0 border">
+                         <div className="col-4">
+                           <span>{marketData.timeSpan}</span> |{" "}
+                           <span> {marketData.marketName}</span>
+                         </div>
+                         <div
+                           className="col-8"
+                           style={{ backgroundColor: "orange" }}
+                         >
+                           col-8
+                         </div>
+                       </div>
+                     );
+                   })}
+                 {gameWithMarketData.markets.length > 0 ? (
+                   <a
+                     className={`col-12 text-dark text-decoration-none text-nowrap`}
+                     href={`/gameView/${gameWithMarketData?.gameName?.replace(
+                       /\s/g,
+                       ""
+                     )}/${gameWithMarketData?.gameId}`}
+                     style={{ textAlign: "right" }}
+                     onClick={() => handleGameId(gameWithMarketData?.gameId)}
+                   >
+                     View more
+                   </a>
+                 ) : (
+                   <p
+                     className="text-center pt-1"
+                     style={{ backgroundColor: "orange" }}
+                   >
+                     No market
+                   </p>
+                 )}
+               </>
+             );
+           })}
+       </div>
+     );
+   }
 
   function getBody() {
     return (

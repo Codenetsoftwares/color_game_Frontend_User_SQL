@@ -41,24 +41,28 @@ function Layout() {
         }}
       >
         <li key={0} className="p-2 text-white" style={{ fontWeight: 600 }}>
-          <a
-            className=" text-decoration-none"
-            href={`/home`}
-            style={{ color: "rgb(23 101 119)" }}
-          >
+          <a className=" text-decoration-none" href={`/home`}>
             {"Home"}
           </a>
         </li>
-        {/* {user_allGames.map((gameObj, index) => (
-          <li key={index + 1} className="p-2 text-white" style={{ fontWeight: 600 }}>
+        {user_allGames.map((gameObj, index) => (
+          <li
+            key={index + 1}
+            className="p-2 text-white"
+            style={{ fontWeight: 600 }}
+          >
             <a
-              className={`text-white text-decoration-none text-nowrap ${gameObj.isBlink ? 'blink_me' : ''}`}
-              href={`/gameView/${gameObj.gameName.replace(/\s/g, '')}/${gameObj.gameId}`}
+              className={`text-white text-decoration-none text-nowrap ${
+                gameObj.isBlink ? "blink_me" : ""
+              }`}
+              href={`/gameView/${gameObj.gameName.replace(/\s/g, "")}/${
+                gameObj.gameId
+              }`}
             >
               {gameObj.gameName}
             </a>
           </li>
-        ))} */}
+        ))}
       </ul>
     );
   }
