@@ -17,7 +17,8 @@ import { useAppContext } from "../../../contextApi/context";
 import strings from "../../../utils/constant/stringConstant";
 import { toast } from "react-toastify";
 import Login from "../../loginModal/loginModal";
-import CountdownTimer from "../../../globlaCommon/CountdownTimer"
+import CountdownTimer from "../../../globlaCommon/CountdownTimer";
+import updateMarketEventEmitter from "../updateMarketEvent";
 function GameWithMarketList({ isSingleMarket }) {
   const [user_allGamesWithMarketData, setUser_allGamesWithMarketData] =
     useState([]);
@@ -55,6 +56,8 @@ function GameWithMarketList({ isSingleMarket }) {
 
   console.log("data to send", gameIdFromUrl);
 
+  console.log("gi", isActive);
+
   useEffect(() => {
     if (user_marketWithRunnerData?.runners?.length) {
       for (let i = 0; i < user_marketWithRunnerData.runners.length; i++) {
@@ -91,6 +94,26 @@ function GameWithMarketList({ isSingleMarket }) {
       user_getAllGamesWithMarketData();
     }
   }
+
+  //SSE EVENT
+  useEffect(() => {
+    const eventSource = updateMarketEventEmitter();
+    eventSource.onmessage = function (event) {
+      console.log("JSON.parse(event.data)", JSON.parse(event.data));
+      const update = JSON.parse(event.data);
+
+      if (update?.length) {
+        setIsActive(false);
+        update?.forEach((market) => {
+          toast.info(`${market.marketName} has been Suspended`);
+        });
+      }
+    };
+    eventSource.onerror = (err) => {
+      console.error("EventSource failed:", err);
+      eventSource.close();
+    };
+  }, []);
 
   const handleBiddingAmount = (name, value) => {
     setBidding((prevData) => ({
@@ -204,6 +227,11 @@ function GameWithMarketList({ isSingleMarket }) {
       ? Number(bidding.rate)
       : Number(bidding.rate) - 1);
 
+// Rerender When IsActive will get False
+  useEffect(() => {
+    user_getMarketsWithRunnerData();
+  }, [isActive]);
+
   async function user_getMarketsWithRunnerData() {
     dispatch({
       type: strings.isLoading,
@@ -225,6 +253,7 @@ function GameWithMarketList({ isSingleMarket }) {
       setIsActive(response.data.isActive);
     }
   }
+
   async function user_getAllGamesWithMarketData() {
     const response = await user_getAllGamesWithMarketData_api();
     if (response) {
@@ -261,6 +290,8 @@ function GameWithMarketList({ isSingleMarket }) {
         }
       }
     }
+
+    console.log("user_marketWithRunnerData", user_marketWithRunnerData);
     console.log("New Array", arr);
     const highestNegetive = lowestNegativeNumber(arr);
 

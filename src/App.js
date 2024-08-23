@@ -20,18 +20,7 @@ import { useEffect } from "react";
 import updateMarketEventEmitter from "./screen/common/updateMarketEvent";
 
 function App() {
-  useEffect(() => {
-    // console.log("=>>>>", updateMarketEventEmitter());
-    const eventSource = updateMarketEventEmitter();
-    eventSource.onmessage = function (event) {
-      console.log("JSON.parse(event.data)", JSON.parse(event.data));
-      toast.info(event.data);
-    };
-    eventSource.onerror = (err) => {
-      console.error("EventSource failed:", err);
-      eventSource.close();
-    };
-  }, []);
+
   return (
     <AppProvider>
       <ToastContainer
