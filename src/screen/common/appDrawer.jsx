@@ -211,10 +211,6 @@ function AppDrawer({
             {children}
           </div>
         </div>
-        <ResetModalAfterLogin
-          showResetModal={showResetModal}
-          setShowResetModal={setShowResetModal}
-        />
       </div>
     );
   }

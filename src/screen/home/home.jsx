@@ -309,8 +309,6 @@ const Home = () => {
         <Login
           showLogin={showLogin}
           setShowLogin={setShowLogin}
-          setShowResetModal={setShowResetModal}
-          showResetModal={showResetModal}
         />
       </div>
     );
