@@ -11,16 +11,15 @@ import { ResetPasswordSchema } from "../../utils/schema";
 
 const ResetPassword = () => {
   const { dispatch } = useAppContext();
-  const { dispatch } = useAppContext();
   const navigate = useNavigate();
   const location = useLocation();
-  const state = location.state || {}; 
+  const state = location?.state || {}; 
 console.log("location-state", state);
   const formik = useFormik({
     initialValues: {
-      userName:state.userName,
+      userName:state?.userName,
       confirmPassword: "",
-      oldPassword: state.password,
+      oldPassword: state?.password,
       newPassword: "",
     },
     validationSchema: ResetPasswordSchema,
@@ -64,36 +63,7 @@ console.log("location-state", state);
             <div className="card-body">
               <h5 className="card-title text-center">Change Password</h5>
               <form onSubmit={formik.handleSubmit}>
-                {/* <div className="form-group">
-                  <label htmlFor="oldPassword">Old Password</label>
-                  <input
-                    type="password"
-                    className={`form-control ${
-                      formik.touched.oldPassword && formik.errors.oldPassword
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    className={`form-control ${
-                      formik.touched.oldPassword && formik.errors.oldPassword
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    id="oldPassword"
-                    name="oldPassword"
-                    placeholder="Enter Old Password"
-                    value={formik.values.oldPassword}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.oldPassword}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  {formik.touched.oldPassword && formik.errors.oldPassword ? (
-                    <div className="invalid-feedback">
-                      {formik.errors.oldPassword}
-                    </div>
-                  ) : null}
-                </div> */}
+                
                 <div className="form-group">
                   <label htmlFor="newPassword">New Password</label>
                   <input
@@ -143,7 +113,6 @@ console.log("location-state", state);
                 <button
                   type="submit"
                   className="btn btn-primary btn-block"
-                  // disabled={formik.isSubmitting}
                 >
                   RESET PASSWORD
                 </button>

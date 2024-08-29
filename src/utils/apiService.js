@@ -249,7 +249,7 @@ export async function user_carrouselImageDynamic_api(body = {}, isToast = false)
 
 export async function ResetUserPassword(body = {}, isToast = false) {
   try {
-    const callParams =await getCallParams(strings.POST, body, isToast);
+    const callParams =  getNoAuthCallParams(strings.POST, body, isToast);
     const response = await makeCall(urls.resetPassword, callParams, isToast);
     return response;
   } catch (error) {
