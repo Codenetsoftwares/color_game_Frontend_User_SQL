@@ -20,7 +20,7 @@ import superspade from "../../asset/SuperSpade-Games-logo-png-removebg-preview.p
 import Login from "../loginModal/loginModal";
 import AOS from "aos";
 import { user_carrouselImageDynamic_api } from "../../utils/apiService";
-import ResetModalAfterLogin from "../common/gameListView/ResetModalAfterLogin";
+
 const Home = () => {
   const [sliderData, setSliderData] = useState(dSlider);
   const [hitGameData, setHitGameData] = useState(dHitGames);

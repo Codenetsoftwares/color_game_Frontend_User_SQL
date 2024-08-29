@@ -6,7 +6,7 @@ import { getAllGameDataInitialState } from '../../utils/getInitiateState';
 import HamburgerNavBar from './hamburgerNavBar';
 import { useAppContext } from '../../contextApi/context';
 import strings from '../../utils/constant/stringConstant';
-import ResetModalAfterLogin from './gameListView/ResetModalAfterLogin';
+
 
 function AppDrawer({
   children,
