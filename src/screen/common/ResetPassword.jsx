@@ -11,6 +11,7 @@ import { ResetPasswordSchema } from "../../utils/schema";
 
 const ResetPassword = () => {
   const { dispatch } = useAppContext();
+  const { dispatch } = useAppContext();
   const navigate = useNavigate();
   const location = useLocation();
   const state = location.state || {}; 
@@ -72,9 +73,17 @@ console.log("location-state", state);
                         ? "is-invalid"
                         : ""
                     }`}
+                    className={`form-control ${
+                      formik.touched.oldPassword && formik.errors.oldPassword
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     id="oldPassword"
                     name="oldPassword"
                     placeholder="Enter Old Password"
+                    value={formik.values.oldPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.oldPassword}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
