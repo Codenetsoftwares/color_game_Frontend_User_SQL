@@ -6,10 +6,20 @@ import { getAllGameDataInitialState } from '../../utils/getInitiateState';
 import HamburgerNavBar from './hamburgerNavBar';
 import { useAppContext } from '../../contextApi/context';
 import strings from '../../utils/constant/stringConstant';
+import ResetModalAfterLogin from './gameListView/ResetModalAfterLogin';
 
-function AppDrawer({ children, showCarousel, isMobile, isHomePage }) {
+function AppDrawer({
+  children,
+  showCarousel,
+  isMobile,
+  isHomePage,
+  setShowResetModal,
+  showResetModal,
+}) {
   const [toggleStates, setToggleStates] = useState({});
-  const [user_allGames, setUser_allGames] = useState(getAllGameDataInitialState());
+  const [user_allGames, setUser_allGames] = useState(
+    getAllGameDataInitialState()
+  );
   const { dispatch } = useAppContext();
 
   useEffect(() => {
@@ -40,41 +50,49 @@ function AppDrawer({ children, showCarousel, isMobile, isHomePage }) {
     }
   };
   const carouselImages = [
-    'https://images.news18.com/ibnlive/uploads/2024/03/the-carnival-of-cricket-ipl-2024-begins-friday-in-chennai-2024-03-57866b703b220dfd84e70329b271fbd8-3x2.jpg',
-    'https://www.hindustantimes.com/ht-img/img/2024/01/14/550x309/TOPSHOT-TENNIS-AUS-OPEN-33_1705249861778_1705249942860.jpg',
-    'https://assets-webp.khelnow.com/d7293de2fa93b29528da214253f1d8d0/640x360/news/uploads/2024/02/football-lead-pic.jpg.webp',
+    "https://editorial.uefa.com/resources/0288-19b92e19420c-1a9cbc155530-1000/ucl_easportsuclglory_ingamerender_16x9.png",
+    "https://www.hindustantimes.com/ht-img/img/2024/01/14/550x309/TOPSHOT-TENNIS-AUS-OPEN-33_1705249861778_1705249942860.jpg",
+    "https://assets-webp.khelnow.com/d7293de2fa93b29528da214253f1d8d0/640x360/news/uploads/2024/02/football-lead-pic.jpg.webp",
+    "https://deadline.com/wp-content/uploads/2023/08/US-Open-2023-2.jpg",
+    "https://pbs.twimg.com/media/GFlDX7JWkAAseHX.jpg:large",
   ];
 
   function getLeftNavBar() {
     return (
-      <div className="sidebar" style={{ overflowY: 'auto', height: '100vh' }}>
+      <div className="sidebar" style={{ overflowY: "auto", height: "100vh" }}>
         <span
           style={{
-            background: '#2cb3d1',
-            display: 'block',
-            textIndent: '5px',
-            fontWeight: '500',
-            fontSize: '14px',
+            background: "#2cb3d1",
+            display: "block",
+            textIndent: "5px",
+            fontWeight: "500",
+            fontSize: "14px",
           }}
           className="text-white"
         >
-          Popular{' '}
+          Popular{" "}
           <button
             type="button"
             className="btn-close d-xl-none d-lg-none "
             data-bs-dismiss="offcanvas"
             aria-label="Close"
-            style={{ marginLeft: '70%' }}
+            style={{ marginLeft: "70%" }}
           />
         </span>
 
         <ul>
-          <li className={toggleStates['inPlay'] ? 'subMenuHead' : 'MenuHead'} onClick={() => handleToggle('inPlay')}>
+          <li
+            className={toggleStates["inPlay"] ? "subMenuHead" : "MenuHead"}
+            onClick={() => handleToggle("inPlay")}
+          >
             <a href="#">In-Play</a>
           </li>
           {user_allGames.map((gameObj, index) => (
             <React.Fragment key={index}>
-              <li className={toggleStates[index] ? 'subMenuHead' : 'MenuHead'} onClick={() => handleToggle(index)}>
+              <li
+                className={toggleStates[index] ? "subMenuHead" : "MenuHead"}
+                onClick={() => handleToggle(index)}
+              >
                 <Link>{gameObj.gameName}</Link>
               </li>
               {/* Mapping over markets inside each gameName */}
@@ -83,13 +101,18 @@ function AppDrawer({ children, showCarousel, isMobile, isHomePage }) {
                     <li
                       className="subMenuItems"
                       key={marketIndex}
-                      onClick={() => handleAllId(gameObj?.gameId, marketObj?.marketId)}
+                      onClick={() =>
+                        handleAllId(gameObj?.gameId, marketObj?.marketId)
+                      }
                     >
                       <Link
-                        to={`/gameView/${gameObj?.gameName?.replace(/\s/g, '')}-${marketObj?.marketName?.replace(
+                        to={`/gameView/${gameObj?.gameName?.replace(
                           /\s/g,
-                          '',
-                        )}/${marketObj?.marketId?.replace(/\s/g, '')}`}
+                          ""
+                        )}-${marketObj?.marketName?.replace(
+                          /\s/g,
+                          ""
+                        )}/${marketObj?.marketId?.replace(/\s/g, "")}`}
                       >
                         {marketObj.marketName}
                       </Link>
@@ -106,15 +129,22 @@ function AppDrawer({ children, showCarousel, isMobile, isHomePage }) {
   function getMidCarousel() {
     return (
       <>
-        <div id="carouselExampleAutoPlaying" className="carousel slide" data-bs-ride="carousel">
+        <div
+          id="carouselExampleAutoPlaying"
+          className="carousel slide"
+          data-bs-ride="carousel"
+        >
           <div className="carousel-inner ">
             {carouselImages.map((image, index) => (
-              <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
+              <div
+                key={index}
+                className={`carousel-item ${index === 0 ? "active" : ""} mt-3`}
+              >
                 <img
                   src={image}
                   className="d-block w-100"
                   alt={`carousel-image-${index}`}
-                  style={{ height: '300px', objectFit: 'fill' }}
+                  style={{ height: "400px", objectFit: "fill" }}
                 />
               </div>
             ))}
@@ -125,7 +155,10 @@ function AppDrawer({ children, showCarousel, isMobile, isHomePage }) {
             data-bs-target="#carouselExampleAutoPlaying"
             data-bs-slide="prev"
           >
-            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span
+              className="carousel-control-prev-icon"
+              aria-hidden="true"
+            ></span>
             <span className="visually-hidden">Previous</span>
           </button>
           <button
@@ -134,7 +167,10 @@ function AppDrawer({ children, showCarousel, isMobile, isHomePage }) {
             data-bs-target="#carouselExampleAutoPlaying"
             data-bs-slide="next"
           >
-            <span className="carousel-control-next-icon" aria-hidden="true"></span>
+            <span
+              className="carousel-control-next-icon"
+              aria-hidden="true"
+            ></span>
             <span className="visually-hidden">Next</span>
           </button>
         </div>
@@ -150,7 +186,11 @@ function AppDrawer({ children, showCarousel, isMobile, isHomePage }) {
         <div className="row">
           <div
             className="col-md-2 position-fixed d-none d-md-block vertical-navbar p-0"
-            style={{ border: '1px solid red', height: '100vh', marginTop: isHomePage ? '0px' : '93px' }}
+            style={{
+              border: "1px solid red",
+              height: "100vh",
+              marginTop: isHomePage ? "0px" : "93px",
+            }}
           >
             {getLeftNavBar()}
           </div>
@@ -158,16 +198,23 @@ function AppDrawer({ children, showCarousel, isMobile, isHomePage }) {
             className="col-md-10 offset-md-2"
             style={{
               // border: '1px solid red',
-              height: '100vh',
+              height: "100vh",
               // overflowY: 'auto',
             }}
           >
-            <div className="col-md-12" style={{ background: 'green', overflowX: 'auto' }}>
+            <div
+              className="col-md-12"
+              style={{ background: "green", overflowX: "auto" }}
+            >
               {showCarousel && getMidCarousel()}
             </div>
             {children}
           </div>
         </div>
+        <ResetModalAfterLogin
+          showResetModal={showResetModal}
+          setShowResetModal={setShowResetModal}
+        />
       </div>
     );
   }

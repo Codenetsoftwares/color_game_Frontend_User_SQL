@@ -20,6 +20,7 @@ import superspade from "../../asset/SuperSpade-Games-logo-png-removebg-preview.p
 import Login from "../loginModal/loginModal";
 import AOS from "aos";
 import { user_carrouselImageDynamic_api } from "../../utils/apiService";
+import ResetModalAfterLogin from "../common/gameListView/ResetModalAfterLogin";
 const Home = () => {
   const [sliderData, setSliderData] = useState(dSlider);
   const [hitGameData, setHitGameData] = useState(dHitGames);
@@ -28,6 +29,7 @@ const Home = () => {
 
   // to prompt with login modal when clicking on hitgames
   const [showLogin, setShowLogin] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
   const [selectedFooterImage, setSelectedFooterImage] = useState(null);
 
@@ -86,7 +88,7 @@ const Home = () => {
   //   setSliderData(response.data);
   // }
 
-  console.log("sliderData", sliderData)
+  console.log("sliderData", sliderData);
   function carrousel() {
     return (
       <div
@@ -101,8 +103,8 @@ const Home = () => {
               type="button"
               data-bs-target="#carouselExampleCaptions"
               data-bs-slide-to={index}
-              className={index === 0 ? 'active' : ''}
-              aria-current={index === 0 ? 'true' : 'false'}
+              className={index === 0 ? "active" : ""}
+              aria-current={index === 0 ? "true" : "false"}
               aria-label={`Slide ${index + 1}`}
             />
           ))}
@@ -281,7 +283,13 @@ const Home = () => {
   function getLoginHomePage() {
     return (
       <div className="global-margin-top-logged">
-        <AppDrawer showCarousel={true} isMobile={false} isHomePage={true}>
+        <AppDrawer
+          showCarousel={true}
+          isMobile={false}
+          isHomePage={true}
+          showResetModal={showResetModal}
+          setShowResetModal={setShowResetModal}
+        >
           <GameWithMarketList isSingleMarket={false} />
         </AppDrawer>
       </div>
@@ -297,7 +305,13 @@ const Home = () => {
         <GameWithMarketList isSingleMarket={false} />
         {downloadApp()}
         {footer()}
-        <Login showLogin={showLogin} setShowLogin={setShowLogin} />
+        {console.log("showResetModal......", setShowResetModal)}
+        <Login
+          showLogin={showLogin}
+          setShowLogin={setShowLogin}
+          setShowResetModal={setShowResetModal}
+          showResetModal={showResetModal}
+        />
       </div>
     );
   }

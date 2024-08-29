@@ -1,15 +1,16 @@
-import { useState, useEffect } from 'react';
-import { Button, Modal } from 'react-bootstrap';
-import { login, userWallet } from '../../utils/apiService';
-import { useAppContext } from '../../contextApi/context';
-import strings from '../../utils/constant/stringConstant';
-import { useFormik } from 'formik';
-import LoginSchema from '../../schema/loginSchema';
-import './loginModal.css';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { Button, Modal } from "react-bootstrap";
+import { login, userWallet } from "../../utils/apiService";
+import { useAppContext } from "../../contextApi/context";
+import strings from "../../utils/constant/stringConstant";
+import { useFormik } from "formik";
+import LoginSchema from "../../schema/loginSchema";
+import "./loginModal.css";
+import { useNavigate } from "react-router-dom";
 
-
-function Login({ showLogin, setShowLogin }) {
+function Login({ showLogin, setShowLogin, setShowResetModal, showResetModal }) {
+  console.log("setShowResetModal:", setShowResetModal);
+  console.log("typeof setShowResetModal:", typeof setShowResetModal);
   const [loginCred, setLoginCred] = useState(setInitialValues());
   const navigate = useNavigate();
 
@@ -55,13 +56,15 @@ function Login({ showLogin, setShowLogin }) {
     const response = await login(values, true);
     console.log("res from login", response);
     if (response) {
-
       dispatch({
         type: strings.LOG_IN,
         payload: { isLogin: true, ...response.data },
-       
       });
       setShowLogin(!showLogin);
+       if (response.data.isReset) {
+        //  setShowResetModal(!showResetModal);
+        navigate("/passwordReset");
+       }
     }
     dispatch({
       type: strings.isLoading,
@@ -123,28 +126,24 @@ function Login({ showLogin, setShowLogin }) {
   function footer() {
     return (
       <div className="d-flex flex-column w-100">
-
-      <Button
-        variant="secondary"
-        onClick={handleSubmit}
-        style={{
-          backgroundImage: "linear-gradient(to top, #044469 4%, #1AA0D1 92%)",
-        }}
-      >
-        Sign in
-      </Button>
-      <Button
+        <Button
+          variant="secondary"
+          onClick={handleSubmit}
+          style={{
+            backgroundImage: "linear-gradient(to top, #044469 4%, #1AA0D1 92%)",
+          }}
+        >
+          Sign in
+        </Button>
+      {/* <Button
       variant="link"
       onClick={() => navigate('/passwordReset')}
       style={{ textDecoration: 'none', color: '#1AA0D1' }}
     >
       Reset Password
-    </Button>
+    </Button> */}
 
-</div>
-     
-
-
+      </div>
     );
   }
 
