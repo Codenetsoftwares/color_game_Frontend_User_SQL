@@ -257,3 +257,12 @@ export async function ResetUserPassword(body = {}, isToast = false) {
   }
 };
 
+export async function Get_Lotteries(body = {}, isToast = false) {
+  try {
+    const callParams = getNoAuthCallParams(strings.GET, body, isToast);
+    const response = await makeCall(urls.getLotteries, callParams, isToast);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -1,0 +1,59 @@
+/* General Styles */
+.lottery-page-container {
+    border-left: 8px solid #4682b4;
+    border-right: 8px solid #4682b4;
+    border-radius: 10px;
+    background-color: #f5f9fc;
+  }
+  
+  .lottery-heading {
+    font-size: 2.5rem;
+    color: #3b6e91;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  
+  .coming-soon {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ff4500;
+  }
+  
+  .blink {
+    animation: blinker 1s linear infinite;
+    color: #ff6347;
+  }
+  
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
+  
+  /* Lottery Cards */
+  .lottery-card {
+    background-color: #e6f7ff;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+  }
+  
+  .lottery-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-text {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #4682b4;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .lottery-page-container {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  }
+  
