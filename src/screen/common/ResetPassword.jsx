@@ -1,27 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import Logo from "../../asset/Logo.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAppContext } from "../../contextApi/context";
 import strings from "../../utils/constant/stringConstant";
 import { ResetUserPassword } from "../../utils/apiService";
+import { ResetPasswordSchema } from "../../utils/schema";
+
 
 const ResetPassword = () => {
-  const { store, dispatch } = useAppContext();
+  const { dispatch } = useAppContext();
   const navigate = useNavigate();
-  const [resetPassword, setResetPassword] = useState(setInitialValues());
-
-  function setInitialValues() {
-    return {
-      userName: "",
-      oldPassword: "",
+  const location = useLocation();
+  const state = location?.state || {}; 
+console.log("location-state", state);
+  const formik = useFormik({
+    initialValues: {
+      userName:state?.userName,
+      confirmPassword: "",
+      oldPassword: state?.password,
       newPassword: "",
-    };
-  }
-
-  const { values, handleChange, handleSubmit } = useFormik({
-    initialValues: resetPassword,
+    },
+    validationSchema: ResetPasswordSchema,
     onSubmit: function (values) {
       handelresetPassword(values);
     },
@@ -34,12 +35,7 @@ const ResetPassword = () => {
       const response = await ResetUserPassword(values, true);
       console.log("Response from reset password API:", response);
       if (response && response.success) {
-        setResetPassword(values);
-        dispatch({
-          type: strings.LOG_OUT,
-          payload: { isLogin: false },
-        });
-        navigate("/");
+        navigate("/home");
         toast.success("Password changed successfully!");
       } else {
         toast.error(
@@ -51,7 +47,6 @@ const ResetPassword = () => {
       toast.error("An error occurred. Please try again.");
     }
   }
-
   return (
     <div className="container h-175">
       <div className="logo-container">
@@ -67,44 +62,58 @@ const ResetPassword = () => {
           <div className="card shadow p-3 mb-5 bg-white rounded">
             <div className="card-body">
               <h5 className="card-title text-center">Change Password</h5>
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label htmlFor="userName">Username</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="userName"
-                    name="userName"
-                    placeholder="Enter Your Username"
-                    value={values.userName}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="oldPassword">Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="oldPassword"
-                    name="oldPassword"
-                    placeholder="Enter Old Password"
-                    value={values.oldPassword}
-                    onChange={handleChange}
-                  />
-                </div>
+              <form onSubmit={formik.handleSubmit}>
+                
                 <div className="form-group">
                   <label htmlFor="newPassword">New Password</label>
                   <input
                     type="password"
-                    className="form-control"
+                    className={`form-control ${
+                      formik.touched.newPassword && formik.errors.newPassword
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     id="newPassword"
                     name="newPassword"
                     placeholder="Enter New Password"
-                    value={values.newPassword}
-                    onChange={handleChange}
+                    value={formik.values.newPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                   />
+                  {formik.touched.newPassword && formik.errors.newPassword ? (
+                    <div className="invalid-feedback">
+                      {formik.errors.newPassword}
+                    </div>
+                  ) : null}
                 </div>
-                <button type="submit" className="btn btn-primary btn-block">
+                <div className="form-group">
+                  <label htmlFor="confirmPassword">Confirm Password</label>
+                  <input
+                    type="password"
+                    className={`form-control ${
+                      formik.touched.confirmPassword &&
+                      formik.errors.confirmPassword
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    placeholder="Confirm New Password"
+                    value={formik.values.confirmPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword && (
+                      <div className="text-danger">
+                        {formik.errors.confirmPassword}
+                      </div>
+                    )}
+                </div>
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-block"
+                >
                   RESET PASSWORD
                 </button>
               </form>
