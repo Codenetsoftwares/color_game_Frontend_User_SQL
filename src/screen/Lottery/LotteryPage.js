@@ -105,9 +105,9 @@ const LotteryPage = () => {
   return (
     <div className="container lottery-page-container text-center py-5 mt-3" style={{ minHeight: "400px" }}>
        {/* Development Notice */}
-       <div className="alert alert-info">
+       {/* <div className="alert alert-info">
         <p>This page is currently under development. Some features may not be fully functional yet.</p>
-      </div>
+      </div> */}
       {/* Blinking "Coming Soon" Message */}
       <div className="coming-soon alert alert-warning" role="alert">
         <p>

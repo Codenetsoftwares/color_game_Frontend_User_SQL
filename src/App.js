@@ -20,6 +20,7 @@ import { useEffect } from "react";
 import updateMarketEventEmitter from "./screen/common/updateMarketEvent";
 import LotteryCards from "./screen/Lottery/LotteryCards";
 import LotteryPage from "./screen/Lottery/LotteryPage";
+import LotteryPurchaseLayout from "./screen/Lottery/LotteryPurchaseLayout";
 
 function App() {
 
@@ -45,6 +46,7 @@ function App() {
           <Route path="/passwordReset" element={<ResetPassword />} />
           <Route path="/gameView/:gameName/:id" element={<GameView />} />
           <Route path="/lottery" element={<LotteryCards/>} />
+          <Route path="/LotteryPurchaseHistory" element={<LotteryPurchaseLayout/>} />
 
           {/* private routes */}
           <Route

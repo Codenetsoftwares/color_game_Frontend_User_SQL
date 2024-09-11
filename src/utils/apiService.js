@@ -280,3 +280,15 @@ export async function Purchase_lottery(body = {}, isToast = false) {
     throw error;
   }
 };
+
+
+
+export async function Get_Purchase_Lotteries_History(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(urls.historyTicket, callParams, isToast);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
