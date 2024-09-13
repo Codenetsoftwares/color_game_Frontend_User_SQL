@@ -2,24 +2,47 @@ import React, { useEffect, useState } from 'react';
 import { Table, Spinner } from 'react-bootstrap';
 import './LotteryPurchaseHistory.css'; // Optional for additional styling
 import { Get_Purchase_Lotteries_History } from '../../utils/apiService';
+import Pagination from '../common/Pagination';
 
 const LotteryPurchaseHistory = () => {
   const [purchaseHistory, setPurchaseHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    totalPages: 0,
+    totalItems: 0
+  });
+  console.log('response for pagination from usestate',pagination)
 
   // Fetch data on component mount
   useEffect(() => {
     const fetchPurchaseHistory = async () => {
-      const response = await Get_Purchase_Lotteries_History();
+      const response = await Get_Purchase_Lotteries_History({page:pagination.page ,limit:pagination.limit,totalPages:pagination.totalPages,totalItems:pagination.totalItems});
+      console.log('response for pagination',response.pagination)
       if (response?.success) {
         setPurchaseHistory(response.data);
+        setPagination({
+          page: response.pagination.page,
+          limit: response.pagination.limit,
+          totalPages: response.pagination.totalPages,
+          totalItems: response.pagination.totalItems
+        }); 
       } else {
         console.error('Failed to fetch purchase history');
       }
-      setLoading(false); // Set loading to false after the data is fetched
+      setLoading(false);
     };
     fetchPurchaseHistory();
-  }, []);
+  }, [pagination.page,, pagination.limit]);
+
+    // Handle page change from pagination component
+    const handlePageChange = (newPage) => {
+      setPagination((prev) => ({ ...prev, page: newPage }));
+    };
+ 
+  const startIndex = (pagination.page - 1) * pagination.limit + 1;
+  const endIndex = Math.min(pagination.page * pagination.limit, pagination.totalItems);
 
   if (loading) {
     return (
@@ -48,7 +71,7 @@ const LotteryPurchaseHistory = () => {
           {purchaseHistory.length > 0 ? (
             purchaseHistory.map((purchase, index) => (
               <tr key={purchase.purchaseId}>
-                <td>{index + 1}</td>
+                <td>{startIndex + index}</td>
                 <td>{purchase.name}</td>
                 <td>{new Date(purchase.purchaseDate).toLocaleDateString()}</td>
                 <td>{purchase.purchaseAmount}</td>
@@ -63,6 +86,16 @@ const LotteryPurchaseHistory = () => {
           )}
         </tbody>
       </Table>
+
+          {/* Pagination Component */}
+          <Pagination
+        currentPage={pagination.page}
+        totalPages={pagination.totalPages}
+        handlePageChange={handlePageChange}
+        startIndex={startIndex}
+        endIndex={endIndex}
+        totalData={pagination.totalItems}
+      />
     </div>
   );
 };
