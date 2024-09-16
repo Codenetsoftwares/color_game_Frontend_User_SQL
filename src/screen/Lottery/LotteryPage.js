@@ -76,6 +76,10 @@ const LotteryPage = () => {
         const response = await Purchase_lottery({ lotteryId });
         console.log("===>> response for purchase", response);
         alert("Ticket purchase successful!");
+            // Remove the purchased lottery from the lotteries state
+            setLotteries((prevLotteries) =>
+              prevLotteries.filter((lottery) => lottery.lotteryId !== lotteryId)
+            );
       } catch (error) {
         console.error("===>> error in purchase", error);
         alert("Ticket purchase failed. Please try again.");
