@@ -3,42 +3,46 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./LotteryPage.css"; // Add custom styles here
 import { Get_Lotteries, Purchase_lottery } from "../../utils/apiService";
 import LotteryTicket from "./LotteryTicket";
+import Pagination from "../common/Pagination";
 
 const LotteryPage = () => {
   const [lotteries, setLotteries] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [limit, setLimit] = useState(10);
-  const [totalItems, setTotalItems] = useState(0);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    totalPages: 0,
+    totalItems: 0,
+  });
 
   // Fetch lottery data
-  async function fetchLotteries(page) {
+  async function fetchLotteries() {
     setLoading(true);
     try {
       const response = await Get_Lotteries({
-        pageNumber: page,
-        pageSize: limit,
-        totalItems: totalItems,
-        pageLimit: limit,
+        page: pagination.page,
+        pageLimit: pagination.limit,
+        totalPages: pagination.totalPages,
+        totalItems: pagination.totalItems,
       });
-
+  
       console.log("======>>> response for lotteries", response);
-
+  
       if (response.success) {
-        setLotteries((prev) => {
-          // Append new data and remove duplicates
-          const updatedLotteries = [...prev, ...response.data];
-          const uniqueLotteries = Array.from(
-            new Set(updatedLotteries.map((a) => a.lotteryId))
-          ).map((id) => {
-            return updatedLotteries.find((a) => a.lotteryId === id);
-          });
-          return uniqueLotteries;
+        // Replace the lotteries instead of appending
+        const uniqueLotteries = Array.from(
+          new Set(response.data.map((a) => a.lotteryId))
+        ).map((id) => {
+          return response.data.find((a) => a.lotteryId === id);
         });
-        setTotalPages(response.pagination.totalPages); // Set total pages
-        setLimit(response.pagination.limit); // Set page limit
-        setTotalItems(response.pagination.totalItems);
+        setLotteries(uniqueLotteries);
+  
+        setPagination({
+          page: response.pagination.page,
+          limit: response.pagination.limit,
+          totalPages: response.pagination.totalPages,
+          totalItems: response.pagination.totalItems,
+        });
       }
     } catch (error) {
       console.error("Failed to fetch lotteries", error);
@@ -46,10 +50,20 @@ const LotteryPage = () => {
       setLoading(false);
     }
   }
+  
 
   useEffect(() => {
-    fetchLotteries(page);
-  }, [page, totalPages, totalItems, limit]);
+    fetchLotteries();
+  }, [pagination.page, pagination.limit]);
+
+  const startIndex = (pagination.page - 1) * pagination.limit + 1;
+  const endIndex = Math.min(
+    pagination.page * pagination.limit,
+    pagination.totalItems
+  );
+  const handlePageChange = (newPage) => {
+    setPagination((prev) => ({ ...prev, page: newPage }));
+  };
 
   // Handle the Buy Now button click
   const handleBuyNow = async (lotteryId, lotteryName) => {
@@ -71,25 +85,6 @@ const LotteryPage = () => {
     }
   };
 
-  // Handle next and previous navigation
-  const handleNext = () => {
-    console.log("Next button clicked");
-    if (page < totalPages) {
-      setPage((prevPage) => prevPage + 1);
-    } else {
-      console.log("Already on the last page");
-    }
-  };
-
-  const handlePrev = () => {
-    console.log("Previous button clicked");
-    if (page > 1) {
-      setPage((prevPage) => prevPage - 1);
-    } else {
-      console.log("Already on the first page");
-    }
-  };
-
   // Loading state
   if (loading && lotteries.length === 0) {
     return (
@@ -103,9 +98,12 @@ const LotteryPage = () => {
   }
 
   return (
-    <div className="container lottery-page-container text-center py-5 mt-3" style={{ minHeight: "400px" }}>
-       {/* Development Notice */}
-       {/* <div className="alert alert-info">
+    <div
+      className="container lottery-page-container text-center py-5 mt-3"
+      style={{ minHeight: "400px" }}
+    >
+      {/* Development Notice */}
+      {/* <div className="alert alert-info">
         <p>This page is currently under development. Some features may not be fully functional yet.</p>
       </div> */}
       {/* Blinking "Coming Soon" Message */}
@@ -188,6 +186,15 @@ const LotteryPage = () => {
           </div>
         </div>
       )}
+
+      <Pagination
+        currentPage={pagination.page}
+        totalPages={pagination.totalPages}
+        handlePageChange={handlePageChange}
+        startIndex={startIndex}
+        endIndex={endIndex}
+        totalData={pagination.totalItems}
+      />
     </div>
   );
 };
