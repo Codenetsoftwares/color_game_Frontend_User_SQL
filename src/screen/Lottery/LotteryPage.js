@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./LotteryPage.css"; // Add custom styles here
-import { Get_Lotteries, Purchase_lottery } from "../../utils/apiService";
+import { Get_Lotteries, Purchase_lottery, userWallet } from "../../utils/apiService";
 import LotteryTicket from "./LotteryTicket";
 import Pagination from "../common/Pagination";
+import { useAppContext } from "../../contextApi/context";
+import strings from "../../utils/constant/stringConstant";
 
 const LotteryPage = () => {
+  const { store, dispatch } = useAppContext();
   const [lotteries, setLotteries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({
@@ -14,7 +17,7 @@ const LotteryPage = () => {
     totalPages: 0,
     totalItems: 0,
   });
-
+  const userId = store.user?.userId;
   // Fetch lottery data
   async function fetchLotteries() {
     setLoading(true);
@@ -25,9 +28,9 @@ const LotteryPage = () => {
         totalPages: pagination.totalPages,
         totalItems: pagination.totalItems,
       });
-  
+
       console.log("======>>> response for lotteries", response);
-  
+
       if (response.success) {
         // Replace the lotteries instead of appending
         const uniqueLotteries = Array.from(
@@ -36,7 +39,7 @@ const LotteryPage = () => {
           return response.data.find((a) => a.lotteryId === id);
         });
         setLotteries(uniqueLotteries);
-  
+
         setPagination({
           page: response.pagination.page,
           limit: response.pagination.limit,
@@ -50,7 +53,6 @@ const LotteryPage = () => {
       setLoading(false);
     }
   }
-  
 
   useEffect(() => {
     fetchLotteries();
@@ -76,10 +78,24 @@ const LotteryPage = () => {
         const response = await Purchase_lottery({ lotteryId });
         console.log("===>> response for purchase", response);
         alert("Ticket purchase successful!");
-            // Remove the purchased lottery from the lotteries state
-            setLotteries((prevLotteries) =>
-              prevLotteries.filter((lottery) => lottery.lotteryId !== lotteryId)
-            );
+        // Remove the purchased lottery from the lotteries state
+        setLotteries((prevLotteries) =>
+          prevLotteries.filter((lottery) => lottery.lotteryId !== lotteryId)
+        );
+        // const handleUserWallet = async () => {
+        console.log("userId", userId);
+        const walletResponse = await userWallet(userId, true);
+        // console.log("response wallet=>>>>", response);
+        if (walletResponse) {
+          dispatch({
+            type: strings.UserWallet,
+            payload: {
+              ...walletResponse.data,
+            },
+          });
+          console.log("===>> exposure update", walletResponse);
+        }
+        // };
       } catch (error) {
         console.error("===>> error in purchase", error);
         alert("Ticket purchase failed. Please try again.");
