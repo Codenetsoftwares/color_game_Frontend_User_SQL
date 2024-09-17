@@ -33,8 +33,40 @@
 .carousel-container {
   position: relative;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.carousel-wrapper {
+  
+  width: 100%;
+}
+.lottery-card-slider {
+  display: flex;
+  overflow-x: auto; /* Enables horizontal scrolling */
+  scroll-behavior: smooth;
+}
+.lottery-card {
+ 
+  margin-right: 20px; 
+}
+.carousel-arrow {
+  background-color: transparent;
+  border: none;
+
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+.carousel-arrow.left-arrow {
+  left: 10px;
 }
 
+.carousel-arrow.right-arrow {
+  right: 10px;
+}
 .row.justify-content-center {
   display: flex;
   justify-content: center;

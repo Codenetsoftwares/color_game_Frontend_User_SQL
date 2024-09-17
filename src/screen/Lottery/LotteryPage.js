@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./LotteryPage.css"; // Add custom styles here
 import { Get_Lotteries, Purchase_lottery } from "../../utils/apiService";
+import { Pagination } from "react-bootstrap";
 import LotteryTicket from "./LotteryTicket";
-import Pagination from "../common/Pagination";
 
 const LotteryPage = () => {
   const [lotteries, setLotteries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const itemsToShow = 3; // Number of cards to display at once
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
@@ -88,6 +90,20 @@ const LotteryPage = () => {
       console.log("Purchase canceled");
     }
   };
+  const prevSlide = () => {
+    console.log("Previous slide button clicked")
+
+    setCurrentIndex((prevIndex) => 
+      prevIndex === 0 ? Math.max(0, lotteries.length - itemsToShow) : prevIndex - 1
+    );
+  };
+
+  const nextSlide = () => {
+    console.log("Next slide button clicked")
+    setCurrentIndex((prevIndex) => 
+      prevIndex >= lotteries.length - itemsToShow ? 0 : prevIndex + 1
+    );
+  };
 
   // Loading state
   if (loading && lotteries.length === 0) {
@@ -120,6 +136,9 @@ const LotteryPage = () => {
       {/* Lottery Carousel */}
       <div className="carousel-container position-relative">
         {/* Left Arrow */}
+        <button className="carousel-arrow left-arrow" onClick={prevSlide}>
+          &#9664;
+        </button>
         {/* <a
           className="carousel-control-prev"
           role="button"
@@ -135,6 +154,8 @@ const LotteryPage = () => {
 
         {/* Lottery Cards */}
         {lotteries.length > 0 ? (
+          <div className="carousel-wrapper">
+            <div className="lottery-card-slider">
           <div className="carousel-container position-relative">
             <div className="container-fluid">
               <div className="row justify-content-center">
@@ -156,7 +177,10 @@ const LotteryPage = () => {
                 ))}
               </div>
             </div>
-          </div>
+            </div>
+            </div>
+            </div>
+          
         ) : (
           !loading &&
           lotteries.length === 0 && (
@@ -168,6 +192,9 @@ const LotteryPage = () => {
         )}
 
         {/* Right Arrow */}
+        <button className="carousel-arrow right-arrow" onClick={nextSlide}>
+          &#9654;
+        </button>
         {/* <a
           className="carousel-control-next"
           role="button"
