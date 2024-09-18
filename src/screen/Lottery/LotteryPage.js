@@ -3,67 +3,61 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./LotteryPage.css"; // Add custom styles here
 import { Get_Lotteries, Purchase_lottery } from "../../utils/apiService";
 import LotteryTicket from "./LotteryTicket";
-import Pagination from "../common/Pagination";
+
+
+
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const LotteryPage = () => {
   const [lotteries, setLotteries] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 10,
-    totalPages: 0,
-    totalItems: 0,
-  });
-
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const pageLimit = 20;
+  
+  
   // Fetch lottery data
-  async function fetchLotteries() {
+  const fetchMoreData = async () => {
+    console.log("Fetching more data...");
     setLoading(true);
     try {
       const response = await Get_Lotteries({
-        page: pagination.page,
-        pageLimit: pagination.limit,
-        totalPages: pagination.totalPages,
-        totalItems: pagination.totalItems,
+        page: page, // Pass the current page number
+        pageLimit: pageLimit, // Number of items to fetch per request
       });
   
       console.log("======>>> response for lotteries", response);
   
       if (response.success) {
         // Replace the lotteries instead of appending
-        const uniqueLotteries = Array.from(
+        const newLotteries = Array.from(
           new Set(response.data.map((a) => a.lotteryId))
         ).map((id) => {
           return response.data.find((a) => a.lotteryId === id);
         });
-        setLotteries(uniqueLotteries);
+        console.log("New lotteries fetched:", newLotteries); // Log the newly fetched lotteries
+
+        
+        setLotteries((prevLotteries) => [...prevLotteries, ...newLotteries]);
   
-        setPagination({
-          page: response.pagination.page,
-          limit: response.pagination.limit,
-          totalPages: response.pagination.totalPages,
-          totalItems: response.pagination.totalItems,
-        });
+        if (newLotteries.length < pageLimit) {
+          console.log("No more lotteries to load.");
+          setHasMore(false); // If fewer items are returned than expected, stop loading
+        } else {
+          setPage((prevPage) => prevPage + 1); // Otherwise, increment page number for the next fetch
+        }
       }
     } catch (error) {
-      console.error("Failed to fetch lotteries", error);
-    } finally {
+      console.error("Error fetching lottery data:", error);
+    }finally{
       setLoading(false);
     }
-  }
+  };
+  console.log("======>>> response for lotteries", lotteries);
+  
   
 
-  useEffect(() => {
-    fetchLotteries();
-  }, [pagination.page, pagination.limit]);
-
-  const startIndex = (pagination.page - 1) * pagination.limit + 1;
-  const endIndex = Math.min(
-    pagination.page * pagination.limit,
-    pagination.totalItems
-  );
-  const handlePageChange = (newPage) => {
-    setPagination((prev) => ({ ...prev, page: newPage }));
-  };
+  
 
   // Handle the Buy Now button click
   const handleBuyNow = async (lotteryId, lotteryName) => {
@@ -132,7 +126,17 @@ const LotteryPage = () => {
           ></span>
           <span className="sr-only">Previous</span>
         </a> */}
-
+     <InfiniteScroll
+      dataLength={lotteries.length} // Track the length of the items array
+      next={() => {
+        console.log("Loads."); 
+         fetchMoreData();
+      }}
+      
+      hasMore={hasMore} // Whether there are more items to load
+      loader={<h4>Loading...</h4>} // Loading indicator
+       // Message when all data is loaded
+    >
         {/* Lottery Cards */}
         {lotteries.length > 0 ? (
           <div className="carousel-container position-relative">
@@ -157,6 +161,7 @@ const LotteryPage = () => {
               </div>
             </div>
           </div>
+
         ) : (
           !loading &&
           lotteries.length === 0 && (
@@ -166,6 +171,8 @@ const LotteryPage = () => {
             </div>
           )
         )}
+        </InfiniteScroll>
+        
 
         {/* Right Arrow */}
         {/* <a
@@ -191,14 +198,7 @@ const LotteryPage = () => {
         </div>
       )}
 
-      <Pagination
-        currentPage={pagination.page}
-        totalPages={pagination.totalPages}
-        handlePageChange={handlePageChange}
-        startIndex={startIndex}
-        endIndex={endIndex}
-        totalData={pagination.totalItems}
-      />
+      
     </div>
   );
 };
