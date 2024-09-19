@@ -117,7 +117,7 @@ const NavBar = () => {
         }
 
         navigate("/home");
-        toast.info("Logout successfully");
+        // toast.info("Logout successfully");
       } else {
         toast.error(response.message || "Logout failed");
       }

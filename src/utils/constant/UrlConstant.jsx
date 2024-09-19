@@ -4,10 +4,10 @@ class UrlConstant {
   constructor() {}
 
   // url_dev = "https://server.colorgame.dummydoma.in/api";
-  url_dev = 'http://localhost:7000/api';
+  url_dev = "http://localhost:7000/api";
 
   // user api
-  user = 'user';
+  user = "user";
   login = `${this.url_dev}/${this.user}-login`;
   userLogout = `${this.url_dev}/${this.user}-logout`; // added logout api
   userGames = `${this.url_dev}/${this.user}-games`;
@@ -25,8 +25,11 @@ class UrlConstant {
   profitAndLoss = `${this.url_dev}/profit_loss`;
   profitAndLossMarket = `${this.url_dev}/profit_loss_market`;
   profitAndLossRunner = `${this.url_dev}/profit_loss_runner`;
-  user_carrouselImageDynamic=`${this.url_dev}/admin/slider-text-img`;
-  resetPassword=`${this.url_dev}/reset-password`;
+  user_carrouselImageDynamic = `${this.url_dev}/admin/slider-text-img`;
+  resetPassword = `${this.url_dev}/reset-password`;
+  getProfitLossGame = `${this.url_dev}/profit_loss`;
+  getProfitLossRunner = `${this.url_dev}/profit_loss_runner`;
+  getProfitLossEvent = `${this.url_dev}/profit_loss_market`;
 }
 
 const urls = new UrlConstant();

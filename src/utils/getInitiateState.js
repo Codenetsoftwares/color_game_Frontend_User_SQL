@@ -110,3 +110,45 @@ export function getbiddingInitialState(body = {}) {
     amount: "",
   };
 }
+
+export function getprofitLossDataState(body = {}) {
+  return {
+    dataGameWise: [],
+    dataMarketWise: [],
+    dataHistory: [],
+    totalPages: 0,
+    totalData: 0,
+    currentPage: 1,
+    itemPerPage: 10,
+    endDate: "",
+    startDate: "",
+    searchItem: "",
+    dataSource: "live",
+    startDate: "",
+    endDate: "",
+  };
+}
+
+export function getprofitLossEventDataState(body = {}) {
+  return {
+    data: [],
+    totalPages: 0,
+    totalData: 0,
+    currentPage: 1,
+    itemPerPage: 10,
+    searchItem: "",
+  };
+}
+
+export function getprofitLossRunnerDataState(body = {}) {
+  return {
+    data: [],
+    totalPages: 0,
+    totalData: 0,
+    currentPage: 1,
+    itemPerPage: 10,
+    searchItem: "",
+  };
+}
+
+
