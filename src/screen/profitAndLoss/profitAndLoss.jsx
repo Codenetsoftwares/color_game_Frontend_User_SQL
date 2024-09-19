@@ -42,21 +42,28 @@ const ProfitAndLoss = () => {
   console.log("profitLossData", profitLossData);
 
   async function getProfitLossGameWise() {
-    const response = await getProfitLossGame({
-      fromDate: profitLossData.startDate,
-      toDate: profitLossData.endDate,
-      limit: profitLossData.itemPerPage,
-      searchName: profitLossData.searchItem,
-      dataSource: profitLossData.dataSource,
-    });
-    console.log("getProfitLossGameWise", response);
-    SetProfitLossData((prevState) => ({
-      ...prevState,
-      dataGameWise: response.data,
-      totalPages: response.pagination.totalPages,
-      totalData: response.pagination.totalItems,
-    }));
+    try {
+      const response = await getProfitLossGame({
+        fromDate: formatDate(profitLossData.startDate),
+        toDate: formatDate(profitLossData.endDate),
+        limit: profitLossData.itemPerPage,
+        searchName: profitLossData.searchItem,
+        dataSource: profitLossData.dataSource,
+      });
+
+      console.log("getProfitLossGameWise", response);
+
+      SetProfitLossData((prevState) => ({
+        ...prevState,
+        dataGameWise: response.data,
+        totalPages: response.pagination.totalPages,
+        totalData: response.pagination.totalItems,
+      }));
+    } catch (error) {
+      console.error("Error fetching Profit/Loss data:", error);
+    }
   }
+
   console.log(
     "profitLossData",
     profitLossData.currentPage,
@@ -74,8 +81,8 @@ const ProfitAndLoss = () => {
   const handleDateForProfitLoss = () => {
     SetProfitLossData((prevState) => ({
       ...prevState,
-      startDate: formatDate(profitLossData.backupStartDate),
-      endDate: formatDate(profitLossData.backupEndDate),
+      startDate: formatDate(profitLossData.startDate),
+      endDate: formatDate(profitLossData.endDate),
     }));
   };
 
@@ -121,189 +128,196 @@ const ProfitAndLoss = () => {
     return () => clearTimeout(timer);
   }, [profitLossData.searchItem]);
 
-  const ProfitAndLossEvent = ({
-    data,
-    SetComponent,
-    SetMarketId,
-    SetProfitLossEventData,
-    currentPage,
-    SetToggle,
-    totalItems,
-  }) => {
-    console.log("data", data);
-    const startIndex = Math.min((data.currentPage - 1) * 10 + 1);
-    const endIndex = Math.min(data.currentPage * 10, data.totalData);
+ const ProfitAndLossEvent = ({
+   data,
+   SetComponent,
+   SetMarketId,
+   SetProfitLossEventData,
+   currentPage,
+   SetToggle,
+   totalItems,
+ }) => {
+   console.log("data", data);
 
-    const handelGotoRunnerWiseProfitLoss = (marketId, componentName) => {
-      SetComponent(componentName);
-      SetMarketId(marketId);
-    };
-    const handelItemPerPage = (event) => {
-      console.log("event.target.value", event.target.value);
-      SetProfitLossEventData((prevState) => ({
-        ...prevState,
-        itemPerPage: Number(event.target.value),
-        currentPage: Number(currentPage),
-      }));
-      toast.error("Work Pending From ServerSide");
-    };
+   const startIndex = (currentPage - 1) * data.itemPerPage + 1;
+   const endIndex = Math.min(currentPage * data.itemPerPage, data.totalData);
 
-    const handleSearch = (e) => {
-      SetProfitLossEventData((prev) => ({
-        ...prev,
-        searchItem: e.target.value,
-      }));
-    };
+   const handleGotoRunnerWiseProfitLoss = (marketId, componentName) => {
+     SetComponent(componentName);
+     SetMarketId(marketId);
+   };
 
-    return (
-      <>
-        {/* card */}
-        <div className="card w-100 rounded">
-          <div
-            className="card-heade text-white p-1 d-flex justify-content-between"
-            style={{ backgroundColor: "#26416e" }}
-          >
-            <b>&nbsp;&nbsp;Profit & Loss Events</b>
-            <span
-              style={{ cursor: "pointer" }}
-              title="Back"
-              onClick={() => {
-                SetToggle(true);
-              }}
-            >
-              {" "}
-              <i className="fas fa-arrow-left"></i>
-            </span>
-          </div>
-          <div className="m-1 d-flex justify-content-between align-items-center">
-            <select
-              className="form-select w-auto m-1"
-              onChange={handelItemPerPage}
-            >
-              <option value="10" selected>
-                10 Entries
-              </option>
-              <option value="25">25 Entries</option>
-              <option value="50">50 Entries</option>
-              <option value="100">100 Entries</option>
-            </select>
-            <input
-              type="search"
-              className="form-control w-auto"
-              placeholder="Search..."
-              onChange={handleSearch}
-            />
-          </div>
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item">
-              <div className="white_card_body">
-                {data?.data?.length === 0 && totalItems !== 0 ? (
-                  // Loader
-                  <div
-                    className="d-flex justify-content-center align-items-center"
-                    style={{ height: "100px" }}
-                  >
-                    <div className="spinner-border" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div>
-                  </div>
-                ) : (
-                  // Table
-                  <div className="QA_section">
-                    <div className="QA_table mb_30">
-                      <table className="table lms_table_active3 table-bordered">
-                        <thead>
-                          <tr
-                            style={{
-                              backgroundColor: "#e6e9ed",
-                              color: "#5562a3",
-                            }}
-                            align="center"
-                          >
-                            <th scope="col">
-                              <b>Sport Name</b>
-                            </th>
-                            <th scope="col">
-                              <b>Event Name</b>
-                            </th>
-                            <th scope="col">
-                              <b>Commission</b>
-                            </th>
-                            <th scope="col">
-                              <b>Profit & Loss</b>
-                            </th>
-                            <th scope="col">
-                              <b>Total P&L</b>
-                            </th>
-                          </tr>
-                          {data?.data?.length > 0 ? (
-                            data?.data?.map((data, index) => (
-                              <tr key={index} align="center">
-                                <td>{data?.gameName}</td>
-                                <td
-                                  className="text-primary fw-bold"
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => {
-                                    handelGotoRunnerWiseProfitLoss(
-                                      data.marketId,
-                                      "ProfitAndLossRunner"
-                                    );
-                                  }}
-                                >
-                                  {data?.marketName}
-                                </td>
-                                <td>{data?.commission || "NDS"}</td>
-                                <td>{data?.profitLoss || "NDS"}</td>
-                                <td
-                                  className={`fw-bold ${
-                                    data?.totalProfitLoss > 0
-                                      ? "text-success"
-                                      : "text-danger"
-                                  }`}
-                                >
-                                  {data?.totalProfitLoss}
-                                </td>
-                              </tr>
-                            ))
-                          ) : (
-                            <tr align="center">
-                              <td colspan="5">
-                                <div
-                                  class="alert alert-info fw-bold"
-                                  role="alert"
-                                >
-                                  No Data Found !!
-                                </div>
-                              </td>
-                            </tr>
-                          )}
-                        </thead>
-                      </table>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </li>
-            <li className="list-group-item">
-              {/* Pagination */}
-              {data?.data?.length > 0 && (
-                <Pagination
-                  currentPage={data.currentPage}
-                  totalPages={data.totalPages}
-                  handlePageChange={data.handlePageChange}
-                  startIndex={startIndex}
-                  endIndex={endIndex}
-                  totalData={data.totalData}
-                />
-              )}
-              {/* Pagination */}
-            </li>
-          </ul>
-        </div>
-        {/* card */}
-      </>
-    );
-  };
+   const handleItemPerPage = (event) => {
+     console.log("event.target.value", event.target.value);
+     SetProfitLossEventData((prevState) => ({
+       ...prevState,
+       itemPerPage: Number(event.target.value),
+       currentPage: Number(currentPage),
+     }));
+     toast.error("Work Pending From ServerSide");
+   };
+
+   const handleSearch = (e) => {
+     SetProfitLossEventData((prev) => ({
+       ...prev,
+       searchItem: e.target.value,
+     }));
+   };
+
+   return (
+     <>
+       {/* card */}
+       <div className="card w-100 rounded">
+         <div
+           className="card-heade text-white p-1 d-flex justify-content-between"
+           style={{ backgroundColor: "#2CB3D1" }}
+         >
+           <b>&nbsp;&nbsp;Profit & Loss Events</b>
+           <span
+             style={{ cursor: "pointer" }}
+             title="Back"
+             onClick={() => {
+               SetToggle(true);
+             }}
+           >
+             <i className="fas fa-arrow-left"></i>
+           </span>
+         </div>
+         <div className="m-1 d-flex justify-content-between align-items-center">
+           <select
+             className="form-select w-auto m-1"
+             onChange={handleItemPerPage}
+           >
+             <option value="10" selected={data.itemPerPage === 10}>
+               10 Entries
+             </option>
+             <option value="25" selected={data.itemPerPage === 25}>
+               25 Entries
+             </option>
+             <option value="50" selected={data.itemPerPage === 50}>
+               50 Entries
+             </option>
+             <option value="100" selected={data.itemPerPage === 100}>
+               100 Entries
+             </option>
+           </select>
+           <input
+             type="search"
+             className="form-control w-auto"
+             placeholder="Search..."
+             onChange={handleSearch}
+           />
+         </div>
+         <ul className="list-group list-group-flush">
+           <li className="list-group-item">
+             <div className="white_card_body">
+               {data?.data?.length === 0 && totalItems !== 0 ? (
+                 // Loader
+                 <div
+                   className="d-flex justify-content-center align-items-center"
+                   style={{ height: "100px" }}
+                 >
+                   <div className="spinner-border" role="status">
+                     <span className="sr-only">Loading...</span>
+                   </div>
+                 </div>
+               ) : (
+                 // Table
+                 <div className="QA_section">
+                   <div className="QA_table mb_30">
+                     <table className="table lms_table_active3 table-bordered">
+                       <thead>
+                         <tr
+                           style={{
+                             backgroundColor: "#e6e9ed",
+                             color: "#5562a3",
+                           }}
+                           align="center"
+                         >
+                           <th scope="col">
+                             <b>Sport Name</b>
+                           </th>
+                           <th scope="col">
+                             <b>Event Name</b>
+                           </th>
+                           <th scope="col">
+                             <b>Commission</b>
+                           </th>
+                           <th scope="col">
+                             <b>Profit & Loss</b>
+                           </th>
+                           <th scope="col">
+                             <b>Total P&L</b>
+                           </th>
+                         </tr>
+                         {data?.data?.length > 0 ? (
+                           data?.data?.map((data, index) => (
+                             <tr key={index} align="center">
+                               <td>{data?.gameName}</td>
+                               <td
+                                 className="text-primary fw-bold"
+                                 style={{ cursor: "pointer" }}
+                                 onClick={() => {
+                                   handleGotoRunnerWiseProfitLoss(
+                                     data.marketId,
+                                     "ProfitAndLossRunner"
+                                   );
+                                 }}
+                               >
+                                 {data?.marketName}
+                               </td>
+                               <td>{data?.commission || "NDS"}</td>
+                               <td>{data?.profitLoss || "NDS"}</td>
+                               <td
+                                 className={`fw-bold ${
+                                   data?.totalProfitLoss > 0
+                                     ? "text-success"
+                                     : "text-danger"
+                                 }`}
+                               >
+                                 {data?.totalProfitLoss}
+                               </td>
+                             </tr>
+                           ))
+                         ) : (
+                           <tr align="center">
+                             <td colSpan="5">
+                               <div
+                                 className="alert alert-info fw-bold"
+                                 role="alert"
+                               >
+                                 No Data Found !!
+                               </div>
+                             </td>
+                           </tr>
+                         )}
+                       </thead>
+                     </table>
+                   </div>
+                 </div>
+               )}
+             </div>
+           </li>
+           <li className="list-group-item">
+             {/* Pagination */}
+             {data?.data?.length > 0 && (
+               <Pagination
+                 currentPage={data.currentPage}
+                 totalPages={data.totalPages}
+                 handlePageChange={data.handlePageChange}
+                 startIndex={startIndex}
+                 endIndex={endIndex}
+                 totalData={data.totalData}
+               />
+             )}
+             {/* Pagination */}
+           </li>
+         </ul>
+       </div>
+     </>
+   );
+ };
+
 
   const ProfitAndLossRunner = ({
     data,
@@ -313,10 +327,11 @@ const ProfitAndLoss = () => {
     totalItems,
   }) => {
     console.log("data", data);
-    const startIndex = Math.min((data.currentPage - 1) * 10 + 1);
-    const endIndex = Math.min(data.currentPage * 10, data.totalData);
 
-    const handelItemPerPage = (event) => {
+    const startIndex = (currentPage - 1) * data.itemPerPage + 1;
+    const endIndex = Math.min(currentPage * data.itemPerPage, data.totalData);
+
+    const handleItemPerPage = (event) => {
       console.log("event.target.value", event.target.value);
       SetProfitLossRunnerData((prevState) => ({
         ...prevState,
@@ -325,6 +340,7 @@ const ProfitAndLoss = () => {
       }));
       toast.error("Work Pending From ServerSide");
     };
+
     const handleSearch = (e) => {
       SetProfitLossRunnerData((prev) => ({
         ...prev,
@@ -338,7 +354,7 @@ const ProfitAndLoss = () => {
         <div className="card w-100 rounded">
           <div
             className="card-heade text-white p-1 d-flex justify-content-between"
-            style={{ backgroundColor: "#26416e" }}
+            style={{ backgroundColor: "#2CB3D1" }}
           >
             <b>&nbsp;&nbsp;Profit & Loss Markets</b>
             <span
@@ -355,14 +371,20 @@ const ProfitAndLoss = () => {
           <div className="m-1 d-flex justify-content-between align-items-center">
             <select
               className="form-select w-auto m-1"
-              onChange={handelItemPerPage}
+              onChange={handleItemPerPage}
             >
-              <option value="10" selected>
+              <option value="10" selected={data.itemPerPage === 10}>
                 10 Entries
               </option>
-              <option value="25">25 Entries</option>
-              <option value="50">50 Entries</option>
-              <option value="100">100 Entries</option>
+              <option value="25" selected={data.itemPerPage === 25}>
+                25 Entries
+              </option>
+              <option value="50" selected={data.itemPerPage === 50}>
+                50 Entries
+              </option>
+              <option value="100" selected={data.itemPerPage === 100}>
+                100 Entries
+              </option>
             </select>
             <input
               type="search"
@@ -375,7 +397,7 @@ const ProfitAndLoss = () => {
           <ul className="list-group list-group-flush">
             <li className="list-group-item">
               <div className="white_card_body">
-                {data?.data?.length === 0 && totalItems !== 0 ? ( // Problem : if really no data from server always it is spinning
+                {data?.data?.length === 0 && !loading ? (
                   // Loader
                   <div
                     className="d-flex justify-content-center align-items-center"
@@ -454,9 +476,9 @@ const ProfitAndLoss = () => {
                             ))
                           ) : (
                             <tr align="center">
-                              <td colspan="8">
+                              <td colSpan="8">
                                 <div
-                                  class="alert alert-info fw-bold"
+                                  className="alert alert-info fw-bold"
                                   role="alert"
                                 >
                                   No Data Found !!
@@ -492,6 +514,7 @@ const ProfitAndLoss = () => {
     );
   };
 
+
   const ProfitAndLoss = ({
     setEndDate,
     setStartDate,
@@ -521,19 +544,26 @@ const ProfitAndLoss = () => {
     const [marketId, SetMarketId] = useState(null);
 
     async function getProfitLossRunnerWise() {
-      SetToggle(false);
-      const response = await getProfitLossRunner({
-        marketId: marketId,
-        limit: profitLossRunnerData.itemPerPage,
-        searchName: profitLossRunnerData.searchItem,
-      });
-      console.log("runner=>>>", response);
-      SetProfitLossRunnerData((prevState) => ({
-        ...prevState,
-        data: response.data,
-        totalPages: response.pagination.totalPages,
-        totalData: response.pagination.totalItems,
-      }));
+      try {
+        SetToggle(false);
+
+        const response = await getProfitLossRunner({
+          marketId: marketId,
+          limit: profitLossRunnerData.itemPerPage,
+          searchName: profitLossRunnerData.searchItem,
+        });
+
+        console.log("runner=>>>", response);
+
+        SetProfitLossRunnerData((prevState) => ({
+          ...prevState,
+          data: response.data,
+          totalPages: response.pagination.totalPages,
+          totalData: response.pagination.totalItems,
+        }));
+      } catch (error) {
+        console.error("Error fetching Profit/Loss runner data:", error);
+      }
     }
 
     useEffect(() => {
@@ -545,21 +575,29 @@ const ProfitAndLoss = () => {
     ]);
 
     async function getProfitLossEventWise(gameId, componentName) {
-      // if useEffcet  added give condition toggle must be false for end point to hit
-      SetToggle(false);
-      SetComponent(componentName);
-      const response = await getProfitLossEvent({
-        gameId: gameId,
-        searchName: profitLossEventData.searchItem,
-      });
-      console.log("event=>>>", response);
-      SetProfitLossEventData((prevState) => ({
-        ...prevState,
-        data: response.data,
-        totalPages: response.pagination.totalPages,
-        totalData: response.pagination.totalItems,
-      }));
+      try {
+        // If useEffect is added, ensure toggle is false before hitting the endpoint
+        SetToggle(false);
+        SetComponent(componentName);
+
+        const response = await getProfitLossEvent({
+          gameId: gameId,
+          searchName: profitLossEventData.searchItem,
+        });
+
+        console.log("event=>>>", response);
+
+        SetProfitLossEventData((prevState) => ({
+          ...prevState,
+          data: response.data,
+          totalPages: response.pagination.totalPages,
+          totalData: response.pagination.totalItems,
+        }));
+      } catch (error) {
+        console.error("Error fetching Profit/Loss event data:", error);
+      }
     }
+
     console.log("component", component);
     let componentToRender;
     if (component === "ProfitAndLossEvent") {
@@ -689,7 +727,7 @@ const ProfitAndLoss = () => {
         )}
 
         <br />
-        {dataGameWise.length > 0 ? (
+        {toggle ? (
           <div class="card w-100 rounded">
             <div
               class="card-heade text-white p-1"
@@ -822,7 +860,7 @@ const ProfitAndLoss = () => {
             </ul>
           </div>
         ) : (
-          <div className="">{componentToRender}</div>
+          <div style={{ marginTop: "96px" }}>{componentToRender}</div>
         )}
       </>
     );
