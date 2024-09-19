@@ -21,10 +21,11 @@ const BetHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
-  const [totalEntries, setTotalEntries] = useState(5);
+  const [totalEntries, setTotalEntries] = useState(10);
   const [openBet, setOpenBet] = useState([]);
   const [selectedMarket, setSelectedMarket] = useState("");
-  const [selectedMarketId, setSelectedMarketId] = useState("");
+  const [selectedGameId, setSelectedGameId] = useState(null);
+
   const defaultStartDate = new Date();
   const [selected, setSelected] = useState(<Date />);
   // <Date/>
@@ -54,10 +55,8 @@ const BetHistory = () => {
     }));
   };
 
-  const [marketSelectionbetHistory, setMarketSelectionbetHistory] = useState(
-    []
-  ); // from dummy data into bet history selection
-  console.log("=======>>> market selection", marketSelectionbetHistory);
+  const [gameSelectionBetHistory, setGameSelectionBetHistory] = useState([]); // from dummy data into bet history selection
+  console.log("=======>>> market selection", gameSelectionBetHistory);
   const [openBetSelectionbetHistory, setopenBetSelectionbetHistory] = useState(
     []
   ); // from dummy data into open bet selection
@@ -66,7 +65,7 @@ const BetHistory = () => {
     openBetSelectionbetHistory
   );
   const [selectedOptions, setSelectedOptions] = useState({
-    select1: "",
+    dataSource: "live",
     select2: "",
     select3: "",
   });
@@ -79,26 +78,27 @@ const BetHistory = () => {
   // the api called for bet history data
   async function handleGetHistory() {
     const response = await user_getBetHistory_api({
-      marketId: selectedMarketId,
-      marketName: marketSelectionbetHistory,
+      gameId: selectedGameId,
+      // marketName: gameSelectionBetHistory,
       pageNumber: currentPage,
       dataLimit: totalEntries,
       startDate: formatDate(dateValue.startDate),
       endDate: formatDate(dateValue.endDate),
+      dataSource: selectedOptions.dataSource,
     });
 
     if (response) {
       console.log("response for betHistoryData ", response);
-      setBetHistoryData(response.data.rows);
-      setTotalPages(response.pagination.totalPages);
-      setTotalItems(response.pagination.totalItems);
+      setBetHistoryData(response?.data);
+      setTotalPages(response?.pagination?.totalPages);
+      setTotalItems(response?.pagination?.totalItems);
     } else {
       //add loading part //
     }
   }
   // useeffect for bet history data
   useEffect(() => {
-    if (selectedMarketId != "") {
+    if (selectedGameId != "") {
       handleGetHistory();
     }
   }, [currentPage, totalItems, totalEntries]);
@@ -128,8 +128,8 @@ const BetHistory = () => {
         "===========>response for betOpenBetDataSelect and marketname(Line 237)",
         response
       );
-      setMarketSelectionbetHistory(response.data.betHistory);
-      setopenBetSelectionbetHistory(response.data.currentMarket);
+      setGameSelectionBetHistory(response.data);
+      // setopenBetSelectionbetHistory(response.data.currentMarket);
     } else {
       //add loading part //
     }
@@ -139,8 +139,8 @@ const BetHistory = () => {
     handleGetSelectData();
   }, []);
   console.log(
-    "=========> marketSelectionbetHistory line 108",
-    marketSelectionbetHistory
+    "=========> gameSelectionBetHistory line 108",
+    gameSelectionBetHistory
   );
   console.log(
     "=========> openBetSelectionbetHistor line 109",
@@ -153,25 +153,23 @@ const BetHistory = () => {
   };
   console.log("=====. line 157", selectedMarket);
 
-  const handleGetHistoryChange = (e, selectName) => {
-    const { value } = e.target;
-
+  const handleGetHistoryChange = (e) => {
     setSelectedOptions((prevState) => ({
       ...prevState,
-      [selectName]: value,
+      dataSource: e.target.value,
     }));
 
     // Additional logic based on the selected option, if required
-    console.log(`Selected====> ${selectName}:`, value);
+    // console.log(`Selected====> ${selectName}:`, value);
   };
 
-  const handleGetMarketChange = (e) => {
+  const handleGameChange = (e) => {
     console.log("empty value line 150", e.target.value);
-    setSelectedMarketId(e.target.value);
+    setSelectedGameId(e.target.value);
     setDateVisible(true); // Show date picker when market is selected
   };
 
-  console.log("Market ID:", selectedMarketId);
+  console.log("Market ID:", selectedGameId);
 
   // this is back lay open bets data but this api needs to be updated
   async function handleGetData() {
@@ -200,8 +198,8 @@ const BetHistory = () => {
   // Function to render "No data found" message when history data is empty
   const renderNoDataFound = () => {
     return (
-      <div className="card-body">
-        <p>No data found</p>
+      <div class="alert alert-danger text-center mt-2" role="alert">
+        No data found
       </div>
     );
   };
@@ -220,13 +218,14 @@ const BetHistory = () => {
                   <select
                     className="form-select form-select-sm"
                     aria-label=".form-select-sm example"
-                    value={selectedOptions.select1}
-                    onChange={(e) => handleGetHistoryChange(e, "select1")}
+                    value={selectedOptions.dataSource}
+                    onChange={(e) => handleGetHistoryChange(e)}
                   >
-                    <option selected>Data Source</option>
-                    <option value="old-data">OLD DATA</option>
-                    <option value="live-data">LIVE DATA</option>
-                    <option value="backup-data">BACKUP DATA</option>
+                    <option value="live" selected>
+                      LIVE DATA
+                    </option>
+                    <option value="backup">BACKUP DATA</option>
+                    <option value="olddata">OLD DATA</option>
                   </select>
                 </div>
               </div>
@@ -238,13 +237,13 @@ const BetHistory = () => {
                   <select
                     className="form-select form-select-sm"
                     aria-label=".form-select-sm example"
-                    value={selectedMarketId || ""}
-                    onChange={handleGetMarketChange}
+                    value={selectedGameId || ""}
+                    onChange={handleGameChange}
                   >
-                    <option value="">Open this select market</option>
-                    {marketSelectionbetHistory.map((market, index) => (
-                      <option key={index} value={market.marketId}>
-                        {market.marketName}
+                    <option value=""> Select Game </option>
+                    {gameSelectionBetHistory.map((game, index) => (
+                      <option key={index} value={game.gameId}>
+                        {game.gameName}
                       </option>
                     ))}
                   </select>
@@ -311,6 +310,7 @@ const BetHistory = () => {
                 <button
                   className="btn btn-primary"
                   onClick={() => handleGetHistory()}
+                  disabled={!selectedGameId}
                 >
                   Get History
                 </button>
@@ -331,7 +331,11 @@ const BetHistory = () => {
           >
             <h5 className="card-title">Bet History</h5>
           </div>
-          {betHistoryData.length > 0 ? (
+          {selectedGameId === null ? (
+            <div className="alert alert-info text-center mt-2" role="alert">
+              Please Select a Game Name & Click Get History
+            </div>
+          ) : betHistoryData?.length > 0 ? (
             <div className="card-body">
               {/* Show entries dropdown */}
               <div className="mb-3">
@@ -344,16 +348,19 @@ const BetHistory = () => {
                   value={totalEntries}
                   onChange={handleEntriesChange}
                 >
-                  <option value="3">3</option>
-                  <option value="5">5</option>
-                  <option value="10">10</option>
+                  <option value="10" selected>
+                    10 Entries
+                  </option>
+                  <option value="25">25 Entries</option>
+                  <option value="50">50 Entries</option>
+                  <option value="100">100 Entries</option>
                 </select>
               </div>
 
               <div style={{ overflow: "auto" }}>
                 <table className="table table-bordered">
                   <thead>
-                    <tr>
+                    <tr align="center">
                       <th scope="col">Game Name</th>
                       <th scope="col">Market Name</th>
                       <th scope="col">Runner Name</th>
@@ -364,13 +371,13 @@ const BetHistory = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {betHistoryData.map((item, index) => (
-                      <tr key={index}>
+                    {betHistoryData?.map((item, index) => (
+                      <tr key={index} align="center">
                         <td>{item.gameName}</td>
                         <td>{item.marketName}</td>
                         <td>{item.runnerName}</td>
                         <td>{item.rate}</td>
-                        <td>{item.value}</td>
+                        <td className="fw-bold">{item.value}</td>
                         <td>{item.type}</td>
                         <td>{new Date(item.date).toLocaleString()}</td>
                       </tr>
