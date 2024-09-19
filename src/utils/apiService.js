@@ -13,7 +13,6 @@ export async function login(body, isToast = false) {
   }
 }
 
-
 // Logout function
 export async function logout(body, isToast = false) {
   try {
@@ -98,7 +97,7 @@ export async function user_getBetHistory_api(body = {}, isToast = false) {
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
     const response = await makeCall(
-      `${urls.userBetHistoryById}/${body.marketId}?page=${body.pageNumber}&limit=${body.dataLimit}&startDate=${body.startDate}&endDate=${body.endDate}`,
+      `${urls.userBetHistoryById}/${body.gameId}?page=${body.pageNumber}&limit=${body.dataLimit}&startDate=${body.startDate}&endDate=${body.endDate}&dataType=${body.dataSource}`,
       callParams,
       isToast
     );
@@ -228,32 +227,38 @@ export async function profitAndLossRunner_Api(body = {}, isToast = false) {
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
     const response = await makeCall(
-      `${urls.profitAndLossRunner}/${body.marketId}?startDate=${body.startDate}&endDate=${body.endDate}&page=${body.pageNumber}&limit=${body.dataLimit}`,callParams);
+      `${urls.profitAndLossRunner}/${body.marketId}?startDate=${body.startDate}&endDate=${body.endDate}&page=${body.pageNumber}&limit=${body.dataLimit}`,
+      callParams
+    );
 
     return response;
   } catch (error) {
     throw error;
   }
-};
+}
 
-
-export async function user_carrouselImageDynamic_api(body = {}, isToast = false) {
+export async function user_carrouselImageDynamic_api(
+  body = {},
+  isToast = false
+) {
   try {
     const callParams = getNoAuthCallParams(strings.GET, body, isToast);
-    const response = await makeCall(urls.user_carrouselImageDynamic, callParams);
-   return response;
+    const response = await makeCall(
+      urls.user_carrouselImageDynamic,
+      callParams
+    );
+    return response;
   } catch (error) {
     throw error;
   }
-};
+}
 
 export async function ResetUserPassword(body = {}, isToast = false) {
   try {
-    const callParams =  getNoAuthCallParams(strings.POST, body, isToast);
+    const callParams = getNoAuthCallParams(strings.POST, body, isToast);
     const response = await makeCall(urls.resetPassword, callParams, isToast);
     return response;
   } catch (error) {
     throw error;
   }
-};
-
+}
