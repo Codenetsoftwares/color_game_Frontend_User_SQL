@@ -19,6 +19,7 @@ import {
   getprofitLossEventDataState,
   getprofitLossRunnerDataState,
 } from "../../utils/getInitiateState";
+import { ToggleButtonGroup } from "react-bootstrap";
 
 const ProfitAndLoss = () => {
   const [profitLossData, SetProfitLossData] = useState(
@@ -602,88 +603,91 @@ const ProfitAndLoss = () => {
     };
     return (
       <>
-        <div
-          className="card section"
-          style={{ marginTop: "120px", fontWeight: "700", width: "100%" }}
-        >
-          <span
-            className="text-white"
-            style={{
-              backgroundColor: "#2CB3D1",
-              display: "block",
-              padding: "0px",
-              textIndent: "5px",
-              textAlign: "center",
-            }}
+        {toggle && (
+          <div
+            className="card section"
+            style={{ marginTop: "120px", fontWeight: "700", width: "100%" }}
           >
-            Profit & Loss Report
-          </span>
-          <div className="card">
-            <div
-              className="card-body d-flex flex-column flex-md-row align-items-md-center justify-content-md-between"
-              // style={{ backgroundColor: "#e6e9ed" }}
+            <span
+              className="text-white"
+              style={{
+                backgroundColor: "#2CB3D1",
+                display: "block",
+                padding: "0px",
+                textIndent: "5px",
+                textAlign: "center",
+              }}
             >
-              <div className="form-group mb-3 mb-md-0 px-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">Data Source</div>
-                    <div class="col-sm">From</div>
-                    <div class="col-sm">To</div>
-                    <div class="col-sm"></div>
+              Profit & Loss Report
+            </span>
+            <div className="card">
+              <div
+                className="card-body d-flex flex-column flex-md-row align-items-md-center justify-content-md-between"
+                // style={{ backgroundColor: "#e6e9ed" }}
+              >
+                <div className="form-group mb-3 mb-md-0 px-2">
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-sm">Data Source</div>
+                      <div class="col-sm">From</div>
+                      <div class="col-sm">To</div>
+                      <div class="col-sm"></div>
+                    </div>
                   </div>
-                </div>
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                      {" "}
-                      <select
-                        class="form-select"
-                        aria-label="Default select example"
-                        value={profitLossData.dataSource}
-                        onChange={(e) => {
-                          SetProfitLossData((prevState) => ({
-                            ...prevState,
-                            dataSource: e.target.value,
-                          }));
-                        }}
-                      >
-                        <option value="live" selected>
-                          LIVE DATA
-                        </option>
-                        <option value="backup">BACKUP DATA</option>
-                        <option value="olddata">OLD DATA</option>
-                      </select>
-                    </div>
-                    <div class="col-sm">
-                      <DatePicker
-                        selected={startDate}
-                        onChange={(date) => setStartDate(date)}
-                        placeholderText={"Select Start Date"}
-                      />
-                    </div>
-                    <div class="col-sm">
-                      {" "}
-                      <DatePicker
-                        selected={endDate}
-                        onChange={(date) => setEndDate(date)}
-                        placeholderText={"Select End Date"}
-                      />
-                    </div>
-                    <div class="col-sm">
-                      <button
-                        className="btn btn-primary mb-2"
-                        disabled={startDate === "" || endDate === ""}
-                        onClick={handleDateForProfitLoss}
-                      >
-                        Get Statement
-                      </button>
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-sm">
+                        {" "}
+                        <select
+                          class="form-select"
+                          aria-label="Default select example"
+                          value={profitLossData.dataSource}
+                          onChange={(e) => {
+                            SetProfitLossData((prevState) => ({
+                              ...prevState,
+                              dataSource: e.target.value,
+                            }));
+                          }}
+                        >
+                          <option value="live" selected>
+                            LIVE DATA
+                          </option>
+                          <option value="backup">BACKUP DATA</option>
+                          <option value="olddata">OLD DATA</option>
+                        </select>
+                      </div>
+                      <div class="col-sm">
+                        <DatePicker
+                          selected={startDate}
+                          onChange={(date) => setStartDate(date)}
+                          placeholderText={"Select Start Date"}
+                        />
+                      </div>
+                      <div class="col-sm">
+                        {" "}
+                        <DatePicker
+                          selected={endDate}
+                          onChange={(date) => setEndDate(date)}
+                          placeholderText={"Select End Date"}
+                        />
+                      </div>
+                      <div class="col-sm">
+                        <button
+                          className="btn btn-primary mb-2"
+                          disabled={startDate === "" || endDate === ""}
+                          onClick={handleDateForProfitLoss}
+                        >
+                          Get Statement
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
+
         <br />
         {dataGameWise.length > 0 ? (
           <div class="card w-100 rounded">
@@ -818,13 +822,7 @@ const ProfitAndLoss = () => {
             </ul>
           </div>
         ) : (
-          <div
-            class="alert alert-info"
-            role="alert"
-            style={{ textAlign: "center" }}
-          >
-            NO DATA FOUND !!
-          </div>
+          <div className="">{componentToRender}</div>
         )}
       </>
     );
