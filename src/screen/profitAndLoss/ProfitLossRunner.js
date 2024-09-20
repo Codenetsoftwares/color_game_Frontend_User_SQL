@@ -124,7 +124,7 @@ const ProfitAndLossRunner = ({
                           data?.data?.map((data, index) => (
                             <tr key={index} align="center">
                               <td>{data?.gameName}</td>
-                              <td>{data?.runnerName}</td>
+                              <td>{data?.marketName}</td>
                               <td>{data?.marketId || "NDS"}</td>
                               <td
                                 className="text-primary fw-bold"
@@ -133,9 +133,10 @@ const ProfitAndLossRunner = ({
                                   toast.error("Work Pending From ServerSide");
                                 }}
                               >
-                                {"NDS"}
+                               {data?.isWin?"WINNER":"MATCH ODD"}
                               </td>
-                              <td>{"NDS"}</td>
+                              {/* <td>{data?.isWin?"WINNER":"MATCH ODD"}</td> */}
+                              <td>{data?.runnerName}</td>
                               <td
                                 className={`fw-bold ${
                                   data?.profitLoss > 0
@@ -145,7 +146,7 @@ const ProfitAndLossRunner = ({
                               >
                                 {data?.profitLoss}
                               </td>
-                              <td>{"NDS"}</td>
+                              <td>0</td>
                               <td>{"NDS"}</td>
                             </tr>
                           ))

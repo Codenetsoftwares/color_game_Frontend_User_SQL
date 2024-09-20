@@ -7,6 +7,7 @@ import ProfitAndLossRunner from "./ProfitLossRunner";
 import Pagination from "../common/Pagination";
 import { getprofitLossEventDataState, getprofitLossRunnerDataState } from "../../utils/getInitiateState";
 import { getProfitLossEvent, getProfitLossRunner } from "../../utils/apiService";
+import { customErrorHandler } from "../../utils/helper";
 
 const ProfitLoss = ({
   UserName,
@@ -35,21 +36,34 @@ const ProfitLoss = ({
   const [marketId, SetMarketId] = useState(null);
 
   async function getProfitLossRunnerWise() {
-    SetToggle(false);
-    const response = await getProfitLossRunner({
-      userName: UserName,
-      marketId: marketId,
-      limit: profitLossRunnerData.itemPerPage,
-      searchName: profitLossRunnerData.searchItem,
-    });
-    console.log("runner=>>>", response);
-    SetProfitLossRunnerData((prevState) => ({
-      ...prevState,
-      data: response.data,
-      totalPages: response.pagination.totalPages,
-      totalData: response.pagination.totalItems,
-    }));
+    try {
+      // Set toggle to false before hitting the API
+      SetToggle(false);
+
+      // Make the API call
+      const response = await getProfitLossRunner({
+        userName: UserName,
+        marketId: marketId,
+        limit: profitLossRunnerData.itemPerPage,
+        searchName: profitLossRunnerData.searchItem,
+      });
+
+      console.log("runner=>>>", response);
+
+      // Update state with the response data
+      SetProfitLossRunnerData((prevState) => ({
+        ...prevState,
+        data: response.data,
+        totalPages: response.pagination.totalPages,
+        totalData: response.pagination.totalItems,
+      }));
+    } catch (error) {
+      // Handle any errors during the API call
+      toast.error(customErrorHandler(error));
+
+    }
   }
+
 
   useEffect(() => {
     if (marketId) getProfitLossRunnerWise();
@@ -60,23 +74,35 @@ const ProfitLoss = ({
   ]);
 
   async function getProfitLossEventWise(gameId, componentName) {
-    // if useEffcet  added give condition toggle must be false for end point to hit
-    SetToggle(false);
-    SetComponent(componentName);
-    const response = await getProfitLossEvent({
-      userName: UserName,
-      gameId: gameId,
-      // limit: profitLossEventData.itemPerPage,  //Work pending by serverSide
-      searchName: profitLossEventData.searchItem,
-    });
-    console.log("event=>>>", response);
-    SetProfitLossEventData((prevState) => ({
-      ...prevState,
-      data: response.data,
-      totalPages: response.pagination.totalPages,
-      totalData: response.pagination.totalItems,
-    }));
+    try {
+      // Set toggle to false before hitting the endpoint
+      SetToggle(false);
+      SetComponent(componentName);
+
+      // Make the API call
+      const response = await getProfitLossEvent({
+        userName: UserName,
+        gameId: gameId,
+        // limit: profitLossEventData.itemPerPage,  //Work pending by serverSide
+        searchName: profitLossEventData.searchItem,
+      });
+
+      console.log("event=>>>", response);
+
+      // Update state with the response data
+      SetProfitLossEventData((prevState) => ({
+        ...prevState,
+        data: response.data,
+        totalPages: response.pagination.totalPages,
+        totalData: response.pagination.totalItems,
+      }));
+    } catch (error) {
+      // Handle any errors that occur during the API call
+      toast.error(customErrorHandler(error));
+
+    }
   }
+
   console.log("component", component);
   let componentToRender;
   if (component === "ProfitAndLossEvent") {
@@ -269,7 +295,7 @@ const ProfitLoss = ({
                               >
                                 {data?.totalProfitLoss}
                               </td>
-                              <td>{data?.commission || "NDS"}</td>
+                              <td>{data?.commission || 0}</td>
                               <td>
                                 <span
                                   className={`fw-bold ${data?.totalProfitLoss > 0

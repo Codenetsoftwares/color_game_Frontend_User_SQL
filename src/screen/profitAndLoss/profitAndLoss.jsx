@@ -4,6 +4,8 @@ import Layout from "../layout/layout";
 import { getprofitLossDataState } from "../../utils/getInitiateState";
 import ProfitLoss from "./ProfitLoss";
 import { getProfitLossGame } from "../../utils/apiService";
+import { toast } from "react-toastify";
+import { customErrorHandler } from "../../utils/helper";
 
 const ProfitAndLoss = () => {
   const [profitLossData, SetProfitLossData] = useState(
@@ -44,20 +46,29 @@ const ProfitAndLoss = () => {
 
   // For Game wise Profit Loss Data to show
   async function getProfitLossGameWise() {
-    const response = await getProfitLossGame({
-      fromDate: profitLossData.startDate,
-      toDate: profitLossData.endDate,
-      limit: profitLossData.itemPerPage,
-      searchName: profitLossData.searchItem,
-      dataSource: profitLossData.dataSource,
-    });
-    console.log("getProfitLossGameWise", response);
-    SetProfitLossData((prevState) => ({
-      ...prevState,
-      dataGameWise: response?.data,
-      totalPages: response?.pagination?.totalPages,
-      totalData: response?.pagination?.totalItems,
-    }));
+    try {
+      // Make the API call
+      const response = await getProfitLossGame({
+        fromDate: profitLossData.startDate,
+        toDate: profitLossData.endDate,
+        limit: profitLossData.itemPerPage,
+        searchName: profitLossData.searchItem,
+        dataSource: profitLossData.dataSource,
+      });
+
+      console.log("getProfitLossGameWise", response);
+
+      // Update state with the response data
+      SetProfitLossData((prevState) => ({
+        ...prevState,
+        dataGameWise: response?.data,
+        totalPages: response?.pagination?.totalPages,
+        totalData: response?.pagination?.totalItems,
+      }));
+    } catch (error) {
+      // Handle any errors during the API call
+      toast.error(customErrorHandler(error));
+    }
   }
 
   const handleDateForProfitLoss = () => {
@@ -79,7 +90,7 @@ const ProfitAndLoss = () => {
     <div data-aos="zoom-in">
       <AppDrawer showCarousel={false}>
         <Layout />
-        <div style={{marginTop:"120px"}}>
+        <div style={{ marginTop: "120px" }}>
           <ProfitLoss
             dataGameWise={profitLossData.dataGameWise}
             startDate={profitLossData.backupStartDate}

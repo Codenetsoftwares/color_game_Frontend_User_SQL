@@ -133,7 +133,7 @@ const ProfitAndLossEvent = ({
                               >
                                 {data?.marketName}
                               </td>
-                              <td>{data?.commission || "NDS"}</td>
+                              <td>{data?.commission || 0}</td>
                               <td
                                 className={`fw-bold ${data?.totalProfitLoss > 0
                                     ? "text-success"
