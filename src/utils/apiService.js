@@ -262,3 +262,45 @@ export async function ResetUserPassword(body = {}, isToast = false) {
     throw error;
   }
 }
+
+export async function getProfitLossGame(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(
+      `${urls.getProfitLossGame}/?startDate=${body.fromDate}&endDate=${body.toDate}&limit=${body.limit}&search=${body.searchName}&dataType=${body.dataSource}`,
+      callParams,
+      isToast
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getProfitLossRunner(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(
+      `${urls.getProfitLossRunner}/${body.marketId}`, ///&limit=${body.limit}&search=${body.searchName} ((by search sending blank server is not giving data))
+      callParams,
+      isToast
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getProfitLossEvent(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(
+      `${urls.getProfitLossEvent}/${body.gameId}`, ///&limit=${body.limit}&search=${body.searchName} ((by search sending blank server is not giving data))
+      callParams,
+      isToast
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
