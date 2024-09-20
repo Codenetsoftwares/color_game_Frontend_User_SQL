@@ -44,8 +44,14 @@ const ProfitAndLoss = () => {
   async function getProfitLossGameWise() {
     try {
       const response = await getProfitLossGame({
-        fromDate: formatDate(profitLossData.startDate),
-        toDate: formatDate(profitLossData.endDate),
+        fromDate:
+          profitLossData.startDate === ""
+            ? ""
+            : formatDate(profitLossData.startDate),
+        toDate:
+          profitLossData.endDate === ""
+            ? ""
+            : formatDate(profitLossData.endDate),
         limit: profitLossData.itemPerPage,
         searchName: profitLossData.searchItem,
         dataSource: profitLossData.dataSource,
