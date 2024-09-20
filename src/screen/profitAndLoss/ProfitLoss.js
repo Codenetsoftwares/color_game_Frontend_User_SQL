@@ -210,12 +210,12 @@ const ProfitLoss = ({
               <option value="50">50 Entries</option>
               <option value="100">100 Entries</option>
             </select>
-            {/* <input
+            <input
               type="search"
               className="form-control w-auto"
               placeholder="Search..."
               onChange={handleSearch}
-            /> */}
+            />
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">
@@ -261,7 +261,14 @@ const ProfitLoss = ({
                               >
                                 {data?.gameName}
                               </td>
-                              <td>{data?.profitLoss || "NDS"}</td>
+                              <td
+                                className={`fw-bold ${data?.totalProfitLoss > 0
+                                    ? "text-success"
+                                    : "text-danger"
+                                  }`}
+                              >
+                                {data?.totalProfitLoss}
+                              </td>
                               <td>{data?.commission || "NDS"}</td>
                               <td>
                                 <span
