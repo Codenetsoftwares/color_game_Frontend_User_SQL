@@ -1,376 +1,120 @@
 import React, { useEffect, useState } from "react";
 import AppDrawer from "../common/appDrawer";
 import Layout from "../layout/layout";
-import Datetime from "react-datetime";
-import moment from "moment";
-import { useAppContext } from "../../contextApi/context";
-import {
-  profitAndLossMarket_Api,
-  profitAndLossRunner_Api,
-  profitAndLoss_Api,
-} from "../../utils/apiService";
-import Pagination from "../common/Pagination";
-import { Link, useNavigate } from "react-router-dom";
-import strings from "../../utils/constant/stringConstant";
+import { getprofitLossDataState } from "../../utils/getInitiateState";
+import ProfitLoss from "./ProfitLoss";
+import { getProfitLossGame } from "../../utils/apiService";
+import { toast } from "react-toastify";
+import { customErrorHandler } from "../../utils/helper";
 
 const ProfitAndLoss = () => {
-  const [profitAndLossGameData, setProfitAndLossGameData] = useState([]);
-  const [profitAndLossMarketData, setProfitAndLossMarketData] = useState([]);
-  const [profitAndLossData, setProfitAndLossData] = useState([]);
-  const [totalEntries, setTotalEntries] = useState(5);
-  const navigate = useNavigate();
-  const { dispatch } = useAppContext();
-  //first table
-  const [pagination, setPagination] = useState({
-    totalItems: 0,
-    currentPage: 1,
-    totalPages: 1,
-  });
-
-  console.log(
-    "======>>>>>>> profit and loss data",
-    profitAndLossData,
-    profitAndLossMarketData,
-    profitAndLossGameData
+  const [profitLossData, SetProfitLossData] = useState(
+    getprofitLossDataState()
   );
-  //first table
-  let startIndex = Math.min((pagination.currentPage - 1) * totalEntries + 1);
-  let endIndex = Math.min(
-    pagination.currentPage * totalEntries,
-    pagination.totalItems
-  );
-  const defaultStartDate = new Date();
-  defaultStartDate.setDate(defaultStartDate.getDate() - 1);
-  console.log(
-    "defaultStartDate",
-    moment(defaultStartDate).format("YYYY-MM-DD")
 
-    // .toLocaleDateString()
-    // .split("/")
-    // .reverse()
-    // .join("/")
-    // .replace(/\//g, "-")
-  );
-  const [dateValue, setDateValue] = useState({
-    startDate: moment(defaultStartDate).format("YYYY-MM-DD"),
-    endDate: moment(new Date()).format("YYYY-MM-DD"),
-  });
-  //check this for table two
-  const handleGameClick = async (gameId) => {
-    navigate(`/gameNameList/${gameId}`);
-  };
+  const formatDate = (dateString) => {
+    // Parse the date string to create a Date object
+    const date = new Date(dateString);
 
-  console.log("dataline number +++++>", profitAndLossGameData);
+    // Extract the year, month, and day
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, "0");
 
-  console.log("date without fn", dateValue.endDate);
-  console.log("date with fn", formatDate(dateValue.endDate));
-  const handleFetchDateData = async () => {
-    dispatch({
-      type: strings.isLoading,
-      payload: true,
-    });
-
-    const response = await profitAndLoss_Api({
-      startDate: dateValue.startDate,
-      endDate: dateValue.endDate,
-      pageNumber: pagination.currentPage,
-      dataLimit: totalEntries,
-    });
-    if (response) {
-      setProfitAndLossData(response.data);
-      setPagination((prevState) => ({
-        ...prevState,
-        totalPages: response?.pagination?.totalPages,
-        totalItems: response?.pagination?.totalItems,
-      }));
-    }
-    dispatch({
-      type: strings.isLoading,
-      payload: false,
-    });
-  };
-  useEffect(() => {
-    handleFetchDateData();
-  }, [pagination.currentPage, pagination.totalItems, totalEntries]);
-
-  const handleDateValue = (name, value) => {
-    setDateValue((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-  const handleReset = () => {
-    setDateValue({
-      startDate: defaultStartDate,
-      endDate: new Date(),
-    });
-    setProfitAndLossData([]);
-    setProfitAndLossGameData([]);
-    setProfitAndLossMarketData([]);
-  };
-  // entries for no. of entries for pagination
-  const handleEntriesChange = (event) => {
-    const entries = Number(event.target.value);
-    console.log("entries", entries);
-    setTotalEntries(entries);
-    // After updating totalItems, we need to fetch data for the first page with the new number of items
-    setPagination((prevState) => ({
-      ...prevState,
-      currentPage: 1,
-    }));
-  };
-  // pagination handlechange (to be solved later )
-  const handlePageChange = (pageNumber) => {
-    setPagination((prevState) => ({
-      ...prevState,
-      currentPage: pageNumber,
-    }));
-  };
-  // Define isValidDate function here
-  const isValidDate = (current) => {
-    return current.isBefore(moment(), "day");
-  };
-
-  function formatDate(dateString) {
-    let date = new Date(dateString);
-    let year = date.getFullYear();
-    let month = ("0" + (date.getMonth() + 1)).slice(-2);
-    let day = ("0" + date.getDate()).slice(-2);
+    // Format the date as "YYYY-MM-DD"
     return `${year}-${month}-${day}`;
+  };
+
+  useEffect(() => {
+    getProfitLossGameWise();
+  }, [
+    profitLossData.startDate,
+    profitLossData.endDate,
+    profitLossData.currentPage,
+    profitLossData.itemPerPage,
+    // profitLossData.searchItem,
+    profitLossData.dataSource,
+  ]);
+
+  // Debounce for search
+  useEffect(() => {
+    let timer = setTimeout(() => {
+      getProfitLossGameWise();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [profitLossData.searchItem]);
+
+  // For Game wise Profit Loss Data to show
+  async function getProfitLossGameWise() {
+    try {
+      // Make the API call
+      const response = await getProfitLossGame({
+        fromDate: profitLossData.startDate,
+        toDate: profitLossData.endDate,
+        limit: profitLossData.itemPerPage,
+        searchName: profitLossData.searchItem,
+        dataSource: profitLossData.dataSource,
+      });
+
+      console.log("getProfitLossGameWise", response);
+
+      // Update state with the response data
+      SetProfitLossData((prevState) => ({
+        ...prevState,
+        dataGameWise: response?.data,
+        totalPages: response?.pagination?.totalPages,
+        totalData: response?.pagination?.totalItems,
+      }));
+    } catch (error) {
+      // Handle any errors during the API call
+      toast.error(customErrorHandler(error));
+    }
   }
 
-  const ProfitLoss = ({
-    dateValue,
-    handleDateValue,
-    handleFetchDateData,
-    handleReset,
-    profitAndLossData,
-    setProfitAndLossGameData,
-    handleGameClick,
-    profitAndLossGameData,
-    handleMarketClick,
-    profitAndLossMarketData,
-    // for pagination table 1
-    totalEntries,
-    handleEntriesChange,
-    currentPage,
-    totalPages,
-    handlePageChange,
-    startIndex,
-    endIndex,
-    totalItems,
-    isValidDate,
-  }) => {
-    return (
-      <>
-        <div
-          className="card section"
-          style={{ marginTop: "120px", fontWeight: "700", width: "100%" }}
-        >
-          <span
-            className="text-white"
-            style={{
-              backgroundColor: "#2CB3D1",
-              display: "block",
-              // fontWeight: "700",
-              padding: "0px",
-              textIndent: "5px",
-              textAlign: "center",
-            }}
-          >
-            Profit & Loss Report
-          </span>
-          <div className="row" style={{ margin: "10px" }}>
-            <div className="col-sm-3 col-md-4 col-lg-3">
-              <Datetime
-                value={dateValue.startDate}
-                name="startDate"
-                dateFormat="YYYY-MM-DD"
-                onChange={(e) =>
-                  handleDateValue("startDate", moment(e).format("YYYY-MM-DD"))
-                }
-                timeFormat={false}
-                // timeFormat="HH:mm"
-                isValidDate={(current) => current.isBefore(new Date())}
-              />
-            </div>
-            <div className="col-sm-3 col-md-4 col-lg-3">
-              <Datetime
-                value={dateValue.endDate}
-                name="endDate"
-                dateFormat="YYYY-MM-DD"
-                onChange={(e) =>
-                  handleDateValue("endDate", moment(e).format("YYYY-MM-DD"))
-                }
-                timeFormat={false}
-                // timeFormat="HH:mm"
-                isValidDate={(current) => current.isBefore(new Date())}
-              />
-            </div>
-            <div className="col-lg-3">
-              <div className="col-sm-6 d-flex justify-content-center ">
-                <button
-                  className="btn btn-secondary proLossButton"
-                  style={{ backgroundColor: "#2CB3D1", fontWeight: "bold" }}
-                  onClick={handleFetchDateData}
-                >
-                  Go
-                </button>
-                <button
-                  className="btn btn-secondary proLossButton"
-                  style={{
-                    backgroundColor: "#2CB3D1",
-                    marginLeft: "20px",
-                    fontWeight: "bold",
-                  }}
-                  onClick={handleReset}
-                >
-                  Reset
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <br />
-        {profitAndLossData.length > 0 ? (
-          <div className="card p-0 section" style={{ width: "100%" }}>
-            <div
-              className="table-container overflow-x-scroll"
-              style={{ overflowX: "auto", margin: "10px" }}
-            >
-              {/* show entries deopdown */}
-              <div className="mb-3">
-                <label htmlFor="showEntriesDropdown" className="form-label">
-                  Show entries
-                </label>
-                <select
-                  className="form-select"
-                  id="showEntriesDropdown"
-                  value={totalEntries}
-                  onChange={handleEntriesChange}
-                >
-                  <option value="3">3</option>
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                </select>
-              </div>
-              <table className="table table-bordered">
-                <thead>
-                  <tr>
-                    <th
-                      scope="col"
-                      style={{
-                        backgroundColor: "#2CB3D1",
-                        color: "white",
-                        textAlign: "center",
-                      }}
-                    >
-                      Game Name
-                    </th>
-                    <th
-                      scope="col"
-                      style={{
-                        backgroundColor: "#2CB3D1",
-                        color: "white",
-                        textAlign: "center",
-                      }}
-                    >
-                      Profit&Loss
-                    </th>
-                    <th
-                      scope="col"
-                      style={{
-                        backgroundColor: "#2CB3D1",
-                        color: "white",
-                        textAlign: "center",
-                      }}
-                    >
-                      Total P&L
-                    </th>
-                  </tr>
-                </thead>
-                <tbody style={{ textAlign: "center" }}>
-                  {profitAndLossData.map((item, index) => (
-                    <tr key={index}>
-                      <td style={{ cursor: "pointer", fontWeight: "bold" }}>
-                        <Link to={`/gameNameList/${item.gameId}`}>
-                          {item.gameName}
-                        </Link>
-                      </td>
-                      <td
-                        style={{
-                          color: item.profitLoss >= 0 ? "green" : "red",
-                        }}
-                      >
-                        {item.totalProfitLoss}
-                      </td>
-                      <td
-                        style={{
-                          color: item.profitLoss >= 0 ? "green" : "red",
-                        }}
-                      >
-                        {item.totalProfitLoss}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div
-              style={{
-                margin: "10px",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                handlePageChange={handlePageChange}
-                startIndex={startIndex}
-                endIndex={endIndex}
-                totalData={totalItems}
-              />
-            </div>
-          </div>
-        ) : (
-          <div
-            class="alert alert-info"
-            role="alert"
-            style={{ textAlign: "center" }}
-          >
-            NO DATA FOUND !!
-          </div>
-        )}
-      </>
-    );
+  const handleDateForProfitLoss = () => {
+    SetProfitLossData((prevState) => ({
+      ...prevState,
+      startDate: formatDate(profitLossData.backupStartDate),
+      endDate: formatDate(profitLossData.backupEndDate),
+    }));
+  };
+
+  const handlePageChange = (page) => {
+    console.log("Changing to page:", page);
+    setState((prevState) => ({
+      ...prevState,
+      currentPage: page,
+    }));
   };
   return (
     <div data-aos="zoom-in">
       <AppDrawer showCarousel={false}>
         <Layout />
-        <ProfitLoss
-          dateValue={dateValue}
-          handleDateValue={handleDateValue}
-          handleFetchDateData={handleFetchDateData}
-          handleReset={handleReset}
-          profitAndLossData={profitAndLossData}
-          setProfitAndLossGameData={setProfitAndLossGameData}
-          handleGameClick={handleGameClick}
-          profitAndLossGameData={profitAndLossGameData}
-          // handleMarketClick={handleMarketClick}
-          profitAndLossMarketData={profitAndLossMarketData}
-          // for pagination
-          totalEntries={totalEntries}
-          handleEntriesChange={handleEntriesChange}
-          currentPage={pagination.currentPage}
-          totalPages={pagination.totalPages}
-          handlePageChange={handlePageChange}
-          startIndex={startIndex}
-          endIndex={endIndex}
-          totalItems={pagination.totalItems}
-          isValidDate={isValidDate}
-        />
+        <div style={{ marginTop: "120px" }}>
+          <ProfitLoss
+            dataGameWise={profitLossData.dataGameWise}
+            startDate={profitLossData.backupStartDate}
+            endDate={profitLossData.backupEndDate}
+            setStartDate={(date) =>
+              SetProfitLossData((prevState) => ({
+                ...prevState,
+                backupStartDate: date,
+              }))
+            }
+            setEndDate={(date) =>
+              SetProfitLossData((prevState) => ({
+                ...prevState,
+                backupEndDate: date,
+              }))
+            }
+            currentPage={profitLossData.currentPage}
+            totalData={profitLossData.totalData}
+            totalPages={profitLossData.totalPages}
+            handlePageChange={handlePageChange}
+            SetProfitLossData={SetProfitLossData}
+            handleDateForProfitLoss={handleDateForProfitLoss}
+          />
+        </div>
       </AppDrawer>
     </div>
   );
