@@ -29,7 +29,8 @@ class UrlConstant {
   resetPassword=`${this.url_dev}/reset-password`;
   getLotteries=`${this.url_dev}/get-lottery-game`;
   purchaseTicket=`${this.url_dev}/purchase-lottery`;
-  historyTicket=`${this.url_dev}/user-purchases`
+  historyTicket=`${this.url_dev}/user-purchases`;
+  lotteriesDummy= `${this.url_dev}/lotteries-dummyData`
 }
 
 const urls = new UrlConstant();

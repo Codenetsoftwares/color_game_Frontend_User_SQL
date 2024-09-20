@@ -259,9 +259,9 @@ export async function ResetUserPassword(body = {}, isToast = false) {
 
 export async function Get_Lotteries(body = {}, isToast = false) {
   try {
-    const callParams = getNoAuthCallParams(strings.GET, body, isToast);
+    const callParams =  await getCallParams(strings.GET, body, isToast);
     const response = await makeCall(
-      `${urls.getLotteries}?page=${body.page}&pageSize=${body.totalPages}&totalItems=${body.totalItems}&pagelimit=${body.pageLimit}`, 
+      `${urls.getLotteries}?page=${body.page}`,
       callParams, 
       isToast);
     return response;
@@ -269,7 +269,20 @@ export async function Get_Lotteries(body = {}, isToast = false) {
     throw error;
   }
 };
+// api fetch for lotteries with dummydata from server
 
+export async function Get_Lotteries_dummy(body = {}, isToast = false) {
+  try {
+    const callParams =  await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(
+      `${urls.lotteriesDummy}?page=${body.page}`,
+      callParams, 
+      isToast);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export async function Purchase_lottery(body = {}, isToast = false) {
   try {
