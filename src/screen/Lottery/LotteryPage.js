@@ -22,20 +22,26 @@ const LotteryPage = () => {
         page: page,
         pageLimit: pageLimit
       });
-      console.log("response", response)
+      console.log("response", response.lotteries)
+      const newLotteries = response.lotteries;
+      console.log( '=== >>> new lotteries',newLotteries)
+      setLotteries((prevLotteries) => [...prevLotteries, ...newLotteries]);
 
-      if (response.success) {
-        const newLotteries = response.lotteries;
+      if (response.lotteries) {
+        // const newLotteries = response[0].lotteries;
+        // console.log( '=== >>> new lotteries',newLotteries)
 
-        setLotteries((prevLotteries) => [...prevLotteries, ...newLotteries]);
+        // setLotteries((prevLotteries) => [...prevLotteries, ...newLotteries]);
 
         if (newLotteries.length < pageLimit) {
           setHasMore(false); // No more data to load
         }
+      
       }
-    } catch (error) {
-      console.error("Error fetching lottery data:", error);
-    } finally {
+    } 
+    
+   
+    finally {
       setLoading(false);
     }
   };
@@ -152,6 +158,17 @@ const handleBuyNow = async (lotteryId, lotteryName) => {
       </p>
     }
   >
+
+{/* {
+            "lotteryId": "2723afdc-f93a-495f-87db-c8c24ffc38c0",
+            "name": "Lottery 1",
+            "date": "2024-06-03T06:15:49.067Z",
+            "createdAt": "2024-09-20T06:59:55.435Z",
+            "firstPrize": 545043,
+            "isPurchased": true,
+            "price": 10,
+            "sem": 50
+        }, */}
        
         {/* Lottery Cards */}
         {lotteries.length > 0 ? (
