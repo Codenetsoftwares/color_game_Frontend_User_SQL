@@ -65,7 +65,7 @@ const ProfitLoss = ({
       }));
     } catch (error) {
       // Handle any errors during the API call
-      // toast.error(customErrorHandler(error));
+      toast.error(customErrorHandler(error));
 
     }
   }
@@ -110,7 +110,7 @@ const ProfitLoss = ({
       }));
     } catch (error) {
       // Handle any errors that occur during the API call
-      // toast.error(customErrorHandler(error));
+      toast.error(customErrorHandler(error));
 
     }
   }
@@ -135,7 +135,7 @@ const ProfitLoss = ({
       }));
     } catch (error) {
       // Handle any errors that occur during the API call
-      // toast.error(customErrorHandler(error));
+      toast.error(customErrorHandler(error));
 
     }
   }
