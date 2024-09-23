@@ -284,6 +284,7 @@ export async function Get_Lotteries_dummy(body = {}, isToast = false) {
   }
 };
 
+
 export async function Purchase_lottery(body = {}, isToast = false) {
   try {
     const callParams = await getCallParams(strings.POST, body, isToast);

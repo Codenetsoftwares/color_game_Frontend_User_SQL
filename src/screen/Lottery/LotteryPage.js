@@ -18,12 +18,12 @@ const LotteryPage = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await Get_Lotteries_dummy({
+      const response = await  Get_Lotteries({
         page: page,
         pageLimit: pageLimit
       });
       console.log("response", response.lotteries)
-      const newLotteries = response.lotteries;
+      const newLotteries = response.data;
       console.log( '=== >>> new lotteries',newLotteries)
       setLotteries((prevLotteries) => [...prevLotteries, ...newLotteries]);
 
@@ -109,11 +109,11 @@ const handleBuyNow = async (lotteryId, lotteryName) => {
         <p>This page is currently under development. Some features may not be fully functional yet.</p>
       </div> */}
       {/* Blinking "Coming Soon" Message */}
-      <div className="coming-soon alert alert-warning" role="alert">
+      {/* <div className="coming-soon alert alert-warning" role="alert">
         <p>
           The Game is <span className="blink">Coming Soon</span>!
         </p>
-      </div>
+      </div> */}
 
       {/* Lottery Carousel */}
       <div className="carousel-container position-relative">
@@ -176,7 +176,7 @@ const handleBuyNow = async (lotteryId, lotteryName) => {
             <div className="container-fluid">
               <div className="row justify-content-center">
                 {lotteries.map((lottery, index) => (
-                  <div className="col-lg-3 col-md-4 col-sm-6 mb-4" key={index}>
+                  <div className="col-lg-3 col-md-4 col-sm-6 mb-4 " key={index}>
                     <LotteryTicket
                       lotteryName={lottery.name}
                       drawDate={new Date(lottery.date).toLocaleDateString()}
