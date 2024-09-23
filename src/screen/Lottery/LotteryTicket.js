@@ -275,7 +275,7 @@ const LotteryTicket = ({
                     margin: '5px 0',
                   }}
                 >
-                  Click to reveal Ticket No
+                  Click to reveal Ticket Number
                 </p>
               </div>
               <div className="flip-card-back ">
