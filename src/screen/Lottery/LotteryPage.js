@@ -140,11 +140,11 @@ const LotteryPage = () => {
         <p>This page is currently under development. Some features may not be fully functional yet.</p>
       </div>
       {/* Blinking "Coming Soon" Message */}
-      <div className="coming-soon alert alert-warning" role="alert">
+      {/* <div className="coming-soon alert alert-warning" role="alert">
         <p>
           The Game is <span className="blink">Coming Soon</span>!
         </p>
-      </div>
+      </div> */}
 
       {/* Lottery Carousel */}
       <div className="carousel-container position-relative">
