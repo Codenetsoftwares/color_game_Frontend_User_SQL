@@ -8,6 +8,7 @@ const ProfitAndLossRunner = ({
   SetProfitLossRunnerData,
   currentPage,
   totalItems,
+  SetRunnerId
 }) => {
   console.log("data", data);
   const startIndex = Math.min((data.currentPage - 1) * 10 + 1);
@@ -27,6 +28,12 @@ const ProfitAndLossRunner = ({
       ...prev,
       searchItem: e.target.value,
     }));
+  };
+
+  const handelGotoBetHistory = (runnerId, componentName) => {
+    console.log("qwerty",runnerId)
+    SetComponent(componentName);
+    SetRunnerId(runnerId);
   };
 
   return (
@@ -130,19 +137,21 @@ const ProfitAndLossRunner = ({
                                 className="text-primary fw-bold"
                                 style={{ cursor: "pointer" }}
                                 onClick={() => {
-                                  toast.error("Work Pending From ServerSide");
+                                  handelGotoBetHistory(
+                                    data?.runnerId,
+                                    "UserBetHistory"
+                                  );
                                 }}
                               >
-                               {data?.isWin?"WINNER":"MATCH ODD"}
+                                {data?.isWin ? "WINNER" : "MATCH ODD"}
                               </td>
                               {/* <td>{data?.isWin?"WINNER":"MATCH ODD"}</td> */}
                               <td>{data?.runnerName}</td>
                               <td
-                                className={`fw-bold ${
-                                  data?.profitLoss > 0
-                                    ? "text-success"
-                                    : "text-danger"
-                                }`}
+                                className={`fw-bold ${data?.profitLoss > 0
+                                  ? "text-success"
+                                  : "text-danger"
+                                  }`}
                               >
                                 {data?.profitLoss}
                               </td>
