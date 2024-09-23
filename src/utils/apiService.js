@@ -298,3 +298,17 @@ export async function Get_Purchase_Lotteries_History(body = {}, isToast = false)
     throw error;
   }
 };
+
+export async function lottery_Amount_Alert(body = {}, isToast = true) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(
+      `${urls.alertPromptAmount}/${body.lotteryId}` , 
+      callParams, 
+      isToast);
+    return response;
+  } catch (error) {
+    console.error("Error fetching lottery amount", error);
+    throw error;
+  }
+};

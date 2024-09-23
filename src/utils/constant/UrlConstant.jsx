@@ -30,6 +30,7 @@ class UrlConstant {
   getLotteries=`${this.url_dev}/get-lottery-game`;
   purchaseTicket=`${this.url_dev}/purchase-lottery`;
   historyTicket=`${this.url_dev}/user-purchases`
+  alertPromptAmount=`${this.url_dev}/${this.user}-lotteryAmount`;
 }
 
 const urls = new UrlConstant();

@@ -1,30 +1,32 @@
-import React, { useState } from 'react'
-import BuyButton from '../common/BuyButton';
-import './LotteryTicket.css';
+import React, { useState } from 'react';
+import './DearLotteryCard.css'; 
 
-const LotteryTicket = ({
-    lotteryName,
-    drawDate,
-    drawTime,
-    firstPrize,
-    sem,
-    price,
-    ticketNumbers,
-    onBuyClick
-    }) => {
-      const [currentTicket, setCurrentTicket] = useState(0);
+const DearLotteryCard = ({
+  lotteryName,
+  drawDate,
+  drawTime,
+  firstPrize,
+  sem,
+  price,
+  ticketNumbers ,
+  onBuyClick
+}) =>{
+  const [currentTicket, setCurrentTicket] = useState(0);
 
-      // Function to show the next ticket number
-      const showNextTicket = () => {
-        setCurrentTicket((prev) => (prev + 1) % ticketNumbers.length);
-      };
-  return (
-    <div
+  // Function to show the next ticket number
+  const showNextTicket = () => {
+    setCurrentTicket((prev) => (prev + 1) % ticketNumbers.length);
+  };
+
+
+return (
+
+  
+  <div
     className="dear-lottery-card"
     style={{
       width: '100%',
       maxWidth: '320px',
-      minHeight: '350px', // Ensures card maintains its height
       height: 'auto',
       backgroundColor: '#FF6347', // Main background color of the ticket
       color: '#fff',
@@ -169,100 +171,95 @@ const LotteryTicket = ({
       }}
     />
 
-    {/* Conditional rendering for content */}
-    {lotteryName && (
-      <div
+    <div
+      style={{
+        marginBottom: '15px',
+        paddingBottom: '15px',
+        borderBottom: '2px dashed #fff', // Dashed line similar to ticket tear-off
+      }}
+    >
+      <h5
         style={{
-          marginBottom: '15px',
-          paddingBottom: '15px',
-          borderBottom: '2px dashed #fff', // Dashed line similar to ticket tear-off
+          fontSize: '18px',
+          fontWeight: 'bold',
+          textTransform: 'uppercase',
         }}
       >
-        <h5
-          style={{
-            fontSize: '18px',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-          }}
-        >
-          {lotteryName}
-        </h5>
-        {drawDate && (
-          <p
-            style={{
-              fontSize: '14px',
-              margin: '5px 0',
-            }}
-          >
-            Draw Date: {drawDate}
-          </p>
-        )}
-        {drawTime && (
-          <p
-            style={{
-              fontSize: '14px',
-              margin: '5px 0',
-            }}
-          >
-            Draw Time: {drawTime}
-          </p>
-        )}
-      </div>
-    )}
+        {lotteryName}
+      </h5>
+      <p
+        style={{
+          fontSize: '14px',
+          margin: '5px 0',
+        }}
+      >
+        Draw Date: {drawDate}
+      </p>
+      <p
+        style={{
+          fontSize: '14px',
+          margin: '5px 0',
+        }}
+      >
+        Draw Time: {drawTime}
+      </p>
+    </div>
     <div
       style={{
         marginBottom: '15px',
       }}
     >
-      {firstPrize && (
-        <p
-          style={{
-            fontSize: '24px',
-            fontWeight: 'bold',
-            color: '#FFD700', // Gold color for prize amount
-            margin: '5px 0',
-          }}
-        >
-          1st PRIZE: ₹{firstPrize}
-        </p>
-      )}
-      {sem && (
-        <p
-          style={{
-            fontSize: '16px',
-            fontWeight: 'bold',
-            color: '#fff',
-            margin: '5px 0',
-          }}
-        >
-          Sem: {sem}
-        </p>
-      )}
-      {price && (
-        <p
-          style={{
-            fontSize: '16px',
-            fontWeight: 'bold',
-            color: '#fff',
-            margin: '5px 0',
-          }}
-        >
-          Price: ₹{price}
-        </p>
-      )}
-      {/* {ticketNumber && (
-        <p
-          style={{
-            fontSize: '12px',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-          }}
-        >
-          Ticket No: {ticketNumber}
-        </p>
-      )} */}
+      <p
+        style={{
+          fontSize: '24px',
+          fontWeight: 'bold',
+          color: '#FFD700', // Gold color for prize amount
+          margin: '5px 0',
+        }}
+      >
+      1st PRIZE: ₹{firstPrize}
+      </p>
+      <p
+        style={{
+          fontSize: '16px',
+          fontWeight: 'bold',
+          color: '#fff',
+          margin: '5px 0',
+        }}
+      >
+        Sem: {sem}
+      </p>
+      <p
+        style={{
+          fontSize: '16px',
+          fontWeight: 'bold',
+          color: '#fff',
+          margin: '5px 0',
+        }}
+      >
+        Price: ₹{price}
+      </p>
+      {/* <p
+        style={{
+          fontSize: '12px',
+          fontWeight: 'bold',
+          textTransform: 'uppercase',
+        }}
+      >
+        Ticket No:
+      </p>
 
-<div className="ticket-number-container" onClick={showNextTicket}>
+      <ul style={{ listStyleType: 'none', padding: 0 }}>
+          {ticketNumbers.map((ticketNumber, index) => (
+            <li key={index} style={{ fontSize: '12px', fontWeight: 'bold' }}>
+              {ticketNumber}
+            </li>
+          ))}
+        </ul> */}
+
+
+        {/* Flipping Ticket Number */}
+        <div className="ticket-number-container" onClick={showNextTicket}>
           <div className="flip-card">
             <div className="flip-card-inner">
               <div className="flip-card-front ">
@@ -297,14 +294,13 @@ const LotteryTicket = ({
         <p style={{ fontSize: '12px', marginTop: '10px' }}>
           Click the ticket to see the next number!
         </p>
-      
-    </div>
-    <div className="card-footer text-center">
+      </div>
+      <div className="card-footer text-center">
         {/* Place the BuyButton inside the footer and pass the click handler */}
         <BuyButton  onClick = {onBuyClick} />
       </div>
-  </div>
-  )
+    </div>
+);
 }
 
-export default LotteryTicket
+export default DearLotteryCard;

@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./LotteryPage.css"; // Add custom styles here
-import { Get_Lotteries, Purchase_lottery, userWallet } from "../../utils/apiService";
+import {
+  Get_Lotteries,
+  lottery_Amount_Alert,
+  Purchase_lottery,
+  userWallet,
+} from "../../utils/apiService";
 import LotteryTicket from "./LotteryTicket";
 import Pagination from "../common/Pagination";
 import { useAppContext } from "../../contextApi/context";
@@ -69,8 +74,16 @@ const LotteryPage = () => {
 
   // Handle the Buy Now button click
   const handleBuyNow = async (lotteryId, lotteryName) => {
+    console.log("========>>>> lottery id", lotteryId);
+
+    const response = await lottery_Amount_Alert({ lotteryId });
+    console.log("===>>> ALERT RESPONSE FROM API", response);
+    // Extract the message from the API response
+    const lotteryAmountMessage =
+      response?.message || "Lottery amount information unavailable.";
+
     const isConfirmed = window.confirm(
-      `Are you sure you want to buy a ticket for the lottery: ${lotteryName}?`
+      `Are you sure you want to buy this ${lotteryAmountMessage} for  ${lotteryName}?`
     );
 
     if (isConfirmed) {
@@ -123,9 +136,9 @@ const LotteryPage = () => {
       style={{ minHeight: "400px" }}
     >
       {/* Development Notice */}
-      {/* <div className="alert alert-info">
+      <div className="alert alert-info">
         <p>This page is currently under development. Some features may not be fully functional yet.</p>
-      </div> */}
+      </div>
       {/* Blinking "Coming Soon" Message */}
       <div className="coming-soon alert alert-warning" role="alert">
         <p>
@@ -161,7 +174,7 @@ const LotteryPage = () => {
                       drawDate={new Date(lottery.date).toLocaleDateString()}
                       drawTime={new Date(lottery.date).toLocaleTimeString()}
                       firstPrize={lottery.firstPrize}
-                      ticketNumber={lottery.ticketNumber}
+                      ticketNumbers={lottery.ticketNumber}
                       price={lottery.price}
                       sem={lottery.sem}
                       onBuyClick={() =>
