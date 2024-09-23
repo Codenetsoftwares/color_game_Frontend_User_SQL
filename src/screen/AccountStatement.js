@@ -49,6 +49,10 @@ const AccountStatement = () => {
         }
     }
 
+    const startIndex = Math.min((getAccountstatement.currentPage - 1) * 10 + 1);
+    const endIndex = Math.min(getAccountstatement.currentPage * 10, getAccountstatement.totalEntries);
+    console.log("pagination", startIndex, endIndex, getAccountstatement.currentPage, getAccountstatement.totalEntries)
+
     // UseEffect to trigger fetchAccountStatement whenever the dependencies change
     useEffect(() => {
         fetchAccountStatement();
@@ -244,9 +248,9 @@ const AccountStatement = () => {
                                             currentPage={getAccountstatement.currentPage}
                                             totalPages={getAccountstatement.totalPages}
                                             handlePageChange={(newPage) => setGetAccountstatement((prevState) => ({ ...prevState, currentPage: newPage }))}
-                                            startIndex={getAccountstatement.startIndex}
-                                            endIndex={getAccountstatement.endIndex}
-                                            totalData={getAccountstatement.totalData}
+                                            startIndex={startIndex}
+                                            endIndex={endIndex}
+                                            totalData={getAccountstatement.totalEntries}
                                         />
                                     </li>
                                 )}
