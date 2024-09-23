@@ -5,9 +5,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import ProfitAndLossEvent from "./ProfitAndLossEvent";
 import ProfitAndLossRunner from "./ProfitLossRunner";
 import Pagination from "../common/Pagination";
-import { getprofitLossEventDataState, getprofitLossRunnerDataState } from "../../utils/getInitiateState";
-import { getProfitLossEvent, getProfitLossRunner } from "../../utils/apiService";
+import { getprofitLossEventDataState, getprofitLossRunnerDataState, getUserBetHistory } from "../../utils/getInitiateState";
+import { getProfitLossEvent, getProfitLossRunner, getUserBetHistory_api } from "../../utils/apiService";
 import { customErrorHandler } from "../../utils/helper";
+import UserBetHistory from "./UserBetHistory";
+import { toast } from "react-toastify";
 
 const ProfitLoss = ({
   UserName,
@@ -31,9 +33,13 @@ const ProfitLoss = ({
 
   const [profitLossRunnerData, SetProfitLossRunnerData] = useState(getprofitLossRunnerDataState());
 
+  const [userBetHistory, setUserBetHistory] = useState(getUserBetHistory())
+
   const [toggle, SetToggle] = useState(true);
   const [component, SetComponent] = useState(null);
   const [marketId, SetMarketId] = useState(null);
+  const [runnerId, SetRunnerId] = useState(null);
+  console.log("qwertyu", runnerId)
 
   async function getProfitLossRunnerWise() {
     try {
@@ -59,7 +65,7 @@ const ProfitLoss = ({
       }));
     } catch (error) {
       // Handle any errors during the API call
-      toast.error(customErrorHandler(error));
+      // toast.error(customErrorHandler(error));
 
     }
   }
@@ -71,6 +77,12 @@ const ProfitLoss = ({
     marketId,
     profitLossRunnerData.itemPerPage,
     profitLossRunnerData.searchItem,
+  ]);
+
+  useEffect(() => {
+    if (runnerId) getUserBetHistoryWise();
+  }, [
+    runnerId,
   ]);
 
   async function getProfitLossEventWise(gameId, componentName) {
@@ -98,7 +110,32 @@ const ProfitLoss = ({
       }));
     } catch (error) {
       // Handle any errors that occur during the API call
-      toast.error(customErrorHandler(error));
+      // toast.error(customErrorHandler(error));
+
+    }
+  }
+
+  async function getUserBetHistoryWise() {
+    console.log("asdfgh", runnerId)
+    try {
+      // Set toggle to false before hitting the endpoint
+      SetToggle(false);
+      // Make the API call
+      const response = await getUserBetHistory_api({
+        runnerId: runnerId,
+      });
+
+      console.log("event=>>>", runnerId);
+
+      // Update state with the response data
+      setUserBetHistory((prevState) => ({
+        ...prevState,
+        data: response.data,
+
+      }));
+    } catch (error) {
+      // Handle any errors that occur during the API call
+      // toast.error(customErrorHandler(error));
 
     }
   }
@@ -117,7 +154,12 @@ const ProfitLoss = ({
         totalItems={profitLossEventData.totalData}
       />
     );
-  } else {
+  } else if (component === "UserBetHistory") {
+    componentToRender = (
+      <UserBetHistory SetComponent={SetComponent} data={userBetHistory} />
+    );
+  }
+  else {
     componentToRender = (
       <ProfitAndLossRunner
         data={profitLossRunnerData}
@@ -125,6 +167,7 @@ const ProfitLoss = ({
         SetProfitLossRunnerData={SetProfitLossRunnerData}
         currentPage={profitLossRunnerData.currentPage}
         totalItems={profitLossRunnerData.totalData}
+        SetRunnerId={SetRunnerId}
       />
     );
   }
@@ -289,8 +332,8 @@ const ProfitLoss = ({
                               </td>
                               <td
                                 className={`fw-bold ${data?.totalProfitLoss > 0
-                                    ? "text-success"
-                                    : "text-danger"
+                                  ? "text-success"
+                                  : "text-danger"
                                   }`}
                               >
                                 {data?.totalProfitLoss}
@@ -299,8 +342,8 @@ const ProfitLoss = ({
                               <td>
                                 <span
                                   className={`fw-bold ${data?.totalProfitLoss > 0
-                                      ? "text-success"
-                                      : "text-danger"
+                                    ? "text-success"
+                                    : "text-danger"
                                     }`}
                                 >
                                   {data?.totalProfitLoss}

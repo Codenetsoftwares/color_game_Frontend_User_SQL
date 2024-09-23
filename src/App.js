@@ -18,6 +18,7 @@ import MarketNameList from "./screen/profitAndLoss/marketNameList";
 import ResetPassword from "./screen/common/ResetPassword";
 import { useEffect } from "react";
 import updateMarketEventEmitter from "./screen/common/updateMarketEvent";
+import AccountStatement from "./screen/AccountStatement";
 
 function App() {
 
@@ -91,6 +92,14 @@ function App() {
             element={
               <PrivateRoute>
                 <MarketNameList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/accountStatement"
+            element={
+              <PrivateRoute>
+                <AccountStatement />
               </PrivateRoute>
             }
           />

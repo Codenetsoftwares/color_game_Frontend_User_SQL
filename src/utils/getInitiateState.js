@@ -150,3 +150,24 @@ export function getprofitLossRunnerDataState(body = {}) {
     searchItem: "",
   };
 }
+export function getAccountStatement(body = {}) {
+  return {
+    dataGameWise: [],
+    dataMarketWise: [],
+    dataHistory: [],
+    totalPages: 0,
+    totalData: 0,
+    currentPage: 1,
+    totalEntries: 10,
+    endDate: "",
+    startDate: "",
+    searchItem: "",
+    dataSource: "live",
+  };
+}
+
+export function getUserBetHistory(body = {}) {
+  return {
+    data: [],
+  };
+}

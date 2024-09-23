@@ -304,3 +304,27 @@ export async function getProfitLossEvent(body = {}, isToast = false) {
     throw error;
   }
 }
+
+export async function getAccountstatement_api(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(
+      `${urls.getAccountStatement}?page=${body.pageNumber}&pageSize=${body.dataLimit}&startDate=${body.fromDate}&endDate=${body.toDate}&dataType=${body.dataSource}`,
+      callParams,
+      isToast
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const getUserBetHistory_api = async (body = {}, isToast = false) => {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(`${urls.getUserBetList}/${body.runnerId}`, callParams, isToast);
+    return response;
+  } catch (err) {
+    throw err;
+  }
+}
