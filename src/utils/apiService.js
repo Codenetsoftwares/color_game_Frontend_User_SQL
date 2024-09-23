@@ -64,7 +64,7 @@ export async function user_getGameWithMarketData_api(
   } catch (error) {
     throw error;
   }
-}
+};
 
 export async function user_getMarketWithRunnerData_api(
   body = {},
@@ -328,3 +328,60 @@ export const getUserBetHistory_api = async (body = {}, isToast = false) => {
     throw err;
   }
 }
+
+
+
+export async function Purchase_lottery(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.POST, body, isToast);
+    const response = await makeCall(urls.purchaseTicket, callParams, isToast);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export async function Get_Lotteries(body = {}, isToast = false) {
+  try {
+    const callParams = getNoAuthCallParams(strings.GET, body, isToast);
+    const response = await makeCall(
+      `${urls.getLotteries}?page=${body.page}&pageSize=${body.totalPages}&totalItems=${body.totalItems}&pagelimit=${body.pageLimit}`, 
+      callParams, 
+      isToast);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+export async function Get_Purchase_Lotteries_History(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(
+      
+      `${urls.historyTicket}?page=${body.page}&limitPerPage=${body.limit}&totalPages=${body.totalPages}&totalData=${body.totalItems}`, 
+      
+      callParams, 
+      
+      isToast);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export async function lottery_Amount_Alert(body = {}, isToast = true) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(
+      `${urls.alertPromptAmount}/${body.lotteryId}` , 
+      callParams, 
+      isToast);
+    return response;
+  } catch (error) {
+    console.error("Error fetching lottery amount", error);
+    throw error;
+  }
+};

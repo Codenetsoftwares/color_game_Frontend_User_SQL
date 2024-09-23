@@ -9,19 +9,21 @@ import "./App.css";
 import RulesPage from "./screen/common/rulesPage";
 import ForgotPassword from "./screen/chnagePassword/forgotPassword";
 import PrivateRoute from "./globlaCommon/privateRoute";
-import HamburgerNavBar from "./screen/common/hamburgerNavBar";
+
 import BetHistory from "./screen/history/BetHistory";
-import ProfitAndLoss from "./screen/profitAndLoss/profitAndLoss";
+
 import Loading from "./globlaCommon/loading";
 import GameNameList from "./screen/profitAndLoss/gameNameList";
 import MarketNameList from "./screen/profitAndLoss/marketNameList";
 import ResetPassword from "./screen/common/ResetPassword";
-import { useEffect } from "react";
-import updateMarketEventEmitter from "./screen/common/updateMarketEvent";
+
+import LotteryCards from "./screen/Lottery/LotteryCards";
+
+import LotteryPurchaseLayout from "./screen/Lottery/LotteryPurchaseLayout";
+import ProfitAndLoss from "./screen/profitAndLoss/profitAndLoss";
 import AccountStatement from "./screen/AccountStatement";
 
 function App() {
-
   return (
     <AppProvider>
       <ToastContainer
@@ -43,6 +45,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/passwordReset" element={<ResetPassword />} />
           <Route path="/gameView/:gameName/:id" element={<GameView />} />
+          <Route path="/lottery" element={<LotteryCards />} />
+          <Route
+            path="/LotteryPurchaseHistory"
+            element={<LotteryPurchaseLayout />}
+          />
 
           {/* private routes */}
           <Route

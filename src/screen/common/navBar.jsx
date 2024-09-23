@@ -13,6 +13,7 @@ import {
   FaSignOutAlt,
   FaKey,
   FaBook,
+  FaTicketAlt,
 } from "react-icons/fa";
 import Login from "../loginModal/loginModal";
 import strings from "../../utils/constant/stringConstant";
@@ -86,6 +87,12 @@ const NavBar = () => {
   const handleBetHistoryClick = () => {
     navigate("/betHistory");
   };
+// handle lottery purchase history 
+  function handleLotteryPurchasesClick() {
+    // Add your logic here for navigating or opening the lottery purchases page/modal
+    console.log("Navigating to My Lottery Purchases");
+    navigate("/LotteryPurchaseHistory");
+  }
   const handleAccountStatementClick = () => {
     navigate("/accountStatement");
   };
@@ -358,6 +365,29 @@ const NavBar = () => {
                 />{" "}
                 Change Password
               </li>
+
+              <li
+              class="nav-item mb-3 align-items-start"
+              style={{
+                color: "white", // Initial color
+                cursor: "pointer",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.color = "#2FA8BA"; // Color change on hover
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.color = "white"; // Color back to original on mouse out
+              }}
+              onClick={handleLotteryPurchasesClick}
+            >
+              <FaTicketAlt
+                style={{
+                  color: "#fec015",
+                }}
+              />{" "}
+              My Lottery Purchases
+            </li>
+
               <li
                 class="nav-item mb-3 align-items-start"
                 style={{

@@ -81,10 +81,15 @@ function AppDrawer({
         </span>
 
         <ul>
-          <li
-            className={toggleStates["inPlay"] ? "subMenuHead" : "MenuHead"}
-            onClick={() => handleToggle("inPlay")}
-          >
+        <li className="MenuHead lottery-section">
+            <Link to="/lottery" >
+              <div className="lottery-wrapper">
+                <span className="new-tag">New</span>
+                Lottery
+              </div>
+            </Link>
+          </li>
+          <li className={toggleStates['inPlay'] ? 'subMenuHead' : 'MenuHead'} onClick={() => handleToggle('inPlay')}>
             <a href="#">In-Play</a>
           </li>
           {user_allGames.map((gameObj, index) => (
