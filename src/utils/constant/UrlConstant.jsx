@@ -4,10 +4,10 @@ class UrlConstant {
   constructor() {}
 
   // url_dev = "https://server.colorgame.dummydoma.in/api";
-  url_dev = 'http://localhost:7000/api';
+  url_dev = "http://localhost:7000/api";
 
   // user api
-  user = 'user';
+  user = "user";
   login = `${this.url_dev}/${this.user}-login`;
   userLogout = `${this.url_dev}/${this.user}-logout`; // added logout api
   userGames = `${this.url_dev}/${this.user}-games`;
@@ -18,19 +18,24 @@ class UrlConstant {
   userBetHistoryById = `${this.url_dev}/${this.user}-betHistory`;
   userGetOpenBet = `${this.url_dev}/${this.user}-current-market`;
   userBackLayData = `${this.url_dev}/${this.user}-currentOrderHistory`;
-  getDataFromHistoryLandingPage = `${this.url_dev}/${this.user}-market-data`;
+  getDataFromHistoryLandingPage = `${this.url_dev}/${this.user}-betHistory-games`;
   betHistory = `${this.url_dev}/${this.user}-betHistory`;
   userWallet = `${this.url_dev}/${this.user}/view-wallet`;
   userBidding = `${this.url_dev}/user-bidding`;
   profitAndLoss = `${this.url_dev}/profit_loss`;
   profitAndLossMarket = `${this.url_dev}/profit_loss_market`;
   profitAndLossRunner = `${this.url_dev}/profit_loss_runner`;
-  user_carrouselImageDynamic=`${this.url_dev}/admin/slider-text-img`;
-  resetPassword=`${this.url_dev}/reset-password`;
+  user_carrouselImageDynamic = `${this.url_dev}/admin/slider-text-img`;
+  resetPassword = `${this.url_dev}/reset-password`;
   getLotteries=`${this.url_dev}/get-lottery-game`;
   purchaseTicket=`${this.url_dev}/purchase-lottery`;
   historyTicket=`${this.url_dev}/user-purchases`
   alertPromptAmount=`${this.url_dev}/${this.user}-lotteryAmount`;
+  getProfitLossGame = `${this.url_dev}/profit_loss`;
+  getProfitLossRunner = `${this.url_dev}/profit_loss_runner`;
+  getProfitLossEvent = `${this.url_dev}/profit_loss_market`;
+  getAccountStatement = `${this.url_dev}/${this.user}-account-statement`;
+  getUserBetList = `${this.url_dev}/get-user-betList`;
 }
 
 const urls = new UrlConstant();

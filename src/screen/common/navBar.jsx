@@ -93,6 +93,9 @@ const NavBar = () => {
     console.log("Navigating to My Lottery Purchases");
     navigate("/LotteryPurchaseHistory");
   }
+  const handleAccountStatementClick = () => {
+    navigate("/accountStatement");
+  };
 
   // const handleLogout = () => {
   //   dispatch({
@@ -111,7 +114,7 @@ const NavBar = () => {
     try {
       // Call the logout API
       const response = await logout({ userId }, true);
-      
+
       if (response && response.success) {
         dispatch({
           type: strings.LOG_OUT,
@@ -312,6 +315,7 @@ const NavBar = () => {
                 onMouseOut={(e) => {
                   e.currentTarget.style.color = "white"; // Color back to original on mouse out
                 }}
+                onClick={handleAccountStatementClick}
               >
                 <FaFileAlt
                   style={{

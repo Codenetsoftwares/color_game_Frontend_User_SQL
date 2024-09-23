@@ -21,6 +21,7 @@ import LotteryCards from "./screen/Lottery/LotteryCards";
 
 import LotteryPurchaseLayout from "./screen/Lottery/LotteryPurchaseLayout";
 import ProfitAndLoss from "./screen/profitAndLoss/profitAndLoss";
+import AccountStatement from "./screen/AccountStatement";
 
 function App() {
   return (
@@ -98,6 +99,14 @@ function App() {
             element={
               <PrivateRoute>
                 <MarketNameList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/accountStatement"
+            element={
+              <PrivateRoute>
+                <AccountStatement />
               </PrivateRoute>
             }
           />
