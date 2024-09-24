@@ -9,6 +9,7 @@ import { useAppContext } from "../../contextApi/context";
 
 import {
   getDataFromHistoryLandingPage,
+  getOpenBetsGame,
   user_getBackLayData_api,
   user_getBetHistory_api,
   // user_getOpenBetData_api,
@@ -23,9 +24,9 @@ const BetHistory = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [totalEntries, setTotalEntries] = useState(10);
   const [openBet, setOpenBet] = useState([]);
-  const [selectedMarket, setSelectedMarket] = useState("");
+  const [selectedGameName, setSelectedGameName] = useState("");
   const [selectedGameId, setSelectedGameId] = useState(null);
-
+  const [flag, setFlag] = useState(true);
   const defaultStartDate = new Date();
   const [selected, setSelected] = useState(<Date />);
   // <Date/>
@@ -57,13 +58,8 @@ const BetHistory = () => {
 
   const [gameSelectionBetHistory, setGameSelectionBetHistory] = useState([]); // from dummy data into bet history selection
   console.log("=======>>> market selection", gameSelectionBetHistory);
-  const [openBetSelectionbetHistory, setopenBetSelectionbetHistory] = useState(
-    []
-  ); // from dummy data into open bet selection
-  console.log(
-    "========>>>>>> line 63 selection data",
-    openBetSelectionbetHistory
-  );
+  const [openBetGameNames, setOpenBetGameNames] = useState([]);
+
   const [selectedOptions, setSelectedOptions] = useState({
     dataSource: "live",
     select2: "",
@@ -77,6 +73,7 @@ const BetHistory = () => {
   let endIndex = Math.min(currentPage * totalEntries, totalItems);
   // the api called for bet history data
   async function handleGetHistory() {
+    setFlag(false);
     const response = await user_getBetHistory_api({
       gameId: selectedGameId,
       // marketName: gameSelectionBetHistory,
@@ -123,20 +120,20 @@ const BetHistory = () => {
   //this is the select market response whic for both open bets and bet history
   async function handleGetSelectData() {
     const response = await getDataFromHistoryLandingPage();
-    if (response) {
-      console.log(
-        "===========>response for betOpenBetDataSelect and marketname(Line 237)",
-        response
-      );
-      setGameSelectionBetHistory(response.data);
-      // setopenBetSelectionbetHistory(response.data.currentMarket);
-    } else {
-      //add loading part //
-    }
+    if (response) setGameSelectionBetHistory(response.data);
   }
+
+  const openBetsGame = async () => {
+    const response = await getOpenBetsGame();
+    setOpenBetGameNames(response.data);
+  };
+
+  console.log("Data=>>>", openBetGameNames);
+
   // useeffect for bet history and open bets selection input boxes only
   useEffect(() => {
     handleGetSelectData();
+    openBetsGame();
   }, []);
   console.log(
     "=========> gameSelectionBetHistory line 108",
@@ -144,14 +141,14 @@ const BetHistory = () => {
   );
   console.log(
     "=========> openBetSelectionbetHistor line 109",
-    openBetSelectionbetHistory
+    openBetGameNames
   );
 
   // this is for open bets selection onchnage
   const handleSelectChange = (e) => {
-    setSelectedMarket(e.target.value);
+    setSelectedGameName(e.target.value);
   };
-  console.log("=====. line 157", selectedMarket);
+  console.log("=====. line 157", selectedGameName);
 
   const handleGetHistoryChange = (e) => {
     setSelectedOptions((prevState) => ({
@@ -174,26 +171,18 @@ const BetHistory = () => {
   // this is back lay open bets data but this api needs to be updated
   async function handleGetData() {
     const response = await user_getBackLayData_api({
-      marketId: selectedMarket,
+      marketId: selectedGameName,
     });
-    if (response && response.data && response.data.rows) {
-      console.log(
-        "===========>response for betOpenBetData(Line 173)",
-        response
-      );
-      setOpenBet(response.data.rows);
-    } else {
-      //add loading part //
-    }
+    setOpenBet(response?.data);
   }
   // this is useEffect for  back lay open bets data but this api needs to be updated
   useEffect(() => {
-    if (selectedMarket != "") {
+    if (selectedGameName != "") {
       handleGetData();
     }
-  }, [selectedMarket]);
+  }, [selectedGameName]);
   console.log("============> openBet", openBet);
-  console.log("============> selectMarketId", selectedMarket);
+  console.log("============> selectMarketId", selectedGameName);
 
   // Function to render "No data found" message when history data is empty
   const renderNoDataFound = () => {
@@ -424,17 +413,17 @@ const BetHistory = () => {
               style={{ width: "100%" }}
               onChange={handleSelectChange}
             >
-              <option value={""}>Select Market</option>
-              {openBetSelectionbetHistory.map((item, index) => (
-                <option key={index} value={item.marketId}>
-                  {item.marketName}
+              <option value={""}>Select Sport Name</option>
+              {openBetGameNames.map((item, index) => (
+                <option key={index} value={item.gameId}>
+                  {item.gameName}
                 </option>
               ))}
             </select>
           </div>
 
           {/* Render back  and laytable if market is selected */}
-          {selectedMarket.length > 0 && !selectedMarket == "" && (
+          {selectedGameName.length > 0 && !selectedGameName == "" && (
             <>
               {renderBackTable()}
               {renderLayTable()}
@@ -452,12 +441,12 @@ const BetHistory = () => {
         style={{ backgroundColor: "#cfe2f3" }}
       >
         <div className="card-body">
-          <div className="table-responsive">
-            <table className="table table-bordered">
+          <div className="table-responsive ">
+            <table className="table table-striped table-sm">
               {/* Table header */}
               <thead>
-                <tr>
-                  <th className="d-none d-sm-table-cell">Back(Bet For)</th>
+                <tr align="center fs-6">
+                  <th className="d-none d-sm-table-cell">Back</th>
                   <th className="d-none d-sm-table-cell">Odds</th>
                   <th className="d-none d-sm-table-cell">Stake</th>
                   <th className="d-none d-sm-table-cell">Profit</th>
@@ -467,35 +456,48 @@ const BetHistory = () => {
               {/* Table body - data to be filled dynamically */}
               <tbody>
                 {/* Insert rows for back bets */}
-                {openBet
-                  .filter((item) => item.type === "back") // Ensure correct type matching (case-sensitive)
-                  .map((item, index) => (
-                    <tr key={index}>
-                      <td className="d-none d-sm-table-cell">
-                        {item.runnerName}
-                      </td>
-                      <td className="d-none d-sm-table-cell">{item.rate}</td>
-                      <td className="d-none d-sm-table-cell">{item.value}</td>
-                      <td className="d-none d-sm-table-cell">
-                        {item.bidAmount}(-{item.value})
-                      </td>
-                      <td className="d-table-cell d-sm-none">
-                        <div>
-                          <strong>Back (Bet For):</strong> {item.runnerName}
-                        </div>
-                        <div>
-                          <strong>Odds:</strong> {item.rate}
-                        </div>
-                        <div>
-                          <strong>Stake:</strong> {item.value}
-                        </div>
-                        <div>
-                          <strong>Profit:</strong> {item.bidAmount}(-
-                          {item.value})
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                {openBet.filter((item) => item.type === "back").length > 0 ? (
+                  openBet
+                    .filter((item) => item.type === "back")
+                    .map((item, index) => (
+                      <tr key={index} align="center">
+                        {/* Show for larger screens */}
+                        <td className="d-none d-sm-table-cell">
+                          {item.runnerName}
+                        </td>
+                        <td className="d-none d-sm-table-cell">{item.rate}</td>
+                        <td className="d-none d-sm-table-cell">{item.value}</td>
+                        <td className="d-none d-sm-table-cell">
+                          {Math.round(item.value)}(-
+                          {Math.round(item.bidAmount)})
+                        </td>
+
+                        {/* Show for smaller screens */}
+                        <td className="d-table-cell d-sm-none">
+                          <div>
+                            <strong>Back (Bet For):</strong> {item.runnerName}
+                          </div>
+                          <div>
+                            <strong>Odds:</strong> {item.rate}
+                          </div>
+                          <div>
+                            <strong>Stake:</strong> {item.value}
+                          </div>
+                          <div>
+                            <strong>Profit:</strong> {Math.round(item.value)}
+                            (-
+                            {Math.round(item.bidAmount)})
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" align="center">
+                      No Data Found
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -513,11 +515,11 @@ const BetHistory = () => {
       >
         <div className="card-body">
           <div className="table-responsive">
-            <table className="table table-bordered">
+            <table className="table table-striped table-sm">
               {/* Table header */}
               <thead>
-                <tr>
-                  <th className="d-none d-sm-table-cell">Lay(Bet Against)</th>
+                <tr align="center">
+                  <th className="d-none d-sm-table-cell">Lay</th>
                   <th className="d-none d-sm-table-cell">Odds</th>
                   <th className="d-none d-sm-table-cell">Stake</th>
                   <th className="d-none d-sm-table-cell">Liability</th>
@@ -527,35 +529,49 @@ const BetHistory = () => {
               {/* Table body - data to be filled dynamically */}
               <tbody>
                 {/* Insert rows for lay bets */}
-                {openBet
-                  .filter((item) => item.type === "lay")
-                  .map((item, index) => (
-                    <tr key={index}>
-                      <td className="d-none d-sm-table-cell">
-                        {item.runnerName}
-                      </td>
-                      <td className="d-none d-sm-table-cell">{item.rate}</td>
-                      <td className="d-none d-sm-table-cell">{item.value}</td>
-                      <td className="d-none d-sm-table-cell">
-                        {item.value}(-{item.bidAmount})
-                      </td>
-                      <td className="d-table-cell d-sm-none">
-                        <div>
-                          <strong>Lay(Bet Against):</strong> {item.runnerName}
-                        </div>
-                        <div>
-                          <strong>Odds:</strong> {item.rate}
-                        </div>
-                        <div>
-                          <strong>Stake:</strong> {item.value}
-                        </div>
-                        <div>
-                          <strong>Liability:</strong> {item.value}(-
-                          {item.bidAmount})
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                {openBet.filter((item) => item.type === "lay").length > 0 ? (
+                  openBet
+                    .filter((item) => item.type === "lay")
+                    .map((item, index) => (
+                      <tr key={index} align="center">
+                        {/* Show for larger screens */}
+                        <td className="d-none d-sm-table-cell">
+                          {item.runnerName}
+                        </td>
+                        <td className="d-none d-sm-table-cell">{item.rate}</td>
+                        <td className="d-none d-sm-table-cell">{item.value}</td>
+                        <td className="d-none d-sm-table-cell">
+                          {Math.round(item.value)}(-
+                          {Math.round(item.bidAmount)})
+                        </td>
+
+                        {/* Show for smaller screens */}
+                        <td className="d-table-cell d-sm-none">
+                          <div>
+                            <strong>Lay (Bet Against):</strong>{" "}
+                            {item.runnerName}
+                          </div>
+                          <div>
+                            <strong>Odds:</strong> {item.rate}
+                          </div>
+                          <div>
+                            <strong>Stake:</strong> {item.value}
+                          </div>
+                          <div>
+                            <strong>Liability:</strong> {Math.round(item.value)}
+                            (-
+                            {Math.round(item.bidAmount)})
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" align="center">
+                      No Data Found
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
