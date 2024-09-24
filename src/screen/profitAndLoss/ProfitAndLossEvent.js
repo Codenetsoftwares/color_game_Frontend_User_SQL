@@ -107,12 +107,12 @@ const ProfitAndLossEvent = ({
                           <th scope="col">
                             <b>Event Name</b>
                           </th>
+                            <th scope="col">
+                              <b>Profit & Loss</b>
+                            </th>
                           <th scope="col">
                             <b>Commission</b>
-                          </th>
-                          <th scope="col">
-                            <b>Profit & Loss</b>
-                          </th>
+                          </th>                       
                           <th scope="col">
                             <b>Total P&L</b>
                           </th>
@@ -133,15 +133,15 @@ const ProfitAndLossEvent = ({
                               >
                                 {data?.marketName}
                               </td>
-                              <td>{data?.commission || 0}</td>
                               <td
                                 className={`fw-bold ${data?.totalProfitLoss > 0
-                                    ? "text-success"
-                                    : "text-danger"
+                                  ? "text-success"
+                                  : "text-danger"
                                   }`}
                               >
                                 {data?.totalProfitLoss}
                               </td>
+                              <td>{data?.commission || 0}</td>
                               <td
                                 className={`fw-bold ${
                                   data?.totalProfitLoss > 0

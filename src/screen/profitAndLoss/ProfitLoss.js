@@ -39,7 +39,6 @@ const ProfitLoss = ({
   const [component, SetComponent] = useState(null);
   const [marketId, SetMarketId] = useState(null);
   const [runnerId, SetRunnerId] = useState(null);
-  console.log("qwertyu", runnerId)
 
   async function getProfitLossRunnerWise() {
     try {
@@ -53,8 +52,6 @@ const ProfitLoss = ({
         limit: profitLossRunnerData.itemPerPage,
         searchName: profitLossRunnerData.searchItem,
       });
-
-      console.log("runner=>>>", response);
 
       // Update state with the response data
       SetProfitLossRunnerData((prevState) => ({
