@@ -283,11 +283,11 @@ const ProfitLoss = ({
               onChange={handleSearch}
             />
           </div>
-          <ul class="list-group list-group-flush">
+          <ul class="list-group list-group-flush" >
             <li class="list-group-item">
               <div class="white_card_body">
                 {/* Table */}
-                <div class="QA_section">
+                <div class="QA_section" style={{ overflowX: "auto" }}>
                   <div class="QA_table mb_30">
                     <table class="table lms_table_active3 table-bordered">
                       <thead>
