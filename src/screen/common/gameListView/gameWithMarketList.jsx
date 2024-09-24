@@ -956,19 +956,36 @@ function GameWithMarketList({ isSingleMarket }) {
                   {gameWithMarketData.gameName}
                 </div>
                 {gameWithMarketData &&
-                  gameWithMarketData.markets.slice(0, 3).map((marketData) => {
+                  gameWithMarketData.markets.slice(0, 2).map((marketData) => {
                     return (
-                      <div className="row py-1 px-0 m-0 border">
-                        <div className="col-4">
-                          <span>{marketData.timeSpan}</span> |{" "}
-                          <span> {marketData.marketName}</span>
+                      <div
+                        className="row p-0 m-0"
+                        style={{ backgroundColor: "white" }}
+                      >
+                        <div className="row py-1 px-0 m-0 ">
+                          {/* Runner Name and Balance */}
+                          <span className="col-4 text-dark text-decoration-none text-nowrap">
+                            {marketData?.marketName}
+                          </span>
+
+                          {/* Back and Lay Rates */}
+                          <div
+                            className="col-4"
+                            style={{ backgroundColor: "lightblue" }}
+                          >
+                            {marketData?.runners[0]?.rate[0]?.back ?? "N/A"}
+                          </div>
+
+                          <div
+                            className="col-4"
+                            style={{ backgroundColor: "pink" }}
+                          >
+                            {marketData?.runners[0]?.rate[0]?.lay ?? "N/A"}
+                          </div>
                         </div>
-                        <div
-                          className="col-8"
-                          style={{ backgroundColor: "orange" }}
-                        >
-                          col-8
-                        </div>
+                        {/* );
+                            }
+                          )} */}
                       </div>
                     );
                   })}
