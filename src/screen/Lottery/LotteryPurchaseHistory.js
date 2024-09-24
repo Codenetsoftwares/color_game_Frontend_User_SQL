@@ -20,7 +20,7 @@ const LotteryPurchaseHistory = () => {
     const fetchPurchaseHistory = async () => {
       const response = await Get_Purchase_Lotteries_History({page:pagination.page ,limit:pagination.limit,totalPages:pagination.totalPages,totalItems:pagination.totalItems});
       console.log('response for pagination',response.pagination)
-      if (response?.success) {
+      if (response?.success && response.pagination) {
         setPurchaseHistory(response.data);
         setPagination({
           page: response.pagination.page,
