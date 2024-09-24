@@ -1,6 +1,22 @@
 import React from 'react';
 
 const UserBetHistory = ({ data, SetComponent }) => {
+
+    const formatDate = (isoString) => {
+        const date = new Date(isoString);
+
+        // Extract year, month, day, hours, minutes, and seconds
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // months are 0-indexed
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        // Format the date as "YYYY-MM-DD HH:mm:ss"
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    };
+
     return (
         <div className="card w-100 rounded">
             {/* Header section with title and back button */}
@@ -70,8 +86,8 @@ const UserBetHistory = ({ data, SetComponent }) => {
                                                     <span className='text-success mx-1'>{data?.bidAmount}</span>
                                                     <span className='text-danger'>(-{data?.value})</span>
                                                 </td>
-                                                <td>{data?.placeDate}</td> 
-                                                <td>{data?.matchDate}</td> 
+                                                <td>{formatDate(data?.placeDate)}</td> 
+                                                <td>{formatDate(data?.matchDate)}</td> 
                                             </tr>
                                         ))
                                     ) : (

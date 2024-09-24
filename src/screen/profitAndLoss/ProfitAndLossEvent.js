@@ -90,7 +90,7 @@ const ProfitAndLossEvent = ({
                 </div>
               ) : (
                 // Table
-                <div className="QA_section">
+                  <div className="QA_section" style={{ overflowX: "auto" }}>
                   <div className="QA_table mb_30">
                     <table className="table lms_table_active3 table-bordered">
                       <thead>

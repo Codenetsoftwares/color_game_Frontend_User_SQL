@@ -81,7 +81,7 @@ const ProfitAndLoss = () => {
 
   const handlePageChange = (page) => {
     console.log("Changing to page:", page);
-    setState((prevState) => ({
+    SetProfitLossData((prevState) => ({
       ...prevState,
       currentPage: page,
     }));
