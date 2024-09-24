@@ -27,15 +27,16 @@ class UrlConstant {
   profitAndLossRunner = `${this.url_dev}/profit_loss_runner`;
   user_carrouselImageDynamic = `${this.url_dev}/admin/slider-text-img`;
   resetPassword = `${this.url_dev}/reset-password`;
-  getLotteries=`${this.url_dev}/get-lottery-game`;
-  purchaseTicket=`${this.url_dev}/purchase-lottery`;
-  historyTicket=`${this.url_dev}/user-purchases`
-  alertPromptAmount=`${this.url_dev}/${this.user}-lotteryAmount`;
+  getLotteries = `${this.url_dev}/get-lottery-game`;
+  purchaseTicket = `${this.url_dev}/purchase-lottery`;
+  historyTicket = `${this.url_dev}/user-purchases`;
+  alertPromptAmount = `${this.url_dev}/${this.user}-lotteryAmount`;
   getProfitLossGame = `${this.url_dev}/profit_loss`;
   getProfitLossRunner = `${this.url_dev}/profit_loss_runner`;
   getProfitLossEvent = `${this.url_dev}/profit_loss_market`;
   getAccountStatement = `${this.url_dev}/${this.user}-account-statement`;
   getUserBetList = `${this.url_dev}/get-user-betList`;
+  getOpenBetsGame = `${this.url_dev}/${this.user}-currentOrder-games`;
 }
 
 const urls = new UrlConstant();
