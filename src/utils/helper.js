@@ -1,3 +1,5 @@
+import { useLocation, useNavigate } from "react-router-dom"
+
 export const customErrorHandler = (error) => {
     let errorMessage = ''
     if (error?.response?.data?.message) {
@@ -9,3 +11,14 @@ export const customErrorHandler = (error) => {
     }
     return errorMessage
 }
+
+// export const customStatusCodeHandler = (response) => {
+//     console.log("response", response)
+//     const navigate = useNavigate()
+//     if (response === 40030) {
+//         navigate("/home")
+//     } else if (response === 400321) {
+//         navigate("/home")
+//     } else {
+//     }
+// }
