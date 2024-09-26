@@ -70,7 +70,7 @@ export async function makeCall(callName, callParams, isToast) {
       sessionStorage.setItem('sessionExpierd', true);
       window.location.href = '/home';
     }
-    if ([40030, 400322].includes(json.panelStatusCode)){
+    if ([strings.Anouncement_StatusCode, strings.Void_StatusCode].includes(json.panelStatusCode)) {
       window.location.href = '/home'
     }
     if (json.success === false) {

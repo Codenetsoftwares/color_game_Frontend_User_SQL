@@ -20,7 +20,14 @@ export class StringConstants {
   UserWallet = 'UserWallet';
   isLoading = 'isLoading';
   RESET_PASSWORD = 'RESET_PASSWORD';
+
+
+  // custom status code
+  Void_StatusCode = 400322
+  Anouncement_StatusCode = 40030
+
 }
+
 
 let strings = new StringConstants();
 export default strings;
