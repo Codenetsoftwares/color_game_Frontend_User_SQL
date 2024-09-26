@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify';
 import urls from '../utils/constant/UrlConstant';
 import strings from '../utils/constant/stringConstant';
+import { customStatusCodeHandler } from './helper';
 
 export function getNoAuthCallParams(methodType, body) {
   const params = {
@@ -63,10 +64,14 @@ export async function makeCall(callName, callParams, isToast) {
     });
 
     const json = await response.json();
+    console.log("error", json)
     if (json.responseCode === 401) {
       localStorage.clear();
       sessionStorage.setItem('sessionExpierd', true);
       window.location.href = '/home';
+    }
+    if ([strings.Anouncement_StatusCode, strings.Void_StatusCode].includes(json.panelStatusCode)) {
+      window.location.href = '/home'
     }
     if (json.success === false) {
       toast.error(json.errMessage);
