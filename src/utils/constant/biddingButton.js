@@ -1,10 +1,10 @@
 const BiddingBtnData = [
   {
-    name: '50',
+    name: '100',
     col: 'col-3 col-sm-1 col-md-1 col-lg-1 col-xl-1',
   },
   {
-    name: '100',
+    name: '150',
     col: 'col-3 col-sm-1 col-md-1 col-lg-1 col-xl-1',
   },
   {
