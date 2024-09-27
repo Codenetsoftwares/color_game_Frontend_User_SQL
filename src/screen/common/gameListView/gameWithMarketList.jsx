@@ -296,17 +296,32 @@ function GameWithMarketList({ isSingleMarket }) {
       difference = Math.abs(highestNegetive) - Math.abs(preExposure);
       bal = store.user.wallet.balance - difference;
     }
+
     if (!store.user.isLogin) {
       setLoginModal(true);
       return;
     }
-    if (bidding.amount == 0 || bidding.amount < 0 || bidding.amount == "") {
-      if (bidding.amount == 0) {
-        toast.error("Amount can not be zero");
+
+    // Amount validation with minimum bet condition
+    if (
+      bidding.amount == 0 ||
+      bidding.amount < 0 ||
+      bidding.amount === "" ||
+      bidding.amount < 100
+    ) {
+      if (bidding.amount === 0) {
+        toast.error("Amount cannot be zero");
+        return;
+      } else if (bidding.amount < 0) {
+        toast.error("Amount should be a positive value.");
+        return;
+      } else if (bidding.amount === "") {
+        toast.error("Amount cannot be empty.");
+        return;
+      } else if (bidding.amount < 100) {
+        toast.error("Minimum Amount for Bet should be 100.");
         return;
       }
-      toast.error("Amount fields cannot be empty.");
-      return;
     }
 
     if (
@@ -316,7 +331,7 @@ function GameWithMarketList({ isSingleMarket }) {
         store.user?.wallet?.balance &&
         !(toggle.mode === "back"))
     ) {
-      toast.error("insufficient amount.");
+      toast.error("Insufficient amount.");
       return;
     }
 
@@ -390,15 +405,17 @@ function GameWithMarketList({ isSingleMarket }) {
               ...response.data,
             },
           });
-          toast.info(`wallet updated ${response.message}`);
+          toast.info(`Wallet updated: ${response.message}`);
         } else {
-          toast.error(`wallet updated ${response.message}`);
+          toast.error(`Wallet update failed: ${response.message}`);
         }
       })();
     }
+
     handleCancel();
     handleRefreshOrGetInitialData();
   };
+
 
   function getMarketDetailByMarketId() {
     function convertUTCtoIST(utcDateString) {

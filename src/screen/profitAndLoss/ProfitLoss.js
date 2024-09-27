@@ -11,7 +11,7 @@ import { customErrorHandler } from "../../utils/helper";
 import UserBetHistory from "./UserBetHistory";
 import { toast } from "react-toastify";
 
-const ProfitLoss = ({
+const  ProfitLoss = ({
   UserName,
   setEndDate,
   setStartDate,
