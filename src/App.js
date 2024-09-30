@@ -22,6 +22,7 @@ import LotteryCards from "./screen/Lottery/LotteryCards";
 import LotteryPurchaseLayout from "./screen/Lottery/LotteryPurchaseLayout";
 import ProfitAndLoss from "./screen/profitAndLoss/profitAndLoss";
 import AccountStatement from "./screen/AccountStatement";
+import ActivityLog from "./screen/activityLog/activityLog";
 
 function App() {
   return (
@@ -107,6 +108,15 @@ function App() {
             element={
               <PrivateRoute>
                 <AccountStatement />
+              </PrivateRoute>
+            }
+          />
+          
+          <Route
+            path="/activityLog"
+            element={
+              <PrivateRoute>
+                <ActivityLog />
               </PrivateRoute>
             }
           />

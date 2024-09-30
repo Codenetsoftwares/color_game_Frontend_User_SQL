@@ -87,7 +87,11 @@ const NavBar = () => {
   const handleBetHistoryClick = () => {
     navigate("/betHistory");
   };
-// handle lottery purchase history 
+
+  const handleActivityLog = () => {
+    navigate("/activityLog");
+  };
+  // handle lottery purchase history
   function handleLotteryPurchasesClick() {
     // Add your logic here for navigating or opening the lottery purchases page/modal
     console.log("Navigating to My Lottery Purchases");
@@ -177,12 +181,6 @@ const NavBar = () => {
           <button
             class="btn btn-primary d-lg-none hambargerIcon"
             type="button"
-            // data-bs-toggle="offcanvas"
-            // data-bs-target="#offcanvasExample"
-            // aria-controls="offcanvasExample"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasScrolling"
-            aria-controls="offcanvasScrolling"
             style={{ width: "44px" }}
           >
             ☰
@@ -192,7 +190,13 @@ const NavBar = () => {
           </a>
           <button class="navbar-toggler border-0" type="button">
             {store.user.isLogin && store.user.isLogin ? (
-              <span class="d-flex flex-column align-items-start">
+              <span
+                class="d-flex flex-column align-items-start"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasDarkNavbar"
+                aria-controls="offcanvasDarkNavbar"
+                aria-label="Toggle navigation"
+              >
                 <span
                   className="btn btn-info mb-1 w-100 d-flex align-items-center text-white border border-white"
                   style={{
@@ -201,10 +205,6 @@ const NavBar = () => {
                       "linear-gradient(to top, #114551, #226575, #34879b, #47abc2, #5ad0eb)",
                     fontSize: "13px",
                   }}
-                  data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasDarkNavbar"
-                  aria-controls="offcanvasDarkNavbar"
-                  aria-label="Toggle navigation"
                 >
                   <FaCoins style={{ color: "#fec015" }} />
                   &nbsp; {store?.user?.wallet?.balance}
@@ -217,10 +217,6 @@ const NavBar = () => {
                       "linear-gradient(to top, #114551, #226575, #34879b, #47abc2, #5ad0eb)",
                     fontSize: "13px",
                   }}
-                  data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasDarkNavbar"
-                  aria-controls="offcanvasDarkNavbar"
-                  aria-label="Toggle navigation"
                 >
                   Exp : {exposureAndWallet.exposure ?? 0}
                 </span>
@@ -367,26 +363,26 @@ const NavBar = () => {
               </li>
 
               <li
-              class="nav-item mb-3 align-items-start"
-              style={{
-                color: "white", // Initial color
-                cursor: "pointer",
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.color = "#2FA8BA"; // Color change on hover
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.color = "white"; // Color back to original on mouse out
-              }}
-              onClick={handleLotteryPurchasesClick}
-            >
-              <FaTicketAlt
+                class="nav-item mb-3 align-items-start"
                 style={{
-                  color: "#fec015",
+                  color: "white", // Initial color
+                  cursor: "pointer",
                 }}
-              />{" "}
-              My Lottery Purchases
-            </li>
+                onMouseOver={(e) => {
+                  e.currentTarget.style.color = "#2FA8BA"; // Color change on hover
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.color = "white"; // Color back to original on mouse out
+                }}
+                onClick={handleLotteryPurchasesClick}
+              >
+                <FaTicketAlt
+                  style={{
+                    color: "#fec015",
+                  }}
+                />{" "}
+                My Lottery Purchases
+              </li>
 
               <li
                 class="nav-item mb-3 align-items-start"
@@ -433,6 +429,7 @@ const NavBar = () => {
 
               <li
                 class="nav-item mb-3 align-items-start"
+                onClick={handleActivityLog}
                 style={{
                   color: "white", // Initial color
                   cursor: "pointer",

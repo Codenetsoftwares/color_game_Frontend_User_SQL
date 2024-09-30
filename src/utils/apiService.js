@@ -400,3 +400,13 @@ export async function lottery_Amount_Alert(body = {}, isToast = true) {
     throw error;
   }
 }
+
+export async function activityLog(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(`${urls.activityLog}`, callParams, isToast);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
