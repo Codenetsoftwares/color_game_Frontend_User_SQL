@@ -171,8 +171,8 @@ const LotteryPage = () => {
                   <div className="col-lg-3 col-md-4 col-sm-6 mb-4" key={index}>
                     <LotteryTicket
                       lotteryName={lottery.name}
-                      drawDate={new Date(lottery.date).toLocaleDateString()}
-                      drawTime={new Date(lottery.date).toLocaleTimeString()}
+                      drawDate={new Date(lottery.drawDate).toISOString().split('T')[0]}
+                      drawTime={lottery.drawTime}
                       firstPrize={lottery.firstPrize}
                       ticketNumbers={lottery.ticketNumber}
                       price={lottery.price}
