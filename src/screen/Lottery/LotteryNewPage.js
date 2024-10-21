@@ -1,115 +1,312 @@
-import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import { ticketService } from '../../utils/helper';
-
+import React, { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./LotteryNewPage.css";
+import { SearchLotteryTicketUser } from "../../utils/apiService";
 
 const LotteryNewPage = () => {
-  // State for each dropdown
-  const [firstHouse, setFirstHouse] = useState('');
-  const [secondHouse, setSecondHouse] = useState('');
-  const [thirdHouse, setThirdHouse] = useState('');
-  const [semSelection, setSemSelection] = useState('');
-  const [generatedTickets, setGeneratedTickets] = useState([]);
+  const [sem, setSem] = useState("");
+  const [group, setGroup] = useState("");
+  const [series, setSeries] = useState("");
+  const [number, setNumber] = useState("");
+  const [isGroupPickerVisible, setIsGroupPickerVisible] = useState(false);
+  const [isSeriesPickerVisible, setIsSeriesPickerVisible] = useState(false);
+  const [isNumberPickerVisible, setIsNumberPickerVisible] = useState(false);
+  const [responseData, setResponseData] = useState(null);
+  const [showSearch, setShowSearch] = useState(true);
 
-  // Options for each house
-  const firstHouseOptions = Array.from({ length: 62 }, (_, i) => i + 38); // 38 to 99
-  const secondHouseOptions = ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'J', 'K', 'L'];
-  const semOptions = [5, 10, 25, 50, 100, 200];
+  const handleSemChange = (e) => {
+    setSem(e.target.value);
+  };
 
-  // Function to generate random tickets
-  const generateTickets = () => {
-    const ticketNumbers = [];
-    const semCount = parseInt(semSelection) || 0;
+  const handleGroupSelect = (value) => {
+    setGroup(value);
+    setIsGroupPickerVisible(false);
+  };
 
-    for (let i = 0; i < semCount; i++) {
-      const randomFiveDigitNumber = String(Math.floor(Math.random() * 100000)).padStart(5, '0');
-      const ticket = `${firstHouse}-${secondHouse}-${randomFiveDigitNumber}`;
-      ticketNumbers.push(ticket);
+  const renderGroupGrid = () => {
+    const groups = Array.from({ length: 62 }, (_, i) => (i + 38).toString());
+    return (
+      <div className="calendar-grid">
+        {groups.map((group) => (
+          <button
+            key={group}
+            className="calendar-cell"
+            onClick={() => handleGroupSelect(group)}
+          >
+            {group}
+          </button>
+        ))}
+      </div>
+    );
+  };
+
+  const handleSeriesSelect = (value) => {
+    setSeries(value);
+    setIsSeriesPickerVisible(false);
+  };
+
+  const renderSeriesGrid = () => {
+    const letters = ["A", "B", "C", "D", "E", "G", "H", "J", "K", "L"];
+    return (
+      <div className="calendar-grid">
+        {letters.map((letter) => (
+          <button
+            key={letter}
+            className="calendar-cell"
+            onClick={() => handleSeriesSelect(letter)}
+          >
+            {letter}
+          </button>
+        ))}
+      </div>
+    );
+  };
+
+  const handleNumberSelect = (value) => {
+    setNumber(value);
+    setIsNumberPickerVisible(false);
+  };
+
+  const renderNumberGrid = (
+    rangeStart = 0,
+    rangeEnd = 99999,
+    isFormatted = true
+  ) => {
+    const numbers = Array.from(
+      { length: rangeEnd - rangeStart + 1 },
+      (_, i) => i + rangeStart
+    );
+    return (
+      <div className="calendar-grid">
+        {numbers.map((number) => (
+          <button
+            key={number}
+            className="calendar-cell"
+            onClick={() =>
+              handleNumberSelect(
+                isFormatted
+                  ? number.toString().padStart(5, "0")
+                  : number.toString()
+              )
+            }
+          >
+            {isFormatted
+              ? number.toString().padStart(5, "0")
+              : number.toString()}
+          </button>
+        ))}
+      </div>
+    );
+  };
+
+  const handleSearch = async () => {
+    const requestBody = {
+      group: group ? parseInt(group) : null,
+      series: series ? series : null,
+      number: number ? parseInt(number) : null,
+      sem: sem ? parseInt(sem) : null,
+    };
+
+    try {
+      const response = await SearchLotteryTicketUser(requestBody);
+
+      setResponseData(response.data);
+      setShowSearch(false);
+    } catch (error) {
+      console.error("Error:", error);
     }
+  };
 
-    setGeneratedTickets(ticketNumbers);
+  const handleBuy = () => {
+    // Handle the logic for purchasing the lottery ticket
+    alert("Ticket purchased successfully!");
   };
 
   return (
-    <div className="container mt-5">
-      <h2 className="text-center mb-4">Lottery Ticket Generator</h2>
+    <div
+      className="container-fluid d-flex justify-content-center mt-5"
+      style={{ minHeight: "75vh", backgroundColor: "#f0f4f8" }}
+    >
+      <div
+        className="border border-3 rounded-3 shadow-lg "
+        style={{
+          padding: "40px",
+          width: "80%",
+          maxWidth: "800px",
+          backgroundColor: "#ffffff",
+        }}
+      >
+        {showSearch ? (
+          <>
+            <div className="text-center mb-4">
+              <h2
+                className="mb-1"
+                style={{
+                  color: "#ff4500",
+                  fontWeight: "bold",
+                  letterSpacing: "1px",
+                  fontSize: "2rem",
+                }}
+              >
+                🎉 Find Your Lucky Ticket & Win Big! 🎟️
+              </h2>
+              <p
+                style={{
+                  color: "#3b6e91",
+                  fontSize: "1.2rem",
+                  marginTop: "10px",
+                }}
+              >
+                Search for tickets and grab the chance to change your future
+                today!
+              </p>
+            </div>
 
-      <div className="row mb-3">
-        {/* First House: 38-99 */}
-        <div className="col-md-2">
-          <label>1st House (38-99)</label>
-          <select className="form-control" value={firstHouse} onChange={(e) => setFirstHouse(e.target.value)}>
-            <option value="">Select</option>
-            {firstHouseOptions.map((num) => (
-              <option key={num} value={num}>
-                {num}
-              </option>
-            ))}
-          </select>
-        </div>
+            {/* SEM Input Field */}
+            <div className="mb-4">
+              <label
+                htmlFor="sem"
+                className="form-label"
+                style={{ color: "#4682B4", fontWeight: "bold" }}
+              >
+                Select SEM
+              </label>
+              <select
+                id="sem"
+                className="form-select"
+                value={sem}
+                onChange={handleSemChange}
+              >
+                <option value="">Choose SEM</option>
+                <option value="5">5 SEM</option>
+                <option value="10">10 SEM</option>
+                <option value="25">25 SEM</option>
+                <option value="50">50 SEM</option>
+                <option value="100">100 SEM</option>
+                <option value="200">200 SEM</option>
+              </select>
+            </div>
 
-        {/* Second House: A-L (excluding I, F) */}
-        <div className="col-md-2">
-          <label>2nd House (A-L)</label>
-          <select className="form-control" value={secondHouse} onChange={(e) => setSecondHouse(e.target.value)}>
-            <option value="">Select</option>
-            {secondHouseOptions.map((char) => (
-              <option key={char} value={char}>
-                {char}
-              </option>
-            ))}
-          </select>
-        </div>
+            {/* Group Input */}
+            <div className="mb-3">
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  placeholder="Group"
+                  className="form-control"
+                  value={group}
+                  onFocus={() => setIsGroupPickerVisible(true)}
+                  readOnly
+                />
+                {isGroupPickerVisible && (
+                  <div className="picker-dropdown">{renderGroupGrid()}</div>
+                )}
+              </div>
+            </div>
 
-        {/* Third House: 00000-99999 */}
-        <div className="col-md-3">
-          <label>3rd House (00000-99999)</label>
-          <input
-            className="form-control"
-            type="text"
-            value={thirdHouse}
-            onChange={(e) => setThirdHouse(e.target.value)}
-            placeholder="Enter number (00000-99999)"
-          />
-        </div>
+            {/* Series Input */}
+            <div className="mb-3">
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  placeholder="Series"
+                  className="form-control"
+                  value={series}
+                  onFocus={() => setIsSeriesPickerVisible(true)}
+                  readOnly
+                />
+                {isSeriesPickerVisible && (
+                  <div className="picker-dropdown">{renderSeriesGrid()}</div>
+                )}
+              </div>
+            </div>
 
-        {/* SEM Selection */}
-        <div className="col-md-2">
-          <label>SEM Selection</label>
-          <select className="form-control" value={semSelection} onChange={(e) => setSemSelection(e.target.value)}>
-            <option value="">Select SEM</option>
-            {semOptions.map((sem) => (
-              <option key={sem} value={sem}>
-                {sem}
-              </option>
-            ))}
-          </select>
-        </div>
+            {/* Number Input */}
+            <div className="mb-4">
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  placeholder="Number"
+                  className="form-control"
+                  value={number}
+                  onFocus={() => setIsNumberPickerVisible(true)}
+                  readOnly
+                />
+                {isNumberPickerVisible && (
+                  <div className="picker-dropdown">{renderNumberGrid()}</div>
+                )}
+              </div>
+            </div>
 
-        {/* "In General" Box */}
-        <div className="col-md-3 d-flex align-items-end">
-          <button className="btn btn-primary btn-block" onClick={generateTickets}>
-            Generate Tickets
-          </button>
-        </div>
-      </div>
+            {/* Search Button */}
+            <div className="text-center">
+              <button
+                className="btn btn-primary"
+                onClick={handleSearch}
+                style={{
+                  backgroundColor: "#4682B4",
+                  padding: "10px 40px",
+                  fontWeight: "bold",
+                }}
+              >
+                Search
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="text-center">
+            <h4 style={{ color: "#4682B4", fontWeight: "bold" }}>
+              Search Results:
+            </h4>
+            <div className="mt-3">
+              {responseData &&
+              responseData.tickets &&
+              responseData.tickets.length > 0 ? (
+                <>
+                  <h5>Tickets:</h5>
+                  <ul>
+                    {responseData.tickets.map((ticket, index) => (
+                      <li key={index} style={{ color: "#3b6e91" }}>
+                        {ticket}
+                      </li>
+                    ))}
+                  </ul>
+                  <h5>
+                    Price:{" "}
+                    <span style={{ color: "#3b6e91" }}>
+                      ₹{responseData.price}
+                    </span>
+                  </h5>
+                  <h5>
+                    SEM:{" "}
+                    <span style={{ color: "#3b6e91" }}>{responseData.sem}</span>
+                  </h5>
 
-      {/* Display Generated Tickets */}
-      <div className="row mt-4">
-        <div className="col">
-          <h5>Generated Tickets</h5>
-          {generatedTickets.length > 0 ? (
-            <ul className="list-group">
-              {generatedTickets.map((ticket, index) => (
-                <li key={index} className="list-group-item">
-                  {ticket}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No tickets generated yet.</p>
-          )}
-        </div>
+                  {/* Buy Button */}
+                  <div className="text-center mt-4">
+                    <button
+                      className="btn btn-success"
+                      onClick={handleBuy}
+                      style={{
+                        backgroundColor: "#28a745",
+                        padding: "10px 40px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Buy
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <h5 style={{ color: "#3b6e91" }}>
+                  {responseData
+                    ? responseData.message || "No tickets found."
+                    : "No data available."}
+                </h5>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

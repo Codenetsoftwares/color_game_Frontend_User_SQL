@@ -410,3 +410,14 @@ export async function activityLog(body = {}, isToast = false) {
     throw error;
   }
 }
+
+
+export async function SearchLotteryTicketUser(body={}, isToast = true) {
+  try {
+    const callParams = await getCallParams(strings.POST, body, isToast);
+    const response = await makeCall(urls.searchTicketUser, callParams, isToast);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
