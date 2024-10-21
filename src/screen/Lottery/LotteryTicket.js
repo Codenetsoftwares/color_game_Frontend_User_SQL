@@ -18,6 +18,10 @@ const LotteryTicket = ({
       const showNextTicket = () => {
         setCurrentTicket((prev) => (prev + 1) % ticketNumbers.length);
       };
+       // Calculate sem based on the current ticket index (starting from 1)
+       const getSemForTicket = (ticketIndex) => {
+        return ticketIndex + 1; // Index 0 is Sem 1, Index 1 is Sem 2, and so on
+      };
   return (
     <div
     className="dear-lottery-card"
@@ -207,6 +211,36 @@ const LotteryTicket = ({
             Draw Time: {drawTime}
           </p>
         )}
+
+<p
+          style={{
+            fontSize: '16px',
+            fontWeight: 'bold',
+            color: '#FFD700',
+            margin: '5px 0',
+          }}
+        >
+          Ticket No: {ticketNumbers[0]} {/* First ticket number is always visible */}
+        </p>
+
+          {/* Graffiti Icon with Swipe Up Animation */}
+          <div
+            className="graffiti-icon"
+            style={{
+              cursor: 'pointer',
+              animation: 'swipeUp 1s infinite', // CSS animation for the swipe-up hand gesture
+              margin: '10px 0',
+            }}
+            // onClick={handleGraffitiClick} // Opens the modal when clicked
+          >
+            <img
+              src="/path-to-graffiti-icon.png" // Replace with actual graffiti icon path
+              alt="Swipe up to see all tickets"
+              style={{ width: '40px', height: '40px' }}
+            />
+          </div>
+
+      
       </div>
     )}
     <div
@@ -289,8 +323,22 @@ const LotteryTicket = ({
                   }}
                 >
                   Ticket No: {ticketNumbers[currentTicket]}
+                  <br/>
+                  sem:{getSemForTicket(currentTicket)}
                 </p>
+                
               </div>
+              <div
+          style={{
+            fontSize: '16px',
+            fontWeight: 'bold',
+            color: '#fff',
+            margin: '5px 0',
+          }}
+        >
+          Sem: {getSemForTicket(currentTicket)} {/* Display initial sem */}
+        </div>
+       
             </div>
           </div>
         </div>

@@ -1,9 +1,10 @@
 import React from 'react';
 import AppDrawer from '../common/appDrawer';
 import { useAppContext } from '../../contextApi/context';
-import LotteryPage from './LotteryPage';
 import Layout from '../layout/layout';
 import './LotteryCards.css';
+import LotteryNewPage from './LotteryNewPage';
+import LotteryPage from './LotteryPage';
 
 
 const  LotteryCards = ()  => {
@@ -12,8 +13,10 @@ const  LotteryCards = ()  => {
     function newGame(){
         return (
             <div className={`global-margin-top${store.user.isLogin ? '-logged' : ''} `}>
-        <AppDrawer showCarousel={true} isMobile={false} isHomePage={true}>
-         <LotteryPage/>
+        <AppDrawer showCarousel={false} isMobile={false} isHomePage={true}>
+         {/* <LotteryPage/> */}
+         <LotteryNewPage/>
+
         </AppDrawer>
       </div>
           );
