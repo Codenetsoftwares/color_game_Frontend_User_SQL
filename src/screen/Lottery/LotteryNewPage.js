@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./LotteryNewPage.css";
-import { SearchLotteryTicketUser } from "../../utils/apiService";
+import { LotteryRange, SearchLotteryTicketUser } from "../../utils/apiService";
+import SearchLotteryResult from "./SearchLotteryResult";
+import { getLotteryRange } from "../../utils/getInitiateState";
 
 const LotteryNewPage = () => {
   const [sem, setSem] = useState("");
@@ -13,36 +15,32 @@ const LotteryNewPage = () => {
   const [isNumberPickerVisible, setIsNumberPickerVisible] = useState(false);
   const [responseData, setResponseData] = useState(null);
   const [showSearch, setShowSearch] = useState(true);
+  const [lotteryRange, setLotteryRange] = useState(getLotteryRange());
+  const [filteredNumbers, setFilteredNumbers] = useState([]);
+  const [debounceTimeout, setDebounceTimeout] = useState(null);
+
+  // Fetch lottery range data when component mounts
+  useEffect(() => {
+    handleLotteryRange();
+  }, []);
+
+  const handleLotteryRange = async () => {
+    const data = await LotteryRange();
+    setLotteryRange({
+      group_start: data.data.group_start,
+      group_end: data.data.group_end,
+      series_start: data.data.series_start,
+      series_end: data.data.series_end,
+      number_start: data.data.number_start,
+      number_end: data.data.number_end,
+    });
+
+    // Initialize the filtered numbers based on the fetched range
+    setFilteredNumbers(generateNumbers(data.data.number_start, data.data.number_end));
+  };
 
   const handleSemChange = (e) => {
     setSem(e.target.value);
-  };
-
-  const handleGroupSelect = (value) => {
-    setGroup(value);
-    setIsGroupPickerVisible(false);
-  };
-
-  const renderGroupGrid = () => {
-    const groups = Array.from({ length: 62 }, (_, i) => (i + 38).toString());
-    return (
-      <div className="calendar-grid">
-        {groups.map((group) => (
-          <button
-            key={group}
-            className="calendar-cell"
-            onClick={() => handleGroupSelect(group)}
-          >
-            {group}
-          </button>
-        ))}
-      </div>
-    );
-  };
-
-  const handleSeriesSelect = (value) => {
-    setSeries(value);
-    setIsSeriesPickerVisible(false);
   };
 
   const renderSeriesGrid = () => {
@@ -62,39 +60,96 @@ const LotteryNewPage = () => {
     );
   };
 
+  const groupLength = Math.abs(lotteryRange.group_end - lotteryRange.group_start) + 1;
+
+  const renderGroupGrid = () => {
+    const groups = Array.from({ length: groupLength }, (_, i) => (i + lotteryRange.group_start).toString());
+    return (
+      <div className="calendar-grid">
+        {groups.map((group) => (
+          <button
+            key={group}
+            className="calendar-cell"
+            onClick={() => handleGroupSelect(group)}
+          >
+            {group}
+          </button>
+        ))}
+      </div>
+    );
+  };
+
+
+  const handleGroupSelect = (value) => {
+    setGroup(value);
+    setIsGroupPickerVisible(false);
+  };
+
+  const handleSeriesSelect = (value) => {
+    setSeries(value);
+    setIsSeriesPickerVisible(false);
+  };
+
+  // Generate numbers within a specified range
+  const generateNumbers = (start, end) => {
+    const actualStart = Math.min(start, end);
+    const actualEnd = Math.max(start, end);
+    return Array.from({ length: actualEnd - actualStart + 1 }, (_, i) => i + actualStart);
+  };
+
+  // Debounced filter function for number input
+  const debouncedFilter = useCallback(
+    (value) => {
+      if (debounceTimeout) {
+        clearTimeout(debounceTimeout); // Clear previous timeout
+      }
+
+      const timeout = setTimeout(() => {
+        const filtered = generateNumbers(lotteryRange.number_start, lotteryRange.number_end).filter((num) =>
+          num.toString().startsWith(value)
+        );
+        setFilteredNumbers(filtered);
+      }, 1500);
+
+      setDebounceTimeout(timeout);
+    },
+    [lotteryRange, debounceTimeout]
+  );
+
+  const handleNumberInputChange = (e) => {
+    const inputValue = e.target.value;
+    setNumber(inputValue);
+
+    // Only filter if input is not empty
+    if (inputValue !== "") {
+      debouncedFilter(inputValue);
+    } else {
+      // Reset to full list if input is empty
+      setFilteredNumbers(generateNumbers(lotteryRange.number_start, lotteryRange.number_end));
+    }
+  };
+
   const handleNumberSelect = (value) => {
     setNumber(value);
     setIsNumberPickerVisible(false);
   };
 
-  const renderNumberGrid = (
-    rangeStart = 0,
-    rangeEnd = 99999,
-    isFormatted = true
-  ) => {
-    const numbers = Array.from(
-      { length: rangeEnd - rangeStart + 1 },
-      (_, i) => i + rangeStart
-    );
+  const renderNumberGrid = () => {
     return (
       <div className="calendar-grid">
-        {numbers.map((number) => (
-          <button
-            key={number}
-            className="calendar-cell"
-            onClick={() =>
-              handleNumberSelect(
-                isFormatted
-                  ? number.toString().padStart(5, "0")
-                  : number.toString()
-              )
-            }
-          >
-            {isFormatted
-              ? number.toString().padStart(5, "0")
-              : number.toString()}
-          </button>
-        ))}
+        {filteredNumbers.length === 0 ? (
+          <div className="text-center">No Results</div> 
+        ) : (
+          filteredNumbers.map((num) => (
+            <button
+              key={num}
+              className="calendar-cell"
+              onClick={() => handleNumberSelect(num.toString().padStart(5, "0"))}
+            >
+              {num.toString().padStart(5, "0")}
+            </button>
+          ))
+        )}
       </div>
     );
   };
@@ -102,24 +157,18 @@ const LotteryNewPage = () => {
   const handleSearch = async () => {
     const requestBody = {
       group: group ? parseInt(group) : null,
-      series: series ? series : null,
-      number: number ? parseInt(number) : null,
+      series: series || null,
+      number: number || null,
       sem: sem ? parseInt(sem) : null,
     };
 
     try {
       const response = await SearchLotteryTicketUser(requestBody);
-
       setResponseData(response.data);
       setShowSearch(false);
     } catch (error) {
       console.error("Error:", error);
     }
-  };
-
-  const handleBuy = () => {
-    // Handle the logic for purchasing the lottery ticket
-    alert("Ticket purchased successfully!");
   };
 
   return (
@@ -128,7 +177,7 @@ const LotteryNewPage = () => {
       style={{ minHeight: "75vh", backgroundColor: "#f0f4f8" }}
     >
       <div
-        className="border border-3 rounded-3 shadow-lg "
+        className="border border-3 rounded-3 shadow-lg"
         style={{
           padding: "40px",
           width: "80%",
@@ -139,51 +188,24 @@ const LotteryNewPage = () => {
         {showSearch ? (
           <>
             <div className="text-center mb-4">
-              <h2
-                className="mb-1"
-                style={{
-                  color: "#ff4500",
-                  fontWeight: "bold",
-                  letterSpacing: "1px",
-                  fontSize: "2rem",
-                }}
-              >
+              <h2 className="mb-1" style={{ color: "#ff4500", fontWeight: "bold", letterSpacing: "1px", fontSize: "2rem" }}>
                 🎉 Find Your Lucky Ticket & Win Big! 🎟️
               </h2>
-              <p
-                style={{
-                  color: "#3b6e91",
-                  fontSize: "1.2rem",
-                  marginTop: "10px",
-                }}
-              >
-                Search for tickets and grab the chance to change your future
-                today!
+              <p style={{ color: "#3b6e91", fontSize: "1.2rem", marginTop: "10px" }}>
+                Search for tickets and grab the chance to change your future today!
               </p>
             </div>
 
             {/* SEM Input Field */}
             <div className="mb-4">
-              <label
-                htmlFor="sem"
-                className="form-label"
-                style={{ color: "#4682B4", fontWeight: "bold" }}
-              >
+              <label htmlFor="sem" className="form-label" style={{ color: "#4682B4", fontWeight: "bold" }}>
                 Select SEM
               </label>
-              <select
-                id="sem"
-                className="form-select"
-                value={sem}
-                onChange={handleSemChange}
-              >
+              <select id="sem" className="form-select" value={sem} onChange={handleSemChange}>
                 <option value="">Choose SEM</option>
-                <option value="5">5 SEM</option>
-                <option value="10">10 SEM</option>
-                <option value="25">25 SEM</option>
-                <option value="50">50 SEM</option>
-                <option value="100">100 SEM</option>
-                <option value="200">200 SEM</option>
+                {[5, 10, 25, 50, 100, 200].map((value) => (
+                  <option key={value} value={value}>{`${value} SEM`}</option>
+                ))}
               </select>
             </div>
 
@@ -198,9 +220,7 @@ const LotteryNewPage = () => {
                   onFocus={() => setIsGroupPickerVisible(true)}
                   readOnly
                 />
-                {isGroupPickerVisible && (
-                  <div className="picker-dropdown">{renderGroupGrid()}</div>
-                )}
+                {isGroupPickerVisible && <div className="picker-dropdown">{renderGroupGrid()}</div>}
               </div>
             </div>
 
@@ -215,9 +235,7 @@ const LotteryNewPage = () => {
                   onFocus={() => setIsSeriesPickerVisible(true)}
                   readOnly
                 />
-                {isSeriesPickerVisible && (
-                  <div className="picker-dropdown">{renderSeriesGrid()}</div>
-                )}
+                {isSeriesPickerVisible && <div className="picker-dropdown">{renderSeriesGrid()}</div>}
               </div>
             </div>
 
@@ -230,11 +248,9 @@ const LotteryNewPage = () => {
                   className="form-control"
                   value={number}
                   onFocus={() => setIsNumberPickerVisible(true)}
-                  readOnly
+                  onChange={handleNumberInputChange}
                 />
-                {isNumberPickerVisible && (
-                  <div className="picker-dropdown">{renderNumberGrid()}</div>
-                )}
+                {isNumberPickerVisible && <div className="picker-dropdown">{renderNumberGrid()}</div>}
               </div>
             </div>
 
@@ -243,69 +259,14 @@ const LotteryNewPage = () => {
               <button
                 className="btn btn-primary"
                 onClick={handleSearch}
-                style={{
-                  backgroundColor: "#4682B4",
-                  padding: "10px 40px",
-                  fontWeight: "bold",
-                }}
+                style={{ backgroundColor: "#4682B4", padding: "10px 40px", fontWeight: "bold" }}
               >
                 Search
               </button>
             </div>
           </>
         ) : (
-          <div className="text-center">
-            <h4 style={{ color: "#4682B4", fontWeight: "bold" }}>
-              Search Results:
-            </h4>
-            <div className="mt-3">
-              {responseData &&
-              responseData.tickets &&
-              responseData.tickets.length > 0 ? (
-                <>
-                  <h5>Tickets:</h5>
-                  <ul>
-                    {responseData.tickets.map((ticket, index) => (
-                      <li key={index} style={{ color: "#3b6e91" }}>
-                        {ticket}
-                      </li>
-                    ))}
-                  </ul>
-                  <h5>
-                    Price:{" "}
-                    <span style={{ color: "#3b6e91" }}>
-                      ₹{responseData.price}
-                    </span>
-                  </h5>
-                  <h5>
-                    SEM:{" "}
-                    <span style={{ color: "#3b6e91" }}>{responseData.sem}</span>
-                  </h5>
-
-                  {/* Buy Button */}
-                  <div className="text-center mt-4">
-                    <button
-                      className="btn btn-success"
-                      onClick={handleBuy}
-                      style={{
-                        backgroundColor: "#28a745",
-                        padding: "10px 40px",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Buy
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <h5 style={{ color: "#3b6e91" }}>
-                  {responseData
-                    ? responseData.message || "No tickets found."
-                    : "No data available."}
-                </h5>
-              )}
-            </div>
-          </div>
+          <SearchLotteryResult responseData={responseData} />
         )}
       </div>
     </div>

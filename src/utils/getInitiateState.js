@@ -171,3 +171,14 @@ export function getUserBetHistory(body = {}) {
     data: [],
   };
 }
+
+export function getLotteryRange(body = {}) {
+  return {
+    group_start: null,
+    group_end: null,
+    series_start: "",
+    series_end: "",
+    number_start: "",
+    number_end: "",
+  };
+}

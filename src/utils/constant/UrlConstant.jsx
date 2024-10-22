@@ -39,6 +39,7 @@ class UrlConstant {
   getOpenBetsGame = `${this.url_dev}/${this.user}-currentOrder-games`;
   activityLog = `${this.url_dev}/user-activitylog`;
   searchTicketUser = `${this.url_dev}/search-ticket`;
+  lotteryRange = `${this.url_dev}/get-range`;
 }
 
 const urls = new UrlConstant();
