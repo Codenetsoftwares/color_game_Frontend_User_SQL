@@ -1,6 +1,7 @@
 import React from 'react'
 
 const SearchLotteryResult = ({ responseData }) => {
+    console.log('response data line 4 lottery result',responseData)
     return (
         <div className="text-center">
             <h4 style={{ color: "#4682B4", fontWeight: "bold" }}>

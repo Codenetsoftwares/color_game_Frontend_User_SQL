@@ -1,52 +1,51 @@
-import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './Search.css'; 
-import { SearchLotteryTicket } from '../../Utils/apiService';
+mport React, { useCallback, useEffect, useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./LotteryNewPage.css";
+import { LotteryRange, SearchLotteryTicketUser } from "../../utils/apiService";
+import SearchLotteryResult from "./SearchLotteryResult";
+import { getLotteryRange } from "../../utils/getInitiateState";
 
-const Search = () => {
-  const [sem, setSem] = useState('');
-  const [group, setGroup] = useState(''); 
-  const [series, setSeries] = useState(''); 
-  const [number, setNumber] = useState(''); 
+const LotteryNewPage = () => {
+  const [sem, setSem] = useState("");
+  const [group, setGroup] = useState("");
+  const [series, setSeries] = useState("");
+  const [number, setNumber] = useState("");
   const [isGroupPickerVisible, setIsGroupPickerVisible] = useState(false);
   const [isSeriesPickerVisible, setIsSeriesPickerVisible] = useState(false);
   const [isNumberPickerVisible, setIsNumberPickerVisible] = useState(false);
-  const [responseData, setResponseData] = useState(null); // State to hold API response
-  const [showSearch, setShowSearch] = useState(true); // State to control visibility of search box
+  const [responseData, setResponseData] = useState(null);
+  const [showSearch, setShowSearch] = useState(true);
+  const [lotteryRange, setLotteryRange] = useState(getLotteryRange());
+  const [filteredNumbers, setFilteredNumbers] = useState([]);
+  const [debounceTimeout, setDebounceTimeout] = useState(null);
+  console.log('===>>> lottery range',lotteryRange)
+
+  // Fetch lottery range data when component mounts
+  useEffect(() => {
+    handleLotteryRange();
+  }, []);
+
+  const handleLotteryRange = async () => {
+    const data = await LotteryRange();
+    setLotteryRange({
+      group_start: data.data.group_start,
+      group_end: data.data.group_end,
+      series_start: data.data.series_start,
+      series_end: data.data.series_end,
+      number_start: data.data.number_start,
+      number_end: data.data.number_end,
+    });
+
+    // Initialize the filtered numbers based on the fetched range
+    setFilteredNumbers(generateNumbers(data.data.number_start, data.data.number_end));
+  };
 
   const handleSemChange = (e) => {
     setSem(e.target.value);
   };
 
-  const handleGroupSelect = (value) => {
-    setGroup(value);
-    setIsGroupPickerVisible(false);
-  };
-
-  const renderGroupGrid = () => {
-    const groups = Array.from({ length: 62 }, (_, i) => (i + 38).toString());
-    return (
-      <div className="calendar-grid">
-        {groups.map((group) => (
-          <button
-            key={group}
-            className="calendar-cell"
-            onClick={() => handleGroupSelect(group)}
-          >
-            {group}
-          </button>
-        ))}
-      </div>
-    );
-  };
-
-  const handleSeriesSelect = (value) => {
-    setSeries(value);
-    setIsSeriesPickerVisible(false);
-  };
-
   const renderSeriesGrid = () => {
-    const letters = ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'J', 'K', 'L'];
+    const letters = ["A", "B", "C", "D", "E", "G", "H", "J", "K", "L"];
     return (
       <div className="calendar-grid">
         {letters.map((letter) => (
@@ -62,24 +61,96 @@ const Search = () => {
     );
   };
 
+  const groupLength = Math.abs(lotteryRange.group_end - lotteryRange.group_start) + 1;
+
+  const renderGroupGrid = () => {
+    const groups = Array.from({ length: groupLength }, (_, i) => (i + lotteryRange.group_start).toString());
+    return (
+      <div className="calendar-grid">
+        {groups.map((group) => (
+          <button
+            key={group}
+            className="calendar-cell"
+            onClick={() => handleGroupSelect(group)}
+          >
+            {group}
+          </button>
+        ))}
+      </div>
+    );
+  };
+
+
+  const handleGroupSelect = (value) => {
+    setGroup(value);
+    setIsGroupPickerVisible(false);
+  };
+
+  const handleSeriesSelect = (value) => {
+    setSeries(value);
+    setIsSeriesPickerVisible(false);
+  };
+
+  // Generate numbers within a specified range
+  const generateNumbers = (start, end) => {
+    const actualStart = Math.min(start, end);
+    const actualEnd = Math.max(start, end);
+    return Array.from({ length: actualEnd - actualStart + 1 }, (_, i) => i + actualStart);
+  };
+
+  // Debounced filter function for number input
+  const debouncedFilter = useCallback(
+    (value) => {
+      if (debounceTimeout) {
+        clearTimeout(debounceTimeout); // Clear previous timeout
+      }
+
+      const timeout = setTimeout(() => {
+        const filtered = generateNumbers(lotteryRange.number_start, lotteryRange.number_end).filter((num) =>
+          num.toString().startsWith(value)
+        );
+        setFilteredNumbers(filtered);
+      }, 1500);
+
+      setDebounceTimeout(timeout);
+    },
+    [lotteryRange, debounceTimeout]
+  );
+
+  const handleNumberInputChange = (e) => {
+    const inputValue = e.target.value;
+    setNumber(inputValue);
+
+    // Only filter if input is not empty
+    if (inputValue !== "") {
+      debouncedFilter(inputValue);
+    } else {
+      // Reset to full list if input is empty
+      setFilteredNumbers(generateNumbers(lotteryRange.number_start, lotteryRange.number_end));
+    }
+  };
+
   const handleNumberSelect = (value) => {
     setNumber(value);
     setIsNumberPickerVisible(false);
   };
 
-  const renderNumberGrid = (rangeStart = 0, rangeEnd = 99999, isFormatted = true) => {
-    const numbers = Array.from({ length: rangeEnd - rangeStart + 1 }, (_, i) => i + rangeStart);
+  const renderNumberGrid = () => {
     return (
       <div className="calendar-grid">
-        {numbers.map((number) => (
-          <button
-            key={number}
-            className="calendar-cell"
-            onClick={() => handleNumberSelect(isFormatted ? number.toString().padStart(5, '0') : number.toString())}
-          >
-            {isFormatted ? number.toString().padStart(5, '0') : number.toString()}
-          </button>
-        ))}
+        {filteredNumbers.length === 0 ? (
+          <div className="text-center">No Results</div> 
+        ) : (
+          filteredNumbers.map((num) => (
+            <button
+              key={num}
+              className="calendar-cell"
+              onClick={() => handleNumberSelect(num.toString().padStart(5, "0"))}
+            >
+              {num.toString().padStart(5, "0")}
+            </button>
+          ))
+        )}
       </div>
     );
   };
@@ -87,48 +158,55 @@ const Search = () => {
   const handleSearch = async () => {
     const requestBody = {
       group: group ? parseInt(group) : null,
-      series: series ? series : null,
-      number: number ? parseInt(number) : null,
+      series: series || null,
+      number: number || null,
       sem: sem ? parseInt(sem) : null,
     };
 
-    console.log("Request Body:", requestBody); 
-
     try {
-      const response = await SearchLotteryTicket(requestBody);
-      console.log('Success:', response);
-      
-      // Set the response data and hide the search box
+      const response = await SearchLotteryTicketUser(requestBody);
       setResponseData(response.data);
-
       setShowSearch(false);
     } catch (error) {
-      console.error('Error:', error);
-      // Handle the error if necessary
+      console.error("Error:", error);
     }
   };
-  console.log('====>>> line 110',responseData)
 
   return (
-    <div className="container-fluid d-flex justify-content-center" style={{ minHeight: '75vh', backgroundColor: '#f0f4f8' }}>
-      <div className="border border-3 rounded-3 shadow-lg" style={{ padding: '40px', width: '80%', maxWidth: '800px', backgroundColor: '#ffffff' }}>
+    <div
+      className="container-fluid d-flex justify-content-center mt-5"
+      style={{ minHeight: "75vh", backgroundColor: "#f0f4f8" }}
+    >
+      <div
+        className="border border-3 rounded-3 shadow-lg"
+        style={{
+          padding: "40px",
+          width: "80%",
+          maxWidth: "800px",
+          backgroundColor: "#ffffff",
+        }}
+      >
         {showSearch ? (
           <>
             <div className="text-center mb-4">
-              <h2 className="mb-1" style={{ color: '#4682B4', fontWeight: 'bold', letterSpacing: '1px' }}>🔍 Search Lottery Tickets</h2>
+              <h2 className="mb-1" style={{ color: "#ff4500", fontWeight: "bold", letterSpacing: "1px", fontSize: "2rem" }}>
+                🎉 Find Your Lucky Ticket & Win Big! 🎟️
+              </h2>
+              <p style={{ color: "#3b6e91", fontSize: "1.2rem", marginTop: "10px" }}>
+                Search for tickets and grab the chance to change your future today!
+              </p>
             </div>
 
             {/* SEM Input Field */}
             <div className="mb-4">
-              <label htmlFor="sem" className="form-label" style={{ color: '#4682B4', fontWeight: 'bold' }}>Select SEM</label>
+              <label htmlFor="sem" className="form-label" style={{ color: "#4682B4", fontWeight: "bold" }}>
+                Select SEM
+              </label>
               <select id="sem" className="form-select" value={sem} onChange={handleSemChange}>
                 <option value="">Choose SEM</option>
-                <option value="5">5 SEM</option>
-                <option value="10">10 SEM</option>
-                <option value="25">25 SEM</option>
-                <option value="50">50 SEM</option>
-                <option value="100">100 SEM</option>
-                <option value="200">200 SEM</option>
+                {[5, 10, 25, 50, 100, 200].map((value) => (
+                  <option key={value} value={value}>{${value} SEM}</option>
+                ))}
               </select>
             </div>
 
@@ -143,11 +221,7 @@ const Search = () => {
                   onFocus={() => setIsGroupPickerVisible(true)}
                   readOnly
                 />
-                {isGroupPickerVisible && (
-                  <div className="picker-dropdown">
-                    {renderGroupGrid()}
-                  </div>
-                )}
+                {isGroupPickerVisible && <div className="picker-dropdown">{renderGroupGrid()}</div>}
               </div>
             </div>
 
@@ -162,11 +236,7 @@ const Search = () => {
                   onFocus={() => setIsSeriesPickerVisible(true)}
                   readOnly
                 />
-                {isSeriesPickerVisible && (
-                  <div className="picker-dropdown">
-                    {renderSeriesGrid()}
-                  </div>
-                )}
+                {isSeriesPickerVisible && <div className="picker-dropdown">{renderSeriesGrid()}</div>}
               </div>
             </div>
 
@@ -179,45 +249,29 @@ const Search = () => {
                   className="form-control"
                   value={number}
                   onFocus={() => setIsNumberPickerVisible(true)}
-                  readOnly
+                  onChange={handleNumberInputChange}
                 />
-                {isNumberPickerVisible && (
-                  <div className="picker-dropdown">
-                    {renderNumberGrid()}
-                  </div>
-                )}
+                {isNumberPickerVisible && <div className="picker-dropdown">{renderNumberGrid()}</div>}
               </div>
             </div>
 
-             {/* Search Button */}
-             <div className="text-center">
-              <button className="btn btn-primary" onClick={handleSearch} style={{ backgroundColor: '#4682B4', padding: '10px 40px', fontWeight: 'bold' }}>Search</button>
+            {/* Search Button */}
+            <div className="text-center">
+              <button
+                className="btn btn-primary"
+                onClick={handleSearch}
+                style={{ backgroundColor: "#4682B4", padding: "10px 40px", fontWeight: "bold" }}
+              >
+                Search
+              </button>
             </div>
           </>
         ) : (
-          <div className="text-center">
-            <h4 style={{ color: '#4682B4', fontWeight: 'bold' }}>Search Results:</h4>
-            <div className="mt-3">
-              {responseData && responseData.tickets && responseData.tickets.length > 0 ? ( 
-                <>
-                  <h5>Tickets:</h5>
-                  <ul>
-                    {responseData.tickets.map((ticket, index) => ( 
-                      <li key={index} style={{ color: '#3b6e91' }}>{ticket}</li>
-                    ))}
-                  </ul>
-                  <h5>Price: <span style={{ color: '#3b6e91' }}>₹{responseData.price}</span></h5>
-                  <h5>SEM: <span style={{ color: '#3b6e91' }}>{responseData.sem}</span></h5>
-                </>
-              ) : (
-                <h5 style={{ color: '#3b6e91' }}>{responseData ? responseData.message || 'No tickets found.' : 'No data available.'}</h5>
-              )}
-            </div>
-          </div>
+          <SearchLotteryResult responseData={responseData} />
         )}
       </div>
     </div>
   );
 };
 
-export default Search;
+export default LotteryNewPage;
