@@ -431,3 +431,24 @@ export async function LotteryRange(body = {}, isToast = false) {
     throw error;
   }
 }
+
+
+export async function PurhaseLotteryTicketUser(body={}, isToast = true) {
+  try {
+    const callParams = await getCallParams(strings.POST, body, isToast);
+    const response = await makeCall(urls.buyTicketUser, callParams, isToast);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function lotteryPurchaseHIstoryUserNew(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.POST, body, isToast);
+    const response = await makeCall(urls.userPurchaseHIstory, callParams, isToast);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
