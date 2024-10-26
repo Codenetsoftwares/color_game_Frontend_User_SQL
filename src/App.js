@@ -49,7 +49,7 @@ function App() {
           <Route path="/lottery" element={<LotteryCards />} />
           <Route
             path="/LotteryPurchaseHistory"
-            element={<LotteryPurchaseLayout />}
+            element={<LotteryPurchaseLayout/>}
           />
 
           {/* private routes */}

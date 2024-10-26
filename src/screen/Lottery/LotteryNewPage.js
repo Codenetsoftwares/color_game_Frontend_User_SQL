@@ -21,30 +21,58 @@ const LotteryNewPage = () => {
   const [filteredSeries, setFilteredSeries] = useState([]); // For filtered series
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [seriesList, setSeriesList] = useState([]);
+  console.log('response from this page',responseData)
 
   // Fetch lottery range data when component mounts
   useEffect(() => {
     handleLotteryRange();
   }, []);
 
+  // const handleLotteryRange = async () => {
+  //   const data = await LotteryRange();
+  //   setLotteryRange({
+  //     group_start: data.data.group_start || "",
+  //     group_end: data.data.group_end || "",
+  //     series_start: data.data.series_start || "",
+  //     series_end: data.data.series_end || "",
+  //     number_start: data.data.number_start || 0,
+  //     number_end: data.data.number_end || 0,
+  //   });
+
+  //   // Initialize the filtered numbers and groups based on the fetched range
+  //   setFilteredNumbers(generateNumbers(data.data.number_start, data.data.number_end));
+  //   setFilteredGroups(generateGroups(data.data.group_start, data.data.group_end)); // Initialize groups
+  //   setSeriesList(generateSeries(data.data.series_start, data.data.series_end));
+  //   setFilteredSeries(generateSeries(data.data.series_start, data.data.series_end)); // Initialize series
+  // };
+
   const handleLotteryRange = async () => {
-    const data = await LotteryRange();
-    setLotteryRange({
-      group_start: data.data.group_start,
-      group_end: data.data.group_end,
-      series_start: data.data.series_start,
-      series_end: data.data.series_end,
-      number_start: data.data.number_start,
-      number_end: data.data.number_end,
-    });
-
-    // Initialize the filtered numbers and groups based on the fetched range
-    setFilteredNumbers(generateNumbers(data.data.number_start, data.data.number_end));
-    setFilteredGroups(generateGroups(data.data.group_start, data.data.group_end)); // Initialize groups
-    setSeriesList(generateSeries(data.data.series_start, data.data.series_end));
-    setFilteredSeries(generateSeries(data.data.series_start, data.data.series_end)); // Initialize series
+    try {
+      const data = await LotteryRange();
+      
+      if (data && data.data) {
+        setLotteryRange({
+          group_start: data.data.group_start || "",
+          group_end: data.data.group_end || "",
+          series_start: data.data.series_start || "",
+          series_end: data.data.series_end || "",
+          number_start: data.data.number_start || 0,
+          number_end: data.data.number_end || 0,
+        });
+  
+        // Initialize the filtered numbers and groups based on the fetched range
+        setFilteredNumbers(generateNumbers(data.data.number_start || 0, data.data.number_end || 0));
+        setFilteredGroups(generateGroups(data.data.group_start || 0, data.data.group_end || 0)); 
+        setSeriesList(generateSeries(data.data.series_start || "A", data.data.series_end || "Z"));
+        setFilteredSeries(generateSeries(data.data.series_start || "A", data.data.series_end || "Z"));
+      } else {
+        console.warn("LotteryRange returned null or undefined data");
+      }
+    } catch (error) {
+      console.error("Error fetching lottery range:", error);
+    }
   };
-
+  
   const handleSemChange = (e) => {
     setSem(e.target.value);
   };
@@ -334,7 +362,7 @@ const LotteryNewPage = () => {
             </button>
           </>
         ) : (
-          <SearchLotteryResult data={responseData}  />
+          <SearchLotteryResult responseData={responseData}  />
         )}
       </div>
     </div>

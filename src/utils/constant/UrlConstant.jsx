@@ -29,7 +29,7 @@ class UrlConstant {
   resetPassword = `${this.url_dev}/reset-password`;
   getLotteries = `${this.url_dev}/get-lottery-game`;
   purchaseTicket = `${this.url_dev}/purchase-lottery`;
-  historyTicket = `${this.url_dev}/user-purchases`;
+  historyTicket = `${this.url_dev}/purchase-history`;
   alertPromptAmount = `${this.url_dev}/${this.user}-lotteryAmount`;
   getProfitLossGame = `${this.url_dev}/profit_loss`;
   getProfitLossRunner = `${this.url_dev}/profit_loss_runner`;
@@ -40,6 +40,8 @@ class UrlConstant {
   activityLog = `${this.url_dev}/user-activitylog`;
   searchTicketUser = `${this.url_dev}/search-ticket`;
   lotteryRange = `${this.url_dev}/get-range`;
+  buyTicketUser= `${this.url_dev}/purchase-lottery`;
+  userPurchaseHIstory = `${this.url_dev}/purchase-history`;
 }
 
 const urls = new UrlConstant();
