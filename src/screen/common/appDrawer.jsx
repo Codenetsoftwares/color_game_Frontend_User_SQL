@@ -20,11 +20,21 @@ function AppDrawer({
   const [user_allGames, setUser_allGames] = useState(
     getAllGameDataInitialState()
   );
+  const [lotteryDrawTimes, setLotteryDrawTimes] = useState([]);
   const { dispatch } = useAppContext();
 
   useEffect(() => {
     user_getAllGames();
+    fetchLotteryDrawTimes();
   }, []);
+
+   // Function to fetch draw times from API
+   async function fetchLotteryDrawTimes() {
+    const response = await getLotteryDrawTimesApi();
+    if (response?.success) {
+      setLotteryDrawTimes(response.data); // Update state with draw times data
+    }
+  }
 
   const handleAllId = (gameId, marketId) => {
     dispatch({
@@ -89,6 +99,16 @@ function AppDrawer({
               </div>
             </Link>
           </li>
+             {/* Display lottery draw times */}
+             {lotteryDrawTimes.length > 0 && (
+            <ul className="subMenuItems">
+              {lotteryDrawTimes.map((draw) => (
+                <li key={draw.drawId} className="subMenuHead">
+                  <Link to={`/lottery/${draw.drawId}`}>{draw.drawDate}</Link>
+                </li>
+              ))}
+            </ul>
+          )}
           <li className={toggleStates['inPlay'] ? 'subMenuHead' : 'MenuHead'} onClick={() => handleToggle('inPlay')}>
             <a href="#">In-Play</a>
           </li>

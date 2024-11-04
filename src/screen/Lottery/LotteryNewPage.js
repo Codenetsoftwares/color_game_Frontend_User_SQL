@@ -290,9 +290,9 @@ const LotteryNewPage = () => {
 
             {/* Sem Input */}
             <div className="mb-3">
-              <label className="form-label">Semester</label>
+              <label className="form-label">SEM</label>
               <select className="form-select" value={sem} onChange={handleSemChange}>
-                <option value="">Select Semester</option>
+                <option value="">Select Sem</option>
                 {[5, 10, 25, 50, 100, 200].map((semValue) => (
                   <option key={semValue} value={semValue}>
                     {semValue}

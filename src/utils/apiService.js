@@ -452,3 +452,13 @@ export async function lotteryPurchaseHIstoryUserNew(body = {}, isToast = false) 
     throw error;
   }
 }
+
+export async function getLotteryDrawTimesApi(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.POST, body, isToast);
+    const response = await makeCall(urls.getLotteryDrawTimesApi, callParams, isToast);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
