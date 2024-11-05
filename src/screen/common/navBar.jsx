@@ -97,6 +97,13 @@ const NavBar = () => {
     console.log("Navigating to My Lottery Purchases");
     navigate("/LotteryPurchaseHistory");
   }
+
+
+  function handleResultsClick() {
+    // Add your logic here for navigating or opening the lottery purchases page/modal
+    console.log("Navigating to Winning");
+    navigate("/WinningResult");
+  }
   const handleAccountStatementClick = () => {
     navigate("/accountStatement");
   };
@@ -382,6 +389,28 @@ const NavBar = () => {
                   }}
                 />{" "}
                 My Lottery Purchases
+              </li>
+
+              <li
+                class="nav-item mb-3 align-items-start"
+                style={{
+                  color: "white", // Initial color
+                  cursor: "pointer",
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.color = "#2FA8BA"; // Color change on hover
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.color = "white"; // Color back to original on mouse out
+                }}
+                onClick={handleResultsClick}  
+              >
+                <FaTicketAlt
+                  style={{
+                    color: "#fec015",
+                  }}
+                />{" "}
+                Winning Results
               </li>
 
               <li

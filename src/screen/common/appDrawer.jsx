@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import './appDrawer.css';
-import { user_getAllGamesWithMarketData_api } from '../../utils/apiService';
-import { Link } from 'react-router-dom';
-import { getAllGameDataInitialState } from '../../utils/getInitiateState';
-import HamburgerNavBar from './hamburgerNavBar';
-import { useAppContext } from '../../contextApi/context';
-import strings from '../../utils/constant/stringConstant';
-
+import React, { useState, useEffect } from "react";
+import "./appDrawer.css";
+import {
+  getLotteryDrawTimesApi,
+  user_getAllGamesWithMarketData_api,
+} from "../../utils/apiService";
+import { Link } from "react-router-dom";
+import { getAllGameDataInitialState } from "../../utils/getInitiateState";
+import HamburgerNavBar from "./hamburgerNavBar";
+import { useAppContext } from "../../contextApi/context";
+import strings from "../../utils/constant/stringConstant";
 
 function AppDrawer({
   children,
@@ -20,11 +22,22 @@ function AppDrawer({
   const [user_allGames, setUser_allGames] = useState(
     getAllGameDataInitialState()
   );
+  const [lotteryDrawTimes, setLotteryDrawTimes] = useState([]);
+  const [lotteryToggle, setLotteryToggle] = useState(false); // New state for toggling draw times
   const { dispatch } = useAppContext();
 
   useEffect(() => {
     user_getAllGames();
+    fetchLotteryDrawTimes();
   }, []);
+
+  // Function to fetch draw times from API
+  async function fetchLotteryDrawTimes() {
+    const response = await getLotteryDrawTimesApi();
+    if (response?.success) {
+      setLotteryDrawTimes(response.data); // Update state with draw times data
+    }
+  }
 
   const handleAllId = (gameId, marketId) => {
     dispatch({
@@ -48,6 +61,10 @@ function AppDrawer({
     if (isMobile) {
       // close app drawer logic should call here
     }
+  };
+
+  const handleLotteryToggle = () => {
+    setLotteryToggle(!lotteryToggle);
   };
   const carouselImages = [
     "https://editorial.uefa.com/resources/0288-19b92e19420c-1a9cbc155530-1000/ucl_easportsuclglory_ingamerender_16x9.png",
@@ -81,15 +98,29 @@ function AppDrawer({
         </span>
 
         <ul>
-        <li className="MenuHead lottery-section">
-            <Link to="/lottery" >
-              <div className="lottery-wrapper">
-                <span className="new-tag">New</span>
-                Lottery
-              </div>
-            </Link>
-          </li>
-          <li className={toggleStates['inPlay'] ? 'subMenuHead' : 'MenuHead'} onClick={() => handleToggle('inPlay')}>
+        <li className="MenuHead lottery-section" onClick={handleLotteryToggle}>
+  <div className="lottery-wrapper">
+    <span className="new-tag">New</span>
+    Lottery
+    <span className={`dropdown-icon ${lotteryToggle ? "active" : ""}`}>▼</span>
+  </div>
+</li>
+{/* Display lottery draw times */}
+{lotteryToggle && lotteryDrawTimes.length > 0 && (
+  <ul className="subMenuItems">
+    {lotteryDrawTimes.map((draw) => (
+      <li key={draw.drawId} className="subMenuHead">
+        <Link to={`/lottery/${draw.drawId}`}>
+        <span className="draw-date-icon">🎟️</span> 
+        {draw.drawDate}</Link>
+      </li>
+    ))}
+  </ul>
+)}
+          <li
+            className={toggleStates["inPlay"] ? "subMenuHead" : "MenuHead"}
+            onClick={() => handleToggle("inPlay")}
+          >
             <a href="#">In-Play</a>
           </li>
           {user_allGames.map((gameObj, index) => (
@@ -149,7 +180,7 @@ function AppDrawer({
                   src={image}
                   className="d-block w-100"
                   alt={`carousel-image-${index}`}
-                  style={{ height: '400px', objectFit: 'fill' }}
+                  style={{ height: "400px", objectFit: "fill" }}
                 />
               </div>
             ))}
