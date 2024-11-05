@@ -23,6 +23,7 @@ import LotteryPurchaseLayout from "./screen/Lottery/LotteryPurchaseLayout";
 import ProfitAndLoss from "./screen/profitAndLoss/profitAndLoss";
 import AccountStatement from "./screen/AccountStatement";
 import ActivityLog from "./screen/activityLog/activityLog";
+import ResultLayout from "./screen/Lottery/ResultLayout";
 
 function App() {
   return (
@@ -46,10 +47,15 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/passwordReset" element={<ResetPassword />} />
           <Route path="/gameView/:gameName/:id" element={<GameView />} />
-          <Route path="/lottery" element={<LotteryCards />} />
+          <Route  path="/lottery/:drawId" element={<LotteryCards />} />
           <Route
             path="/LotteryPurchaseHistory"
             element={<LotteryPurchaseLayout/>}
+          />
+
+<Route
+            path="/WinningResult"
+            element={<ResultLayout/>}
           />
 
           {/* private routes */}

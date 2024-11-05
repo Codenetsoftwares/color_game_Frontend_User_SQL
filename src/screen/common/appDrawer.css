@@ -80,11 +80,14 @@
   border-radius: 8px;
   margin: 10px 0;
   list-style-type: none;
+  cursor: pointer; /* Change cursor to pointer for better UX */
+  transition: background-color 0.3s; /* Smooth transition on hover */
 }
 
 .lottery-wrapper {
   display: flex;
   align-items: center;
+  justify-content: space-between; /* Space between text and icon */
 }
 
 .new-tag {
@@ -96,6 +99,50 @@
   border-radius: 12px;
   margin-right: 10px;
   animation: blink 1s infinite;
+}
+
+.lottery-section:hover {
+  background-color: #cceeff; /* Change background color on hover */
+}
+
+.dropdown-icon {
+  margin-left: 10px; /* Space between text and icon */
+  transition: transform 0.3s; /* Smooth transition for rotation */
+}
+
+.dropdown-icon.active {
+  transform: rotate(180deg); /* Rotate icon when active */
+}
+
+.subMenuItems {
+  padding-left: 20px; /* Indent submenu items for differentiation */
+  list-style-type: none; /* Remove default bullets */
+}
+
+.subMenuHead {
+  padding: 10px 14px;
+  font-size: 15px;
+  color: #444;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #e6f7ff, #fff); /* Light background */
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.subMenuHead:hover {
+  background: linear-gradient(135deg, #ffd700, #ffa500); /* Gold/Orange gradient */
+  color: #333;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2); /* Adds a shadow on hover */
+}
+
+/* Draw date icon styling */
+.draw-date-icon {
+  font-size: 18px;
+  color: #ff6347; /* Coral color for a vibrant look */
 }
 
 .lottery-section a::after {

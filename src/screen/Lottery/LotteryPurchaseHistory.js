@@ -78,7 +78,7 @@ const LotteryPurchaseHistory = () => {
         <thead style={{ backgroundColor: '#4682B4', color: '#fff', fontWeight: 'bold', textAlign: 'center' }}>
           <tr>
             <th>Serial Number</th>
-            <th>Draw Date</th>
+            <th>Draw Time</th>
             <th>Price</th>
             <th>SEM</th>
             <th>Ticket Numbers</th>
