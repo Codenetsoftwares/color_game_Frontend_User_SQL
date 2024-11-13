@@ -362,7 +362,7 @@ const LotteryNewPage = ({ marketId }) => {
             </button>
           </>
         ) : (
-            <SearchLotteryResult responseData={responseData} marketId={marketId} />
+            <SearchLotteryResult responseData={responseData} marketId={marketId} setShowSearch={setShowSearch}/>
         )}
       </div>
     </div>

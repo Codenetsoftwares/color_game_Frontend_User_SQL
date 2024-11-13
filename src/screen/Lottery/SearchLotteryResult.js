@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { PurhaseLotteryTicketUser } from "../../utils/apiService";
 import { useNavigate } from "react-router-dom";
 
-const SearchLotteryResult = ({ responseData, marketId }) => {
+const SearchLotteryResult = ({ responseData, marketId, setShowSearch }) => {
   const navigate = useNavigate();
   const [purchaseResponse, setPurchaseResponse] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ const SearchLotteryResult = ({ responseData, marketId }) => {
       console.log("API response:", response);
       setPurchaseResponse(response);
       setTimeout(() => {
-        // window.location.reload();
+        setShowSearch(prev=>!prev)
       }, 2000);
     } catch (error) {
       console.error("Error purchasing ticket:", error);
