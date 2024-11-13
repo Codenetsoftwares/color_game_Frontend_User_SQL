@@ -47,7 +47,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/passwordReset" element={<ResetPassword />} />
           <Route path="/gameView/:gameName/:id" element={<GameView />} />
-          <Route  path="/lottery/:drawId" element={<LotteryCards />} />
+          <Route  path="/lottery/:marketId" element={<LotteryCards />} />
           <Route
             path="/LotteryPurchaseHistory"
             element={<LotteryPurchaseLayout/>}

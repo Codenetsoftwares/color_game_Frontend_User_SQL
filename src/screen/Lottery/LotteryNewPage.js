@@ -5,7 +5,7 @@ import { LotteryRange, SearchLotteryTicketUser } from "../../utils/apiService";
 import SearchLotteryResult from "./SearchLotteryResult";
 import { getLotteryRange } from "../../utils/getInitiateState";
 
-const LotteryNewPage = () => {
+const LotteryNewPage = ({ marketId }) => {
   const [sem, setSem] = useState("");
   const [group, setGroup] = useState("");
   const [series, setSeries] = useState("");
@@ -362,7 +362,7 @@ const LotteryNewPage = () => {
             </button>
           </>
         ) : (
-          <SearchLotteryResult responseData={responseData}  />
+            <SearchLotteryResult responseData={responseData} marketId={marketId} />
         )}
       </div>
     </div>
