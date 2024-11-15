@@ -1,4 +1,4 @@
-mport React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./LotteryNewPage.css";
 import { LotteryRange, SearchLotteryTicketUser } from "../../utils/apiService";
@@ -205,7 +205,7 @@ const LotteryNewPage = () => {
               <select id="sem" className="form-select" value={sem} onChange={handleSemChange}>
                 <option value="">Choose SEM</option>
                 {[5, 10, 25, 50, 100, 200].map((value) => (
-                  <option key={value} value={value}>{${value} SEM}</option>
+                  <option key={value} value={value}>{`${value} SEM`}</option>
                 ))}
               </select>
             </div>
