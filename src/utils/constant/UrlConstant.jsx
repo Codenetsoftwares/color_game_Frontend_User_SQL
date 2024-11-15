@@ -40,11 +40,10 @@ class UrlConstant {
   activityLog = `${this.url_dev}/user-activitylog`;
   searchTicketUser = `${this.url_dev}/search-ticket`;
   lotteryRange = `${this.url_dev}/get-range`;
-  buyTicketUser= `${this.url_dev}/purchase-lottery`;
+  buyTicketUser = `${this.url_dev}/purchase-lottery`;
   userPurchaseHIstory = `${this.url_dev}/purchase-history`;
-  getLotteryDrawTimesApi = `${this.url_dev}/user-drawDates`;
+  getLotteryMarketsApi = `${this.url_dev}/${this.user}-getAllMarket`;
   getPrizeResult = `${this.url_dev}/prize-results`;
-
 }
 
 const urls = new UrlConstant();

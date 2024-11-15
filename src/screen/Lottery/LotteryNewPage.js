@@ -5,7 +5,7 @@ import { LotteryRange, SearchLotteryTicketUser } from "../../utils/apiService";
 import SearchLotteryResult from "./SearchLotteryResult";
 import { getLotteryRange } from "../../utils/getInitiateState";
 
-const LotteryNewPage = () => {
+const LotteryNewPage = ({ marketId }) => {
   const [sem, setSem] = useState("");
   const [group, setGroup] = useState("");
   const [series, setSeries] = useState("");
@@ -21,50 +21,35 @@ const LotteryNewPage = () => {
   const [filteredSeries, setFilteredSeries] = useState([]); // For filtered series
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [seriesList, setSeriesList] = useState([]);
-  console.log('response from this page',responseData)
+  console.log('response from this page', responseData)
 
   // Fetch lottery range data when component mounts
   useEffect(() => {
     handleLotteryRange();
   }, []);
 
-  // const handleLotteryRange = async () => {
-  //   const data = await LotteryRange();
-  //   setLotteryRange({
-  //     group_start: data.data.group_start || "",
-  //     group_end: data.data.group_end || "",
-  //     series_start: data.data.series_start || "",
-  //     series_end: data.data.series_end || "",
-  //     number_start: data.data.number_start || 0,
-  //     number_end: data.data.number_end || 0,
-  //   });
-
-  //   // Initialize the filtered numbers and groups based on the fetched range
-  //   setFilteredNumbers(generateNumbers(data.data.number_start, data.data.number_end));
-  //   setFilteredGroups(generateGroups(data.data.group_start, data.data.group_end)); // Initialize groups
-  //   setSeriesList(generateSeries(data.data.series_start, data.data.series_end));
-  //   setFilteredSeries(generateSeries(data.data.series_start, data.data.series_end)); // Initialize series
-  // };
-
   const handleLotteryRange = async () => {
     try {
       const data = await LotteryRange();
-      
+
       if (data && data.data) {
+        console.log(data.data)
+        const filteredObject = data.data.find((item) => { 
+          return (item.marketId === marketId) });
         setLotteryRange({
-          group_start: data.data.group_start || "",
-          group_end: data.data.group_end || "",
-          series_start: data.data.series_start || "",
-          series_end: data.data.series_end || "",
-          number_start: data.data.number_start || 0,
-          number_end: data.data.number_end || 0,
+          group_start: filteredObject?.group_start ,
+          group_end: filteredObject?.group_end ,
+          series_start: filteredObject?.series_start ,
+          series_end: filteredObject?.series_end ,
+          number_start: filteredObject?.number_start,
+          number_end: filteredObject?.number_end,
         });
-  
+
         // Initialize the filtered numbers and groups based on the fetched range
-        setFilteredNumbers(generateNumbers(data.data.number_start || 0, data.data.number_end || 0));
-        setFilteredGroups(generateGroups(data.data.group_start || 0, data.data.group_end || 0)); 
-        setSeriesList(generateSeries(data.data.series_start || "A", data.data.series_end || "Z"));
-        setFilteredSeries(generateSeries(data.data.series_start || "A", data.data.series_end || "Z"));
+        setFilteredNumbers(generateNumbers(filteredObject?.number_start || 0, filteredObject?.number_end || 0));
+        setFilteredGroups(generateGroups(filteredObject?.group_start || 0, filteredObject?.group_end || 0)); 
+        setSeriesList(generateSeries(filteredObject?.series_start || "A", filteredObject?.series_end || "Z"));
+        setFilteredSeries(generateSeries(filteredObject?.series_start || "A", filteredObject?.series_end || "Z"));
       } else {
         console.warn("LotteryRange returned null or undefined data");
       }
@@ -72,7 +57,7 @@ const LotteryNewPage = () => {
       console.error("Error fetching lottery range:", error);
     }
   };
-  
+
   const handleSemChange = (e) => {
     setSem(e.target.value);
   };
@@ -362,7 +347,7 @@ const LotteryNewPage = () => {
             </button>
           </>
         ) : (
-          <SearchLotteryResult responseData={responseData}  />
+          <SearchLotteryResult responseData={responseData} marketId={marketId} setShowSearch={setShowSearch} />
         )}
       </div>
     </div>

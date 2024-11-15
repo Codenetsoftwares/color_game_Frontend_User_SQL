@@ -64,7 +64,6 @@ export async function makeCall(callName, callParams, isToast) {
     });
 
     const json = await response.json();
-    console.log("error", json)
     if (json.responseCode === 401) {
       localStorage.clear();
       sessionStorage.setItem('sessionExpierd', true);

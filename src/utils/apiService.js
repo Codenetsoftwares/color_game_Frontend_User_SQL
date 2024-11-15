@@ -412,7 +412,7 @@ export async function activityLog(body = {}, isToast = false) {
 }
 
 
-export async function SearchLotteryTicketUser(body={}, isToast = true) {
+export async function SearchLotteryTicketUser(body = {}, isToast = true) {
   try {
     const callParams = await getCallParams(strings.POST, body, isToast);
     const response = await makeCall(urls.searchTicketUser, callParams, isToast);
@@ -433,10 +433,10 @@ export async function LotteryRange(body = {}, isToast = false) {
 }
 
 
-export async function PurhaseLotteryTicketUser(body={}, isToast = true) {
+export async function PurhaseLotteryTicketUser(body = {}, isToast = true) {
   try {
     const callParams = await getCallParams(strings.POST, body, isToast);
-    const response = await makeCall(urls.buyTicketUser, callParams, isToast);
+    const response = await makeCall(`${urls.buyTicketUser}/${body.marketId}`, callParams, isToast);
     return response;
   } catch (error) {
     throw error;
@@ -468,10 +468,10 @@ export async function lotteryPurchaseHIstoryUserNew(body = {}, isToast = false) 
 
 
 
-export async function getLotteryDrawTimesApi(body = {}, isToast = false) {
+export async function getLotteryMarketsApi(body = {}, isToast = false) {
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
-    const response = await makeCall(urls.getLotteryDrawTimesApi, callParams, isToast);
+    const response = await makeCall(urls.getLotteryMarketsApi, callParams, isToast);
     return response;
   } catch (error) {
     throw error;
