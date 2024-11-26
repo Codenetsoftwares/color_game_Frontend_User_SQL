@@ -1,14 +1,54 @@
 import React, { useState, useEffect } from "react";
+import { GetResultMarket, GetWiningResult } from "../../utils/apiService";
 
 const NewResult = () => {
   const [markets, setMarkets] = useState([]);
   const [selectedMarket, setSelectedMarket] = useState(null);
   const [scrollIndex, setScrollIndex] = useState(0);
+  const [results, setResults] = useState([]); // State to store fetched prize data
+  const [error, setError] = useState(null); 
   const maxVisibleMarkets = 5;
   const visibleMarkets = markets.slice(
     scrollIndex,
     scrollIndex + maxVisibleMarkets
   );
+
+  useEffect(() => {
+    const fetchMarkets = () => {
+     GetResultMarket({ date: new Date().toISOString().slice(0, 10) }).then((response) => {
+        if (response && response.success && response.data) {
+          setMarkets(response.data);
+          setSelectedMarket(response.data[0]); // Default to the first market
+        } else {
+          setError("Failed to fetch markets or no data available.");
+        }
+      });
+    };
+    fetchMarkets();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedMarket) return;
+
+    const fetchResults = () => {
+      setError(null);
+      GetWiningResult({ marketId: selectedMarket.marketId }).then((response) => {
+        if (response && response.success) {
+          if (response.data && response.data.length > 0) {
+            setResults(response.data);
+          } else {
+            setResults([]); 
+            setError("No prize data available.");
+          }
+        } else {
+          setError(response?.message);
+        }
+      });
+    };
+
+    fetchResults();
+  }, [selectedMarket]);
+
   const handleScrollLeft = () => {
     if (scrollIndex > 0) setScrollIndex(scrollIndex - 1);
   };

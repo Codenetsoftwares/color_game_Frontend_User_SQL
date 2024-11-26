@@ -492,3 +492,29 @@ export async function getWinningResult(body = {}, isToast = false) {
     throw error;
   }
 }
+
+export async function GetResultMarket(body = {}) {
+  try {
+    const callParams = await getCallParams(strings.GET, body);
+    const response = await makeCall(
+      `${urls.getResultMarkets}?date=${body.date}`,
+      callParams,
+   
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function GetWiningResult(body) {
+  try {
+    const callParams = await getCallParams(strings.GET, body);
+    const response = await makeCall(
+      `${urls.GetResult}/${body.marketId}`, 
+      callParams);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}

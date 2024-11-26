@@ -11,17 +11,44 @@ const SearchLotteryResult = ({ responseData, marketId }) => {
   const [loading, setLoading] = useState(false);
 
   // Function to handle the purchase button click
-  const handleBuy = async (price) => {
+  // const handleBuy = async (price) => {
+  //   if (!responseData) return;
+
+  //   const body = {
+  //     generateId: responseData.generateId || "defaultId",
+
+  //     lotteryPrice: responseData.price || "5.00",
+  //     marketId: marketId || "defaultMarketId"  // Pass marketId to the body
+
+  //     lotteryPrice: price,
+
+  //   };
+
+  //   try {
+  //     setLoading(true);
+  //     const response = await PurhaseLotteryTicketUser(body); // Use updated body
+  //     console.log("API response:", response);
+  //     setPurchaseResponse(response);
+  //     setTimeout(() => {
+
+  //       // window.location.reload();
+
+  //       setShowSearch(prev=>!prev)
+
+  //     }, 2000);
+  //   } catch (error) {
+  //     console.error("Error purchasing ticket:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  const handleBuy = async () => {
     if (!responseData) return;
 
     const body = {
       generateId: responseData.generateId || "defaultId",
-
       lotteryPrice: responseData.price || "5.00",
       marketId: marketId || "defaultMarketId"  // Pass marketId to the body
-
-      lotteryPrice: price,
-
     };
 
     try {
@@ -30,11 +57,7 @@ const SearchLotteryResult = ({ responseData, marketId }) => {
       console.log("API response:", response);
       setPurchaseResponse(response);
       setTimeout(() => {
-
-        // window.location.reload();
-
-        setShowSearch(prev=>!prev)
-
+        window.location.reload();
       }, 2000);
     } catch (error) {
       console.error("Error purchasing ticket:", error);

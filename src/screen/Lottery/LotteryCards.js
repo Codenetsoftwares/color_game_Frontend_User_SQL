@@ -21,7 +21,7 @@ const  LotteryCards = ()  => {
         <AppDrawer showCarousel={false} isMobile={false} isHomePage={true}>
          {/* <LotteryPage/> */}
 
-         <LotteryNewPage drawId={drawId} />
+         <LotteryNewPage drawId={marketId} />
 
 
         </AppDrawer>
