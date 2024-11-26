@@ -49,7 +49,7 @@ const LotteryResult = () => {
               <Accordion.Header>
                 <strong>{new Date(result.date).toLocaleDateString()}</strong> - Results for {result.announceTime}
               </Accordion.Header>
-              <Accordion.Body>
+              {/* <Accordion.Body>
                 {result.data.map((prize, idx) => (
                   <Card key={idx} className="mb-3">
                     <Card.Header style={{ backgroundColor: '#4682B4', color: '#fff', textAlign: 'center' }}>
@@ -73,7 +73,7 @@ const LotteryResult = () => {
                     </Card.Body>
                   </Card>
                 ))}
-              </Accordion.Body>
+              </Accordion.Body> */}
             </Accordion.Item>
           ))
         ) : (

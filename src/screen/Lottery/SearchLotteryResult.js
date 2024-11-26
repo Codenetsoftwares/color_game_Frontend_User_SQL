@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { PurhaseLotteryTicketUser } from "../../utils/apiService";
 import { useNavigate } from "react-router-dom";
 
-const SearchLotteryResult = ({ responseData }) => {
+const SearchLotteryResult = ({ responseData, marketId }) => {
+  console.log('====>>>> responseData', marketId);
   const navigate = useNavigate();
   const [purchaseResponse, setPurchaseResponse] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -13,16 +14,17 @@ const SearchLotteryResult = ({ responseData }) => {
 
     const body = {
       generateId: responseData.generateId || "defaultId",
-      drawDate: responseData.drawDate || "1.00",
+      lotteryPrice: responseData.price || "5.00",
+      marketId: marketId || "defaultMarketId"  // Pass marketId to the body
     };
 
     try {
       setLoading(true);
-      const response = await PurhaseLotteryTicketUser(body);
+      const response = await PurhaseLotteryTicketUser(body); // Use updated body
       console.log("API response:", response);
       setPurchaseResponse(response);
       setTimeout(() => {
-        window.location.reload();
+        // window.location.reload();
       }, 2000);
     } catch (error) {
       console.error("Error purchasing ticket:", error);
@@ -97,7 +99,6 @@ const SearchLotteryResult = ({ responseData }) => {
           </h5>
         )}
       </div>
- 
     </div>
   );
 };

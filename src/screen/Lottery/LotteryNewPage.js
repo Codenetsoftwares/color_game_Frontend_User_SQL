@@ -5,7 +5,9 @@ import { LotteryRange, SearchLotteryTicketUser } from "../../utils/apiService";
 import SearchLotteryResult from "./SearchLotteryResult";
 import { getLotteryRange } from "../../utils/getInitiateState";
 
-const LotteryNewPage = () => {
+const LotteryNewPage = ({ drawId }) => {
+
+  console.log('====>>>> line number 10',drawId)
   const [sem, setSem] = useState("");
   const [group, setGroup] = useState("");
   const [series, setSeries] = useState("");
@@ -21,12 +23,61 @@ const LotteryNewPage = () => {
   const [filteredSeries, setFilteredSeries] = useState([]); // For filtered series
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [seriesList, setSeriesList] = useState([]);
-  console.log('response from this page',responseData)
+  const [marketIds, setMarketIds] = useState([]); 
+  const [marketName, setMarketName] = useState("");
+  console.log('===>> marketName',marketName)
+
+  console.log('response from this page')
 
   // Fetch lottery range data when component mounts
-  useEffect(() => {
-    handleLotteryRange();
-  }, []);
+ // Handle market data update when drawId changes
+ useEffect(() => {
+  const handleLotteryRange = async () => {
+    try {
+      const data = await LotteryRange(); // Fetch data from the API
+
+      if (data && data.data) {
+        // Filter the data to find the market with the matching marketId
+        const filteredMarket = data.data.filter((item) => item.marketId === drawId);
+
+        if (filteredMarket.length > 0) {
+          const currentMarket = filteredMarket[0];
+
+          // Set the market name
+          setMarketName(currentMarket.marketName || "Unknown Market");
+
+          // Set lottery range values based on the matched market
+          setLotteryRange({
+            group_start: currentMarket.group_start || "",
+            group_end: currentMarket.group_end || "",
+            series_start: currentMarket.series_start || "",
+            series_end: currentMarket.series_end || "",
+            number_start: currentMarket.number_start || 0,
+            number_end: currentMarket.number_end || 0,
+          });
+
+          // Update the filtered values based on the new market range
+          setFilteredNumbers(generateNumbers(currentMarket.number_start, currentMarket.number_end));
+          setFilteredGroups(generateGroups(currentMarket.group_start, currentMarket.group_end));
+          setFilteredSeries(generateSeries(currentMarket.series_start, currentMarket.series_end));
+        } else {
+          console.warn("No market found matching the given drawId");
+          setMarketName("Unknown Market");
+          setLotteryRange({});
+          setFilteredNumbers([]);
+          setFilteredGroups([]);
+          setFilteredSeries([]);
+        }
+      } else {
+        console.warn("LotteryRange returned null or undefined data");
+      }
+    } catch (error) {
+      console.error("Error fetching lottery range:", error);
+    }
+  };
+
+  handleLotteryRange();
+}, [drawId]);
 
   // const handleLotteryRange = async () => {
   //   const data = await LotteryRange();
@@ -46,32 +97,92 @@ const LotteryNewPage = () => {
   //   setFilteredSeries(generateSeries(data.data.series_start, data.data.series_end)); // Initialize series
   // };
 
-  const handleLotteryRange = async () => {
-    try {
-      const data = await LotteryRange();
+  // const handleLotteryRange = async () => {
+  //   try {
+  //     const data = await LotteryRange();
+  //     console.log('====>>> response', data)
       
-      if (data && data.data) {
-        setLotteryRange({
-          group_start: data.data.group_start || "",
-          group_end: data.data.group_end || "",
-          series_start: data.data.series_start || "",
-          series_end: data.data.series_end || "",
-          number_start: data.data.number_start || 0,
-          number_end: data.data.number_end || 0,
-        });
+  //     if (data && data.data) {
+
+  //       const currentMarket = data.data.find((item) => item.marketId === drawId);
+  //       setMarketName(currentMarket?.marketName || "Unknown Market");
+  //       const allMarketIds = data.data.map((item) => item.marketId === drawId);
+  //       setMarketIds(allMarketIds);
+  //       setLotteryRange({
+  //         group_start: data.data.group_start || "",
+  //         group_end: data.data.group_end || "",
+  //         series_start: data.data.series_start || "",
+  //         series_end: data.data.series_end || "",
+  //         number_start: data.data.number_start || 0,
+  //         number_end: data.data.number_end || 0,
+  //       });
   
-        // Initialize the filtered numbers and groups based on the fetched range
-        setFilteredNumbers(generateNumbers(data.data.number_start || 0, data.data.number_end || 0));
-        setFilteredGroups(generateGroups(data.data.group_start || 0, data.data.group_end || 0)); 
-        setSeriesList(generateSeries(data.data.series_start || "A", data.data.series_end || "Z"));
-        setFilteredSeries(generateSeries(data.data.series_start || "A", data.data.series_end || "Z"));
-      } else {
-        console.warn("LotteryRange returned null or undefined data");
-      }
-    } catch (error) {
-      console.error("Error fetching lottery range:", error);
-    }
-  };
+  //       // Initialize the filtered numbers and groups based on the fetched range
+  //       setFilteredNumbers(generateNumbers(data.data.number_start || 0, data.data.number_end || 0));
+  //       setFilteredGroups(generateGroups(data.data.group_start || 0, data.data.group_end || 0)); 
+  //       setSeriesList(generateSeries(data.data.series_start || "A", data.data.series_end || "Z"));
+  //       setFilteredSeries(generateSeries(data.data.series_start || "A", data.data.series_end || "Z"));
+  //     } else {
+  //       console.warn("LotteryRange returned null or undefined data");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching lottery range:", error);
+  //   }
+  // };
+
+  // const handleLotteryRange = async () => {
+  //   try {
+  //     const data = await LotteryRange(); // Fetch data from the API
+  //     console.log("====>>> response", data);
+  
+  //     if (data && data.data) {
+  //       // Filter the data to find the market with the matching marketId
+  //       const filteredMarket = data.data.filter((item) => item.marketId === drawId);
+  
+  //       if (filteredMarket.length > 0) {
+  //         // We assume there's only one match, but filter will return an array.
+  //         const currentMarket = filteredMarket[0];
+  
+  //         // Set the market name or default to "Unknown Market"
+  //         setMarketName(currentMarket.marketName || "Unknown Market");
+  
+  //         // Set lottery range values based on the matched market
+  //         setLotteryRange({
+  //           group_start: currentMarket.group_start || "",
+  //           group_end: currentMarket.group_end || "",
+  //           series_start: currentMarket.series_start || "",
+  //           series_end: currentMarket.series_end || "",
+  //           number_start: currentMarket.number_start || 0,
+  //           number_end: currentMarket.number_end || 0,
+  //         });
+  
+  //         // Generate and set filtered data based on the current market range
+  //         setFilteredNumbers(generateNumbers(currentMarket.number_start || 0, currentMarket.number_end || 0));
+  //         setFilteredGroups(generateGroups(currentMarket.group_start || 0, currentMarket.group_end || 0));
+  //         setSeriesList(generateSeries(currentMarket.series_start || "A", currentMarket.series_end || "Z"));
+  //         setFilteredSeries(generateSeries(currentMarket.series_start || "A", currentMarket.series_end || "Z"));
+  
+  //         // Update the marketIds list (if needed)
+  //         const allMarketIds = data.data.map((item) => item.marketId);
+  //         setMarketIds(allMarketIds);
+  //       } else {
+  //         // If no matching market is found
+  //         console.warn("No market found matching the given drawId");
+  //         setMarketName("Unknown Market");
+  //         setLotteryRange({});
+  //         setFilteredNumbers([]);
+  //         setFilteredGroups([]);
+  //         setSeriesList([]);
+  //         setFilteredSeries([]);
+  //       }
+  //     } else {
+  //       console.warn("LotteryRange returned null or undefined data");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching lottery range:", error);
+  //   }
+  // };
+  
   
   const handleSemChange = (e) => {
     setSem(e.target.value);
@@ -248,6 +359,8 @@ const LotteryNewPage = () => {
       series: series || null,
       number: number || null,
       sem: sem ? parseInt(sem) : null,
+      marketId : drawId
+
     };
 
     try {
@@ -282,6 +395,18 @@ const LotteryNewPage = () => {
         {showSearch ? (
           <>
             <div className="text-center mb-4">
+
+            <h2
+            className="mb-1"
+            style={{
+              color: "#ff4500",
+              fontWeight: "bold",
+              letterSpacing: "1px",
+              fontSize: "2rem",
+            }}
+          >
+            {marketName}
+          </h2>
               <h2 className="mb-1" style={{ color: "#ff4500", fontWeight: "bold", letterSpacing: "1px", fontSize: "2rem" }}>
                 🎉 Find Your Lucky Ticket & Win Big! 🎟️
               </h2>
@@ -358,11 +483,11 @@ const LotteryNewPage = () => {
                 fontWeight: "bold",
               }}
             >
-              Search
+              Search 
             </button>
           </>
         ) : (
-          <SearchLotteryResult responseData={responseData}  />
+          <SearchLotteryResult responseData={responseData} marketId={drawId}  />
         )}
       </div>
     </div>

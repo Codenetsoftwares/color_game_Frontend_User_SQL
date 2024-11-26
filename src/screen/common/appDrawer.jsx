@@ -17,6 +17,9 @@ function AppDrawer({
   isHomePage,
   setShowResetModal,
   showResetModal,
+  onMarketSelect, // New prop for market selection callback
+  
+
 }) {
   const [toggleStates, setToggleStates] = useState({});
   const [user_allGames, setUser_allGames] = useState(
@@ -109,10 +112,10 @@ function AppDrawer({
 {lotteryToggle && lotteryDrawTimes.length > 0 && (
   <ul className="subMenuItems">
     {lotteryDrawTimes.map((draw) => (
-      <li key={draw.drawId} className="subMenuHead">
-        <Link to={`/lottery/${draw.drawId}`}>
+      <li key={draw.marketId} className="subMenuHead">
+        <Link to={`/lottery/${draw.marketId}`}>
         <span className="draw-date-icon">🎟️</span> 
-        {draw.drawDate}</Link>
+        {draw.marketName}</Link>
       </li>
     ))}
   </ul>

@@ -5,17 +5,21 @@ import Layout from '../layout/layout';
 import './LotteryCards.css';
 import LotteryNewPage from './LotteryNewPage';
 import LotteryPage from './LotteryPage';
+import { useParams } from 'react-router-dom';
+
+
 
 
 const  LotteryCards = ()  => {
     const { store } = useAppContext();
+    const { drawId } = useParams(); 
 
     function newGame(){
         return (
             <div className={`global-margin-top${store.user.isLogin ? '-logged' : ''} `}>
         <AppDrawer showCarousel={false} isMobile={false} isHomePage={true}>
          {/* <LotteryPage/> */}
-         <LotteryNewPage/>
+         <LotteryNewPage drawId={drawId} />
 
         </AppDrawer>
       </div>
