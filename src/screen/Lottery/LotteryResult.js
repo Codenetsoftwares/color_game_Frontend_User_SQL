@@ -11,16 +11,21 @@ const LotteryResult = () => {
     try {
       const response = await getWinningResult(); // Make the API call
 
-      // Ensure the response has the correct structure
-      if (response && response.success && response.data) {
-        setResults([response.data]); // Wrap the data object in an array to handle multiple results
+      // Check if the response has the correct structure
+      if (response && response.success && Array.isArray(response.data)) {
+        // Map results to include a default date if missing
+        const updatedResults = response.data.map(result => ({
+          ...result,
+          date: result.date || new Date().toISOString() // Use current date if `date` is not provided
+        }));
+        setResults(updatedResults);
       } else {
         console.error('Unexpected data format in API response:', response);
-        setResults([]); // If the data format is unexpected, set results to an empty array
+        setResults([]);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
-      setResults([]); // Ensure `results` is always an array to avoid map errors
+      setResults([]);
     } finally {
       setLoading(false);
     }
@@ -49,6 +54,7 @@ const LotteryResult = () => {
               <Accordion.Header>
                 <strong>{new Date(result.date).toLocaleDateString()}</strong> - Results for {result.announceTime}
               </Accordion.Header>
+
               {/* <Accordion.Body>
                 {result.data.map((prize, idx) => (
                   <Card key={idx} className="mb-3">
@@ -74,6 +80,7 @@ const LotteryResult = () => {
                   </Card>
                 ))}
               </Accordion.Body> */}
+
             </Accordion.Item>
           ))
         ) : (

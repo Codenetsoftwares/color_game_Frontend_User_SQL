@@ -2,20 +2,26 @@ import React, { useState } from "react";
 import { PurhaseLotteryTicketUser } from "../../utils/apiService";
 import { useNavigate } from "react-router-dom";
 
+
 const SearchLotteryResult = ({ responseData, marketId }) => {
   console.log('====>>>> responseData', marketId);
+
   const navigate = useNavigate();
   const [purchaseResponse, setPurchaseResponse] = useState(null);
   const [loading, setLoading] = useState(false);
 
   // Function to handle the purchase button click
-  const handleBuy = async () => {
+  const handleBuy = async (price) => {
     if (!responseData) return;
 
     const body = {
       generateId: responseData.generateId || "defaultId",
+
       lotteryPrice: responseData.price || "5.00",
       marketId: marketId || "defaultMarketId"  // Pass marketId to the body
+
+      lotteryPrice: price,
+
     };
 
     try {
@@ -24,7 +30,11 @@ const SearchLotteryResult = ({ responseData, marketId }) => {
       console.log("API response:", response);
       setPurchaseResponse(response);
       setTimeout(() => {
+
         // window.location.reload();
+
+        setShowSearch(prev=>!prev)
+
       }, 2000);
     } catch (error) {
       console.error("Error purchasing ticket:", error);
@@ -38,8 +48,8 @@ const SearchLotteryResult = ({ responseData, marketId }) => {
       <h4 style={{ color: "#4682B4", fontWeight: "bold" }}>Search Results:</h4>
       <div className="mt-3">
         {responseData &&
-        responseData.tickets &&
-        responseData.tickets.length > 0 ? (
+          responseData.tickets &&
+          responseData.tickets.length > 0 ? (
           <>
             <h5>Tickets:</h5>
             <div
@@ -71,7 +81,7 @@ const SearchLotteryResult = ({ responseData, marketId }) => {
             <div className="text-center mt-4">
               <button
                 className="btn btn-success"
-                onClick={handleBuy}
+                  onClick={() => handleBuy(responseData.price)}
                 style={{
                   backgroundColor: "#28a745",
                   padding: "10px 40px",
@@ -99,6 +109,7 @@ const SearchLotteryResult = ({ responseData, marketId }) => {
           </h5>
         )}
       </div>
+
     </div>
   );
 };

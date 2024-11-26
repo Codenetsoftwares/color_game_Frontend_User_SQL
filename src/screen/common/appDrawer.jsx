@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./appDrawer.css";
 import {
-  getLotteryDrawTimesApi,
+  getLotteryMarketsApi,
   user_getAllGamesWithMarketData_api,
 } from "../../utils/apiService";
 import { Link } from "react-router-dom";
@@ -31,12 +31,12 @@ function AppDrawer({
 
   useEffect(() => {
     user_getAllGames();
-    fetchLotteryDrawTimes();
+    fetchLotteryMarkets();
   }, []);
 
   // Function to fetch draw times from API
-  async function fetchLotteryDrawTimes() {
-    const response = await getLotteryDrawTimesApi();
+  async function fetchLotteryMarkets() {
+    const response = await getLotteryMarketsApi();
     if (response?.success) {
       setLotteryDrawTimes(response.data); // Update state with draw times data
     }
@@ -101,25 +101,35 @@ function AppDrawer({
         </span>
 
         <ul>
-        <li className="MenuHead lottery-section" onClick={handleLotteryToggle}>
-  <div className="lottery-wrapper">
-    <span className="new-tag">New</span>
-    Lottery
-    <span className={`dropdown-icon ${lotteryToggle ? "active" : ""}`}>▼</span>
-  </div>
-</li>
-{/* Display lottery draw times */}
-{lotteryToggle && lotteryDrawTimes.length > 0 && (
-  <ul className="subMenuItems">
-    {lotteryDrawTimes.map((draw) => (
-      <li key={draw.marketId} className="subMenuHead">
-        <Link to={`/lottery/${draw.marketId}`}>
-        <span className="draw-date-icon">🎟️</span> 
-        {draw.marketName}</Link>
-      </li>
-    ))}
-  </ul>
-)}
+
+          <li
+            className="MenuHead lottery-section"
+            onClick={handleLotteryToggle}
+          >
+            <div className="lottery-wrapper">
+              <span className="new-tag">New</span>
+              Lottery
+              <span
+                className={`dropdown-icon ${lotteryToggle ? "active" : ""}`}
+              >
+                ▼
+              </span>
+            </div>
+          </li>
+          {/* Display lottery draw times */}
+          {lotteryToggle && lotteryDrawTimes.length > 0 && (
+            <ul className="subMenuItems">
+              {lotteryDrawTimes.map((market) => (
+                <li key={market.marketId} className="subMenuHead">
+                  <Link to={`/lottery/${market.marketId}`}>
+                    <span className="draw-date-icon">🎟️</span>
+                    {market.marketName}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+
           <li
             className={toggleStates["inPlay"] ? "subMenuHead" : "MenuHead"}
             onClick={() => handleToggle("inPlay")}
