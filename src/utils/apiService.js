@@ -461,7 +461,7 @@ export async function lotteryPurchaseHIstoryUserNew(body = {}, isToast = false) 
   try {
     const callParams = await getCallParams(strings.POST, body, isToast); // Using POST method with `body`
     const response = await makeCall(
-      `${urls.userPurchaseHIstory}?page=${body.page}&limitPerPage=${body.limit}&searchTerm=${body.searchTerm}`, // Constructing URL with pagination and search term
+      `${urls.userPurchaseHIstory}/${body.marketId}?page=${body.page}&limitPerPage=${body.limit}&searchTerm=${body.searchTerm}`, // Constructing URL with pagination and search term
       callParams,
       isToast
     );
@@ -513,6 +513,16 @@ export async function GetWiningResult(body) {
     const response = await makeCall(
       `${urls.GetResult}/${body.marketId}`, 
       callParams);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function GetPurchaseHistoryMarketTimings(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(urls.getPurchaseMarketTime, callParams, isToast);
     return response;
   } catch (error) {
     throw error;
