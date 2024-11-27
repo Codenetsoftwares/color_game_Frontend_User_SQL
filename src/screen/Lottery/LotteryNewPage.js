@@ -46,10 +46,10 @@ const LotteryNewPage = ({ marketId }) => {
         });
 
         // Initialize the filtered numbers and groups based on the fetched range
-        setFilteredNumbers(generateNumbers(filteredObject?.number_start || 0, filteredObject?.number_end || 0));
-        setFilteredGroups(generateGroups(filteredObject?.group_start || 0, filteredObject?.group_end || 0)); 
-        setSeriesList(generateSeries(filteredObject?.series_start || "A", filteredObject?.series_end || "Z"));
-        setFilteredSeries(generateSeries(filteredObject?.series_start || "A", filteredObject?.series_end || "Z"));
+        setFilteredNumbers(generateNumbers(filteredObject?.number_start || data?.data[0]?.number_start, filteredObject?.number_end || data?.data[0]?.number_end));
+        setFilteredGroups(generateGroups(filteredObject?.group_start || data?.data[0]?.group_start, filteredObject?.group_end || data?.data[0]?.group_end)); 
+        setSeriesList(generateSeries(filteredObject?.series_start || data?.data[0]?.series_start, filteredObject?.series_end || data?.data[0]?.series_end));
+        setFilteredSeries(generateSeries(filteredObject?.series_start || data?.data[0]?.series_start, filteredObject?.series_end || data?.data[0]?.series_end));
       } else {
         console.warn("LotteryRange returned null or undefined data");
       }
@@ -67,7 +67,7 @@ const LotteryNewPage = ({ marketId }) => {
     const letters = [];
     for (let i = start.charCodeAt(0); i <= end.charCodeAt(0); i++) {
       const letter = String.fromCharCode(i);
-      if (letter !== 'I' && letter !== 'F') {
+      if (letter !== 'I' && letter !== 'F' && letter !== 'O') {
         letters.push(letter);
       }
     }

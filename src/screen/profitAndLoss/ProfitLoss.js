@@ -25,6 +25,7 @@ const  ProfitLoss = ({
   SetProfitLossData,
   handleDateForProfitLoss,
 }) => {
+  
   //Pagination
   const startIndex = Math.min((currentPage - 1) * 10 + 1);
   const endIndex = Math.min(currentPage * 10, totalData);

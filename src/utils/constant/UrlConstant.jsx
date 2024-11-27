@@ -3,8 +3,8 @@
 class UrlConstant {
   constructor() {}
 
-  url_dev = "https://cg.server.dummydoma.in/api";
-  // url_dev = "http://localhost:7000/api";
+  // url_dev = "https://cg.server.dummydoma.in/api";
+  url_dev = "http://localhost:7000/api";
 
   // user api
   user = "user";
@@ -44,6 +44,7 @@ class UrlConstant {
   userPurchaseHIstory = `${this.url_dev}/purchase-history`;
   getLotteryMarketsApi = `${this.url_dev}/${this.user}-getAllMarket`;
   getPrizeResult = `${this.url_dev}/prize-results`;
+  userLotteryBetHistoryById = `${this.url_dev}/lottery-bet-history`;
 }
 
 const urls = new UrlConstant();
