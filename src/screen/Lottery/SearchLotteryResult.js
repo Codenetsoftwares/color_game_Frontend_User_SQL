@@ -68,72 +68,86 @@ const SearchLotteryResult = ({ responseData, marketId }) => {
 
   return (
     <div className="text-center">
-      <h4 style={{ color: "#4682B4", fontWeight: "bold" }}>Search Results:</h4>
-      <div className="mt-3">
-        {responseData &&
-          responseData.tickets &&
-          responseData.tickets.length > 0 ? (
-          <>
-            <h5>Tickets:</h5>
+    <h4 style={{ color: "#4682B4", fontWeight: "bold" }}>Search Results:</h4>
+    <div className="mt-3">
+      {responseData && responseData.tickets && responseData.tickets.length > 0 ? (
+        <>
+          <h5>Tickets:</h5>
+          <div
+            style={{
+              maxHeight: responseData.tickets.length > 8 ? "200px" : "auto",
+              overflowY: responseData.tickets.length > 8 ? "scroll" : "unset",
+              border: responseData.tickets.length > 8 ? "1px solid #ccc" : "none",
+              padding: "10px",
+              borderRadius: "4px",
+            }}
+          >
             <div
               style={{
-                maxHeight: responseData.tickets.length > 8 ? "200px" : "auto",
-                overflowY: responseData.tickets.length > 8 ? "scroll" : "unset",
-                border: responseData.tickets.length > 8 ? "1px solid #ccc" : "none",
-                padding: "10px",
-                borderRadius: "4px",
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: "10px",
               }}
             >
-              <ul style={{ paddingLeft: 0, listStyleType: "none" }}>
-                {responseData.tickets.map((ticket, index) => (
-                  <li key={index} style={{ color: "#3b6e91" }}>
-                    {ticket}
-                  </li>
-                ))}
-              </ul>
+              {responseData.tickets.map((ticket, index) => (
+                <div
+                  key={index}
+                  style={{
+                    backgroundColor: "#e6f7ff",
+                    padding: "10px",
+                    borderRadius: "12px", // Inverted curve effect
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                    textAlign: "center",
+                    color: "#3b6e91",
+                  }}
+                >
+                  <h6>{ticket}</h6>
+                </div>
+              ))}
             </div>
-            <h5>
-              Price:{" "}
-              <span style={{ color: "#3b6e91" }}>₹{responseData.price}</span>
-            </h5>
-            <h5>
-              SEM: <span style={{ color: "#3b6e91" }}>{responseData.sem}</span>
-            </h5>
-
-            {/* Buy Button */}
-            <div className="text-center mt-4">
-              <button
-                className="btn btn-success"
-                  onClick={() => handleBuy(responseData.price)}
-                style={{
-                  backgroundColor: "#28a745",
-                  padding: "10px 40px",
-                  fontWeight: "bold",
-                }}
-                disabled={loading}
-              >
-                {loading ? "Processing..." : "Buy"}
-              </button>
-            </div>
-
-            {purchaseResponse && (
-              <div className="mt-4">
-                <h5 style={{ color: "#28a745" }}>
-                  {purchaseResponse.message || "Purchase successful!"}
-                </h5>
-              </div>
-            )}
-          </>
-        ) : (
-          <h5 style={{ color: "#3b6e91" }}>
-            {responseData
-              ? responseData.message || "No tickets found."
-              : "No data available."}
+          </div>
+          <h5>
+            Price:{" "}
+            <span style={{ color: "#3b6e91" }}>₹{responseData.price}</span>
           </h5>
-        )}
-      </div>
-
+          <h5>
+            SEM: <span style={{ color: "#3b6e91" }}>{responseData.sem}</span>
+          </h5>
+  
+          {/* Buy Button */}
+          <div className="text-center mt-4">
+            <button
+              className="btn btn-success"
+              onClick={() => handleBuy(responseData.price)}
+              style={{
+                backgroundColor: "#28a745",
+                padding: "10px 40px",
+                fontWeight: "bold",
+              }}
+              disabled={loading}
+            >
+              {loading ? "Processing..." : "Buy"}
+            </button>
+          </div>
+  
+          {purchaseResponse && (
+            <div className="mt-4">
+              <h5 style={{ color: "#28a745" }}>
+                {purchaseResponse.message || "Purchase successful!"}
+              </h5>
+            </div>
+          )}
+        </>
+      ) : (
+        <h5 style={{ color: "#3b6e91" }}>
+          {responseData
+            ? responseData.message || "No tickets found."
+            : "No data available."}
+        </h5>
+      )}
     </div>
+  </div>
+  
   );
 };
 
