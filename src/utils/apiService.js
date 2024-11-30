@@ -436,7 +436,12 @@ export async function LotteryRange(body = {}, isToast = false) {
 export async function PurhaseLotteryTicketUser(body = {}, isToast = true) {
   try {
     const callParams = await getCallParams(strings.POST, body, isToast);
-    const response = await makeCall(`${urls.buyTicketUser}/${body.marketId}`, callParams, isToast);
+
+    const response = await makeCall(
+      `${urls.buyTicketUser}/${body.marketId}`, 
+      
+      callParams, isToast);
+
     return response;
   } catch (error) {
     throw error;

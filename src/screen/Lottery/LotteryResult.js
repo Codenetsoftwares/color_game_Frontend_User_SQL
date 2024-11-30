@@ -54,29 +54,33 @@ const LotteryResult = () => {
               <Accordion.Header>
                 <strong>{new Date(result.date).toLocaleDateString()}</strong> - Results for {result.announceTime}
               </Accordion.Header>
-              <Accordion.Body>
-                <Card className="mb-3">
-                  <Card.Header style={{ backgroundColor: '#4682B4', color: '#fff', textAlign: 'center' }}>
-                    <strong>{result.prizeCategory}</strong> - Prize Amount: ₹{result.prizeAmount}
-                  </Card.Header>
-                  <Card.Body>
-                    <h5 className="text-center" style={{ color: '#4682B4' }}>Winning Ticket Numbers</h5>
-                    <Table bordered hover responsive className="text-center mt-3">
-                      <tbody>
-                        <tr>
-                          {result.ticketNumbers && result.ticketNumbers.length > 0 ? (
-                            result.ticketNumbers.map((ticket, i) => (
-                              <td key={i} className="text-info">{ticket}</td>
-                            ))
-                          ) : (
-                            <td className="text-muted">No ticket numbers available</td>
-                          )}
-                        </tr>
-                      </tbody>
-                    </Table>
-                  </Card.Body>
-                </Card>
-              </Accordion.Body>
+
+              {/* <Accordion.Body>
+                {result.data.map((prize, idx) => (
+                  <Card key={idx} className="mb-3">
+                    <Card.Header style={{ backgroundColor: '#4682B4', color: '#fff', textAlign: 'center' }}>
+                      <strong>{prize.prizeCategory}</strong> - Prize Amount: ₹{prize.prizeAmount}
+                    </Card.Header>
+                    <Card.Body>
+                      <h5 className="text-center" style={{ color: '#4682B4' }}>Winning Ticket Numbers</h5>
+                      <Table bordered hover responsive className="text-center mt-3">
+                        <tbody>
+                          <tr>
+                            {prize.ticketNumbers && prize.ticketNumbers.length > 0 ? (
+                              prize.ticketNumbers.map((ticket, i) => (
+                                <td key={i} className="text-info">{ticket}</td>
+                              ))
+                            ) : (
+                              <td className="text-muted">No ticket numbers available</td>
+                            )}
+                          </tr>
+                        </tbody>
+                      </Table>
+                    </Card.Body>
+                  </Card>
+                ))}
+              </Accordion.Body> */}
+
             </Accordion.Item>
           ))
         ) : (

@@ -5,7 +5,11 @@ import { LotteryRange, SearchLotteryTicketUser } from "../../utils/apiService";
 import SearchLotteryResult from "./SearchLotteryResult";
 import { getLotteryRange } from "../../utils/getInitiateState";
 
-const LotteryNewPage = ({ marketId }) => {
+
+const LotteryNewPage = ({ drawId }) => {
+
+  console.log('====>>>> line number 10',drawId)
+
   const [sem, setSem] = useState("");
   const [group, setGroup] = useState("");
   const [series, setSeries] = useState("");
@@ -21,29 +25,42 @@ const LotteryNewPage = ({ marketId }) => {
   const [filteredSeries, setFilteredSeries] = useState([]); // For filtered series
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [seriesList, setSeriesList] = useState([]);
+
+  const [marketIds, setMarketIds] = useState([]); 
+  const [marketName, setMarketName] = useState("");
+  console.log('===>> marketName',marketName)
+
+  console.log('response from this page')
+
   console.log('response from this page', responseData)
 
-  // Fetch lottery range data when component mounts
-  useEffect(() => {
-    handleLotteryRange();
-  }, []);
 
+  // Fetch lottery range data when component mounts
+ // Handle market data update when drawId changes
+ useEffect(() => {
   const handleLotteryRange = async () => {
     try {
-      const data = await LotteryRange();
+      const data = await LotteryRange(); // Fetch data from the API
 
       if (data && data.data) {
-        console.log(data.data)
-        const filteredObject = data.data.find((item) => { 
-          return (item.marketId === marketId) });
-        setLotteryRange({
-          group_start: filteredObject?.group_start ,
-          group_end: filteredObject?.group_end ,
-          series_start: filteredObject?.series_start ,
-          series_end: filteredObject?.series_end ,
-          number_start: filteredObject?.number_start,
-          number_end: filteredObject?.number_end,
-        });
+        // Filter the data to find the market with the matching marketId
+        const filteredMarket = data.data.filter((item) => item.marketId === drawId);
+
+        if (filteredMarket.length > 0) {
+          const currentMarket = filteredMarket[0];
+
+          // Set the market name
+          setMarketName(currentMarket.marketName || "Unknown Market");
+
+          // Set lottery range values based on the matched market
+          setLotteryRange({
+            group_start: currentMarket.group_start || "",
+            group_end: currentMarket.group_end || "",
+            series_start: currentMarket.series_start || "",
+            series_end: currentMarket.series_end || "",
+            number_start: currentMarket.number_start || 0,
+            number_end: currentMarket.number_end || 0,
+          });
 
         // Initialize the filtered numbers and groups based on the fetched range
         setFilteredNumbers(generateNumbers(filteredObject?.number_start || data?.data[0]?.number_start, filteredObject?.number_end || data?.data[0]?.number_end));
@@ -57,6 +74,10 @@ const LotteryNewPage = ({ marketId }) => {
       console.error("Error fetching lottery range:", error);
     }
   };
+
+  handleLotteryRange();
+}, [drawId]);
+
 
   const handleSemChange = (e) => {
     setSem(e.target.value);
@@ -233,6 +254,8 @@ const LotteryNewPage = ({ marketId }) => {
       series: series || null,
       number: number || null,
       sem: sem ? parseInt(sem) : null,
+      marketId : drawId
+
     };
 
     try {
@@ -267,6 +290,18 @@ const LotteryNewPage = ({ marketId }) => {
         {showSearch ? (
           <>
             <div className="text-center mb-4">
+
+            <h2
+            className="mb-1"
+            style={{
+              color: "#ff4500",
+              fontWeight: "bold",
+              letterSpacing: "1px",
+              fontSize: "2rem",
+            }}
+          >
+            {marketName}
+          </h2>
               <h2 className="mb-1" style={{ color: "#ff4500", fontWeight: "bold", letterSpacing: "1px", fontSize: "2rem" }}>
                 🎉 Find Your Lucky Ticket & Win Big! 🎟️
               </h2>
@@ -343,11 +378,13 @@ const LotteryNewPage = ({ marketId }) => {
                 fontWeight: "bold",
               }}
             >
-              Search
+              Search 
             </button>
           </>
         ) : (
-          <SearchLotteryResult responseData={responseData} marketId={marketId} setShowSearch={setShowSearch} />
+
+          <SearchLotteryResult responseData={responseData} marketId={drawId}  />
+
         )}
       </div>
     </div>

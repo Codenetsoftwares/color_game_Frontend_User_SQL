@@ -17,6 +17,9 @@ function AppDrawer({
   isHomePage,
   setShowResetModal,
   showResetModal,
+  onMarketSelect, // New prop for market selection callback
+  
+
 }) {
   const [toggleStates, setToggleStates] = useState({});
   const [user_allGames, setUser_allGames] = useState(
@@ -98,6 +101,7 @@ function AppDrawer({
         </span>
 
         <ul>
+
           <li
             className="MenuHead lottery-section"
             onClick={handleLotteryToggle}
@@ -125,6 +129,7 @@ function AppDrawer({
               ))}
             </ul>
           )}
+
           <li
             className={toggleStates["inPlay"] ? "subMenuHead" : "MenuHead"}
             onClick={() => handleToggle("inPlay")}

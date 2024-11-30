@@ -7,8 +7,10 @@ import LotteryNewPage from './LotteryNewPage';
 import LotteryPage from './LotteryPage';
 import { useParams } from 'react-router-dom';
 
+
 const  LotteryCards = ()  => {
     const { store } = useAppContext();
+    const { drawId } = useParams(); 
 
   const { marketId } = useParams()
   console.log("param", marketId)
@@ -18,7 +20,9 @@ const  LotteryCards = ()  => {
             <div className={`global-margin-top${store.user.isLogin ? '-logged' : ''} `}>
         <AppDrawer showCarousel={false} isMobile={false} isHomePage={true}>
          {/* <LotteryPage/> */}
-              <LotteryNewPage marketId={marketId}/>
+
+         <LotteryNewPage drawId={drawId} />
+
 
         </AppDrawer>
       </div>
