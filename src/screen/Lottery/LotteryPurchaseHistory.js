@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Spinner } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import Pagination from "../common/Pagination";
 import {
   GetPurchaseHistoryMarketTimings,
@@ -19,7 +19,22 @@ const LotteryPurchaseHistory = ({ MarketId }) => {
   const [markets, setMarkets] = useState([]);
   const [selectedMarketId, setSelectedMarketId] = useState(MarketId);
   const [dropdownOpen, setDropdownOpen] = useState(null);
+  const [visibleStartIndex, setVisibleStartIndex] = useState(0);
+  const visibleCount = 5;
+  const handleLeftClick = () => {
+    setVisibleStartIndex((prev) => Math.max(0, prev - 1));
+  };
 
+  const handleRightClick = () => {
+    setVisibleStartIndex((prev) =>
+      Math.min(prev + 1, Math.max(0, markets.length - visibleCount))
+    );
+  };
+
+  const visibleMarkets = markets.slice(
+    visibleStartIndex,
+    visibleStartIndex + visibleCount
+  );
   const toggleDropdown = (id) => {
     setDropdownOpen(dropdownOpen === id ? null : id);
   };
@@ -57,7 +72,7 @@ const LotteryPurchaseHistory = ({ MarketId }) => {
 
         if (response?.success) {
           const filteredData = response.data.map((item) => ({
-            drawDate: item.drawDate,
+            marketName: item.marketName,
             tickets: item.tickets,
             price: item.price,
             userName: item.userName,
@@ -101,9 +116,15 @@ const LotteryPurchaseHistory = ({ MarketId }) => {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center">
-        <Spinner animation="border" role="status" />
-        <span className="ml-2 mt-5">Loading...</span>
+      <div className="d-flex justify-content-center align-items-center ">
+        <h1
+          className="fw-bold text-white p-5 rounded-5"
+          style={{ marginTop: "300px", background: "#1a89a2" }}
+        >
+          Purchase Lottery is
+          <br />
+          Not Available
+        </h1>
       </div>
     );
   }
@@ -117,30 +138,48 @@ const LotteryPurchaseHistory = ({ MarketId }) => {
         boxShadow: "0 0 15px rgba(0,0,0,0.1)",
       }}
     >
-      {/* Top Navigation for Markets */}
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h4>Markets</h4>
-        <div className="d-flex flex-wrap">
-          {markets.length > 0 ? (
-            markets.map((market) => (
-              <span
-                key={market.marketId}
-                className={`badge ${
-                  selectedMarketId === market.marketId
-                    ? "bg-success"
-                    : "bg-primary"
-                } me-2`}
-                style={{ cursor: "pointer" }}
-                onClick={() => handleMarketClick(market.marketId)}
-              >
-                {market.marketName}
-              </span>
-            ))
-          ) : (
-            <span>No markets available</span>
-          )}
+      <div className="d-flex justify-content-between align-items-center mb-3 position-relative mt-4">
+        <h4 className="mb-0 fw-bold">Markets</h4>
+        <div className="position-absolute start-50 translate-middle-x">
+          <div className="d-flex align-items-center">
+            <button
+              className="btn btn-sm btn-outline-secondary me-2"
+              onClick={handleLeftClick}
+              disabled={visibleStartIndex === 0}
+            >
+              &lt;
+            </button>
+            <div className="d-flex flex-wrap">
+              {visibleMarkets.length > 0 ? (
+                visibleMarkets.map((market) => (
+                  <span
+                    key={market.marketId}
+                    className={`badge ${
+                      selectedMarketId === market.marketId
+                        ? "bg-success"
+                        : "bg-primary"
+                    } me-2`}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleMarketClick(market.marketId)}
+                  >
+                    {market.marketName}
+                  </span>
+                ))
+              ) : (
+                <span>No markets available</span>
+              )}
+            </div>
+            <button
+              className="btn btn-sm btn-outline-secondary ms-2"
+              onClick={handleRightClick}
+              disabled={visibleStartIndex + visibleCount >= markets.length}
+            >
+              &gt;
+            </button>
+          </div>
         </div>
       </div>
+
       <h2 className="text-center mb-4" style={{ color: "#4682B4" }}>
         My Lottery Purchases
       </h2>
@@ -155,7 +194,7 @@ const LotteryPurchaseHistory = ({ MarketId }) => {
         >
           <tr>
             <th>Serial Number</th>
-            <th>Draw Time</th>
+            <th>Market Name</th>
             <th>Price</th>
             <th>SEM</th>
             <th>Ticket Numbers</th>
@@ -167,7 +206,7 @@ const LotteryPurchaseHistory = ({ MarketId }) => {
             purchaseHistory.map((purchase, index) => (
               <tr key={index}>
                 <td>{startIndex + index}</td>
-                <td>{purchase.drawDate || "N/A"}</td>
+                <td>{purchase.marketName || "N/A"}</td>
                 <td>{purchase.price !== undefined ? purchase.price : "N/A"}</td>
                 <td>{purchase.sem || "N/A"}</td>
                 <td>
