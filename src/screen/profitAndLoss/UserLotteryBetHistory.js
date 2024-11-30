@@ -92,7 +92,9 @@ const UserLotteryBetHistory = ({ data, SetComponent }) => {
                                     </tr>
                                     {data?.data?.length > 0 ? (
                                         data?.data?.map((data, index) => (
-                                            <tr key={index} align="center">
+                                            <tr key={index}
+                                                align="center"
+                                                style={{ backgroundColor: "#accafa" }}>
                                                 <td>{data?.gameName}</td>
                                                 <td>{data?.marketName}</td>
                                                 <td>{"WINNER"}</td>
@@ -120,9 +122,9 @@ const UserLotteryBetHistory = ({ data, SetComponent }) => {
                                                             {dropdownOpen === index && (
                                                                 <div
                                                                     style={{
-                                                                        maxHeight: "200px", 
-                                                                      
-                                                                        padding: "10px", 
+                                                                        maxHeight: "200px",
+
+                                                                        padding: "10px",
                                                                     }}
                                                                 >
                                                                     <span style={{ fontWeight: "bold", display: "block", marginBottom: "5px" }}>
@@ -162,7 +164,7 @@ const UserLotteryBetHistory = ({ data, SetComponent }) => {
                                     ) : (
                                         // Display message if no data is available
                                         <tr align="center">
-                                            <td colSpan="10"> 
+                                            <td colSpan="10">
                                                 <div className="alert alert-info fw-bold" role="alert">
                                                     No Data Found !!
                                                 </div>

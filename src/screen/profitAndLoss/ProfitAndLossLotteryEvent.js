@@ -141,7 +141,7 @@ const ProfitAndLossLotteryEvent = ({
                               </td>
                               <td>{data?.commission || 0}</td>
                               <td
-                                className={`fw-bold ${data?.totalProfitLoss > 0
+                                className={`fw-bold ${data?.profitLoss > 0
                                     ? "text-success"
                                     : "text-danger"
                                   }`}
