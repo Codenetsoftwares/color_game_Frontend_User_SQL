@@ -8,7 +8,7 @@ import { getLotteryRange } from "../../utils/getInitiateState";
 
 const LotteryNewPage = ({ drawId }) => {
 
-  console.log('====>>>> line number 10',drawId)
+  console.log('====>>>> line number 10', drawId)
 
   const [sem, setSem] = useState("");
   const [group, setGroup] = useState("");
@@ -26,9 +26,9 @@ const LotteryNewPage = ({ drawId }) => {
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [seriesList, setSeriesList] = useState([]);
 
-  const [marketIds, setMarketIds] = useState([]); 
+  const [marketIds, setMarketIds] = useState([]);
   const [marketName, setMarketName] = useState("");
-  console.log('===>> marketName',marketName)
+  console.log('===>> marketName', marketName)
 
   console.log('response from this page')
 
@@ -36,54 +36,48 @@ const LotteryNewPage = ({ drawId }) => {
 
 
   // Fetch lottery range data when component mounts
- // Handle market data update when drawId changes
- useEffect(() => {
-  const handleLotteryRange = async () => {
-    try {
-      const data = await LotteryRange(); // Fetch data from the API
+  // Handle market data update when drawId changes
+  useEffect(() => {
+    const handleLotteryRange = async () => {
+      try {
+        const data = await LotteryRange(); // Fetch data from the API
 
-      if (data && data.data) {
-        // Filter the data to find the market with the matching marketId
-        const filteredMarket = data.data.filter((item) => item.marketId === drawId);
+        if (data && data.data) {
+          // Filter the data to find the market with the matching marketId
+          const filteredMarket = data.data.filter((item) => item.marketId === drawId);
 
-        if (filteredMarket.length > 0) {
-          const currentMarket = filteredMarket[0];
+          if (filteredMarket.length > 0) {
+            const currentMarket = filteredMarket[0];
 
-          // Set the market name
-          setMarketName(currentMarket.marketName || "Unknown Market");
+            // Set the market name
+            setMarketName(currentMarket.marketName || "Unknown Market");
 
-          // Set lottery range values based on the matched market
-          setLotteryRange({
-            group_start: currentMarket.group_start || "",
-            group_end: currentMarket.group_end || "",
-            series_start: currentMarket.series_start || "",
-            series_end: currentMarket.series_end || "",
-            number_start: currentMarket.number_start || 0,
-            number_end: currentMarket.number_end || 0,
-          });
+            // Set lottery range values based on the matched market
+            setLotteryRange({
+              group_start: currentMarket.group_start || "",
+              group_end: currentMarket.group_end || "",
+              series_start: currentMarket.series_start || "",
+              series_end: currentMarket.series_end || "",
+              number_start: currentMarket.number_start || 0,
+              number_end: currentMarket.number_end || 0,
+            });
 
-          // Update the filtered values based on the new market range
-          setFilteredNumbers(generateNumbers(currentMarket.number_start, currentMarket.number_end));
-          setFilteredGroups(generateGroups(currentMarket.group_start, currentMarket.group_end));
-          setFilteredSeries(generateSeries(currentMarket.series_start, currentMarket.series_end));
-        } else {
-          console.warn("No market found matching the given drawId");
-          setMarketName("Unknown Market");
-          setLotteryRange({});
-          setFilteredNumbers([]);
-          setFilteredGroups([]);
-          setFilteredSeries([]);
+            // Initialize the filtered numbers and groups based on the fetched range
+            setFilteredNumbers(generateNumbers(filteredObject?.number_start || data?.data[0]?.number_start, filteredObject?.number_end || data?.data[0]?.number_end));
+            setFilteredGroups(generateGroups(filteredObject?.group_start || data?.data[0]?.group_start, filteredObject?.group_end || data?.data[0]?.group_end));
+            setSeriesList(generateSeries(filteredObject?.series_start || data?.data[0]?.series_start, filteredObject?.series_end || data?.data[0]?.series_end));
+            setFilteredSeries(generateSeries(filteredObject?.series_start || data?.data[0]?.series_start, filteredObject?.series_end || data?.data[0]?.series_end));
+          } else {
+            console.warn("LotteryRange returned null or undefined data");
+          }
         }
-      } else {
-        console.warn("LotteryRange returned null or undefined data");
+      } catch (error) {
+        console.error("Error fetching lottery range:", error);
       }
-    } catch (error) {
-      console.error("Error fetching lottery range:", error);
-    }
-  };
+    };
 
-  handleLotteryRange();
-}, [drawId]);
+    handleLotteryRange();
+  }, [drawId]);
 
 
   const handleSemChange = (e) => {
@@ -95,7 +89,7 @@ const LotteryNewPage = ({ drawId }) => {
     const letters = [];
     for (let i = start.charCodeAt(0); i <= end.charCodeAt(0); i++) {
       const letter = String.fromCharCode(i);
-      if (letter !== 'I' && letter !== 'F') {
+      if (letter !== 'I' && letter !== 'F' && letter !== 'O') {
         letters.push(letter);
       }
     }
@@ -261,7 +255,7 @@ const LotteryNewPage = ({ drawId }) => {
       series: series || null,
       number: number || null,
       sem: sem ? parseInt(sem) : null,
-      marketId : drawId
+      marketId: drawId
 
     };
 
@@ -298,17 +292,17 @@ const LotteryNewPage = ({ drawId }) => {
           <>
             <div className="text-center mb-4">
 
-            <h2
-            className="mb-1"
-            style={{
-              color: "#ff4500",
-              fontWeight: "bold",
-              letterSpacing: "1px",
-              fontSize: "2rem",
-            }}
-          >
-            {marketName}
-          </h2>
+              <h2
+                className="mb-1"
+                style={{
+                  color: "#ff4500",
+                  fontWeight: "bold",
+                  letterSpacing: "1px",
+                  fontSize: "2rem",
+                }}
+              >
+                {marketName}
+              </h2>
               <h2 className="mb-1" style={{ color: "#ff4500", fontWeight: "bold", letterSpacing: "1px", fontSize: "2rem" }}>
                 🎉 Find Your Lucky Ticket & Win Big! 🎟️
               </h2>
@@ -385,12 +379,12 @@ const LotteryNewPage = ({ drawId }) => {
                 fontWeight: "bold",
               }}
             >
-              Search 
+              Search
             </button>
           </>
         ) : (
 
-          <SearchLotteryResult responseData={responseData} marketId={drawId}  />
+          <SearchLotteryResult responseData={responseData} marketId={drawId} />
 
         )}
       </div>

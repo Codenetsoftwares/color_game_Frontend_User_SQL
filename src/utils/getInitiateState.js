@@ -182,3 +182,20 @@ export function getLotteryRange(body = {}) {
     number_end: "",
   };
 }
+
+export function getprofitLossLotteryEventDataState(body = {}) {
+  return {
+    data: [],
+    totalPages: 0,
+    totalData: 0,
+    currentPage: 1,
+    itemPerPage: 10,
+    searchItem: "",
+  };
+}
+
+export function getUserLotteryBetHistory(body = {}) {
+  return {
+    data: [],
+  };
+}

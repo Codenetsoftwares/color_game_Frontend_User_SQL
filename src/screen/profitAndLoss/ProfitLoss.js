@@ -5,13 +5,15 @@ import "react-datepicker/dist/react-datepicker.css";
 import ProfitAndLossEvent from "./ProfitAndLossEvent";
 import ProfitAndLossRunner from "./ProfitLossRunner";
 import Pagination from "../common/Pagination";
-import { getprofitLossEventDataState, getprofitLossRunnerDataState, getUserBetHistory } from "../../utils/getInitiateState";
-import { getProfitLossEvent, getProfitLossRunner, getUserBetHistory_api } from "../../utils/apiService";
+import { getprofitLossEventDataState, getprofitLossLotteryEventDataState, getprofitLossRunnerDataState, getUserBetHistory, getUserLotteryBetHistory } from "../../utils/getInitiateState";
+import { getProfitLossEvent, getProfitLossLotteryEvent, getProfitLossRunner, getUserBetHistory_api, getUserLotteryBetHistory_api } from "../../utils/apiService";
 import { customErrorHandler } from "../../utils/helper";
 import UserBetHistory from "./UserBetHistory";
 import { toast } from "react-toastify";
+import ProfitAndLossLotteryEvent from "./ProfitAndLossLotteryEvent";
+import UserLotteryBetHistory from "./UserLotteryBetHistory";
 
-const  ProfitLoss = ({
+const ProfitLoss = ({
   UserName,
   setEndDate,
   setStartDate,
@@ -25,6 +27,7 @@ const  ProfitLoss = ({
   SetProfitLossData,
   handleDateForProfitLoss,
 }) => {
+
   //Pagination
   const startIndex = Math.min((currentPage - 1) * 10 + 1);
   const endIndex = Math.min(currentPage * 10, totalData);
@@ -33,7 +36,11 @@ const  ProfitLoss = ({
 
   const [profitLossRunnerData, SetProfitLossRunnerData] = useState(getprofitLossRunnerDataState());
 
+  const [profitLossLotteryEventData, SetProfitLossLotteryEventData] = useState(getprofitLossLotteryEventDataState());
+
+
   const [userBetHistory, setUserBetHistory] = useState(getUserBetHistory())
+  const [userLotteryBetHistory, setUserLotteryBetHistory] = useState(getUserLotteryBetHistory())
 
   const [toggle, SetToggle] = useState(true);
   const [component, SetComponent] = useState(null);
@@ -67,7 +74,6 @@ const  ProfitLoss = ({
     }
   }
 
-
   useEffect(() => {
     if (marketId) getProfitLossRunnerWise();
   }, [
@@ -81,6 +87,10 @@ const  ProfitLoss = ({
   }, [
     runnerId,
   ]);
+
+  useEffect(() => {
+    if (component === "UserLotteryBetHistory") getUserLotteryBetHistoryWise();
+  }, [component]);
 
   async function getProfitLossEventWise(gameId, componentName) {
     try {
@@ -137,6 +147,58 @@ const  ProfitLoss = ({
     }
   }
 
+  async function getProfitLossLotteryEventWise(gameId, componentName) {
+    try {
+      // Set toggle to false before hitting the endpoint
+      SetToggle(false);
+      SetComponent(componentName);
+
+      // Make the API call
+      const response = await getProfitLossLotteryEvent({
+        userName: UserName,
+        gameId: gameId,
+        page: profitLossLotteryEventData.currentPage,
+        limit: profitLossLotteryEventData.itemPerPage,
+        searchName: profitLossLotteryEventData.searchItem,
+      });
+
+      console.log("event=>>>", response);
+
+      // Update state with the response data
+      SetProfitLossLotteryEventData((prevState) => ({
+        ...prevState,
+        data: response?.data,
+        totalPages: response?.pagination?.totalPages,
+        totalData: response?.pagination?.totalItems,
+      }));
+    } catch (error) {
+      // Handle any errors that occur during the API call
+      toast.error(customErrorHandler(error));
+
+    }
+  }
+
+  async function getUserLotteryBetHistoryWise() {
+    console.log("asdfgh", runnerId)
+    try {
+      // Set toggle to false before hitting the endpoint
+      SetToggle(false);
+      // Make the API call
+      const response = await getUserLotteryBetHistory_api();
+
+      // Update state with the response data
+      setUserLotteryBetHistory((prevState) => ({
+        ...prevState,
+        data: response.data,
+
+      }));
+    } catch (error) {
+      // Handle any errors that occur during the API call
+      toast.error(customErrorHandler(error));
+
+    }
+  }
+
   console.log("component", component);
   let componentToRender;
   if (component === "ProfitAndLossEvent") {
@@ -155,6 +217,23 @@ const  ProfitLoss = ({
     componentToRender = (
       <UserBetHistory SetComponent={SetComponent} data={userBetHistory} />
     );
+  } else if (component === "UserLotteryBetHistory") {
+    componentToRender = (
+      <UserLotteryBetHistory SetComponent={SetComponent} data={userLotteryBetHistory} />
+    );
+  }
+  else if (component === "ProfitAndLossLotteryEvent") {
+    componentToRender = (
+      <ProfitAndLossLotteryEvent
+        data={profitLossLotteryEventData}
+        SetComponent={SetComponent}
+        SetMarketId={SetMarketId}
+        SetProfitLossEventData={SetProfitLossLotteryEventData}
+        currentPage={profitLossLotteryEventData.currentPage}
+        SetToggle={SetToggle}
+        totalItems={profitLossLotteryEventData.totalData}
+      />
+    )
   }
   else {
     componentToRender = (
@@ -317,10 +396,11 @@ const  ProfitLoss = ({
                               {" "}
                               <td
                                 onClick={() =>
-                                  getProfitLossEventWise(
-                                    data?.gameId,
-                                    "ProfitAndLossEvent"
-                                  )
+                                  data?.gameName === "Lottery" ? getProfitLossLotteryEventWise(data?.gameId,
+                                    "ProfitAndLossLotteryEvent") : getProfitLossEventWise(
+                                      data?.gameId,
+                                      "ProfitAndLossEvent"
+                                    )
                                 }
                                 className="text-primary fw-bold"
                                 style={{ cursor: "pointer" }}

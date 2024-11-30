@@ -12,6 +12,7 @@ import {
   getOpenBetsGame,
   user_getBackLayData_api,
   user_getBetHistory_api,
+  user_getLotteryBetHistory_api,
   // user_getOpenBetData_api,
   // user_getOpenBetmarket_api,
 } from "../../utils/apiService";
@@ -35,6 +36,11 @@ const BetHistory = () => {
     endDate: new Date(),
   });
   const [dateVisible, setDateVisible] = useState(false); // date visible only when user selects date
+  const [dropdownOpen, setDropdownOpen] = useState(null);
+
+  const toggleDropdown = (id) => {
+    setDropdownOpen(dropdownOpen === id ? null : id);
+  };
 
   defaultStartDate.setDate(defaultStartDate.getDate() - 1);
   function formatDate(dateString) {
@@ -93,9 +99,33 @@ const BetHistory = () => {
       //add loading part //
     }
   }
+
+  async function getHistoryForLotteryBetHistory() {
+    setFlag(false);
+    const response = await user_getLotteryBetHistory_api({
+      gameId: selectedGameId,
+      // marketName: gameSelectionBetHistory,
+      pageNumber: currentPage,
+      dataLimit: totalEntries,
+      startDate: formatDate(dateValue.startDate),
+      endDate: formatDate(dateValue.endDate),
+      dataSource: selectedOptions.dataSource,
+    });
+
+    if (response) {
+      console.log("response for betHistoryData ", response);
+      setBetHistoryData(response?.data);
+      setTotalPages(response?.pagination?.totalPages);
+      setTotalItems(response?.pagination?.totalItems);
+    } else {
+      //add loading part //
+    }
+  }
   // useeffect for bet history data
   useEffect(() => {
-    if (selectedGameId != "") {
+    if (selectedGameId === "lottery") {
+      getHistoryForLotteryBetHistory();
+    } else {
       handleGetHistory();
     }
   }, [currentPage, totalItems, totalEntries]);
@@ -235,6 +265,7 @@ const BetHistory = () => {
                         {game.gameName}
                       </option>
                     ))}
+                    <option value="lottery">Lottery</option>
                   </select>
                 </div>
               </div>
@@ -298,7 +329,11 @@ const BetHistory = () => {
               <div className="col">
                 <button
                   className="btn btn-primary"
-                  onClick={() => handleGetHistory()}
+                  onClick={() =>
+                    selectedGameId === "lottery"
+                      ? getHistoryForLotteryBetHistory()
+                      : handleGetHistory()
+                  }
                   disabled={!selectedGameId}
                 >
                   Get History
@@ -350,12 +385,12 @@ const BetHistory = () => {
                 <table className="table table-bordered">
                   <thead>
                     <tr align="center">
-                      <th scope="col">Game Name</th>
-                      <th scope="col">Market Name</th>
-                      <th scope="col">Runner Name</th>
-                      <th scope="col">Odd Req.</th>
-                      <th scope="col">Value</th>
-                      <th scope="col">Type</th>
+                      <th scope="col">Sport Name</th>
+                      <th scope="col">Event</th>
+                      <th scope="col">Tickets</th>
+                      <th scope="col">Sem</th>
+                      <th scope="col">Ticket Price</th>
+                      <th scope="col">Amount</th>
                       <th scope="col">Date</th>
                     </tr>
                   </thead>
@@ -364,10 +399,87 @@ const BetHistory = () => {
                       <tr key={index} align="center">
                         <td>{item.gameName}</td>
                         <td>{item.marketName}</td>
-                        <td>{item.runnerName}</td>
-                        <td>{item.rate}</td>
-                        <td className="fw-bold">{item.value}</td>
-                        <td>{item.type}</td>
+                        <td>
+                          {" "}
+                          <div
+                            className="dropdown"
+                            style={{ position: "relative" }}
+                          >
+                            <button
+                              className="btn btn-link dropdown-toggle"
+                              type="button"
+                              onClick={() => toggleDropdown(index)}
+                            >
+                              View Tickets
+                            </button>
+                            <div
+                              className="custom-dropdown-content"
+                              style={{
+                                height: dropdownOpen === index ? "200px" : "0",
+                                overflow:
+                                  dropdownOpen === index ? "auto" : "hidden",
+                                transition: "height 0.3s ease",
+                                background: "white",
+                                border: "1px solid #ccc",
+                                borderRadius: "4px",
+                                boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+                              }}
+                            >
+                              {dropdownOpen === index && (
+                                <div
+                                  style={{
+                                    maxHeight: "200px", // Sets the maximum height
+                                    // overflowY: "auto", // Enables scrolling if necessary
+                                    padding: "10px", // Optional: Space inside the dropdown
+                                  }}
+                                >
+                                  <span
+                                    style={{
+                                      fontWeight: "bold",
+                                      display: "block",
+                                      marginBottom: "5px",
+                                    }}
+                                  >
+                                    Ticket Numbers:
+                                  </span>
+                                  <hr
+                                    style={{
+                                      margin: "5px 0",
+                                      borderColor: "#ddd",
+                                    }}
+                                  />
+                                  {item?.tickets?.length > 0 ? (
+                                    item?.tickets?.map((number, i) => (
+                                      <span
+                                        key={i}
+                                        style={{
+                                          display: "block",
+                                          padding: "5px 10px",
+                                          borderBottom: "1px solid #eee",
+                                          color: "#333",
+                                        }}
+                                      >
+                                        {number}
+                                      </span>
+                                    ))
+                                  ) : (
+                                    <span
+                                      style={{
+                                        color: "#999",
+                                        fontStyle: "italic",
+                                      }}
+                                    >
+                                      No ticket numbers available
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td>{item.sem}</td>
+                        <td className="fw-bold">{item.ticketPrice}</td>
+                        <td>{item.amount}</td>
                         <td>{new Date(item.date).toLocaleString()}</td>
                       </tr>
                     ))}

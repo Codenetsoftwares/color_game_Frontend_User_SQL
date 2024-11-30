@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Pagination from "../common/Pagination";
 
-const ProfitAndLossEvent = ({
+const ProfitAndLossLotteryEvent = ({
   data,
   SetComponent,
   SetMarketId,
@@ -15,9 +15,8 @@ const ProfitAndLossEvent = ({
   const startIndex = Math.min((data.currentPage - 1) * 10 + 1);
   const endIndex = Math.min(data.currentPage * 10, data.totalData);
 
-  const handelGotoRunnerWiseProfitLoss = (marketId, componentName) => {
+  const handelGotoLotteryBetHistory = (componentName) => {
     SetComponent(componentName);
-    SetMarketId(marketId);
   };
   const handelItemPerPage = (event) => {
     console.log("event.target.value", event.target.value);
@@ -90,7 +89,7 @@ const ProfitAndLossEvent = ({
                 </div>
               ) : (
                 // Table
-                  <div className="QA_section" style={{ overflowX: "auto" }}>
+                <div className="QA_section" style={{ overflowX: "auto" }}>
                   <div className="QA_table mb_30">
                     <table className="table lms_table_active3 table-bordered">
                       <thead>
@@ -107,12 +106,12 @@ const ProfitAndLossEvent = ({
                           <th scope="col">
                             <b>Event Name</b>
                           </th>
-                            <th scope="col">
-                              <b>Profit & Loss</b>
-                            </th>
+                          <th scope="col">
+                            <b>Profit & Loss</b>
+                          </th>
                           <th scope="col">
                             <b>Commission</b>
-                          </th>                       
+                          </th>
                           <th scope="col">
                             <b>Total P&L</b>
                           </th>
@@ -125,37 +124,35 @@ const ProfitAndLossEvent = ({
                                 className="text-primary fw-bold"
                                 style={{ cursor: "pointer" }}
                                 onClick={() => {
-                                  handelGotoRunnerWiseProfitLoss(
-                                    data.marketId,
-                                    "ProfitAndLossRunner"
+                                  handelGotoLotteryBetHistory(
+                                    "UserLotteryBetHistory"
                                   );
                                 }}
                               >
                                 {data?.marketName}
                               </td>
                               <td
-                                className={`fw-bold ${data?.totalProfitLoss > 0
+                                className={`fw-bold ${data?.profitLoss > 0
                                   ? "text-success"
                                   : "text-danger"
                                   }`}
                               >
-                                {data?.totalProfitLoss}
+                                {data?.profitLoss}
                               </td>
                               <td>{data?.commission || 0}</td>
                               <td
-                                className={`fw-bold ${
-                                  data?.totalProfitLoss > 0
+                                className={`fw-bold ${data?.profitLoss > 0
                                     ? "text-success"
                                     : "text-danger"
-                                }`}
+                                  }`}
                               >
-                                {data?.totalProfitLoss}
+                                {data?.profitLoss}
                               </td>
                             </tr>
                           ))
                         ) : (
                           <tr align="center">
-                            <td colspan="8">
+                            <td colspan="5">
                               <div
                                 class="alert alert-info fw-bold"
                                 role="alert"
@@ -193,4 +190,4 @@ const ProfitAndLossEvent = ({
   );
 };
 
-export default ProfitAndLossEvent;
+export default ProfitAndLossLotteryEvent;

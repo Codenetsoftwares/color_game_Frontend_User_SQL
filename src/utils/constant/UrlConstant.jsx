@@ -46,6 +46,9 @@ class UrlConstant {
   getLotteryMarketsApi = `${this.url_dev}/${this.user}-getAllMarket`;
 
   getPrizeResult = `${this.url_dev}/prize-results`;
+  userLotteryBetHistoryById = `${this.url_dev}/lottery-bet-history`;
+  getProfitLossLotteryEvent = `${this.url_dev}/lottery-profit-loss`;
+  getUserLotteryBetList = `${this.url_dev}/lottery-betHistory-profitLoss`;
   getResultMarkets= `${this.url_dev}/${this.user}/markets-dateWise`;
   GetResult=`${this.url_dev}/${this.user}-lottery-results`; 
   getPurchaseMarketTime = `${this.url_dev}/${this.user}/getMarkets`; 
