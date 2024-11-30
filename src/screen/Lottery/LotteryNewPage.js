@@ -41,17 +41,17 @@ const LotteryNewPage = ({ drawId }) => {
     const handleLotteryRange = async () => {
       try {
         const data = await LotteryRange(); // Fetch data from the API
-
+  
         if (data && data.data) {
           // Filter the data to find the market with the matching marketId
           const filteredMarket = data.data.filter((item) => item.marketId === drawId);
-
+  
           if (filteredMarket.length > 0) {
             const currentMarket = filteredMarket[0];
-
+  
             // Set the market name
             setMarketName(currentMarket.marketName || "Unknown Market");
-
+  
             // Set lottery range values based on the matched market
             setLotteryRange({
               group_start: currentMarket.group_start || "",
@@ -61,21 +61,27 @@ const LotteryNewPage = ({ drawId }) => {
               number_start: currentMarket.number_start || 0,
               number_end: currentMarket.number_end || 0,
             });
-
-            // Initialize the filtered numbers and groups based on the fetched range
-            setFilteredNumbers(generateNumbers(filteredObject?.number_start || data?.data[0]?.number_start, filteredObject?.number_end || data?.data[0]?.number_end));
-            setFilteredGroups(generateGroups(filteredObject?.group_start || data?.data[0]?.group_start, filteredObject?.group_end || data?.data[0]?.group_end));
-            setSeriesList(generateSeries(filteredObject?.series_start || data?.data[0]?.series_start, filteredObject?.series_end || data?.data[0]?.series_end));
-            setFilteredSeries(generateSeries(filteredObject?.series_start || data?.data[0]?.series_start, filteredObject?.series_end || data?.data[0]?.series_end));
+  
+            // Update the filtered values based on the new market range
+            setFilteredNumbers(generateNumbers(currentMarket.number_start, currentMarket.number_end));
+            setFilteredGroups(generateGroups(currentMarket.group_start, currentMarket.group_end));
+            setFilteredSeries(generateSeries(currentMarket.series_start, currentMarket.series_end));
           } else {
-            console.warn("LotteryRange returned null or undefined data");
+            console.warn("No market found matching the given drawId");
+            setMarketName("Unknown Market");
+            setLotteryRange({});
+            setFilteredNumbers([]);
+            setFilteredGroups([]);
+            setFilteredSeries([]);
           }
+        } else {
+          console.warn("LotteryRange returned null or undefined data");
         }
       } catch (error) {
         console.error("Error fetching lottery range:", error);
       }
     };
-
+  
     handleLotteryRange();
   }, [drawId]);
 

@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom';
 
 const  LotteryCards = ()  => {
     const { store } = useAppContext();
-    const { drawId } = useParams(); 
+ 
 
   const { marketId } = useParams()
   console.log("param", marketId)
