@@ -1,216 +1,258 @@
-import React, { useState, useEffect } from "react";
-// import "bootstrap/dist/css/bootstrap.min.css";
-import { GetResultMarket, GetWiningResult } from "../../Utils/apiService";
+import React, { useEffect, useState, useCallback } from "react";
+import { useAppContext } from "../../../contextApi/context";
+import { GetPurchaseHistoryMarketTimings, PurchasedTicketsHistory } from "../../../Utils/apiService";
+import { Table, Spinner } from "react-bootstrap";
+import debounce from "lodash.debounce";
+import { useParams, useNavigate } from "react-router-dom";
 
-const Result = () => {
+const PurchasedTickets = () => {
+  const { dispatch, showLoader, hideLoader } = useAppContext();
+  const { marketId: paramMarketId } = useParams(); // Get marketId from route params
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(true);
+  const [loader, setLoader] = useState(true);
+  const [purchasedTickets, setPurchasedTickets] = useState([]);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    totalPages: 0,
+    totalItems: 0,
+  });
+
+  const [dropdownOpen, setDropdownOpen] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [markets, setMarkets] = useState([]);
-  const [selectedMarket, setSelectedMarket] = useState(null);
-  const [scrollIndex, setScrollIndex] = useState(0);
-  const [results, setResults] = useState([]); // State to store fetched prize data
-  const [error, setError] = useState(null); // State to handle fetch errors
-
-  const maxVisibleMarkets = 5;
-  const visibleMarkets = markets.slice(scrollIndex, scrollIndex + maxVisibleMarkets);
-
-  // Fetch markets using the API
+  const [selectedMarketId, setSelectedMarketId] = useState(paramMarketId || null); // Track selected market ID
+  const toggleDropdown = (id) => {
+    setDropdownOpen(dropdownOpen === id ? null : id);
+  };
   useEffect(() => {
-    const fetchMarkets = () => {
-      GetResultMarket({ date: new Date().toISOString().slice(0, 10) }).then((response) => {
-        if (response && response.success && response.data) {
-          setMarkets(response.data);
-          setSelectedMarket(response.data[0]); // Default to the first market
-        } else {
-          setError("Failed to fetch markets or no data available.");
-        }
-      });
-    };
-    fetchMarkets();
-  }, []);
-
-  // Fetch prize results based on the selected market
-  useEffect(() => {
-    if (!selectedMarket) return;
-
-    const fetchResults = () => {
-      setError(null);
-      GetWiningResult({ marketId: selectedMarket.marketId }).then((response) => {
-        if (response && response.success) {
-          if (response.data && response.data.length > 0) {
-            setResults(response.data);
-          } else {
-            setResults([]); 
-            setError("No prize data available.");
+    const fetchMarketData = async () => {
+      try {
+        const response = await GetPurchaseHistoryMarketTimings();
+        if (response?.success) {
+          setMarkets(response.data || []);
+          if (!paramMarketId && response.data.length > 0) {
+            // If no marketId from route, select the first market in the list
+            setSelectedMarketId(response.data[0].marketId);
           }
         } else {
-          setError(response?.message);
+          console.error("Failed to fetch markets");
         }
-      });
+      } catch (error) {
+        console.error("Error fetching markets:", error);
+      }
     };
 
-    fetchResults();
-  }, [selectedMarket]);
+    fetchMarketData();
+  }, [paramMarketId]);
 
-  const handleScrollLeft = () => {
-    if (scrollIndex > 0) setScrollIndex(scrollIndex - 1);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      showLoader();
+      try {
+        await fetchPurchasedLotteryTickets(searchTerm);
+      } catch (error) {
+        console.error("Error fetching lottery markets:", error);
+      } finally {
+        hideLoader();
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      fetchPurchasedLotteryTickets.cancel();
+    };
+  }, [selectedMarketId, pagination.page, pagination.limit, searchTerm]);
+
+  const fetchPurchasedLotteryTickets = useCallback(
+    debounce(async (searchTerm) => {
+      setLoader(true);
+      try {
+        const response = await PurchasedTicketsHistory({
+          marketId: selectedMarketId, // Use the selected market ID
+          page: pagination.page,
+          limit: pagination.limit,
+          searchBySem: searchTerm,
+        });
+
+        if (response && response.success) {
+          setPurchasedTickets(response.data || []);
+          setPagination({
+            page: response?.pagination?.page || pagination.page,
+            limit: response?.pagination?.limit || pagination.limit,
+            totalPages: response?.pagination?.totalPages || 0,
+            totalItems: response?.pagination?.totalItems || 0,
+          });
+          dispatch({
+            type: "PURCHASED_LOTTERY_TICKETS",
+            payload: response.data,
+          });
+        } else {
+          console.error("Failed to fetch purchased tickets");
+        }
+      } catch (error) {
+        console.error("Error fetching purchased tickets:", error);
+      }
+      setLoader(false);
+    }, 500),
+    [selectedMarketId, pagination.page, pagination.limit, dispatch]
+  );
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    setPagination((prev) => ({ ...prev, page: 1 }));
   };
 
-  const handleScrollRight = () => {
-    if (scrollIndex + maxVisibleMarkets < markets.length) setScrollIndex(scrollIndex + 1);
+  const handlePageChange = (newPage) => {
+    setPagination((prev) => ({ ...prev, page: newPage }));
   };
 
-  const handleOldResults = () => {
-    alert("This portion is under development.");
+  const handleMarketClick = (marketId) => {
+    setSelectedMarketId(marketId); // Update selected market ID
+    setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page
+    navigate(`/purchase-history/${marketId}`); // Navigate to the route with marketId
   };
+
+  const startIndex = (pagination.page - 1) * pagination.limit + 1;
+  const endIndex = Math.min(pagination.page * pagination.limit, pagination.totalItems);
+
+  if (loading) {
+    return null;
+  }
 
   return (
-    <div style={{ fontFamily: "Arial, sans-serif", margin: "20px" }}>
-      {/* Top Navigation Bar */}
-      <div
-        className="d-flex align-items-center"
-        style={{
-          backgroundColor: "#4682B4",
-          padding: "10px",
-          borderRadius: "8px",
-          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        {/* Left Arrow */}
-        <button
-          className="btn btn-light"
-          style={{
-            padding: "5px 10px",
-            fontSize: "18px",
-            borderRadius: "50%",
-            marginRight: "10px",
-          }}
-          onClick={handleScrollLeft}
-          disabled={scrollIndex === 0}
-        >
-          &#8249;
-        </button>
-
-        {/* Market Buttons */}
-        <div
-          className="d-flex flex-nowrap justify-content-center"
-          style={{
-            overflow: "hidden",
-            gap: "10px",
-          }}
-        >
-          {visibleMarkets.map((market) => (
-            <button
-              key={market.marketId}
-              className={`btn ${market.marketId === selectedMarket?.marketId ? "btn-primary" : "btn-outline-light"}`}
-              onClick={() => setSelectedMarket(market)}
-              style={{
-                fontSize: "16px",
-                borderRadius: "4px",
-                boxShadow: market.marketId === selectedMarket?.marketId ? "0px 4px 6px rgba(0, 0, 0, 0.2)" : "none",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {market.marketName}
-            </button>
-          ))}
+    <div className="container mt-4 p-3">
+      {/* Top Navigation for Markets */}
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h4>Markets</h4>
+        <div className="d-flex flex-wrap">
+          {markets.length > 0 ? (
+            markets.map((market) => (
+              <span
+                key={market.marketId}
+                className="badge bg-primary me-2"
+                style={{ cursor: "pointer" }}
+                onClick={() => handleMarketClick(market.marketId)}
+              >
+                {market.marketName}
+              </span>
+            ))
+          ) : (
+            <span>No markets available</span>
+          )}
         </div>
+      </div>
 
-        {/* Right Arrow */}
-        <button
-          className="btn btn-light"
-          style={{
-            padding: "5px 10px",
-            fontSize: "18px",
-            borderRadius: "50%",
-            marginLeft: "10px",
-          }}
-          onClick={handleScrollRight}
-          disabled={scrollIndex + maxVisibleMarkets >= markets.length}
-        >
-          &#8250;
-        </button>
+      {/* Purchased Tickets Table */}
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h2 style={{ color: "#4682B4" }}>Purchased Lottery Tickets</h2>
+        <div className="w-50">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search purchased tickets by SEM.."
+            aria-label="Search tickets"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+        </div>
+      </div>
 
-        {/* Old Results Button */}
-        <button
-          className="btn btn-warning"
-          onClick={handleOldResults}
+      <Table striped hover responsive bordered className="table-sm">
+        <thead
           style={{
-            marginLeft: "auto",
-            borderRadius: "20px",
-            padding: "5px 15px",
+            backgroundColor: "#4682B4",
+            color: "#fff",
             fontWeight: "bold",
-            fontSize: "14px",
+            textAlign: "center",
           }}
         >
-          Old Results
-        </button>
-      </div>
-
-      {/* Market Result Display */}
-      <div className="mt-4">
-        <h2 className="text-center" style={{ color: "#3b6e91" }}>
-          Results for <span style={{ color: "#4682B4" }}>{selectedMarket?.marketName || "Selected Market"}</span>
-        </h2>
-
-        {/* Error Message */}
-        {error && (
-          <p className="text-danger text-center">
-            {error}
-          </p>
-        )}
-
-        {/* Prize Distribution */}
-        {results.length === 0 ? (
-          <p className="text-center text-muted">No prize declared yet.</p>
-        ) : (
-          <div className="accordion mt-4" id="prizeAccordion">
-            {results.map((result, index) => (
-              <div className="accordion-item" key={result.resultId}>
-                <h2 className="accordion-header" id={`heading${index}`}>
-                  <button
-                    className="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target={`#collapse${index}`}
-                    aria-expanded="false"
-                    aria-controls={`collapse${index}`}
-                  >
-                    {result.prizeCategory} - Amount: ₹{result.prizeAmount}
-                    {result.complementaryPrize > 0 && (
-                      <span className="badge bg-success ms-2">
-                        Complementary Prize: ₹{result.complementaryPrize}
-                      </span>
-                    )}
-                  </button>
-                </h2>
-                <div
-                  id={`collapse${index}`}
-                  className="accordion-collapse collapse"
-                  aria-labelledby={`heading${index}`}
-                  data-bs-parent="#prizeAccordion"
-                >
-                  <div className="accordion-body">
-                    <strong>Winning Ticket Numbers:</strong>
-                    <ul>
-                      {result.ticketNumber.map((ticket, idx) => (
-                        <li key={idx}>{ticket}</li>
-                      ))}
-                    </ul>
-                    {/* <p className="text-muted">
-                      Market ID: {result.marketId}
-                      <br />
-                      Created At: {new Date(result.createdAt).toLocaleString()}
-                      <br />
-                      Updated At: {new Date(result.updatedAt).toLocaleString()}
-                    </p> */}
-                  </div>
+          <tr>
+            <th>Serial Number</th>
+            <th>Market Name</th>
+            <th>SEM</th>
+            <th>Tickets</th>
+            <th>User Name</th>
+          </tr>
+        </thead>
+        <tbody style={{ textAlign: "center" }}>
+          {loader ? (
+            <tr>
+              <td colSpan="6">
+                <div className="d-flex justify-content-center align-items-center">
+                  <Spinner animation="border" variant="primary" />
+                  <span className="ms-2">Loading tickets...</span>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              </td>
+            </tr>
+          ) : purchasedTickets.length > 0 ? (
+            purchasedTickets.map((ticket, index) => (
+              <tr key={index}>
+                <td>{startIndex + index}</td>
+                <td>{ticket.marketName || "N/A"}</td>
+                <td>{ticket.sem}</td>
+                <td>
+                  <div className="dropdown" style={{ position: "relative" }}>
+                    <button
+                      className="btn btn-link dropdown-toggle"
+                      type="button"
+                      onClick={() => toggleDropdown(index)}
+                    >
+                      View Tickets
+                    </button>
+                    <div
+                      className="custom-dropdown-content"
+                      style={{
+                        height: dropdownOpen === index ? "150px" : "0",
+                        overflow: "hidden",
+                        transition: "height 0.3s ease",
+                      }}
+                    >
+                      {dropdownOpen === index && (
+                        <div className="custom-dropdown-menu">
+                          <span className="dropdown-item-text">
+                            Ticket Numbers:
+                          </span>
+                          <div className="dropdown-divider" />
+                          {ticket.tickets.length > 0 ? (
+                            ticket.tickets.map((number, i) => (
+                              <span key={i} className="dropdown-item">
+                                {number}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="dropdown-item text-muted">
+                              No ticket numbers available
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </td>
+                {/* <td>{ticket.price }</td> */}
+                <td>{ticket.userName || "N/A"}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5" className="text-center">
+                No tickets found.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
+
+      {/* Pagination Component */}
+      {/* Add pagination here */}
     </div>
   );
 };
 
-export default Result;
+export default PurchasedTickets;
