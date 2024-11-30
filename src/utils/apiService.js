@@ -498,3 +498,31 @@ export async function user_getLotteryBetHistory_api(body = {}, isToast = false) 
     throw error;
   }
 }
+
+export async function getProfitLossLotteryEvent(body = {}, isToast = false) {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(
+      `${urls.getProfitLossLotteryEvent}?page=${body.page}&limit=${body.limit}`, 
+      callParams,
+      isToast
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const getUserLotteryBetHistory_api = async (body = {}, isToast = false) => {
+  try {
+    const callParams = await getCallParams(strings.GET, body, isToast);
+    const response = await makeCall(
+      `${urls.getUserLotteryBetList}`,
+      callParams,
+      isToast
+    );
+    return response;
+  } catch (err) {
+    throw err;
+  }
+};

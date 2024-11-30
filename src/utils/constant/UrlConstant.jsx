@@ -45,6 +45,8 @@ class UrlConstant {
   getLotteryMarketsApi = `${this.url_dev}/${this.user}-getAllMarket`;
   getPrizeResult = `${this.url_dev}/prize-results`;
   userLotteryBetHistoryById = `${this.url_dev}/lottery-bet-history`;
+  getProfitLossLotteryEvent = `${this.url_dev}/lottery-profit-loss`;
+  getUserLotteryBetList = `${this.url_dev}/lottery-betHistory-profitLoss`;
 }
 
 const urls = new UrlConstant();
