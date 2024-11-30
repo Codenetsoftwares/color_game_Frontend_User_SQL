@@ -42,7 +42,9 @@ class UrlConstant {
   lotteryRange = `${this.url_dev}/get-range`;
   buyTicketUser = `${this.url_dev}/purchase-lottery`;
   userPurchaseHIstory = `${this.url_dev}/purchase-history`;
+
   getLotteryMarketsApi = `${this.url_dev}/${this.user}-getAllMarket`;
+
   getPrizeResult = `${this.url_dev}/prize-results`;
 }
 
