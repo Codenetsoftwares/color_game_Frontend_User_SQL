@@ -4,6 +4,7 @@ import "./LotteryNewPage.css";
 import { LotteryRange, SearchLotteryTicketUser } from "../../utils/apiService";
 import SearchLotteryResult from "./SearchLotteryResult";
 import { getLotteryRange } from "../../utils/getInitiateState";
+import moment from "moment";
 
 
 const LotteryNewPage = ({ drawId }) => {
@@ -25,6 +26,8 @@ const LotteryNewPage = ({ drawId }) => {
   const [filteredSeries, setFilteredSeries] = useState([]); // For filtered series
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [seriesList, setSeriesList] = useState([]);
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
 
   const [marketIds, setMarketIds] = useState([]);
   const [marketName, setMarketName] = useState("");
@@ -33,6 +36,7 @@ const LotteryNewPage = ({ drawId }) => {
   console.log('response from this page')
 
   console.log('response from this page', responseData)
+  
 
 
   // Fetch lottery range data when component mounts
@@ -51,6 +55,8 @@ const LotteryNewPage = ({ drawId }) => {
   
             // Set the market name
             setMarketName(currentMarket.marketName || "Unknown Market");
+            setStartTime(moment(currentMarket.start_time).format("hh:mm A") || "1 PM");
+            setEndTime(moment(currentMarket.end_time).format("hh:mm A"));
   
             // Set lottery range values based on the matched market
             setLotteryRange({
@@ -309,6 +315,11 @@ const LotteryNewPage = ({ drawId }) => {
               >
                 {marketName}
               </h2>
+              {startTime && endTime && (
+            <p style={{ color: "#6c757d" }}>
+              Start Time: <strong>{startTime}</strong> | End Time: <strong>{endTime}</strong>
+            </p>
+          )}
               <h2 className="mb-1" style={{ color: "#ff4500", fontWeight: "bold", letterSpacing: "1px", fontSize: "2rem" }}>
                 🎉 Find Your Lucky Ticket & Win Big! 🎟️
               </h2>
