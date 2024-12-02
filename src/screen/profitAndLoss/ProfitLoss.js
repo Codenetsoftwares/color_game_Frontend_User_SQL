@@ -189,7 +189,7 @@ const ProfitLoss = ({
       // Update state with the response data
       setUserLotteryBetHistory((prevState) => ({
         ...prevState,
-        data: response.data,
+        data: response?.data,
 
       }));
     } catch (error) {
