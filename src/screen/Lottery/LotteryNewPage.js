@@ -6,10 +6,8 @@ import SearchLotteryResult from "./SearchLotteryResult";
 import { getLotteryRange } from "../../utils/getInitiateState";
 import moment from "moment";
 
-
 const LotteryNewPage = ({ drawId }) => {
-
-  console.log('====>>>> line number 10', drawId)
+  console.log("====>>>> line number 10", drawId);
 
   const [sem, setSem] = useState("");
   const [group, setGroup] = useState("");
@@ -31,13 +29,11 @@ const LotteryNewPage = ({ drawId }) => {
 
   const [marketIds, setMarketIds] = useState([]);
   const [marketName, setMarketName] = useState("");
-  console.log('===>> marketName', marketName)
+  console.log("===>> marketName", marketName);
 
-  console.log('response from this page')
+  console.log("response from this page");
 
-  console.log('response from this page', responseData)
-  
-
+  console.log("response from this page", responseData);
 
   // Fetch lottery range data when component mounts
   // Handle market data update when drawId changes
@@ -45,19 +41,25 @@ const LotteryNewPage = ({ drawId }) => {
     const handleLotteryRange = async () => {
       try {
         const data = await LotteryRange(); // Fetch data from the API
-  
+
         if (data && data.data) {
           // Filter the data to find the market with the matching marketId
-          const filteredMarket = data.data.filter((item) => item.marketId === drawId);
-  
+          const filteredMarket = data.data.filter(
+            (item) => item.marketId === drawId
+          );
+
           if (filteredMarket.length > 0) {
             const currentMarket = filteredMarket[0];
-  
+
             // Set the market name
             setMarketName(currentMarket.marketName || "Unknown Market");
-            setStartTime(moment(currentMarket.start_time).format("hh:mm A") || "1 PM");
-            setEndTime(moment(currentMarket.end_time).format("hh:mm A"));
-  
+            setStartTime(
+              moment.utc(currentMarket.start_time).format("HH:mm") || "N/A"
+            );
+            setEndTime(
+              moment.utc(currentMarket.end_time).format("HH:mm") || "N/A"
+            );
+
             // Set lottery range values based on the matched market
             setLotteryRange({
               group_start: currentMarket.group_start || "",
@@ -67,11 +69,23 @@ const LotteryNewPage = ({ drawId }) => {
               number_start: currentMarket.number_start || 0,
               number_end: currentMarket.number_end || 0,
             });
-  
+
             // Update the filtered values based on the new market range
-            setFilteredNumbers(generateNumbers(currentMarket.number_start, currentMarket.number_end));
-            setFilteredGroups(generateGroups(currentMarket.group_start, currentMarket.group_end));
-            setFilteredSeries(generateSeries(currentMarket.series_start, currentMarket.series_end));
+            setFilteredNumbers(
+              generateNumbers(
+                currentMarket.number_start,
+                currentMarket.number_end
+              )
+            );
+            setFilteredGroups(
+              generateGroups(currentMarket.group_start, currentMarket.group_end)
+            );
+            setFilteredSeries(
+              generateSeries(
+                currentMarket.series_start,
+                currentMarket.series_end
+              )
+            );
           } else {
             console.warn("No market found matching the given drawId");
             setMarketName("Unknown Market");
@@ -87,10 +101,9 @@ const LotteryNewPage = ({ drawId }) => {
         console.error("Error fetching lottery range:", error);
       }
     };
-  
+
     handleLotteryRange();
   }, [drawId]);
-
 
   const handleSemChange = (e) => {
     setSem(e.target.value);
@@ -101,7 +114,7 @@ const LotteryNewPage = ({ drawId }) => {
     const letters = [];
     for (let i = start.charCodeAt(0); i <= end.charCodeAt(0); i++) {
       const letter = String.fromCharCode(i);
-      if (letter !== 'I' && letter !== 'F' && letter !== 'O') {
+      if (letter !== "I" && letter !== "F" && letter !== "O") {
         letters.push(letter);
       }
     }
@@ -110,7 +123,9 @@ const LotteryNewPage = ({ drawId }) => {
 
   // Generate groups within a specified range
   const generateGroups = (start, end) => {
-    return Array.from({ length: Math.abs(end - start) + 1 }, (_, i) => (i + start).toString());
+    return Array.from({ length: Math.abs(end - start) + 1 }, (_, i) =>
+      (i + start).toString()
+    );
   };
 
   const renderSeriesGrid = () => {
@@ -167,7 +182,10 @@ const LotteryNewPage = ({ drawId }) => {
   const generateNumbers = (start, end) => {
     const actualStart = Math.min(start, end);
     const actualEnd = Math.max(start, end);
-    return Array.from({ length: actualEnd - actualStart + 1 }, (_, i) => i + actualStart);
+    return Array.from(
+      { length: actualEnd - actualStart + 1 },
+      (_, i) => i + actualStart
+    );
   };
 
   // Debounced filter function for number, group, and series inputs
@@ -181,9 +199,10 @@ const LotteryNewPage = ({ drawId }) => {
         let filtered = [];
         switch (type) {
           case "number":
-            filtered = generateNumbers(lotteryRange.number_start, lotteryRange.number_end).filter((num) =>
-              num.toString().startsWith(value)
-            );
+            filtered = generateNumbers(
+              lotteryRange.number_start,
+              lotteryRange.number_end
+            ).filter((num) => num.toString().startsWith(value));
             setFilteredNumbers(filtered);
             break;
           case "group":
@@ -194,7 +213,9 @@ const LotteryNewPage = ({ drawId }) => {
               setFilteredGroups(filtered);
             } else {
               // Reset to all groups if input is empty
-              setFilteredGroups(generateGroups(lotteryRange.group_start, lotteryRange.group_end));
+              setFilteredGroups(
+                generateGroups(lotteryRange.group_start, lotteryRange.group_end)
+              );
             }
             break;
           case "series":
@@ -205,7 +226,12 @@ const LotteryNewPage = ({ drawId }) => {
               setFilteredSeries(filtered);
             } else {
               // Reset to all series if input is empty
-              setFilteredSeries(generateSeries(lotteryRange.series_start, lotteryRange.series_end));
+              setFilteredSeries(
+                generateSeries(
+                  lotteryRange.series_start,
+                  lotteryRange.series_end
+                )
+              );
             }
             break;
           default:
@@ -243,7 +269,7 @@ const LotteryNewPage = ({ drawId }) => {
 
   const renderNumberGrid = () => {
     return (
-      <div className="calendar-grid" >
+      <div className="calendar-grid">
         {filteredNumbers.length === 0 ? (
           <div className="text-center">No Results</div>
         ) : (
@@ -251,7 +277,9 @@ const LotteryNewPage = ({ drawId }) => {
             <button
               key={num}
               className="calendar-cell"
-              onClick={() => handleNumberSelect(num.toString().padStart(5, "0"))}
+              onClick={() =>
+                handleNumberSelect(num.toString().padStart(5, "0"))
+              }
             >
               {num.toString().padStart(5, "0")}
             </button>
@@ -267,8 +295,7 @@ const LotteryNewPage = ({ drawId }) => {
       series: series || null,
       number: number || null,
       sem: sem ? parseInt(sem) : null,
-      marketId: drawId
-
+      marketId: drawId,
     };
 
     try {
@@ -303,7 +330,6 @@ const LotteryNewPage = ({ drawId }) => {
         {showSearch ? (
           <>
             <div className="text-center mb-4">
-
               <h2
                 className="mb-1"
                 style={{
@@ -316,20 +342,35 @@ const LotteryNewPage = ({ drawId }) => {
                 {marketName}
               </h2>
               {startTime && endTime && (
-            <p style={{ color: "#6c757d" }}>
-              Start Time: <strong>{startTime}</strong> | End Time: <strong>{endTime}</strong>
-            </p>
-          )}
-              <h2 className="mb-1" style={{ color: "#ff4500", fontWeight: "bold", letterSpacing: "1px", fontSize: "2rem" }}>
+                <p style={{ color: "#6c757d" }}>
+                  Start Time: <strong>{startTime}</strong> | End Time:{" "}
+                  <strong>{endTime}</strong>
+                </p>
+              )}
+              <h2
+                className="mb-1"
+                style={{
+                  color: "#ff4500",
+                  fontWeight: "bold",
+                  letterSpacing: "1px",
+                  fontSize: "2rem",
+                }}
+              >
                 🎉 Find Your Lucky Ticket & Win Big! 🎟️
               </h2>
-              <p style={{ color: "#6c757d" }}>Search by Sem, Group, Series, or Number</p>
+              <p style={{ color: "#6c757d" }}>
+                Search by Sem, Group, Series, or Number
+              </p>
             </div>
 
             {/* Sem Input */}
             <div className="mb-3">
               <label className="form-label">SEM</label>
-              <select className="form-select" value={sem} onChange={handleSemChange}>
+              <select
+                className="form-select"
+                value={sem}
+                onChange={handleSemChange}
+              >
                 <option value="">Select Sem</option>
                 {[5, 10, 25, 50, 100, 200].map((semValue) => (
                   <option key={semValue} value={semValue}>
@@ -350,7 +391,9 @@ const LotteryNewPage = ({ drawId }) => {
                   onFocus={() => handleFocus("group")}
                   onChange={handleGroupInputChange} // Allow manual input
                 />
-                {isGroupPickerVisible && <div className="picker-dropdown">{renderGroupGrid()}</div>}
+                {isGroupPickerVisible && (
+                  <div className="picker-dropdown">{renderGroupGrid()}</div>
+                )}
               </div>
             </div>
 
@@ -365,7 +408,9 @@ const LotteryNewPage = ({ drawId }) => {
                   onFocus={() => handleFocus("series")}
                   onChange={handleSeriesInputChange} // Allow manual input
                 />
-                {isSeriesPickerVisible && <div className="picker-dropdown">{renderSeriesGrid()}</div>}
+                {isSeriesPickerVisible && (
+                  <div className="picker-dropdown">{renderSeriesGrid()}</div>
+                )}
               </div>
             </div>
 
@@ -380,7 +425,9 @@ const LotteryNewPage = ({ drawId }) => {
                   onFocus={() => handleFocus("number")}
                   onChange={handleNumberInputChange}
                 />
-                {isNumberPickerVisible && <div className="picker-dropdown">{renderNumberGrid()}</div>}
+                {isNumberPickerVisible && (
+                  <div className="picker-dropdown">{renderNumberGrid()}</div>
+                )}
               </div>
             </div>
 
@@ -400,9 +447,7 @@ const LotteryNewPage = ({ drawId }) => {
             </button>
           </>
         ) : (
-
           <SearchLotteryResult responseData={responseData} marketId={drawId} />
-
         )}
       </div>
     </div>
