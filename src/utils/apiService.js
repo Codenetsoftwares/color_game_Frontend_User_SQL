@@ -567,3 +567,23 @@ export const getUserLotteryBetHistory_api = async (body = {}, isToast = false) =
     throw err;
   }
 };
+
+// export async function logout(body, isToast = false) {
+//   try {
+//     const callParams = getNoAuthCallParams(strings.POST, body, isToast);
+//     const response = await makeCall(urls.userLogout, callParams, isToast);
+//     return response;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+export async function getUpdateMarketStatus(body, marketId, isToast = false) {
+  try {
+    const callParams =  getNoAuthCallParams(strings.POST, body, isToast);
+     const response = await makeCall(`${urls.getUpdateMarketStatus}/${marketId}`, callParams, isToast);
+     debugger;
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}

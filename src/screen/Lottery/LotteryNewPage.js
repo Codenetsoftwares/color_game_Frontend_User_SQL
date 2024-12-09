@@ -1,13 +1,23 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./LotteryNewPage.css";
-import { LotteryRange, SearchLotteryTicketUser } from "../../utils/apiService";
+import {
+  LotteryRange,
+  SearchLotteryTicketUser,
+  GetUpdateMarketStatus,
+  getUpdateMarketStatus,
+} from "../../utils/apiService";
 import SearchLotteryResult from "./SearchLotteryResult";
 import { getLotteryRange } from "../../utils/getInitiateState";
 import moment from "moment";
+import CountDownTimerLottery from "../common/CountTimerLottery";
+import { useParams } from "react-router-dom";
 
 const LotteryNewPage = ({ drawId }) => {
   console.log("====>>>> line number 10", drawId);
+  const { marketId } = useParams();
+
+  console.log("marketId", marketId);
 
   const [sem, setSem] = useState("");
   const [group, setGroup] = useState("");
@@ -26,11 +36,21 @@ const LotteryNewPage = ({ drawId }) => {
   const [seriesList, setSeriesList] = useState([]);
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
-
+  const [endTimeForTimer, setEndTimeForTimer] = useState(null);
   const [marketIds, setMarketIds] = useState([]);
   const [marketName, setMarketName] = useState("");
+  const [setIsTimeUp, setSetIsTimeUp] = useState(false);
+  const [isSuspend, setIsSuspend] = useState(false);
   console.log("===>> marketName", marketName);
 
+  useEffect(() => {
+    if (setIsTimeUp) {
+      setIsSuspend(true);
+    }
+    else{
+      setIsSuspend(false);
+    }
+  }, [setIsTimeUp]);
   console.log("response from this page");
 
   console.log("response from this page", responseData);
@@ -50,14 +70,20 @@ const LotteryNewPage = ({ drawId }) => {
 
           if (filteredMarket.length > 0) {
             const currentMarket = filteredMarket[0];
-
-            // Set the market name
             setMarketName(currentMarket.marketName || "Unknown Market");
             setStartTime(
-              moment.utc(currentMarket.start_time).format("HH:mm") || "N/A"
+              moment.utc(currentMarket.start_time).format("YYYY-MM-DD HH:mm") ||
+                "N/A"
             );
             setEndTime(
-              moment.utc(currentMarket.end_time).format("HH:mm") || "N/A"
+              moment.utc(currentMarket.end_time).format("YYYY-MM-DD HH:mm") ||
+                "N/A"
+            );
+
+            setEndTimeForTimer(
+              moment
+                .utc(currentMarket.end_time)
+                .format("YYYY-MM-DDTHH:mm:ss") || "N/A"
             );
 
             // Set lottery range values based on the matched market
@@ -68,6 +94,7 @@ const LotteryNewPage = ({ drawId }) => {
               series_end: currentMarket.series_end || "",
               number_start: currentMarket.number_start || 0,
               number_end: currentMarket.number_end || 0,
+              
             });
 
             // Update the filtered values based on the new market range
@@ -318,8 +345,9 @@ const LotteryNewPage = ({ drawId }) => {
       className="container-fluid d-flex justify-content-center mt-5"
       style={{ minHeight: "75vh", backgroundColor: "#f0f4f8" }}
     >
+      {/* Main Content Wrapper */}
       <div
-        className="border border-3 rounded-3 shadow-lg"
+        className="border border-3 rounded-3 shadow-lg position-relative"
         style={{
           padding: "40px",
           width: "80%",
@@ -327,6 +355,24 @@ const LotteryNewPage = ({ drawId }) => {
           backgroundColor: "#ffffff",
         }}
       >
+        {/* Suspended Overlay */}
+        {isSuspend &&  (<div
+          className="d-flex justify-content-center align-items-center"
+          style={{
+            zIndex: 10,
+            backgroundColor: "rgba(0, 0, 0, 0.2)",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            borderRadius: "inherit",
+          }}
+        >
+          <h1 className="fw-bold text-black">Suspended</h1>
+        </div>)}
+        {/* Your Existing Page Content */}
+        
         {showSearch ? (
           <>
             <div className="text-center mb-4">
@@ -361,6 +407,10 @@ const LotteryNewPage = ({ drawId }) => {
               <p style={{ color: "#6c757d" }}>
                 Search by Sem, Group, Series, or Number
               </p>
+              <CountDownTimerLottery
+                endDateTime={endTimeForTimer}
+                onTimeUp={() => setSetIsTimeUp(true)}
+              />
             </div>
 
             {/* Sem Input */}
@@ -430,7 +480,7 @@ const LotteryNewPage = ({ drawId }) => {
                 )}
               </div>
             </div>
-
+            
             <button
               className="btn btn-primary"
               onClick={handleSearch}
@@ -450,8 +500,10 @@ const LotteryNewPage = ({ drawId }) => {
           <SearchLotteryResult responseData={responseData} marketId={drawId} />
         )}
       </div>
+      
     </div>
   );
 };
+
 
 export default LotteryNewPage;

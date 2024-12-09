@@ -180,6 +180,7 @@ export function getLotteryRange(body = {}) {
     series_end: "",
     number_start: "",
     number_end: "",
+    isActive:null
   };
 }
 
