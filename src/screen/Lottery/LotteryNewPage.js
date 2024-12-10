@@ -37,6 +37,7 @@ const LotteryNewPage = ({ drawId }) => {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [endTimeForTimer, setEndTimeForTimer] = useState(null);
+  const [showCountdown, setShowCountdown] = useState(false);
   const [marketIds, setMarketIds] = useState([]);
   const [marketName, setMarketName] = useState("");
   const [setIsTimeUp, setSetIsTimeUp] = useState(false);
@@ -55,73 +56,65 @@ const LotteryNewPage = ({ drawId }) => {
 
   console.log("response from this page", responseData);
 
-  // Fetch lottery range data when component mounts
-  // Handle market data update when drawId changes
+  useEffect(() => {
+    if (startTime) {
+      const currentTime = moment(); 
+      const marketStartTime = moment(startTime);
+        if (currentTime.isSameOrAfter(marketStartTime)) {
+        setShowCountdown(true);
+      } else {
+        setShowCountdown(false); 
+      }
+    }
+  }, [startTime]);
+  
   useEffect(() => {
     const handleLotteryRange = async () => {
       try {
         const data = await LotteryRange(); // Fetch data from the API
-        console.log("======>>>>>> response from data line 64", data);
-
+        console.log("======>>>>>> response from data", data);
+  
         if (data && data.data) {
           // Filter the data to find the market with the matching marketId
           const filteredMarket = data.data.filter(
             (item) => item.marketId === drawId
           );
-
+  
           if (filteredMarket.length > 0) {
             const currentMarket = filteredMarket[0];
-            console.log("===>> line 75", currentMarket);
+            console.log("===>> currentMarket", currentMarket);
+  
             setPriceEach(currentMarket.price || "no price to show");
             setMarketName(currentMarket.marketName || "Unknown Market");
+  
+            const start = moment.utc(currentMarket.start_time);
+            const end = moment.utc(currentMarket.end_time);
+            console.log("object============>>>>>>>>", start);
             setStartTime(
-              moment.utc(currentMarket.start_time).format("YYYY-MM-DD HH:mm") ||
-                "N/A"
+              moment.utc(currentMarket.start_time).format("YYYY-MM-DD HH:mm")
             );
             setEndTime(
-              moment.utc(currentMarket.end_time).format("YYYY-MM-DD HH:mm") ||
-                "N/A"
+              moment.utc(currentMarket.end_time).format("YYYY-MM-DD HH:mm")
             );
 
             setEndTimeForTimer(
-              moment
-                .utc(currentMarket.end_time)
-                .format("YYYY-MM-DDTHH:mm:ss") || "N/A"
+              moment.utc(currentMarket.end_time).format("YYYY-MM-DDTHH:mm:ss")
             );
 
-            // Set lottery range values based on the matched market
-            setLotteryRange({
-              group_start: currentMarket.group_start || "",
-              group_end: currentMarket.group_end || "",
-              series_start: currentMarket.series_start || "",
-              series_end: currentMarket.series_end || "",
-              number_start: currentMarket.number_start || 0,
-              number_end: currentMarket.number_end || 0,
-            });
-
-            // Update the filtered values based on the new market range
-            setFilteredNumbers(
-              generateNumbers(
-                currentMarket.number_start,
-                currentMarket.number_end
-              )
-            );
-            setFilteredGroups(
-              generateGroups(currentMarket.group_start, currentMarket.group_end)
-            );
-            setFilteredSeries(
-              generateSeries(
-                currentMarket.series_start,
-                currentMarket.series_end
-              )
-            );
+            const currentTime = moment();
+            console.log("Current time:", currentTime.format("YYYY-MM-DD HH:mm"));
+            console.log("Start time:", start.format("YYYY-MM-DD HH:mm"));
+  
+            if (currentTime.isSameOrAfter(start)) {
+              setShowCountdown(true);
+              console.log("Countdown will be shown.");
+            } else {
+              setShowCountdown(false);
+              console.log("Countdown will not be shown.");
+            }
           } else {
             console.warn("No market found matching the given drawId");
             setMarketName("Unknown Market");
-            setLotteryRange({});
-            setFilteredNumbers([]);
-            setFilteredGroups([]);
-            setFilteredSeries([]);
           }
         } else {
           console.warn("LotteryRange returned null or undefined data");
@@ -130,9 +123,12 @@ const LotteryNewPage = ({ drawId }) => {
         console.error("Error fetching lottery range:", error);
       }
     };
-
+  
     handleLotteryRange();
   }, [drawId]);
+  
+
+
 
   const handleSemChange = (e) => {
     setSem(e.target.value);
@@ -354,7 +350,7 @@ const LotteryNewPage = ({ drawId }) => {
           padding: "40px",
           width: "80%",
           maxWidth: "800px",
-          backgroundColor: "#ffffff",
+          backgroundColor: "#ffff",
         }}
       >
         {/* Suspended Overlay */}
@@ -399,7 +395,10 @@ const LotteryNewPage = ({ drawId }) => {
                 </h2>
                 <div></div>
                 <div>
-                  <h5 className="btn text-white fw-bold" style={{background:"#1A859D"}}>
+                  <h5
+                    className="btn text-white fw-bold"
+                    style={{ background: "#1A859D" }}
+                  >
                     Price for Each SEM: <strong>{priceEach}</strong>
                   </h5>
                 </div>
@@ -425,10 +424,13 @@ const LotteryNewPage = ({ drawId }) => {
               <p style={{ color: "#6c757d" }}>
                 Search by Sem, Group, Series, or Number
               </p>
-              <CountDownTimerLottery
-                endDateTime={endTimeForTimer}
-                onTimeUp={() => setSetIsTimeUp(true)}
-              />
+              {showCountdown && (
+  <CountDownTimerLottery
+    endDateTime={endTimeForTimer}
+    onTimeUp={() => setSetIsTimeUp(true)}
+  />
+)}
+
             </div>
 
             {/* Sem Input */}
@@ -499,20 +501,19 @@ const LotteryNewPage = ({ drawId }) => {
               </div>
             </div>
 
-            <button
-              className="btn btn-primary"
-              onClick={handleSearch}
-              style={{
-                width: "100%",
-                backgroundColor: "#4682B4",
-                border: "none",
-                padding: "10px",
-                fontSize: "1.2rem",
-                fontWeight: "bold",
-              }}
-            >
-              Search
-            </button>
+            {/* Centered Search Button */}
+            <div className="d-flex justify-content-center">
+              <button
+                className="btn mt-3 text-white"
+                onClick={handleSearch}
+                style={{
+                  width: "150px",
+                  background: "#176577",
+                }}
+              >
+                Search
+              </button>
+            </div>
           </>
         ) : (
           <SearchLotteryResult responseData={responseData} marketId={drawId} />
@@ -523,3 +524,6 @@ const LotteryNewPage = ({ drawId }) => {
 };
 
 export default LotteryNewPage;
+
+
+
