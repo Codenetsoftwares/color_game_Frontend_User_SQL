@@ -41,13 +41,13 @@ const LotteryNewPage = ({ drawId }) => {
   const [marketName, setMarketName] = useState("");
   const [setIsTimeUp, setSetIsTimeUp] = useState(false);
   const [isSuspend, setIsSuspend] = useState(false);
-  console.log("===>> marketName", marketName);
+  const [priceEach, setPriceEach] = useState("");
+  console.log("===>> marketName", lotteryRange);
 
   useEffect(() => {
     if (setIsTimeUp) {
       setIsSuspend(true);
-    }
-    else{
+    } else {
       setIsSuspend(false);
     }
   }, [setIsTimeUp]);
@@ -61,6 +61,7 @@ const LotteryNewPage = ({ drawId }) => {
     const handleLotteryRange = async () => {
       try {
         const data = await LotteryRange(); // Fetch data from the API
+        console.log("======>>>>>> response from data line 64", data);
 
         if (data && data.data) {
           // Filter the data to find the market with the matching marketId
@@ -70,6 +71,8 @@ const LotteryNewPage = ({ drawId }) => {
 
           if (filteredMarket.length > 0) {
             const currentMarket = filteredMarket[0];
+            console.log("===>> line 75", currentMarket);
+            setPriceEach(currentMarket.price || "no price to show");
             setMarketName(currentMarket.marketName || "Unknown Market");
             setStartTime(
               moment.utc(currentMarket.start_time).format("YYYY-MM-DD HH:mm") ||
@@ -94,7 +97,6 @@ const LotteryNewPage = ({ drawId }) => {
               series_end: currentMarket.series_end || "",
               number_start: currentMarket.number_start || 0,
               number_end: currentMarket.number_end || 0,
-              
             });
 
             // Update the filtered values based on the new market range
@@ -356,37 +358,53 @@ const LotteryNewPage = ({ drawId }) => {
         }}
       >
         {/* Suspended Overlay */}
-        {isSuspend &&  (<div
-          className="d-flex justify-content-center align-items-center"
-          style={{
-            zIndex: 10,
-            backgroundColor: "rgba(0, 0, 0, 0.2)",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            borderRadius: "inherit",
-          }}
-        >
-          <h1 className="fw-bold text-black">Suspended</h1>
-        </div>)}
-        {/* Your Existing Page Content */}
-        
+        {isSuspend && (
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{
+              zIndex: 10,
+              backgroundColor: "rgba(0, 0, 0, 0.2)",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              borderRadius: "inherit",
+            }}
+          >
+            <h1 className="fw-bold text-black">Suspended</h1>
+          </div>
+        )}
+
         {showSearch ? (
           <>
             <div className="text-center mb-4">
-              <h2
-                className="mb-1"
-                style={{
-                  color: "#ff4500",
-                  fontWeight: "bold",
-                  letterSpacing: "1px",
-                  fontSize: "2rem",
-                }}
+              <div
+                className="d-flex justify-content-between align-items-center"
+                style={{ position: "relative", width: "100%" }}
               >
-                {marketName}
-              </h2>
+                <h2
+                  className="mb-1"
+                  style={{
+                    position: "absolute",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    color: "#ff4500",
+                    fontWeight: "bold",
+                    fontSize: "2rem",
+                    textAlign: "center",
+                  }}
+                >
+                  {marketName}
+                </h2>
+                <div></div>
+                <div>
+                  <h5 className="btn text-white fw-bold" style={{background:"#1A859D"}}>
+                    Price for Each SEM: <strong>{priceEach}</strong>
+                  </h5>
+                </div>
+              </div>
+
               {startTime && endTime && (
                 <p style={{ color: "#6c757d" }}>
                   Start Time: <strong>{startTime}</strong> | End Time:{" "}
@@ -480,7 +498,7 @@ const LotteryNewPage = ({ drawId }) => {
                 )}
               </div>
             </div>
-            
+
             <button
               className="btn btn-primary"
               onClick={handleSearch}
@@ -500,10 +518,8 @@ const LotteryNewPage = ({ drawId }) => {
           <SearchLotteryResult responseData={responseData} marketId={drawId} />
         )}
       </div>
-      
     </div>
   );
 };
-
 
 export default LotteryNewPage;
