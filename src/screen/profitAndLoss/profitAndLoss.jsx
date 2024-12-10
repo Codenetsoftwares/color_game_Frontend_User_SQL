@@ -12,6 +12,7 @@ const ProfitAndLoss = () => {
     getprofitLossDataState()
   );
 
+  
   const formatDate = (dateString) => {
     // Parse the date string to create a Date object
     const date = new Date(dateString);
@@ -51,6 +52,7 @@ const ProfitAndLoss = () => {
       const response = await getProfitLossGame({
         fromDate: profitLossData.startDate,
         toDate: profitLossData.endDate,
+        page: profitLossData.currentPage,
         limit: profitLossData.itemPerPage,
         searchName: profitLossData.searchItem,
         dataSource: profitLossData.dataSource,

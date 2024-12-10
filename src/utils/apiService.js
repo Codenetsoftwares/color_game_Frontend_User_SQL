@@ -277,7 +277,7 @@ export async function getProfitLossGame(body = {}, isToast = false) {
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
     const response = await makeCall(
-      `${urls.getProfitLossGame}/?startDate=${body.fromDate}&endDate=${body.toDate}&limit=${body.limit}&search=${body.searchName}&dataType=${body.dataSource}`,
+      `${urls.getProfitLossGame}?page=${body.page}&startDate=${body.fromDate}&endDate=${body.toDate}&limit=${body.limit}&search=${body.searchName}&dataType=${body.dataSource}`,
       callParams,
       isToast
     );
@@ -438,8 +438,8 @@ export async function PurhaseLotteryTicketUser(body = {}, isToast = true) {
     const callParams = await getCallParams(strings.POST, body, isToast);
 
     const response = await makeCall(
-      `${urls.buyTicketUser}/${body.marketId}`, 
-      
+      `${urls.buyTicketUser}/${body.marketId}`,
+
       callParams, isToast);
 
     return response;
@@ -499,7 +499,7 @@ export async function GetResultMarket(body = {}) {
     const response = await makeCall(
       `${urls.getResultMarkets}?date=${body.date}`,
       callParams,
-   
+
     );
     return response;
   } catch (error) {
@@ -511,7 +511,7 @@ export async function GetWiningResult(body) {
   try {
     const callParams = await getCallParams(strings.GET, body);
     const response = await makeCall(
-      `${urls.GetResult}/${body.marketId}`, 
+      `${urls.GetResult}/${body.marketId}`,
       callParams);
     return response;
   } catch (error) {
@@ -544,7 +544,7 @@ export async function getProfitLossLotteryEvent(body = {}, isToast = false) {
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
     const response = await makeCall(
-      `${urls.getProfitLossLotteryEvent}?page=${body.page}&limit=${body.limit}`, 
+      `${urls.getProfitLossLotteryEvent}?page=${body.page}&limit=${body.limit}`,
       callParams,
       isToast
     );
