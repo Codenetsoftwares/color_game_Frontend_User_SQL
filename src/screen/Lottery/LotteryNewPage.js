@@ -399,7 +399,7 @@ const LotteryNewPage = ({ drawId }) => {
                     className="btn text-white fw-bold"
                     style={{ background: "#1A859D" }}
                   >
-                    Price for Each SEM: <strong>{priceEach}</strong>
+                    Price: <strong>{priceEach}</strong>
                   </h5>
                 </div>
               </div>
