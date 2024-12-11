@@ -386,7 +386,7 @@ export async function Get_Purchase_Lotteries_History(
   }
 }
 
-export async function lottery_Amount_Alert(body = {}, isToast = true) {
+export async function lottery_Amount_Alert(body = {}, isToast = false) {
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
     const response = await makeCall(
@@ -568,15 +568,7 @@ export const getUserLotteryBetHistory_api = async (body = {}, isToast = false) =
   }
 };
 
-// export async function logout(body, isToast = false) {
-//   try {
-//     const callParams = getNoAuthCallParams(strings.POST, body, isToast);
-//     const response = await makeCall(urls.userLogout, callParams, isToast);
-//     return response;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
+
 export async function getUpdateMarketStatus(body, marketId, isToast = false) {
   try {
     const callParams =  getNoAuthCallParams(strings.POST, body, isToast);

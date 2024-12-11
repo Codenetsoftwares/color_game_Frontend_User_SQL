@@ -81,6 +81,20 @@ const LotteryNewPage = ({ drawId }) => {
             const currentMarket = filteredMarket[0];
             console.log("===>> currentMarket", currentMarket);
 
+            setLotteryRange({
+              group_start: currentMarket.group_start || "",
+              group_end: currentMarket.group_end || "",
+              series_start: currentMarket.series_start || "",
+              series_end: currentMarket.series_end || "",
+              number_start: currentMarket.number_start || 0,
+              number_end: currentMarket.number_end || 0,
+            });
+
+            // Update the filtered values based on the new market range
+            setFilteredNumbers(generateNumbers(currentMarket.number_start, currentMarket.number_end));
+            setFilteredGroups(generateGroups(currentMarket.group_start, currentMarket.group_end));
+            setFilteredSeries(generateSeries(currentMarket.series_start, currentMarket.series_end));
+
             setPriceEach(currentMarket.price || "no price to show");
             setMarketName(currentMarket.marketName || "Unknown Market");
 
