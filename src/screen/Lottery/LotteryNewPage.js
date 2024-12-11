@@ -30,11 +30,12 @@ const LotteryNewPage = ({ drawId }) => {
   const [showSearch, setShowSearch] = useState(true);
   const [lotteryRange, setLotteryRange] = useState(getLotteryRange());
   const [filteredNumbers, setFilteredNumbers] = useState([]);
-  const [filteredGroups, setFilteredGroups] = useState([]); // For filtered groups
+  const [filteredGroups, setFilteredGroups] = useState([]);
   const [filteredSeries, setFilteredSeries] = useState([]); // For filtered series
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [seriesList, setSeriesList] = useState([]);
   const [startTime, setStartTime] = useState(null);
+  const [start, setStart] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [endTimeForTimer, setEndTimeForTimer] = useState(null);
   const [showCountdown, setShowCountdown] = useState(false);
@@ -52,41 +53,51 @@ const LotteryNewPage = ({ drawId }) => {
       setIsSuspend(false);
     }
   }, [setIsTimeUp]);
-  console.log("response from this page");
-
-  console.log("response from this page", responseData);
 
   useEffect(() => {
     if (startTime) {
-      const currentTime = moment(); 
+      const currentTime = moment();
       const marketStartTime = moment(startTime);
-        if (currentTime.isSameOrAfter(marketStartTime)) {
+      if (currentTime.isSameOrAfter(marketStartTime)) {
         setShowCountdown(true);
       } else {
-        setShowCountdown(false); 
+        setShowCountdown(false);
       }
     }
   }, [startTime]);
-  
+
   useEffect(() => {
     const handleLotteryRange = async () => {
       try {
-        const data = await LotteryRange(); // Fetch data from the API
+        const data = await LotteryRange();
         console.log("======>>>>>> response from data", data);
-  
+
         if (data && data.data) {
-          // Filter the data to find the market with the matching marketId
           const filteredMarket = data.data.filter(
             (item) => item.marketId === drawId
           );
-  
+
           if (filteredMarket.length > 0) {
             const currentMarket = filteredMarket[0];
             console.log("===>> currentMarket", currentMarket);
-  
+
+            setLotteryRange({
+              group_start: currentMarket.group_start || "",
+              group_end: currentMarket.group_end || "",
+              series_start: currentMarket.series_start || "",
+              series_end: currentMarket.series_end || "",
+              number_start: currentMarket.number_start || 0,
+              number_end: currentMarket.number_end || 0,
+            });
+
+            // Update the filtered values based on the new market range
+            setFilteredNumbers(generateNumbers(currentMarket.number_start, currentMarket.number_end));
+            setFilteredGroups(generateGroups(currentMarket.group_start, currentMarket.group_end));
+            setFilteredSeries(generateSeries(currentMarket.series_start, currentMarket.series_end));
+
             setPriceEach(currentMarket.price || "no price to show");
             setMarketName(currentMarket.marketName || "Unknown Market");
-  
+
             const start = moment.utc(currentMarket.start_time);
             const end = moment.utc(currentMarket.end_time);
             console.log("object============>>>>>>>>", start);
@@ -101,17 +112,17 @@ const LotteryNewPage = ({ drawId }) => {
               moment.utc(currentMarket.end_time).format("YYYY-MM-DDTHH:mm:ss")
             );
 
-            const currentTime = moment();
-            console.log("Current time:", currentTime.format("YYYY-MM-DD HH:mm"));
-            console.log("Start time:", start.format("YYYY-MM-DD HH:mm"));
-  
-            if (currentTime.isSameOrAfter(start)) {
-              setShowCountdown(true);
-              console.log("Countdown will be shown.");
-            } else {
-              setShowCountdown(false);
-              console.log("Countdown will not be shown.");
-            }
+            // const currentTime = moment();
+            // console.log("Current time:", currentTime.format("YYYY-MM-DD HH:mm"));
+            // console.log("Start time:", start.format("YYYY-MM-DD HH:mm"));
+
+            // if (currentTime.isSameOrAfter(start)) {
+            //   setShowCountdown(true);
+            //   console.log("Countdown will be shown.");
+            // } else {
+            //   setShowCountdown(false);
+            //   console.log("Countdown will not be shown.");
+            // }
           } else {
             console.warn("No market found matching the given drawId");
             setMarketName("Unknown Market");
@@ -123,12 +134,9 @@ const LotteryNewPage = ({ drawId }) => {
         console.error("Error fetching lottery range:", error);
       }
     };
-  
+
     handleLotteryRange();
   }, [drawId]);
-  
-
-
 
   const handleSemChange = (e) => {
     setSem(e.target.value);
@@ -425,12 +433,11 @@ const LotteryNewPage = ({ drawId }) => {
                 Search by Sem, Group, Series, or Number
               </p>
               {showCountdown && (
-  <CountDownTimerLottery
-    endDateTime={endTimeForTimer}
-    onTimeUp={() => setSetIsTimeUp(true)}
-  />
-)}
-
+                <CountDownTimerLottery
+                  endDateTime={endTimeForTimer}
+                  onTimeUp={() => setSetIsTimeUp(true)}
+                />
+              )}
             </div>
 
             {/* Sem Input */}
@@ -524,6 +531,3 @@ const LotteryNewPage = ({ drawId }) => {
 };
 
 export default LotteryNewPage;
-
-
-
