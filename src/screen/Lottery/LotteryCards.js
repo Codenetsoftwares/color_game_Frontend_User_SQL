@@ -7,7 +7,6 @@ import LotteryNewPage from './LotteryNewPage';
 import LotteryPage from './LotteryPage';
 import { useParams } from 'react-router-dom';
 
-
 const  LotteryCards = ()  => {
     const { store } = useAppContext();
  
