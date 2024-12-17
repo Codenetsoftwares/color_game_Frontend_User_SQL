@@ -46,13 +46,13 @@ const LotteryNewPage = ({ drawId }) => {
   const [priceEach, setPriceEach] = useState("");
   console.log("===>> marketName", lotteryRange);
 
-  useEffect(() => {
-    if (setIsTimeUp) {
-      setIsSuspend(true);
-    } else {
-      setIsSuspend(false);
-    }
-  }, [setIsTimeUp]);
+  // useEffect(() => {
+  //   if (setIsTimeUp) {
+  //     setIsSuspend(true);
+  //   } else {
+  //     setIsSuspend(false);
+  //   }
+  // }, [setIsTimeUp]);
 
   useEffect(() => {
     if (startTime) {
@@ -101,6 +101,7 @@ const LotteryNewPage = ({ drawId }) => {
             const start = moment.utc(currentMarket.start_time);
             const end = moment.utc(currentMarket.end_time);
             console.log("object============>>>>>>>>", start);
+            setIsSuspend(currentMarket.isActive)
             setStartTime(
               moment.utc(currentMarket.start_time).format("YYYY-MM-DD HH:mm")
             );
@@ -362,7 +363,7 @@ const LotteryNewPage = ({ drawId }) => {
         }}
       >
         {/* Suspended Overlay */}
-        {isSuspend && (
+        {!isSuspend && (
           <div
             className="d-flex justify-content-center align-items-center"
             style={{
@@ -435,7 +436,6 @@ const LotteryNewPage = ({ drawId }) => {
               {showCountdown && (
                 <CountDownTimerLottery
                   endDateTime={endTimeForTimer}
-                  onTimeUp={() => setSetIsTimeUp(true)}
                 />
               )}
             </div>
