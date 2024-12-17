@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-const CountDownTimerLottery = ({ endDateTime, onTimeUp }) => {
-  const [timeLeft, setTimeLeft] = useState({   
+const CountDownTimerLottery = ({ endDateTime }) => {
+  const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
@@ -23,7 +23,6 @@ const CountDownTimerLottery = ({ endDateTime, onTimeUp }) => {
         });
       } else {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        onTimeUp(); // Notify the parent that time is up
       }
     };
 
@@ -33,7 +32,9 @@ const CountDownTimerLottery = ({ endDateTime, onTimeUp }) => {
 
   return (
     <div>
-      <h2 className="fw-bold"   style={{ color: "red" }}>Time Left:</h2>
+      <h2 className="fw-bold" style={{ color: "red" }}>
+        Time Left:
+      </h2>
       <p>
         {timeLeft.days} days, {timeLeft.hours} hours, {timeLeft.minutes}{" "}
         minutes, {timeLeft.seconds} seconds
