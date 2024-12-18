@@ -57,6 +57,17 @@ class TicketService {
   
   
   }
+export function formatDateForUi(dateString) {
+  const options = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+  };
+  return new Date(dateString).toLocaleDateString("en-US", options);
+}
   
 //   const groupInput = 38;      
 //   const seriesInput = 'L';   
