@@ -15,8 +15,9 @@ const ProfitAndLossLotteryEvent = ({
   const startIndex = Math.min((data.currentPage - 1) * 10 + 1);
   const endIndex = Math.min(data.currentPage * 10, data.totalData);
 
-  const handelGotoLotteryBetHistory = (componentName) => {
+  const handelGotoLotteryBetHistory = (componentName, id) => {
     SetComponent(componentName);
+    SetMarketId(id)
   };
   const handelItemPerPage = (event) => {
     console.log("event.target.value", event.target.value);
@@ -125,7 +126,7 @@ const ProfitAndLossLotteryEvent = ({
                                 style={{ cursor: "pointer" }}
                                 onClick={() => {
                                   handelGotoLotteryBetHistory(
-                                    "UserLotteryBetHistory"
+                                    "UserLotteryBetHistory", data.marketId
                                   );
                                 }}
                               >
@@ -142,8 +143,8 @@ const ProfitAndLossLotteryEvent = ({
                               <td>{data?.commission || 0}</td>
                               <td
                                 className={`fw-bold ${data?.profitLoss > 0
-                                    ? "text-success"
-                                    : "text-danger"
+                                  ? "text-success"
+                                  : "text-danger"
                                   }`}
                               >
                                 {data?.profitLoss}

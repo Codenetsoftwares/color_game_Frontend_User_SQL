@@ -558,7 +558,7 @@ export const getUserLotteryBetHistory_api = async (body = {}, isToast = false) =
   try {
     const callParams = await getCallParams(strings.GET, body, isToast);
     const response = await makeCall(
-      `${urls.getUserLotteryBetList}`,
+      `${urls.getUserLotteryBetList}/${body.marketId}`,
       callParams,
       isToast
     );

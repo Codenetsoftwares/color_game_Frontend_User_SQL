@@ -63,9 +63,9 @@ const ProfitLoss = ({
       // Update state with the response data
       SetProfitLossRunnerData((prevState) => ({
         ...prevState,
-        data: response.data,
-        totalPages: response.pagination.totalPages,
-        totalData: response.pagination.totalItems,
+        data: response?.data,
+        totalPages: response?.pagination?.totalPages,
+        totalData: response?.pagination?.totalItems,
       }));
     } catch (error) {
       // Handle any errors during the API call
@@ -184,7 +184,7 @@ const ProfitLoss = ({
       // Set toggle to false before hitting the endpoint
       SetToggle(false);
       // Make the API call
-      const response = await getUserLotteryBetHistory_api();
+      const response = await getUserLotteryBetHistory_api({marketId:marketId});
 
       // Update state with the response data
       setUserLotteryBetHistory((prevState) => ({
@@ -219,7 +219,7 @@ const ProfitLoss = ({
     );
   } else if (component === "UserLotteryBetHistory") {
     componentToRender = (
-      <UserLotteryBetHistory SetComponent={SetComponent} data={userLotteryBetHistory} />
+      <UserLotteryBetHistory SetComponent={SetComponent} data={userLotteryBetHistory}  />
     );
   }
   else if (component === "ProfitAndLossLotteryEvent") {
