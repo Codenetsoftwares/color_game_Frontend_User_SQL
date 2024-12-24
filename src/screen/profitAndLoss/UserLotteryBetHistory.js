@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { formatDateForUi } from '../../utils/helper';
 
 const UserLotteryBetHistory = ({ data, SetComponent }) => {
 
@@ -159,6 +160,8 @@ const UserLotteryBetHistory = ({ data, SetComponent }) => {
                                                 <td>{data?.sem}</td>
                                                 <td>{data?.ticketPrice}</td>
                                                 <td className="fw-bold">{data?.amount}</td>
+                                                <td>{formatDateForUi(data?.placeTime)}</td>
+                                                <td>{formatDateForUi(data?.settleTime)}</td>
                                             </tr>
                                         ))
                                     ) : (
